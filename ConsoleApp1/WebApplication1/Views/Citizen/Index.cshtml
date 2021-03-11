@@ -1,0 +1,17 @@
+﻿@model List<FullProfileViewModel>
+
+@section Scripts{
+    <script src="~/js/citizen.js"></script>
+}
+
+<h1>
+    All users
+</h1>
+
+@foreach (var user in Model)
+{
+    <div class="user">
+        Name: @user.Name Age: @user.Age Job: @user.Job RegistrationDate: @user.RegistrationDate
+        <input type="button" class="delete" data-name="@user.Name" value="X" />
+    </div>
+}

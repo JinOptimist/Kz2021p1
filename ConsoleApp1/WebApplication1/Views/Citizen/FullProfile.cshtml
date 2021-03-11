@@ -1,0 +1,20 @@
+﻿@model FullProfileViewModel
+
+<h1>
+    Полный профиль @Model.Name.
+</h1>
+
+<form action="@Url.Action("CreateUser", "Citizen")" method="post">
+    <div>
+        Имя: @Html.TextBoxFor(x => x.Name)
+    </div>
+    <div>
+        Возраст: @Html.TextBoxFor(x => x.Age)
+    </div>
+    <div>
+        Профессия: @Html.TextBoxFor(x => x.Job)
+    </div>
+    <div>
+        <input type="submit" value="Создать пользователя" />
+    </div>
+</form>

@@ -14,7 +14,6 @@ namespace ConsoleApp1
 
         private AuthService _authService = new AuthService();
         private UserRepository _userRepository = new UserRepository();
-        
 
         public void Play()
         {
