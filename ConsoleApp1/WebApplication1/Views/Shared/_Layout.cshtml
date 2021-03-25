@@ -28,11 +28,20 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li>
-                            <a class="nav-link text-dark" 
+                            <a class="nav-link text-dark"
                                href="@Url.Action("Index", "Citizen")">Пользователи</a>
                         </li>
                         <li>
                             <a class="nav-link text-dark" href="@Url.Action("FullProfile", "Citizen")">Полный профиль</a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "Adress")">Адреса</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Add", "Adress")">добавить адресс</a>
                         </li>
                     </ul>
                 </div>

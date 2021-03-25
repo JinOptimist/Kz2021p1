@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.EfStuff.Model
+namespace WebApplication1.Models
 {
-    public class Adress : BaseModel
+    public class AdressViewModel
     {
+        public long Id { get; set; }
         public string Street { get; set; }
         public int HouseNumber { get; set; }
         public int FloorCount { get; set; }
 
-        public virtual List<Citizen> Citizens { get; set; }
+        public int CitizenCount { get; set; }
     }
 }

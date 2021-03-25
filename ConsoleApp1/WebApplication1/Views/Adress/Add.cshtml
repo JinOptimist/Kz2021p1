@@ -1,0 +1,20 @@
+﻿@model AdressViewModel
+
+<h1>
+    add adress
+</h1>
+
+<form action="@Url.Action("Add", "Adress")" method="post">
+    <div>
+        Street: @Html.TextBoxFor(x => x.Street)
+    </div>
+    <div>
+        HouseNumber: @Html.TextBoxFor(x => x.HouseNumber)
+    </div>
+    <div>
+        FloorCount: @Html.TextBoxFor(x => x.FloorCount)
+    </div>
+    <div>
+        <input type="submit" value="Создать адресс" />
+    </div>
+</form>

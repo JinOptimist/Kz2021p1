@@ -11,6 +11,8 @@ namespace WebApplication1.EfStuff
     {
         public DbSet<Citizen> Citizens { get; set; }
 
+        public DbSet<Adress> Adress { get; set; }
+
         public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,11 +22,6 @@ namespace WebApplication1.EfStuff
                 .WithMany(x => x.Citizens);
 
             base.OnModelCreating(modelBuilder);
-        }
-
-        internal Citizen Any()
-        {
-            throw new NotImplementedException();
         }
     }
 }

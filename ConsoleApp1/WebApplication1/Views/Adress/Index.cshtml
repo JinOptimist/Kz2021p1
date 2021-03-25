@@ -1,0 +1,12 @@
+﻿@model List<AdressViewModel>
+
+<h1>
+    All adress
+</h1>
+
+@foreach (var adress in Model)
+{
+<div class="adress">
+    @adress.Street @adress.HouseNumber @adress.FloorCount
+</div>
+}

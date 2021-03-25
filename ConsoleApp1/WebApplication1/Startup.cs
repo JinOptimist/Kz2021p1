@@ -1,3 +1,5 @@
+using AutoMapper;
+using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,18 +12,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff;
+using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public Microsoft.Extensions.Configuration.IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -29,11 +33,31 @@ namespace WebApplication1
             var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
-            services.AddScoped<CitizenRepository>(x => 
+            services.AddScoped<CitizenRepository>(x =>
                 new CitizenRepository(x.GetService<KzDbContext>())
                 );
 
+            services.AddScoped<AdressRepository>(x =>
+                new AdressRepository(x.GetService<KzDbContext>())
+                );
+
+            RegisterAutoMapper(services);
+
             services.AddControllersWithViews();
+        }
+
+        private void RegisterAutoMapper(IServiceCollection services)
+        {
+            var configurationExp = new MapperConfigurationExpression();
+
+            configurationExp.CreateMap<Adress, AdressViewModel>()
+                .ForMember(nameof(AdressViewModel.CitizenCount), 
+                    opt => opt.MapFrom(adress => adress.Citizens.Count()));
+            configurationExp.CreateMap<AdressViewModel, Adress>();
+
+            var config = new MapperConfiguration(configurationExp);
+            var mapper = new Mapper(config);
+            services.AddScoped<IMapper>(x => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
