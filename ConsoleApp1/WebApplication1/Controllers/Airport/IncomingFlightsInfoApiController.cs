@@ -18,15 +18,14 @@ namespace WebApplication1.Controllers.Airport
         {
             _incomingFlightInfoRepository = incomingFlightInfoRepository;
         }
-        // GET: api/DepartingFlightsInfo
+        // GET: api/IncomingFlightsInfo
         [HttpGet]
         public ActionResult<IEnumerable<IncomingFlightInfo>> GetDepartingFlightsInfo()
         {
-            //return await _context.DepartingFlightsInfo.ToListAsync();
             return _incomingFlightInfoRepository.GetAll();
         }
 
-        // GET: api/DepartingFlightsInfo/5
+        // GET: api/IncomingFlightsInfo/5
         [HttpGet("{id}")]
         public ActionResult<IncomingFlightInfo> GetDepartingFlightInfo(int id)
         {
@@ -40,7 +39,7 @@ namespace WebApplication1.Controllers.Airport
             return incomingFlightInfo;
         }
 
-        // PUT: api/DepartingFlightsInfo/5
+        // PUT: api/IncomingFlightsInfo/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -54,7 +53,7 @@ namespace WebApplication1.Controllers.Airport
 
         }
 
-        // POST: api/DepartingFlightsInfo
+        // POST: api/IncomingFlightsInfo
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -65,11 +64,10 @@ namespace WebApplication1.Controllers.Airport
             return CreatedAtAction("GetDepartingFlightInfo", new { id = incomingFlightInfo.Id }, incomingFlightInfo);
         }
 
-        // DELETE: api/DepartingFlightsInfo/5
+        // DELETE: api/IncomingFlightsInfo/5
         [HttpDelete("{id}")]
         public ActionResult<IncomingFlightInfo> DeleteDepartingFlightInfo(int id)
         {
-            //var departingFlightInfo = await _context.DepartingFlightsInfo.Find(id);
             var incomingFlightInfo = _incomingFlightInfoRepository.Get(id);
             if (incomingFlightInfo == null)
             {

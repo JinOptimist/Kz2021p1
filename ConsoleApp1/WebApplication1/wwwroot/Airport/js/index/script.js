@@ -6,7 +6,7 @@ btnIncomingFlights.addEventListener('click', async (e) => {
     e.target.classList.add('btn-light')
     btnDepartingFlights.classList.remove('btn-light')
     btnDepartingFlights.classList.add('btn-outline-light')
-    const incomingFlightsURL = 'https://localhost:44386/api/IncomingFlightsInfo'
+    const incomingFlightsURL = 'https://localhost:44330/api/IncomingFlightsInfoApi'
     let incomingFlights = []
     await fetch(incomingFlightsURL).then(response => response.json()).then(data =>
     {
@@ -24,7 +24,7 @@ btnDepartingFlights.addEventListener('click', async (e) => {
     e.target.classList.add('btn-light')
     btnIncomingFlights.classList.remove('btn-light')
     btnIncomingFlights.classList.add('btn-outline-light')
-    const departingFlightsURL = 'https://localhost:44386/api/DepartingFlightsInfo'
+    const departingFlightsURL = 'https://localhost:44330/api/DepartingFlightsInfoApi'
     let departingFlights = []
     await fetch(departingFlightsURL).then(response => response.json()).then(data =>
     {
