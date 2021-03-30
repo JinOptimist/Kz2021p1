@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.Models;
 
 namespace WebApplication1
@@ -39,6 +40,12 @@ namespace WebApplication1
 
             services.AddScoped<AdressRepository>(x =>
                 new AdressRepository(x.GetService<KzDbContext>())
+                );
+            services.AddScoped<IncomingFlightsRepository>(x => 
+                new IncomingFlightsRepository(x.GetService<KzDbContext>())
+                );
+            services.AddScoped<DepartingFlightsRepository>(x =>
+                new DepartingFlightsRepository(x.GetService<KzDbContext>())
                 );
 
             RegisterAutoMapper(services);
