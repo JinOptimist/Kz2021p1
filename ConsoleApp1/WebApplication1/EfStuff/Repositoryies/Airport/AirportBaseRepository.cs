@@ -41,5 +41,36 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
             _dbSet.Remove(model);
             _kzDbContext.SaveChanges();
         }
+        public bool PutEntity(long id, DbModel flightInfoModel)
+        {
+            if (id != flightInfoModel.Id)
+            {
+                return false;
+            }
+
+            _kzDbContext.Entry(flightInfoModel).State = EntityState.Modified;
+
+            try
+            {
+                _kzDbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!flightInfoModelExists(id))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return true;
+        }
+        private bool flightInfoModelExists(long id)
+        {
+            return _dbSet.Any(e => e.Id == id);
+        }
     }
 }
