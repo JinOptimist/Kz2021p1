@@ -24,5 +24,12 @@ namespace WebApplication1.Controllers.Airport
             List<IncomingFlightInfo> incomingFlightsInfo = _incomingFlightsRepository.GetAll();
             return View(incomingFlightsInfo);
         }
+
+        [HttpGet]
+        public IActionResult AvailableFlights()
+        {
+            List<DepartingFlightInfo> departingFlightsAvailableForBooking = _departingFlightsRepository.GetAll().Where(flight => flight.Status == "On Time").ToList();
+            return View(departingFlightsAvailableForBooking);
+        }
     }
 }
