@@ -25,11 +25,16 @@ namespace WebApplication1.Controllers.Airport
             return View(incomingFlightsInfo);
         }
 
-        [HttpGet]
         public IActionResult AvailableFlights()
         {
             List<DepartingFlightInfo> departingFlightsAvailableForBooking = _departingFlightsRepository.GetAll().Where(flight => flight.Status == "On Time").ToList();
             return View(departingFlightsAvailableForBooking);
+        }
+        [HttpGet]
+        public IActionResult BookTicket(long id)
+        {
+            DepartingFlightInfo selectedFlight = _departingFlightsRepository.Get(id);
+            return View(selectedFlight);
         }
     }
 }
