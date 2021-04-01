@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -41,23 +42,28 @@
                         </li>
                         <li>
                             <a class="nav-link text-dark"
-                               href="@Url.Action("Add", "Adress")">добавить адресс</a>
+                               href="@Url.Action("Add", "Adress")">Добавить адресс</a>
                         </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "Restorans")">Общественное питание</a>
+                        </li>
+                       
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Сайт про прекрасный город
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </footer>    
+
+        <footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2021 - Сайт про прекрасный город
+            </div>
+        </footer>
 </body>
 </html>

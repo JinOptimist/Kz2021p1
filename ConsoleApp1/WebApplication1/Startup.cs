@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,15 @@ namespace WebApplication1
             var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
+            //services.AddDbContext<KzDbContext>(options => options.UseInMemoryDatabase());
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options => //CookieAuthenticationOptions
+                {
+                   options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/AccauntRUsers/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/AccauntRUsers/Login");
+                });
+
             services.AddScoped<CitizenRepository>(x =>
                 new CitizenRepository(x.GetService<KzDbContext>())
                 );
@@ -40,8 +50,18 @@ namespace WebApplication1
             services.AddScoped<AdressRepository>(x =>
                 new AdressRepository(x.GetService<KzDbContext>())
                 );
+            services.AddScoped<RestoransRepository>(x =>
+                new RestoransRepository(x.GetService<KzDbContext>())
+                );
+            services.AddScoped<UsersRestoRepository>(x =>
+                new UsersRestoRepository(x.GetService<KzDbContext>())
+                ); 
+                 services.AddScoped<RolesRestoRepository>(x =>
+                new RolesRestoRepository(x.GetService<KzDbContext>())
+                );
 
             RegisterAutoMapper(services);
+            RegisterRestoMapper(services);
 
             services.AddControllersWithViews();
         }
@@ -54,6 +74,17 @@ namespace WebApplication1
                 .ForMember(nameof(AdressViewModel.CitizenCount), 
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
+
+            var config = new MapperConfiguration(configurationExp);
+            var mapper = new Mapper(config);
+            services.AddScoped<IMapper>(x => mapper);
+        }
+        private void RegisterRestoMapper(IServiceCollection services)
+        {
+            var configurationExp = new MapperConfigurationExpression();
+
+            configurationExp.CreateMap<Restorans, RestoViewModel>();
+            configurationExp.CreateMap<RestoViewModel, Restorans>();
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
@@ -78,7 +109,8 @@ namespace WebApplication1
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
 
             app.UseEndpoints(endpoints =>
             {

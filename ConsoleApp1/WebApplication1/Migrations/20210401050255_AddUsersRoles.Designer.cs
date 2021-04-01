@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210401050255_AddUsersRoles")]
+    partial class AddUsersRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,18 +129,6 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RolesResto");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "admin"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "user"
-                        });
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.UsersResto", b =>
@@ -162,15 +152,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UsersResto");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Email = "admin@mail.ru",
-                            Password = "123456",
-                            RoleId = 1L
-                        });
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
