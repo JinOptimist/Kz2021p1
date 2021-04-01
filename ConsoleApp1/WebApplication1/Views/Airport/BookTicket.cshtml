@@ -26,11 +26,17 @@
                     </tr>
                 </tbody>
             </table>
-            <form method="post" action="@Url.Action("BookTicket", "Airport")">
-                <input type="text" name="FirstName" />
-                <input type="text" name="LastName" />
-                <input type="submit" value="Купить" />
-            </form>
         </div>
+    </div>
+    <div class="row-auto">
+        <form method="post" action="@Url.Action("BookTicket", "Airport")">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Имя</span>
+                <input type="text" class="form-control" placeholder="Имя" aria-label="Username">
+                <span class="input-group-text">Фамилия</span>
+                <input type="text" class="form-control" placeholder="Фамилия" aria-label="Server">
+                <input class="btn btn-primary" type="submit" value="Купить" />
+            </div>
+        </form>
     </div>
 </div>
