@@ -15,7 +15,7 @@ namespace WebApplication1.EfStuff
         public DbSet<Adress> Adress { get; set; }
         public DbSet<IncomingFlightInfo> IncomingFlightsInfo { get; set; }
         public DbSet<DepartingFlightInfo> DepartingFlightsInfo { get; set; }
-
+        public DbSet<Passenger> Passengers { get; set; }
         public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
