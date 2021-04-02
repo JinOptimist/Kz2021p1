@@ -51,6 +51,9 @@ namespace WebApplication1
             services.AddScoped<DepartingFlightsRepository>(x =>
                 new DepartingFlightsRepository(x.GetService<KzDbContext>())
                 );
+            services.AddScoped<PassengersRepository>(x =>
+                new PassengersRepository(x.GetService<KzDbContext>())
+                );
 
             services.AddScoped<UserService>(x =>
                 new UserService(
