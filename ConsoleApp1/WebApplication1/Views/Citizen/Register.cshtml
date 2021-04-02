@@ -1,0 +1,19 @@
+﻿@model LoginViewModel
+
+<h1>
+    Register
+</h1>
+<form action="/Citizen/Register" method="post">
+    <div>
+        Name: @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        Password: 
+        @Html.TextBoxFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+    </div>
+    <div>
+        <input type="submit" value="Register" />
+    </div>
+</form>

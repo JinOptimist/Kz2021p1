@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,11 +17,14 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
     public class Startup
     {
+        public const string AuthMethod = "Smile";
+
         public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
@@ -48,9 +52,23 @@ namespace WebApplication1
                 new DepartingFlightsRepository(x.GetService<KzDbContext>())
                 );
 
+            services.AddScoped<UserService>(x =>
+                new UserService(
+                    x.GetService<CitizenRepository>(),
+                    x.GetService<IHttpContextAccessor>())
+                );
+
             RegisterAutoMapper(services);
 
+            services.AddAuthentication(AuthMethod)
+                .AddCookie(AuthMethod, config =>
+                {
+                    config.Cookie.Name = "Smile";
+                    config.LoginPath = "/Citizen/Login";
+                });
+
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
         }
 
         private void RegisterAutoMapper(IServiceCollection services)
@@ -58,7 +76,7 @@ namespace WebApplication1
             var configurationExp = new MapperConfigurationExpression();
 
             configurationExp.CreateMap<Adress, AdressViewModel>()
-                .ForMember(nameof(AdressViewModel.CitizenCount), 
+                .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
@@ -85,6 +103,10 @@ namespace WebApplication1
 
             app.UseRouting();
 
+            // то ты?
+            app.UseAuthentication();
+
+            // уда у теб€ есть доступ?
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
