@@ -1,6 +1,5 @@
 ﻿const btnIncomingFlights = document.getElementById('btnIncomingFlights')
 const btnDepartingFlights = document.getElementById('btnDepartingFlights')
-// TODO: Update links to API and add API
 btnIncomingFlights.addEventListener('click', async (e) => {
     e.target.classList.remove('btn-outline-light')
     e.target.classList.add('btn-light')
