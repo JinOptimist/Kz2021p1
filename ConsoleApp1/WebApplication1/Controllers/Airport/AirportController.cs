@@ -54,11 +54,7 @@ namespace WebApplication1.Controllers.Airport
                 CitizenId = citizen.Id
             };
             _passengersRepository.Save(passenger);
-            return RedirectToAction("BookingConfirmation");
-        }
-        public IActionResult BookingConfirmation()
-        {
-            return View();
+            return View("./Views/Airport/BookingConfirmation.cshtml");
         }
     }
 }
