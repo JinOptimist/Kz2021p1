@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.Models.Airport;
 
 namespace WebApplication1.Controllers.Airport
 {
@@ -12,17 +14,19 @@ namespace WebApplication1.Controllers.Airport
     [ApiController]
     public class IncomingFlightsInfoApiController : ControllerBase
     {
-        private IncomingFlightsRepository _incomingFlightInfoRepository;
+        private IncomingFlightsRepository _incomingFlightInfoRepository { get; set; }
+        private IMapper _mapper { get; set; }
 
-        public IncomingFlightsInfoApiController(IncomingFlightsRepository incomingFlightInfoRepository)
+        public IncomingFlightsInfoApiController(IncomingFlightsRepository incomingFlightInfoRepository, IMapper mapper)
         {
             _incomingFlightInfoRepository = incomingFlightInfoRepository;
+            _mapper = mapper;
         }
         // GET: api/IncomingFlightsInfo
         [HttpGet]
-        public ActionResult<IEnumerable<IncomingFlightInfo>> GetDepartingFlightsInfo()
+        public ActionResult<IEnumerable<IncomingFlightInfoViewModel>> GetDepartingFlightsInfo()
         {
-            return _incomingFlightInfoRepository.GetAll();
+            return _incomingFlightInfoRepository.GetAll().Select(flight => _mapper.Map<IncomingFlightInfoViewModel>(flight)).ToList();
         }
 
         // GET: api/IncomingFlightsInfo/5

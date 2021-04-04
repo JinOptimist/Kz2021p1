@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.Models.Airport;
 
 namespace WebApplication1.Controllers.Airport
 {
@@ -13,18 +15,19 @@ namespace WebApplication1.Controllers.Airport
     public class DepartingFlightsInfoApiController : ControllerBase
     {
         private DepartingFlightsRepository _departingFlightsRepository { get; set; }
+        private IMapper _mapper { get; set; }
 
-        public DepartingFlightsInfoApiController(DepartingFlightsRepository departingFlightsRepository)
+        public DepartingFlightsInfoApiController(DepartingFlightsRepository departingFlightsRepository, IMapper mapper)
         {
             _departingFlightsRepository = departingFlightsRepository;
+            _mapper = mapper;
         }
 
         // GET: api/DepartingFlightsInfo
         [HttpGet]
-        public ActionResult<IEnumerable<DepartingFlightInfo>> GetDepartingFlightsInfo()
+        public ActionResult<IEnumerable<DepartingFlightInfoViewModel>> GetDepartingFlightsInfo()
         {
-            //return await _context.DepartingFlightsInfo.ToListAsync();
-            return _departingFlightsRepository.GetAll();
+            return _departingFlightsRepository.GetAll().Select(flight => _mapper.Map<DepartingFlightInfoViewModel>(flight)).ToList();
         }
 
         // GET: api/DepartingFlightsInfo/5
