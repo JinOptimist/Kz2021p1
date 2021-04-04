@@ -86,7 +86,8 @@ namespace WebApplication1
             configurationExp.CreateMap<AdressViewModel, Adress>();
             configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
             configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
-
+            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
+            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);

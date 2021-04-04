@@ -31,10 +31,7 @@ namespace WebApplication1.Controllers.Airport
 
         public IActionResult Index()
         {
-            // TODO: return view model instead
-            //List<IncomingFlightInfo> incomingFlightsInfo = _incomingFlightsRepository.GetAll();
             List<IncomingFlightInfoViewModel> incomingFlightsInfo = _incomingFlightsRepository.GetAll().Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
-
             return View(incomingFlightsInfo);
         }
 
