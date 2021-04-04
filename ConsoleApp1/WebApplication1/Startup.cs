@@ -14,9 +14,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.Models;
+using WebApplication1.Models.Airport;
 using WebApplication1.Services;
 
 namespace WebApplication1
@@ -82,6 +84,8 @@ namespace WebApplication1
                 .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
+            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
+            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

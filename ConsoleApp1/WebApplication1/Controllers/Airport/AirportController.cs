@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,28 +7,34 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.Models.Airport;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.Airport
 {
     public class AirportController : Controller
     {
-        private IncomingFlightsRepository _incomingFlightsRepository;
-        private DepartingFlightsRepository _departingFlightsRepository;
-        private UserService _userService;
-        private PassengersRepository _passengersRepository;
+        private IncomingFlightsRepository _incomingFlightsRepository { get; set; }
+        private DepartingFlightsRepository _departingFlightsRepository { get; set; }
+        private UserService _userService { get; set; }
+        private PassengersRepository _passengersRepository { get; set; }
+        private IMapper _mapper { get; set; }
 
-        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository)
+        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository, IMapper mapper)
         {
             _incomingFlightsRepository = incomingFlightsRepository;
             _departingFlightsRepository = departingFlightsRepository;
             _userService = userService;
             _passengersRepository = passengersRepository;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            List<IncomingFlightInfo> incomingFlightsInfo = _incomingFlightsRepository.GetAll();
+            // TODO: return view model instead
+            //List<IncomingFlightInfo> incomingFlightsInfo = _incomingFlightsRepository.GetAll();
+            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _incomingFlightsRepository.GetAll().Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
+
             return View(incomingFlightsInfo);
         }
 
