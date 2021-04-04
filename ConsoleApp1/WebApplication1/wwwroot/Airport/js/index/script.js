@@ -50,7 +50,6 @@ function updateTable(dataObj) {
             let row = table.insertRow(-1)
             let cellIndex = 0
             for (let prop in obj) {
-                if (prop === 'id') continue
                 let cell = row.insertCell(cellIndex)
                 if (prop === 'flightId') {
                     cell.outerHTML = `<th>${obj[prop]}</th>`
@@ -73,7 +72,6 @@ function updateTable(dataObj) {
             let row = table.insertRow(-1)
             let cellIndex = 0
             for (let prop in obj) {
-                if (prop === 'id') continue
                 let cell = row.insertCell(cellIndex)
                 if (prop === 'flightId')
                 {
