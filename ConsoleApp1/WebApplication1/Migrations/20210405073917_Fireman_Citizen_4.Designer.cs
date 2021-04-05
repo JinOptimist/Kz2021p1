@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210405073917_Fireman_Citizen_4")]
+    partial class Fireman_Citizen_4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +75,7 @@ namespace WebApplication1.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CitizenId")
+                    b.Property<long>("CitizenId_")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Role")
@@ -84,10 +86,10 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CitizenId")
+                    b.HasIndex("CitizenId_")
                         .IsUnique();
 
-                    b.ToTable("Firemen");
+                    b.ToTable("Fireman");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
@@ -103,7 +105,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen_")
                         .WithOne("Fireman_")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId_")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
