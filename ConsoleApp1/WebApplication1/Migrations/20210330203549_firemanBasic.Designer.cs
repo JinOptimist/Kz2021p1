@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210330203549_firemanBasic")]
+    partial class firemanBasic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,30 +68,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("CitizenId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkExperYears")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CitizenId")
-                        .IsUnique();
-
-                    b.ToTable("Firemen");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.Adress", "House")
@@ -99,25 +77,9 @@ namespace WebApplication1.Migrations
                     b.Navigation("House");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen_")
-                        .WithOne("Fireman_")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen_");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Navigation("Citizens");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
-                {
-                    b.Navigation("Fireman_");
                 });
 #pragma warning restore 612, 618
         }
