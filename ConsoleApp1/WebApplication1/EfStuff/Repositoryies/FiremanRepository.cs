@@ -10,10 +10,6 @@ namespace WebApplication1.EfStuff.Repositoryies
     {
         public FiremanRepository(KzDbContext kzDbContext) : base(kzDbContext)
         {
-        }
-        public Fireman GetById(long id)
-        {
-            return _kzDbContext.Firemen.SingleOrDefault(x => x.Id == id);
-        }
+        }      
     }
 }

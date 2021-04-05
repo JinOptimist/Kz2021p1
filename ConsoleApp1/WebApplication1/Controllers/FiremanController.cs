@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers
         public JsonResult Remove(long id)
         {      
 
-            var fireman = _workerRepository.GetById(id);
+            var fireman = _workerRepository.Get(id);
             if (fireman == null)
             {
                 return Json(false);
