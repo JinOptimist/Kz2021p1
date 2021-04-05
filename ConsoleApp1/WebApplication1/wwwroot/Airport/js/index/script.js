@@ -5,7 +5,8 @@ btnIncomingFlights.addEventListener('click', async (e) => {
     e.target.classList.add('btn-light')
     btnDepartingFlights.classList.remove('btn-light')
     btnDepartingFlights.classList.add('btn-outline-light')
-    const incomingFlightsURL = 'https://localhost:44330/api/IncomingFlightsInfoApi'
+    const port = getCurrentPort()
+    const incomingFlightsURL = `https://localhost:${port}/api/IncomingFlightsInfoApi`
     let incomingFlights = []
     await fetch(incomingFlightsURL).then(response => response.json()).then(data =>
     {
@@ -23,7 +24,8 @@ btnDepartingFlights.addEventListener('click', async (e) => {
     e.target.classList.add('btn-light')
     btnIncomingFlights.classList.remove('btn-light')
     btnIncomingFlights.classList.add('btn-outline-light')
-    const departingFlightsURL = 'https://localhost:44330/api/DepartingFlightsInfoApi'
+    const port = getCurrentPort()
+    const departingFlightsURL = `https://localhost:${port}/api/DepartingFlightsInfoApi`
     let departingFlights = []
     await fetch(departingFlightsURL).then(response => response.json()).then(data =>
     {
@@ -89,4 +91,8 @@ function updateTable(dataObj) {
         }
     }
 
+}
+
+function getCurrentPort() {
+    return window.location.href.split('/')[2].split(':')[1]
 }
