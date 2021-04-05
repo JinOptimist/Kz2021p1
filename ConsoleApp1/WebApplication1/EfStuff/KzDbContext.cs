@@ -12,7 +12,6 @@ namespace WebApplication1.EfStuff
         public DbSet<Citizen> Citizens { get; set; }
 
         public DbSet<Adress> Adress { get; set; }
-        public DbSet<Fireman> Firemen { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -22,16 +21,7 @@ namespace WebApplication1.EfStuff
                 .HasOne(x => x.House)
                 .WithMany(x => x.Citizens);
 
-
-            modelBuilder.Entity<Citizen>()
-                .HasOne<Fireman>(x => x.Fireman_)
-                .WithOne(x => x.Citizen_)
-                .HasForeignKey<Fireman>(x => x.CitizenId);
-
-
-
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

@@ -40,9 +40,7 @@ namespace WebApplication1
             services.AddScoped<AdressRepository>(x =>
                 new AdressRepository(x.GetService<KzDbContext>())
                 );
-            services.AddScoped<FiremanRepository>(x =>
-                new FiremanRepository(x.GetService<KzDbContext>())
-            );
+
             RegisterAutoMapper(services);
 
             services.AddControllersWithViews();
@@ -56,10 +54,6 @@ namespace WebApplication1
                 .ForMember(nameof(AdressViewModel.CitizenCount), 
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
-
-            configurationExp.CreateMap<Fireman, FiremanViewModel>();
-            configurationExp.CreateMap<FiremanViewModel, Fireman>();
-
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
