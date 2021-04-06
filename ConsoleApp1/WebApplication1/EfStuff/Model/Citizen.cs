@@ -16,5 +16,6 @@ namespace WebApplication1.EfStuff.Model
         public DateTime CreatingDate { get; set; }
 
         public virtual Adress House { get; set; }
+        public bool IsOutOfCity { get; set; }
     }
 }

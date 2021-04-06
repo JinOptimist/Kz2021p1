@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.Models.Airport;
 using WebApplication1.Services;
@@ -19,18 +20,21 @@ namespace WebApplication1.Controllers.Airport
         private UserService _userService { get; set; }
         private PassengersRepository _passengersRepository { get; set; }
         private IMapper _mapper { get; set; }
+        private CitizenRepository _citizenRepository { get; set; }
 
-        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository, IMapper mapper)
+        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository, IMapper mapper, CitizenRepository citizenRepository)
         {
             _incomingFlightsRepository = incomingFlightsRepository;
             _departingFlightsRepository = departingFlightsRepository;
             _userService = userService;
             _passengersRepository = passengersRepository;
             _mapper = mapper;
+            _citizenRepository = citizenRepository;
         }
 
         public IActionResult Index()
         {
+            // TODO: filter flights by departure time
             List<IncomingFlightInfoViewModel> incomingFlightsInfo = _incomingFlightsRepository.GetAll().Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
             return View(incomingFlightsInfo);
         }
@@ -60,7 +64,8 @@ namespace WebApplication1.Controllers.Airport
             _passengersRepository.Save(passenger);
             if (selectedFlight.DepartureIsNow())
             {
-                Console.WriteLine("Departure is now!");
+                citizen.IsOutOfCity = true;
+                _citizenRepository.Update(citizen);
             }
             return View("./Views/Airport/BookingConfirmation.cshtml");
         }
