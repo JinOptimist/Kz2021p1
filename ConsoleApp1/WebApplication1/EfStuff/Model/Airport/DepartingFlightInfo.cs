@@ -11,5 +11,14 @@ namespace WebApplication1.EfStuff.Model.Airport
         public string Destination { get; set; }
         public string DepartureTime { get; set; }
         public DateTime SetDate { set { DepartureTime = value.ToString("dd.MM.yyyy hh:mm"); } }
+
+        public bool DepartureIsNow()
+        {
+            DateTime now = DateTime.Now;
+            DateTime dt = DateTime.Parse(DepartureTime);
+            if (dt.Day == now.Day && dt.AddHours(-1).Hour <= now.Hour && now.Hour <= dt.Hour) 
+                return true;
+            return false;
+        }
     }
 }

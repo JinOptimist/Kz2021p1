@@ -58,6 +58,10 @@ namespace WebApplication1.Controllers.Airport
                 CitizenId = citizen.Id
             };
             _passengersRepository.Save(passenger);
+            if (selectedFlight.DepartureIsNow())
+            {
+                Console.WriteLine("Departure is now!");
+            }
             return View("./Views/Airport/BookingConfirmation.cshtml");
         }
     }
