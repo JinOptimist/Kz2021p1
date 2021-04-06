@@ -13,5 +13,7 @@ namespace WebApplication1.Models
         public int FloorCount { get; set; }
 
         public int CitizenCount { get; set; }
+
+        public string UserName { get; set; }
     }
 }
