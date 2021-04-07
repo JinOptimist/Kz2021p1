@@ -14,5 +14,11 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             return _kzDbContext.Citizens.SingleOrDefault(x => x.Name == name);
         }
+
+        public Citizen Login(string name, string password)
+        {
+            return _kzDbContext.Citizens
+                .SingleOrDefault(x => x.Name == name && x.Password == password);
+        }
     }
 }

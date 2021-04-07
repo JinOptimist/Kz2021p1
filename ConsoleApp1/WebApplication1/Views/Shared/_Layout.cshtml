@@ -24,6 +24,21 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Login", "Citizen")" class="nav-link text-dark">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Register", "Citizen")" class="nav-link text-dark">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Exit", "Citizen")" class="nav-link text-dark">Exit</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
