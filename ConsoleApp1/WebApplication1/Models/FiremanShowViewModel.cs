@@ -5,16 +5,13 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class FullProfileViewModel
-    {       
+    public class FiremanShowViewModel
+    {
+        public long Id { get; set; }
         public string Name { get; set; }
-
         public int Age { get; set; }
+        public string Role { get; set; }
+        public int WorkExperYears { get; set; }
         
-        public string Job { get; set; }
-
-        public DateTime RegistrationDate { get; set; }
-
-        public CompanyViewModel Company { get; set; }
     }
 }

@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.EfStuff.Model
 {
-    public class Fireman :BaseModel
-    {
+    public class Fireman : BaseModel
+    {        
         public string Role { get; set; }
-        public int WorkExperYears { get; set; }   
+        public int WorkExperYears { get; set; } 
         public long CitizenId { get; set; }
-        public virtual Citizen Citizen_ { get; set; }  
+        public virtual Citizen Citizen { get; set; }
+      
     }
 }

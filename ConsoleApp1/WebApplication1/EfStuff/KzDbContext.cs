@@ -21,13 +21,10 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasOne(x => x.House)
                 .WithMany(x => x.Citizens);
-
-
             modelBuilder.Entity<Citizen>()
-                .HasOne<Fireman>(x => x.Fireman_)
-                .WithOne(x => x.Citizen_)
-                .HasForeignKey<Fireman>(x => x.CitizenId);
-
+               .HasOne(x => x.Fireman)
+               .WithOne(x => x.Citizen)
+               .HasForeignKey<Fireman>(x => x.CitizenId);
 
 
             base.OnModelCreating(modelBuilder);

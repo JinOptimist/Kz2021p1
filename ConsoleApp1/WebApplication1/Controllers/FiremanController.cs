@@ -12,23 +12,30 @@ namespace WebApplication1.Controllers
 {
     public class FiremanController : Controller
     {
-        private FiremanRepository _workerRepository { get; set; }
+        private FiremanRepository _firemanRepository { get; set; }
         private CitizenRepository _citizenRepository { get; set; }
         private IMapper _mapper { get; set; }
         public FiremanController(FiremanRepository workerRepository, IMapper mapper, CitizenRepository citizenRepository)
         {
-            _workerRepository = workerRepository;
+            _firemanRepository = workerRepository;
             _mapper = mapper;
             _citizenRepository = citizenRepository;
         }
         
         public IActionResult Index()
         {
-            var models = _workerRepository.GetAll()
-                   .Select(x => _mapper.Map<FiremanViewModel>(x))
-                   .ToList();
 
-            return View(models);
+            var viewModels = _firemanRepository
+               .GetAll()
+               .Select(x => new FiremanShowViewModel()
+               {
+                   Id = x.Id,                  
+                   Age = _citizenRepository.Get(x.CitizenId).Age,
+                  Name = _citizenRepository.Get(x.CitizenId).Name,
+                   Role = x.Role,
+                   WorkExperYears = x.WorkExperYears
+               }).ToList();
+            return View(viewModels);
         }
         [HttpGet]
         public IActionResult CreateFireman()
@@ -43,10 +50,12 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
-           // var citizen = _citizenRepository.GetByName(model.NameFireman);
+            var citizen = _citizenRepository.GetByName(model.Name);
+       
             var m = _mapper.Map<Fireman>(model);
-          //  m.Citizen_ = citizen;
-            _workerRepository.Save(m);
+            m.Citizen = citizen;
+            m.CitizenId = citizen.Id;
+            _firemanRepository.Save(m);
             return RedirectToAction("Index", "Fireman");
         }
         public IActionResult Main()
@@ -56,13 +65,13 @@ namespace WebApplication1.Controllers
         public JsonResult Remove(long id)
         {      
 
-            var fireman = _workerRepository.Get(id);
+            var fireman = _firemanRepository.Get(id);
             if (fireman == null)
             {
                 return Json(false);
             }
 
-            _workerRepository.Remove(fireman);
+            _firemanRepository.Remove(fireman);
 
             return Json(true);
         }

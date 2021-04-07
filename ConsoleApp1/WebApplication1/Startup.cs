@@ -60,6 +60,13 @@ namespace WebApplication1
             configurationExp.CreateMap<Fireman, FiremanViewModel>();
             configurationExp.CreateMap<FiremanViewModel, Fireman>();
 
+            configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
+             .ForMember(nameof(FiremanShowViewModel.Name),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+            .ForMember(nameof(FiremanShowViewModel.Age),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+
+            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

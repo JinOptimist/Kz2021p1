@@ -3,7 +3,9 @@
 <h1>New Worker among Firemen!</h1>
 
 <form action="@Url.Action("CreateFireman", "Fireman")" method="post">
->
+    <div>
+        Name : @Html.TextBoxFor(x => x.Name)
+    </div>
     <div>
         Role : @Html.TextBoxFor(x => x.Role)
     </div>

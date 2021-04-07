@@ -12,6 +12,7 @@ namespace WebApplication1.EfStuff.Model
         public DateTime CreatingDate { get; set; }
 
         public virtual Adress House { get; set; } 
-        public virtual Fireman Fireman_ { get; set; }
+        public virtual Fireman Fireman { get; set; }
+
     }
 }

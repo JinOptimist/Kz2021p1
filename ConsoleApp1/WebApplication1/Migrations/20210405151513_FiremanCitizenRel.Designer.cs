@@ -10,8 +10,8 @@ using WebApplication1.EfStuff;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    [Migration("20210405105023_CitizenFireman1")]
-    partial class CitizenFireman1
+    [Migration("20210405151513_FiremanCitizenRel")]
+    partial class FiremanCitizenRel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,13 +103,13 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen_")
-                        .WithOne("Fireman_")
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("Fireman")
                         .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Citizen_");
+                    b.Navigation("Citizen");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
@@ -119,7 +119,7 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
-                    b.Navigation("Fireman_");
+                    b.Navigation("Fireman");
                 });
 #pragma warning restore 612, 618
         }
