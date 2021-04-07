@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Available flights";
+    Layout = "~/Views/Shared/Airport/_LayoutAirport.cshtml";
+}
+@model List<WebApplication1.EfStuff.Model.Airport.DepartingFlightInfo>
+<div class="container justify-content-md-center">
+    <div class="row-auto">
+        <div class="col">
+            <table id="flights-table" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Рейс</th>
+                        <th id="place" scope="col">Куда</th>
+                        <th scope="col">Время прибытия</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Авиакомпания</th>
+                        <th>Купить билет</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var departingFlightInfo in Model)
+                    {
+                        <tr>
+                            <th class="align-middle">@departingFlightInfo.FlightId</th>
+                            <td class="align-middle">@departingFlightInfo.Destination</td>
+                            <td class="align-middle">@departingFlightInfo.DepartureTime</td>
+                            <td class="align-middle">@departingFlightInfo.Status</td>
+                            <td class="align-middle">@departingFlightInfo.Airline</td>
+                            <td class="align-middle">
+                                <form method="get" action="@Url.Action("BookTicket", "Airport")">
+                                    <input type="hidden" name="Id" value="@departingFlightInfo.Id" />
+                                    <input class="btn btn-primary" type="submit" value="Купить" />
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+﻿@model List<FiremanShowViewModel>
+@section Scripts{
+    <script src="~/js/fireman.js"></script>
+}
+<h1>
+    All Fireman workerss
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    table {
+        margin-left: 30px;
+    }
+    </style>
+
+
+<table>
+    <tr>
+        <th>Worker Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Work Experience (years)</th>
+        <th>Remove</th>
+    </tr>
+    @foreach (var worker in Model)
+    {
+<tr class="worker">
+    <td>@worker.Id</td>
+    <td>@worker.Name</td>
+    <td>@worker.Age</td>
+    <td>@worker.Role</td>
+    <td>@worker.WorkExperYears</td>
+    <td><input type="button" class="delete" data-name="@worker.Id" value="delete" /></td>
+</tr>
+    }
+</table>
