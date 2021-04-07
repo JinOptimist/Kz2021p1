@@ -1,0 +1,36 @@
+﻿@model List<UniversityViewModel>
+
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">University ID</th>
+                        <th scope="col">Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td> @item.Id</td>
+                                <td>
+                                    @Html.ActionLink(@item.Name, "UniversityFullInfo", new { IDUniversity = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+

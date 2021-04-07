@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,26 @@ namespace WebApplication1
                 new AdressRepository(x.GetService<KzDbContext>())
                 );
 
+            //--------------------------------------------------------
+
+            services.AddScoped<UniversityRepository>(x =>
+                new UniversityRepository(x.GetService<KzDbContext>())
+                );
+
+            services.AddScoped<StudentRepository>(x =>
+                new StudentRepository(x.GetService<KzDbContext>())
+                );
+
+            services.AddScoped<SchoolRepository>(x =>
+                new SchoolRepository(x.GetService<KzDbContext>())
+                );
+
+            services.AddScoped<PupilRepository>(x =>
+                new PupilRepository(x.GetService<KzDbContext>())
+                );
+
+            //--------------------------------------------------------
+
             services.AddScoped<UserService>(x =>
                 new UserService(
                     x.GetService<CitizenRepository>(),
@@ -62,6 +83,7 @@ namespace WebApplication1
 
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
+            services.AddPaging();
         }
 
         private void RegisterAutoMapper(IServiceCollection services)
@@ -72,6 +94,25 @@ namespace WebApplication1
                 .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
+
+            //-----------------------------------------------------------------
+
+            configurationExp.CreateMap<Student, StudentViewModel>();
+            configurationExp.CreateMap<StudentViewModel, Student>();
+            configurationExp.CreateMap<Pupil, PupilViewModel>();
+            configurationExp.CreateMap<PupilViewModel, Pupil>();
+
+            configurationExp.CreateMap<School, SchoolViewModel>()
+                .ForMember(nameof(SchoolViewModel.PupilCount),
+                    opt => opt.MapFrom(school => school.Pupils.Count()));
+            configurationExp.CreateMap<SchoolViewModel, School>();
+
+            configurationExp.CreateMap<University, UniversityViewModel>()
+                .ForMember(nameof(UniversityViewModel.StudentCount),
+                    opt => opt.MapFrom(university => university.Students.Count()));
+            configurationExp.CreateMap<UniversityViewModel, University>();
+
+            //-----------------------------------------------------------------
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
