@@ -95,7 +95,11 @@ namespace WebApplication1.EfStuff
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<WebApplication1.Models.BusParkViewModel> BusParkViewModel { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+            base.OnConfiguring(optionsBuilder);
+        }
 
     }
 }

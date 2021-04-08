@@ -15,9 +15,9 @@ namespace WebApplication1.EfStuff.Model
         public DateTime? GraduatedYear { get; set; }
         public int? ENT { get; set; }
         public long SchoolId { get; set; } // FK
-        public School School { get; set; }  // навигационное свойство
+        public virtual School School { get; set; }  // навигационное свойство
 
-        public ICollection<Certificate> Certificates { get; set; } // = new List<Course>();
+        public virtual ICollection<Certificate> Certificates { get; set; } // = new List<Course>();
 
     }
 }

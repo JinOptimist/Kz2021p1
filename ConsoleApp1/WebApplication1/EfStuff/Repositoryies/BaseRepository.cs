@@ -30,7 +30,16 @@ namespace WebApplication1.EfStuff.Repositoryies
 
         public DbModel Save(DbModel model)
         {
-            _dbSet.Add(model);
+            if (model.Id > 0)
+            {
+                //_dbSet.Update(model);
+                _kzDbContext.Entry(model).State = EntityState.Modified;
+            }
+            else
+            {
+                _dbSet.Add(model);
+            }
+            
             _kzDbContext.SaveChanges();
 
             return model;
@@ -40,14 +49,6 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             _dbSet.Remove(model);
             _kzDbContext.SaveChanges();            
-        }
-
-        
-
-        public void Update(DbModel model)
-        {
-            _kzDbContext.Entry(model).State = EntityState.Modified;
-            _kzDbContext.SaveChanges();
         }
     }
 }

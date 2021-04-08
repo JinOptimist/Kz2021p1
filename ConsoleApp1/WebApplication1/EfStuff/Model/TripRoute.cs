@@ -13,6 +13,6 @@ namespace WebApplication1.EfStuff.Model
         public decimal Price { get; set; }
         public double TripTime { get; set; }
 
-        public List<Bus> Buses { get; set; }
+        public virtual List<Bus> Buses { get; set; }
     }
 }

@@ -23,6 +23,7 @@ using WebApplication1.ViewModels;
 using WebApplication1.Services;
 using WebApplication1.Profiles;
 using Newtonsoft.Json;
+using WebApplication1.Presentation;
 
 namespace WebApplication1
 {
@@ -48,6 +49,34 @@ namespace WebApplication1
 			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
+            RegisterRepositories(services);
+
+            services.AddScoped<UserService>(x =>
+                new UserService(
+                    x.GetService<CitizenRepository>(),
+                    x.GetService<IHttpContextAccessor>())
+                );
+
+            services.AddScoped<CitizenPresentation>(x => 
+                new CitizenPresentation(x.GetService<CitizenRepository>()));
+
+            services.AddPoliceServices(Configuration);
+            RegisterAutoMapper(services);
+
+            services.AddAuthentication(AuthMethod)
+                .AddCookie(AuthMethod, config =>
+                {
+                    config.Cookie.Name = "Smile";
+                    config.LoginPath = "/Citizen/Login";
+                    config.AccessDeniedPath = "/Citizen/Login";
+                });
+
+            services.AddHttpContextAccessor();
+            services.AddPaging();
+        }
+
+        private void RegisterRepositories(IServiceCollection services)
+        {
             services.AddScoped<CitizenRepository>(x =>
                 new CitizenRepository(x.GetService<KzDbContext>())
                 );
@@ -65,7 +94,7 @@ namespace WebApplication1
             services.AddScoped<StudentRepository>(x =>
                 new StudentRepository(x.GetService<KzDbContext>())
                 );
-            services.AddScoped<IncomingFlightsRepository>(x => 
+            services.AddScoped<IncomingFlightsRepository>(x =>
                 new IncomingFlightsRepository(x.GetService<KzDbContext>())
                 );
             services.AddScoped<DepartingFlightsRepository>(x =>
@@ -74,9 +103,9 @@ namespace WebApplication1
             services.AddScoped<PassengersRepository>(x =>
                 new PassengersRepository(x.GetService<KzDbContext>())
                 );
-           services.AddScoped<FiremanRepository>(x =>
-                new FiremanRepository(x.GetService<KzDbContext>())
-            );
+            services.AddScoped<FiremanRepository>(x =>
+                 new FiremanRepository(x.GetService<KzDbContext>())
+             );
 
             services.AddScoped<SchoolRepository>(x =>
                 new SchoolRepository(x.GetService<KzDbContext>())
@@ -103,24 +132,6 @@ namespace WebApplication1
             services.AddScoped<SportEventRepository>(x =>
                 new SportEventRepository(x.GetService<KzDbContext>())
                 );
-            services.AddScoped<UserService>(x =>
-                new UserService(
-                    x.GetService<CitizenRepository>(),
-                    x.GetService<IHttpContextAccessor>())
-                );
-
-            services.AddPoliceServices(Configuration);
-            RegisterAutoMapper(services);
-
-            services.AddAuthentication(AuthMethod)
-                .AddCookie(AuthMethod, config =>
-                {
-                    config.Cookie.Name = "Smile";
-                    config.LoginPath = "/Citizen/Login";
-                });
-
-            services.AddHttpContextAccessor();
-            services.AddPaging();
         }
 
         private void RegisterAutoMapper(IServiceCollection services)

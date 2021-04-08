@@ -23,7 +23,7 @@ namespace WebApplication1.EfStuff.Model
 
 		public long PolicemanId {get; set;}
 		[JsonIgnore]
-		public Policeman Policeman { get; set; }
+		public virtual Policeman Policeman { get; set; }
 
 	}
 }

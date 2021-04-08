@@ -65,7 +65,7 @@ namespace WebApplication1.Controllers.Airport
             if (selectedFlight.DepartureIsNow())
             {
                 citizen.IsOutOfCity = true;
-                _citizenRepository.Update(citizen);
+                _citizenRepository.Save(citizen);
             }
             return View("./Views/Airport/BookingConfirmation.cshtml");
         }
