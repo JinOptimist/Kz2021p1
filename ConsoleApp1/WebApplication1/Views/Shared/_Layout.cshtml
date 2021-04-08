@@ -4,13 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApplication1</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet" />
+    <link href="~/lib/izimodal/css/iziModal.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-toast-plugin/jquery.toast.min.js"></script>
+    <script src="~/lib/izimodal/js/iziModal.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     @RenderSection("Scripts", required: false)
+    @RenderSection("PoliceMain", required: false)
+    @RenderSection("Style", required: false)
 </head>
 <body>
+    <!--TODO: Переделать меню-->
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -20,9 +31,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 d-flex flex-wrap">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@Url.Action("Index", "Airport") ">Аэропорт</a>
                         </li>
                         @if (!User.Identity.IsAuthenticated)
                         {
@@ -49,6 +63,24 @@
                         <li>
                             <a class="nav-link text-dark" href="@Url.Action("FullProfile", "Citizen")">Полный профиль</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a asp-controller="police" asp-action="main" class="dropdown-toggle nav-link text-dark">Полиция <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="main">Главная</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="news">Новости</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="duties">Полицейские на смене</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="users">Список жителей</a>
+                                </li>
+                                <li class="divider"></li>
+                            </ul>
+                        </li>
 
                         <li>
                             <a class="nav-link text-dark"
@@ -58,6 +90,60 @@
                             <a class="nav-link text-dark"
                                href="@Url.Action("Add", "Adress")">добавить адресс</a>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Education
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @*University*@
+
+                                <li>
+                                    <a class="nav-link text-dark"
+                                       href="@Url.Action("UniversityList", "EducationalInstitution")">Universities</a>
+                                </li>
+                                @*School*@
+
+                                <li>
+                                    <a class="nav-link text-dark"
+                                       href="@Url.Action("SchoolList", "EducationalInstitution")">Schools</a>
+                                </li>
+
+                                @*Student*@
+                                <li>
+                                    <a class="nav-link text-dark"
+                                       href="@Url.Action("StudentListAndSearch", "Person")">Students</a>
+                                </li>
+
+                                @*Pupil*@
+                                <li>
+                                    <a class="nav-link text-dark"
+                                       href="@Url.Action("PupilListAndSearch", "Person")">Pupils</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "SportComplex")">Список спорт-комплексов</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("AddComplex", "SportComplex")">Добавить спорт-комплекс</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "SportEvent")">Спортивные мероприятия</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("AddEvent", "SportEvent")">Добавить мероприятие</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Main", "Fireman")">Пожарные главная страница</a>
+                        </li>
+                        <li class="list-group-item">@Html.ActionLink("City Bus System", "CityBusSystemMainPage", "Bus")</li>
                     </ul>
                 </div>
             </div>
@@ -69,10 +155,27 @@
         </main>
     </div>
 
+    <wrapper class="police-call" data-izimodal-open="#police-call-modal">
+        <div class="dws">
+            <div class="pulse">
+                <div class="bloc"></div>
+                <div class="phone">
+                    <span class="material-icons">
+                        call
+                    </span>
+                </div>
+                <div class="text">Связь с полицией</div>
+            </div>
+        </div>
+    </wrapper>
+    <div id="police-call-modal" style="display: none">
+        @await Html.PartialAsync("_PoliceCall", new PoliceCallViewModel())
+    </div>
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Сайт про прекрасный город
         </div>
-    </footer>    
+
+    </footer>
 </body>
 </html>

@@ -1,0 +1,16 @@
+section {
+    padding-top: 50px;
+}
+
+.table-header {
+    display: flex;
+    padding: 10px;
+    width: auto;
+    height: auto;
+    background-color: #0D6EFD;
+    justify-content: center;
+}
+
+.table-header button {
+    margin-inline:15px;
+}

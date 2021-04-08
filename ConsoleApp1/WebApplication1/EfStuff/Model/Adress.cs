@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.EfStuff.Model
 {
     public class Adress : BaseModel
-    {
+    {       
         public string Street { get; set; }
         public int HouseNumber { get; set; }
         public int FloorCount { get; set; }

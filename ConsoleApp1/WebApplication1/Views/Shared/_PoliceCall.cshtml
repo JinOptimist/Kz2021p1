@@ -1,0 +1,25 @@
+﻿@model PoliceCallViewModel
+
+    <div class="police-call-form p-3">
+        <form id="PoliceCallForm">
+            <div class="form-group">
+                <p>Call Priority:</p>
+                <select class="browser-default custom-select" name="CallPriority">
+                    <option value="0" selected>Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+                <span class="text-danger error-CallPriority"></span>
+            </div>
+           
+            <div class="form-group">
+                <p>Description:</p>
+                <textarea class="form-control" name="Description" placeholder="Description"></textarea>
+                <span class="text-danger error-Description"></span>
+            </div>
+            <div class="form-group d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-success createCall">Send</button>
+                <button type="button" data-iziModal-close class="btn btn-outline-danger decline ml-2">Decline</button>
+            </div>
+        </form>
+    </div>

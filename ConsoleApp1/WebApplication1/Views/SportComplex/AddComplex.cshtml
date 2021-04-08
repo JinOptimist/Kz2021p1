@@ -1,0 +1,18 @@
+﻿@model SportComplexViewModel
+
+<h1>
+    Добавить спорт-комплекс
+</h1>
+
+<form action="@Url.Action("CreateComplex", "SportComplex")" method="post" >
+    <div class="form-group">
+        Наименование: @Html.TextBoxFor(x => x.Name)
+    </div>
+    <div class="form-group">
+        Количество сотрудников: @Html.TextBoxFor(x => x.CountOfEmployees)
+    </div>
+    <div>
+        <input class="btn btn-primary" type="submit" value="Создать комплекс" />
+    </div>
+</form>
+
