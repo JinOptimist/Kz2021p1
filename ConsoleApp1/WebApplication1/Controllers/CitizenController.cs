@@ -10,29 +10,25 @@ using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
+using WebApplication1.Presentation;
 
 namespace WebApplication1.Controllers
 {
     public class CitizenController : Controller
     {
         private CitizenRepository _citizenRepository;
-        private AdressRepository _adressRepository;
+        private CitizenPresentation _citizenPresentation;
 
-        public CitizenController(CitizenRepository citizenRepository, AdressRepository adressRepository)
+        public CitizenController(CitizenRepository citizenRepository, 
+            CitizenPresentation citizenPresentation)
         {
             _citizenRepository = citizenRepository;
-            _adressRepository = adressRepository;
+            _citizenPresentation = citizenPresentation;
         }
 
         public IActionResult Index()
         {
-            var viewModels = _citizenRepository.GetAll()
-                .Select(x => new FullProfileViewModel()
-                    {
-                        Age = x.Age,
-                        Name = x.Name,
-                        RegistrationDate = x.CreatingDate
-                    }).ToList();
+            var viewModels = _citizenPresentation.GetIndexViewModel();
             return View(viewModels);
         }
 
@@ -58,14 +54,7 @@ namespace WebApplication1.Controllers
                 return View(viewModel);
             }
 
-            var pages = new List<Claim>() {
-                new Claim("Id", user.Id.ToString()),
-                new Claim("Name", user.Name.ToString()),
-                new Claim(ClaimTypes.AuthenticationMethod, Startup.AuthMethod)
-            };
-
-            var claimsIdenity = new ClaimsIdentity(pages, Startup.AuthMethod);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdenity);
+            var claimsPrincipal = _citizenPresentation.GetClaimsPrincipal(user);
             await HttpContext.SignInAsync(claimsPrincipal);
 
             return View();
@@ -91,14 +80,7 @@ namespace WebApplication1.Controllers
                 return View(viewModel);
             }
 
-            var citizen = new Citizen()
-            {
-                Name = viewModel.Name,
-                Password = viewModel.Password
-            };
-
-            _citizenRepository.Save(citizen);
-
+            _citizenPresentation.Save(viewModel);
             return RedirectToAction("Index", "Home");
         }
 
@@ -145,5 +127,7 @@ namespace WebApplication1.Controllers
 
             return Json(true);
         }
+
+        
     }
 }

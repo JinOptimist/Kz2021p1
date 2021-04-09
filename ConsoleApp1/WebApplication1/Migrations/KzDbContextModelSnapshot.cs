@@ -144,6 +144,30 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CitizenId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkExperYears")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CitizenId")
+                        .IsUnique();
+
+                    b.ToTable("Firemen");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.Adress", "House")
@@ -153,9 +177,25 @@ namespace WebApplication1.Migrations
                     b.Navigation("House");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("Fireman")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Citizen");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Navigation("Citizens");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
+                {
+                    b.Navigation("Fireman");
                 });
 #pragma warning restore 612, 618
         }
