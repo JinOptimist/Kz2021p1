@@ -116,216 +116,28 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Pupil", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("AverageMark")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Birthday")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClassYear")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ENT")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateTime?>("GraduatedYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IIN")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Patronymic")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<long>("SchoolId")
+                    b.Property<long>("CitizenId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Subject")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Pupils");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.School", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Schools");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Student", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Birthday")
+                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CourseYear")
+                    b.Property<int>("WorkExperYears")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<DateTime>("EnteredYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Faculty")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<double>("Gpa")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime?>("GraduatedYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IIN")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<bool>("OnGrant")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Patronymic")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<long>("UniversityId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("CitizenId")
                         .IsUnique();
 
-                    b.HasIndex("UniversityId");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.University", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Universities");
-                });
-
-            modelBuilder.Entity("CertificatePupil", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Certificate", null)
-                        .WithMany()
-                        .HasForeignKey("CertificatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Pupil", null)
-                        .WithMany()
-                        .HasForeignKey("PupilsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CertificateStudent", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Certificate", null)
-                        .WithMany()
-                        .HasForeignKey("CertificatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Firemen");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
@@ -337,26 +149,15 @@ namespace WebApplication1.Migrations
                     b.Navigation("House");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Pupil", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.School", "School")
-                        .WithMany("Pupils")
-                        .HasForeignKey("SchoolId")
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("Fireman")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Student", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.University", "University")
-                        .WithMany("Students")
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
+                    b.Navigation("Citizen");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
@@ -364,14 +165,9 @@ namespace WebApplication1.Migrations
                     b.Navigation("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.School", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
-                    b.Navigation("Pupils");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.University", b =>
-                {
-                    b.Navigation("Students");
+                    b.Navigation("Fireman");
                 });
 #pragma warning restore 612, 618
         }

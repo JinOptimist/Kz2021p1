@@ -1,0 +1,35 @@
+﻿@model List<BusParkViewModel>
+
+@section Scripts{
+    <script src="~/js/bus.js" asp-append-version="true"></script>
+}
+
+
+<!-- Jumbotron -->
+<div class="p-5 text-center bg-light">
+    <h1 class="mb-3">Bus Park</h1>
+</div>
+<!-- Jumbotron -->
+
+@foreach (var bus in Model)
+{
+    <div class="bus">
+        <table class="table table-bordered table-striped text-center">
+            <tr>
+                <td style="width: 16.66%">@bus.Model</td>
+                <td style="width: 16.66%">@bus.Type</td>
+                <td style="width: 16.66%">@bus.Capacity</td>
+                <td style="width: 16.66%">@bus.Price</td>
+                <td style="width: 5%"><input type="button" class="edit" data-model="@bus.Model" value="E" /></td>
+                <td style="width: 5%"><input type="button" class="delete" data-model="@bus.Model" value="X" /></td>
+            </tr>
+
+
+        </table>
+
+
+        @*Model: @bus.Model    Type: @bus.Type  Capacity: @bus.Capacity  Price:  @bus.Price
+            <input type="button" class="delete" data-model="@bus.Model" value="X" />*@
+    </div>
+
+}

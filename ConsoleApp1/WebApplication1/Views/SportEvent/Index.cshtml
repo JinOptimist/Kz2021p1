@@ -1,0 +1,32 @@
+﻿@model List<SportEventViewModel>
+@section Style{
+    <style>
+        .event-img {
+            width: 100%;
+            height: 160px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+}
+<h1>
+    Спортивные мероприятия
+</h1>
+<div class="row">
+    @foreach (var Event in Model)
+    {
+        <div class="col-12 col-md-3 mb-4">
+            <div class="card" style="">
+                <img src="/Image/@Event.img" class="card-img-top event-img" alt="...">
+                <div class="card-body">
+                    @Html.RouteLink(@Event.title, new {controller = "SportEvent", action = "ShowEvent", id=@Event.Id})
+                </div>
+            </div>
+        </div>
+    }
+</div>

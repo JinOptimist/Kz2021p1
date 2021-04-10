@@ -1,0 +1,35 @@
+﻿@model List<TripViewModel>
+
+@section Scripts{
+    <script src="~/js/trip.js" asp-append-version="true"></script>
+}
+
+
+<!-- Jumbotron -->
+<div class="p-5 text-center bg-light">
+    <h1 class="mb-3">Map</h1>
+</div>
+<!-- Jumbotron -->
+
+@foreach (var route in Model)
+{
+    <div class="route">
+        <table class="table table-bordered table-striped text-center">
+            <tr>
+                <td style="width: 16.66%">@route.Title</td>
+                <td style="width: 16.66%">@route.Type</td>
+                <td style="width: 16.66%">@route.Length</td>
+                <td style="width: 16.66%">@route.Price</td>
+                <td style="width: 5%"><input type="button" class="edit" data-model="@route.Title" value="E" /></td>
+                <td style="width: 5%"><input type="button" class="delete" data-model="@route.Title" value="X" /></td>
+            </tr>
+
+
+        </table>
+
+
+        @*Model: @bus.Model    Type: @bus.Type  Capacity: @bus.Capacity  Price:  @bus.Price
+            <input type="button" class="delete" data-model="@bus.Model" value="X" />*@
+    </div>
+
+}

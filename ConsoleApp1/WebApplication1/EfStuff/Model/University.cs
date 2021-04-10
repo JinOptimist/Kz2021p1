@@ -7,6 +7,6 @@ namespace WebApplication1.EfStuff.Model
 {
     public class University : EducationalInstitution
     {
-        public ICollection<Student> Students { get; set; } // навигационное свойство
+        public virtual ICollection<Student> Students { get; set; } // навигационное свойство
     }
 }

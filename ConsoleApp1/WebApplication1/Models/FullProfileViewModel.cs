@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models
 {
     public class FullProfileViewModel
-    {
+    {       
         public string Name { get; set; }
 
         public int Age { get; set; }

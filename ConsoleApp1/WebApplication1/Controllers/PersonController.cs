@@ -23,20 +23,21 @@ namespace WebApplication1.Controllers
             PupilRepository = pupilRepository;
             Mapper = mapper;
         }
-       
-        public IActionResult StudentListAndSearch(int page=1)
+
+        public IActionResult StudentListAndSearch(int page = 1)
         {
             var students = StudentRepository
                 .GetAll()
                 .Select(x => Mapper.Map<StudentViewModel>(x))
                 .ToList();
             var model = PagingList.Create(students, 3, page);
+
             model.Action = "StudentListAndSearch";
             return View(model);
         }
 
         [HttpGet]
-        public IActionResult StudentListAndSearch(string searchBy, string searchStudent, int page=1)
+        public IActionResult StudentListAndSearch(string searchBy, string searchStudent, int page = 1)
         {
             ViewData["GetStudentDetails"] = searchStudent;
 
@@ -68,7 +69,7 @@ namespace WebApplication1.Controllers
             var model = PagingList.Create(studentViewModels, 3, page);
             model.Action = "StudentListAndSearch";
 
-            return View(model);            
+            return View(model);
         }
 
         public IActionResult StudentFullInfo(string IINStudent)
@@ -77,7 +78,7 @@ namespace WebApplication1.Controllers
             var studentViewModel = Mapper.Map<StudentViewModel>(student);
             return View(studentViewModel);
         }
-              
+
 
         [HttpPost]
         public IActionResult StudentListAndSearch(string select, double minGpaValue)
@@ -116,7 +117,7 @@ namespace WebApplication1.Controllers
         {
 
             var student = StudentRepository.Get(IDStudent);
-            if(student.OnGrant == true)
+            if (student.OnGrant == true)
             {
                 StudentRepository.UpdateStudentGrantData(student.Id, false);
             }
@@ -127,7 +128,7 @@ namespace WebApplication1.Controllers
 
             return View("StudentListAndSearch");
         }
-              
+
 
         public IActionResult PupilListAndSearch()
         {
@@ -180,27 +181,27 @@ namespace WebApplication1.Controllers
         }
 
 
-         [HttpPost]
-         public async Task<IActionResult> PupilListAndSearch(int minValueForGrant)
-         {
-             ViewData["PostMinValueForGrant"] = minValueForGrant;
+        [HttpPost]
+        public async Task<IActionResult> PupilListAndSearch(int minValueForGrant)
+        {
+            ViewData["PostMinValueForGrant"] = minValueForGrant;
 
-             // проверка значения инпута (если пользователь ввел букву например 
-             // или текст а не числовое значение)
+            // проверка значения инпута (если пользователь ввел букву например 
+            // или текст а не числовое значение)
 
-             // добавить вытаскивание айди универа рандомно
-             // enum faculty добавить и тоже рандомно присвоивать при выдаче гранта и 
-             // регистрации ученика в качестве студента
+            // добавить вытаскивание айди универа рандомно
+            // enum faculty добавить и тоже рандомно присвоивать при выдаче гранта и 
+            // регистрации ученика в качестве студента
 
 
-             if (minValueForGrant != null)
-             {
+            if (minValueForGrant != null)
+            {
                 var pupils = PupilRepository.GetAll();
-                 foreach (var pupil in pupils)
-                 {
-                     if (pupil.ENT != null)
-                     {
-                         StudentViewModel studentVIewModel = new StudentViewModel();
+                foreach (var pupil in pupils)
+                {
+                    if (pupil.ENT != null)
+                    {
+                        StudentViewModel studentVIewModel = new StudentViewModel();
                         studentVIewModel.IIN = pupil.IIN;
                         studentVIewModel.Name = pupil.Name;
                         studentVIewModel.Surname = pupil.Surname;
@@ -214,27 +215,27 @@ namespace WebApplication1.Controllers
                         studentVIewModel.GraduatedYear = null;
                         studentVIewModel.UniversityId = 100; // Random()
 
-                         if (pupil.ENT >= minValueForGrant)
-                         {
+                        if (pupil.ENT >= minValueForGrant)
+                        {
                             studentVIewModel.OnGrant = true;
                             var student = Mapper.Map<Student>(studentVIewModel);
                             StudentRepository.Save(student);
 
                             PupilRepository.Remove(pupil);
-                         }
-                         else
-                         {
+                        }
+                        else
+                        {
                             studentVIewModel.OnGrant = false;
                             var student = Mapper.Map<Student>(studentVIewModel);
                             StudentRepository.Save(student);
 
                             PupilRepository.Remove(pupil);
                         }
-                     }
-                 }
-             }
+                    }
+                }
+            }
 
-             return View();
-         }
+            return View();
+        }
     }
 }
