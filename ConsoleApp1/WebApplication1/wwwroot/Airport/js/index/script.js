@@ -1,5 +1,6 @@
 ﻿const btnIncomingFlights = document.getElementById('btnIncomingFlights')
 const btnDepartingFlights = document.getElementById('btnDepartingFlights')
+const flightStatuses = ['Departed', 'On Time', 'Expected', 'Landed', 'Canceled', 'Delayed']
 btnIncomingFlights.addEventListener('click', async (e) => {
     e.target.classList.remove('btn-outline-light')
     e.target.classList.add('btn-light')
@@ -53,15 +54,19 @@ function updateTable(dataObj) {
             let cellIndex = 0
             for (let prop in obj) {
                 let cell = row.insertCell(cellIndex)
-                if (prop === 'flightId') {
+                if (prop === 'tailNumber') {
                     cell.outerHTML = `<th>${obj[prop]}</th>`
                     cellIndex++
                     continue
                 }
-                if (prop === 'status') {
-                    if (obj[prop] === 'Canceled') cell.classList.add('table-danger')
-                    else if (obj[prop] === 'Departed') cell.classList.add('table-success')
-                    else if (obj[prop] === 'Delayed') cell.classList.add('table-warning')
+                if (prop === 'flightStatus') {
+                    let status = flightStatuses[obj[prop]]
+                    if (status === 'Canceled') cell.classList.add('table-danger')
+                    else if (status === 'Departed') cell.classList.add('table-success')
+                    else if (status === 'Delayed') cell.classList.add('table-warning')
+                    cell.innerText = status
+                    cellIndex++
+                    continue
                 }
                 cell.innerText = obj[prop]
                 cellIndex++
@@ -75,15 +80,19 @@ function updateTable(dataObj) {
             let cellIndex = 0
             for (let prop in obj) {
                 let cell = row.insertCell(cellIndex)
-                if (prop === 'flightId')
+                if (prop === 'tailNumber')
                 {
                     cell.outerHTML = `<th>${obj[prop]}</th>`
                     cellIndex++
                     continue
                 }
-                if (prop === 'status') {
-                    if (obj[prop] === 'Delayed') cell.classList.add('table-danger')
-                    else if (obj[prop] === 'Landed') cell.classList.add('table-success')
+                if (prop === 'flightStatus') {
+                    let status = flightStatuses[obj[prop]]
+                    if (status === 'Delayed') cell.classList.add('table-danger')
+                    else if (status === 'Landed') cell.classList.add('table-success')
+                    cell.innerText = status
+                    cellIndex++
+                    continue
                 }
                 cell.innerText = obj[prop]
                 cellIndex++

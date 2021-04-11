@@ -24,10 +24,11 @@ using WebApplication1.Services;
 using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
+using WebApplication1.Profiles.Airport;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -42,11 +43,11 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -57,7 +58,7 @@ namespace WebApplication1
                     x.GetService<IHttpContextAccessor>())
                 );
 
-            services.AddScoped<CitizenPresentation>(x => 
+            services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
@@ -92,11 +93,8 @@ namespace WebApplication1
             services.AddScoped<StudentRepository>(x =>
                 new StudentRepository(x.GetService<KzDbContext>())
                 );
-            services.AddScoped<IncomingFlightsRepository>(x =>
-                new IncomingFlightsRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<DepartingFlightsRepository>(x =>
-                new DepartingFlightsRepository(x.GetService<KzDbContext>())
+            services.AddScoped<FlightsRepository>(x =>
+                new FlightsRepository(x.GetService<KzDbContext>())
                 );
             services.AddScoped<PassengersRepository>(x =>
                 new PassengersRepository(x.GetService<KzDbContext>())
@@ -132,18 +130,14 @@ namespace WebApplication1
 
         private void RegisterAutoMapper(IServiceCollection services)
         {
-			MapperConfigurationExpression configurationExp = new MapperConfigurationExpression();
+            MapperConfigurationExpression configurationExp = new MapperConfigurationExpression();
 
             configurationExp.CreateMap<Adress, AdressViewModel>()
                 .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
-            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
-            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
-            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
-            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
             configurationExp.AddProfile<PoliceProfiles>();
-
+            configurationExp.AddProfile<AirportProfiles>();
             configurationExp.CreateMap<Fireman, FiremanViewModel>();
             configurationExp.CreateMap<FiremanViewModel, Fireman>();
 
@@ -159,11 +153,11 @@ namespace WebApplication1
             configurationExp.CreateMap<TripRoute, TripViewModel>();
             configurationExp.CreateMap<TripViewModel, TripRoute>();
 
-			MapperConfiguration config = new MapperConfiguration(configurationExp);
-			Mapper mapper = new Mapper(config);
+            MapperConfiguration config = new MapperConfiguration(configurationExp);
+            Mapper mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
 
-			MapperConfigurationExpression configurationExpNew = new MapperConfigurationExpression();
+            MapperConfigurationExpression configurationExpNew = new MapperConfigurationExpression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -188,12 +182,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

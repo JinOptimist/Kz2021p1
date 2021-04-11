@@ -15,33 +15,31 @@ namespace WebApplication1.Controllers.Airport
 {
     public class AirportController : Controller
     {
-        private IncomingFlightsRepository _incomingFlightsRepository { get; set; }
-        private DepartingFlightsRepository _departingFlightsRepository { get; set; }
         private UserService _userService { get; set; }
-        private PassengersRepository _passengersRepository { get; set; }
         private IMapper _mapper { get; set; }
         private CitizenRepository _citizenRepository { get; set; }
+        private FlightsRepository _flightsRepository { get; set; }
+        private PassengersRepository _passengersRepository { get; set; }
 
-        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository, IMapper mapper, CitizenRepository citizenRepository)
+        public AirportController(UserService userService, IMapper mapper, CitizenRepository citizenRepository, FlightsRepository flightsRepository, PassengersRepository passengersRepository)
         {
-            _incomingFlightsRepository = incomingFlightsRepository;
-            _departingFlightsRepository = departingFlightsRepository;
             _userService = userService;
-            _passengersRepository = passengersRepository;
             _mapper = mapper;
             _citizenRepository = citizenRepository;
+            _flightsRepository = flightsRepository;
+            _passengersRepository = passengersRepository;
         }
 
         public IActionResult Index()
         {
             // TODO: filter flights by departure time
-            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _incomingFlightsRepository.GetAll().Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
+            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _flightsRepository.GetAll().Where(flight => flight.FlightType == FlightType.IncomingFlight).Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
             return View(incomingFlightsInfo);
         }
 
         public IActionResult AvailableFlights()
         {
-            List<DepartingFlightInfo> departingFlightsAvailableForBooking = _departingFlightsRepository.GetAll().Where(flight => flight.Status == "On Time").ToList();
+            List<Flight> departingFlightsAvailableForBooking = _flightsRepository.GetAll().Where(flight => flight.FlightStatus == FlightStatus.OnTime && flight.FlightType == FlightType.DepartingFlight).ToList();
             return View(departingFlightsAvailableForBooking);
         }
         public IActionResult BookTicket(long id)
@@ -51,7 +49,7 @@ namespace WebApplication1.Controllers.Airport
             {
                 return RedirectToAction("Login", "Citizen");
             }
-            DepartingFlightInfo selectedFlight = _departingFlightsRepository.Get(id);
+            Flight selectedFlight = _flightsRepository.GetAll().SingleOrDefault(f => f.Id == id && f.FlightType == FlightType.DepartingFlight);
             if (selectedFlight == null)
             {
                 return RedirectToAction("AvailableFlights");
@@ -62,12 +60,20 @@ namespace WebApplication1.Controllers.Airport
                 CitizenId = citizen.Id
             };
             _passengersRepository.Save(passenger);
-            if (selectedFlight.DepartureIsNow())
+            if (DepartureIsNow(selectedFlight))
             {
                 citizen.IsOutOfCity = true;
                 _citizenRepository.Save(citizen);
             }
             return View("./Views/Airport/BookingConfirmation.cshtml");
+        }
+        private bool DepartureIsNow(Flight selectedFlight)
+        {
+            DateTime now = DateTime.Now;
+            DateTime dt = selectedFlight.Date;
+            if (dt.Day == now.Day && dt.AddHours(-1).Hour <= now.Hour && now.Hour <= dt.Hour)
+                return true;
+            return false;
         }
     }
 }
