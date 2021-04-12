@@ -31,5 +31,12 @@ namespace WebApplication1.Services
             var id = int.Parse(idStr);
             return _citizenRepository.Get(id);
         }
+
+        //public bool IsPolicment()
+        //{
+        //    return GetUser()?.Policeman == null;
+        //}
+        public bool IsPolicment()
+             => GetUser()?.Policeman != null;
     }
 }

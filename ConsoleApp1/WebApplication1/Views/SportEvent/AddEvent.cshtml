@@ -1,0 +1,65 @@
+﻿@model SportEventViewModel
+@section Scripts{
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+    </script>
+}
+@section Style {
+    <style>
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 50%;
+            min-height: 50%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+        #output {
+            width: 100%;
+        }
+    </style>
+}
+<h1>
+    Добавить мероприятие
+</h1>
+<div class="row">
+    <div class="col-md-6">
+        <form action="@Url.Action("CreateEvent", "SportEvent")" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="title" class="form-label">Название</label>
+                <input asp-for="title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="description" class="form-label">Описание</label>
+                <textarea class="form-control" asp-for="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="imagefile" class="control-label">Фото для мероприятия</label>
+                <input class="btn btn-default btn-file" asp-for="imagefile" accept="image/*" onchange="loadFile(event)" />
+                <img id="output" />
+                <span asp-validation-for="imagefile" class="text-danger"></span>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="submit" value="Создать мероприятие" />
+            </div>
+        </form>
+    </div>
+</div>

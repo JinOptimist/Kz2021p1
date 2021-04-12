@@ -21,7 +21,7 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
             _citizenRepository = citizenRepository;
         }
-        
+
         public IActionResult Index()
         {
 
@@ -29,9 +29,9 @@ namespace WebApplication1.Controllers
                .GetAll()
                .Select(x => new FiremanShowViewModel()
                {
-                   Id = x.Id,                  
-                   Age = _citizenRepository.Get(x.CitizenId).Age,
-                  Name = _citizenRepository.Get(x.CitizenId).Name,
+                   Id = x.Id,
+                   Age = x.Citizen.Age,//_citizenRepository.Get(x.CitizenId).Age,
+                   Name = x.Citizen.Name,
                    Role = x.Role,
                    WorkExperYears = x.WorkExperYears
                }).ToList();
@@ -44,14 +44,14 @@ namespace WebApplication1.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult CreateFireman(FiremanViewModel model) 
+        public IActionResult CreateFireman(FiremanViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
             var citizen = _citizenRepository.GetByName(model.Name);
-       
+
             var m = _mapper.Map<Fireman>(model);
             m.Citizen = citizen;
             m.CitizenId = citizen.Id;
@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers
             return View();
         }
         public JsonResult Remove(long id)
-        {      
+        {
 
             var fireman = _firemanRepository.Get(id);
             if (fireman == null)

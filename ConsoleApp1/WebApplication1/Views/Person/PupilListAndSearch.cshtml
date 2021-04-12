@@ -1,0 +1,81 @@
+﻿@model List<PupilViewModel>
+
+
+@{
+    ViewData["Title"] = "PupilListAndSearch";
+}
+
+<h1 style="display:flex; justify-content:center; align-items:center">Pupil Page</h1>
+<div class="container">
+    <form asp-action="PupilListAndSearch" method="get">
+        <p>
+            <b style="margin: 10px;"> Search By: </b>
+            @Html.RadioButton("searchBy", "iin", true) <text class="marginForText">IIN</text>
+            @Html.RadioButton("searchBy", "name") <text class="marginForText">Name</text>
+            @Html.RadioButton("searchBy", "classYear") <text class="marginForText">Class Year</text>
+            @Html.RadioButton("searchBy", "schoolID") <text class="marginForText">School ID</text>
+
+        </p>
+        <br />
+        <p>
+            <input type="search"
+                   placeholder="Search Pupil..."
+                   value="@ViewData["GetPupilDetails"]"
+                   name="searchPupil"
+                   style="width:300px;" />
+
+            <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
+
+            <a class="btn btn-primary" style="margin-left:15px" asp-action="PupilListAndSearch">Get All Pupil</a>
+        </p>
+    </form>
+
+    <form asp-action="PupilListAndSearch" method="post">
+
+        <p>
+            <input type="number"
+                   placeholder="Pupil ENT must be > ??? for GRANT"
+                   value="@ViewData["PostMinValueForGrant"]"
+                   min="0"
+                   max="140"
+                   name="minValueForGrant"
+                   style="width:300px;" />
+
+
+            <input type="submit" value="Выдать Грант" asp-action="PupilListAndSearch" class="btn btn-primary" style="margin-left:15px" />
+
+        </p>
+    </form>
+</div>
+
+<div class="container">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">IIN</th>
+                <th scope="col">FIO</th>
+                <th scope="col">Class Year</th>
+                <th scope="col">School ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(@item.IIN, "PupilFullInfo", new { IINPupil = item.IIN })
+                        </td>
+                        <td> @item.Surname @item.Name @item.Patronymic </td>
+                        <td> @item.ClassYear </td>
+                        <td> @item.SchoolId</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,30 @@
+﻿@model PoliceAcademyRequestVM
+
+    <div class="registration-form p-3">
+        <form id="policeAcademyForm">
+            <div class="form-group">
+                <input type="text" class="form-control item police-form-field"  name="FirstName" placeholder="Username">
+                <span  class="text-danger error-FirstName"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control item police-form-field"  name="LastName" placeholder="Lastname">
+                <span  class="text-danger error-LastName"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control item police-form-field"  name="EMail" placeholder="Email">
+                <span  class="text-danger error-EMail"></span>
+            </div>
+            <div class="form-group">
+                <input  type="text" class="form-control item police-form-field" name="PhoneNumber" placeholder="Phone Number">
+                <span  class="text-danger error-PhoneNumber"></span>
+            </div>
+            <div class="form-group">
+                <input type="date" class="form-control item police-form-field" name="BirthDate" placeholder="Birth Date">
+                <span  class="text-danger error-BirthDate"></span>
+            </div>
+            <div class="form-group d-flex justify-content-center">
+                <button type="button" class="btn btn-outline-success sendPoliceAcademyRequest">Send</button>
+                <button type="button" data-iziModal-close class="btn btn-outline-danger decline ml-2">Decline</button>
+            </div>
+        </form>
+    </div>

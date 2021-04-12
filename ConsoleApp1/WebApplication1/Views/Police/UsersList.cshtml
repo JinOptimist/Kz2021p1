@@ -1,0 +1,46 @@
+﻿@model List<Citizen>
+
+@section PoliceMain {
+    <link rel="stylesheet" type="text/css" src="~/css/police/main.css">
+    <script src="~/js/Police/police.js"></script>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">LastName</th>
+            <th scope="col">Age</th>
+            <th scope="col">Created Date</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Citizen user in Model)
+        {
+            <tr class="user" data-userid="@user.Id">
+                <td>@user.Name</td>
+                <td>@user.Age</td>
+                <td>@user.CreatingDate</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-info amnesty">Amnesty</button>
+                        <button class="btn btn-outline-danger add-violation" id="add-violation" data-izimodal-open="#modal-custom">Add Violation</button>
+                        <button class="btn btn-outline-danger goToJail">Go to jail</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="modal-custom" data-iziModal-group="violation-form">
+    @await Html.PartialAsync("_AddViolation", new ViolationViewModel())
+</div>
+<div class="pagination-wrapper d-flex justify-content-center align-items-center">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</div>
