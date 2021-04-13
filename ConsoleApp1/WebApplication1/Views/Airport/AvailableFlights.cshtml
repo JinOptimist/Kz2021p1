@@ -14,7 +14,10 @@
                         <th scope="col">Время прибытия</th>
                         <th scope="col">Статус</th>
                         <th scope="col">Авиакомпания</th>
-                        <th>Купить билет</th>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <th>Купить билет</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -33,12 +36,15 @@
                                 <td class="align-middle">@departingFlightInfo.FlightStatus</td>
                             }
                             <td class="align-middle">@departingFlightInfo.Airline</td>
-                            <td class="align-middle">
-                                <form method="get" action="@Url.Action("BookTicket", "Airport")">
-                                    <input type="hidden" name="Id" value="@departingFlightInfo.Id" />
-                                    <input class="btn btn-primary" type="submit" value="Купить" />
-                                </form>
-                            </td>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <td class="align-middle">
+                                    <form method="get" action="@Url.Action("BookTicket", "Airport")">
+                                        <input type="hidden" name="Id" value="@departingFlightInfo.Id" />
+                                        <input class="btn btn-primary" type="submit" value="Купить" />
+                                    </form>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

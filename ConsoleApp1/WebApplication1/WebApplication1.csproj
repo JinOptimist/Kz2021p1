@@ -29,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <Folder Include="Controllers\CustomFilterAttributes\Airport\" />
     <Folder Include="wwwroot\images\police\" />
   </ItemGroup>
 
