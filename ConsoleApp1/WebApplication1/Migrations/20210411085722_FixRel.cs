@@ -8,12 +8,6 @@ namespace WebApplication1.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IncomingFlightsInfo");
-
-            migrationBuilder.DropTable(
-                name: "DepartingFlightsInfo");
-
-            migrationBuilder.DropTable(
                 name: "Passengers");
 
             migrationBuilder.CreateTable(

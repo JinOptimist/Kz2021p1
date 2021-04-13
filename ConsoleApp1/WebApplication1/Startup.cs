@@ -25,6 +25,7 @@ using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using WebApplication1.Profiles.Airport;
+using WebApplication1.ApplicationLogic.Airport;
 
 namespace WebApplication1
 {
@@ -60,6 +61,8 @@ namespace WebApplication1
 
             services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
+            services.AddScoped<AirportLogic>(x =>
+                new AirportLogic(x.GetService<PassengersRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);

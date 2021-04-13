@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.ApplicationLogic.Airport;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
@@ -20,20 +21,23 @@ namespace WebApplication1.Controllers.Airport
         private CitizenRepository _citizenRepository { get; set; }
         private FlightsRepository _flightsRepository { get; set; }
         private PassengersRepository _passengersRepository { get; set; }
+        private AirportLogic _airportLogic { get; set; }
 
-        public AirportController(UserService userService, IMapper mapper, CitizenRepository citizenRepository, FlightsRepository flightsRepository, PassengersRepository passengersRepository)
+        public AirportController(UserService userService, IMapper mapper, CitizenRepository citizenRepository, FlightsRepository flightsRepository, PassengersRepository passengersRepository, AirportLogic airportLogic)
         {
             _userService = userService;
             _mapper = mapper;
             _citizenRepository = citizenRepository;
             _flightsRepository = flightsRepository;
             _passengersRepository = passengersRepository;
+            _airportLogic = airportLogic;
         }
 
         public IActionResult Index()
         {
             // TODO: filter flights by departure time
             List<IncomingFlightInfoViewModel> incomingFlightsInfo = _flightsRepository.GetAll().Where(flight => flight.FlightType == FlightType.IncomingFlight).Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
+            _airportLogic.AdmitPassengers();
             return View(incomingFlightsInfo);
         }
 
