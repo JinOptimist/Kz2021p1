@@ -42,12 +42,14 @@ btnDepartingFlights.addEventListener('click', async (e) => {
 function updateTable(dataObj) {
     let table = document.getElementById('flights-table').tBodies[0]
     let headerPlace = document.getElementById('place')
+    let headerDate = document.getElementById('date')
     let rowsCount = table.rows.length
     for (let i = 0; i < rowsCount; i++) {
         table.deleteRow(0)
     }
     if (dataObj.areDeparting) {
         headerPlace.innerText = 'Куда'
+        headerDate.innerText = 'Время вылета'
         for (let i = 0; i < dataObj.departingFlights.length; i++) {
             let obj = dataObj.departingFlights[i]
             let row = table.insertRow(-1)
@@ -74,6 +76,7 @@ function updateTable(dataObj) {
         }
     } else {
         headerPlace.innerText = 'Откуда'
+        headerDate.innerText = 'Время прибытия'
         for (let i = 0; i < dataObj.incomingFlights.length; i++) {
             let obj = dataObj.incomingFlights[i]
             let row = table.insertRow(-1)

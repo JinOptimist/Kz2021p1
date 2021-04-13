@@ -20,7 +20,7 @@ namespace WebApplication1.Presentation.Airport
 
         public List<IncomingFlightInfoViewModel> GetIndexViewModel()
         {
-            // TODO: Inject automapper
+            // TODO [Airport]: Inject automapper
             return _flightsRepository.GetAll().Where(flight => flight.FlightType == FlightType.IncomingFlight).Select(x => new IncomingFlightInfoViewModel()
             {
                 TailNumber = x.TailNumber,

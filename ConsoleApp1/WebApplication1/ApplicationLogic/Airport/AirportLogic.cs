@@ -27,12 +27,33 @@ namespace WebApplication1.ApplicationLogic.Airport
 
         public void AdmitPassengers()
         {
-            foreach (var passenger in _passengersRepository.GetAll().Where(passenger => passenger.Flight.FlightType == FlightType.IncomingFlight))
+            List<Flight> arrivedFlights = new List<Flight>();
+            foreach (var passenger in _passengersRepository.GetAll().Where(passenger => passenger.Flight.FlightType == FlightType.IncomingFlight && IsValidAddmissionTime(passenger.Flight.Date)))
             {
+                if (!arrivedFlights.Contains(passenger.Flight))
+                {
+                    arrivedFlights.Add(passenger.Flight);
+                }
                 passenger.Citizen.IsOutOfCity = false;
                 _passengersRepository.Save(passenger);
                 _passengersRepository.Remove(passenger);
             }
+            ConvertFlights(arrivedFlights);
+        }
+
+        public void DepartPassengers()
+        {
+            List<Flight> departedFlights = new List<Flight>();
+            foreach (var passenger in _passengersRepository.GetAll().Where(passenger => passenger.Flight.FlightType == FlightType.DepartingFlight && IsValidDepartureTime(passenger.Flight.Date)))
+            {
+                if (!departedFlights.Contains(passenger.Flight))
+                {
+                    departedFlights.Add(passenger.Flight);
+                }
+                passenger.Citizen.IsOutOfCity = true;
+                _citizenRepository.Save(passenger.Citizen);
+            }
+            ConvertFlights(departedFlights);
         }
 
         public bool FlightIsValid(long id)
@@ -52,21 +73,43 @@ namespace WebApplication1.ApplicationLogic.Airport
                 CitizenId = citizen.Id
             };
             _passengersRepository.Save(passenger);
-            if (DepartureIsNow(selectedFlight))
-            {
-                citizen.IsOutOfCity = true;
-                _citizenRepository.Save(citizen);
-            }
         }
 
-
-        public bool DepartureIsNow(Flight selectedFlight)
+        public bool IsValidDepartureTime(DateTime flightDate)
         {
             DateTime now = DateTime.Now;
-            DateTime dt = selectedFlight.Date;
-            if (dt.Day == now.Day && dt.AddHours(-1).Hour <= now.Hour && now.Hour <= dt.Hour)
+            if (flightDate.Day == now.Day && flightDate.AddMinutes(-30) <= now && now >= flightDate)
                 return true;
             return false;
+        }
+
+        public bool IsValidAddmissionTime(DateTime flightDate)
+        {
+            DateTime now = DateTime.Now;
+            DateTime add30 = flightDate.AddMinutes(30);
+            if (flightDate.Day == now.Day && now >= flightDate && now <= add30)
+                return true;
+            return false;
+        }
+
+        public void ConvertFlights(List<Flight> flights)
+        {
+            Random random = new Random();
+            foreach (var flight in flights)
+            {
+                if (flight.FlightType == FlightType.IncomingFlight)
+                {
+                    flight.FlightType = FlightType.DepartingFlight;
+                    flight.FlightStatus = FlightStatus.OnTime;
+                } 
+                else
+                {
+                    flight.FlightType = FlightType.IncomingFlight;
+                    flight.FlightStatus = FlightStatus.Expected;
+                }
+                flight.Date = DateTime.Now.AddDays(random.Next(5));
+                _flightsRepository.Save(flight);
+            }
         }
     }
 }

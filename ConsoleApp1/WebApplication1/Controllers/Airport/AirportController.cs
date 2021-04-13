@@ -22,7 +22,6 @@ namespace WebApplication1.Controllers.Airport
         public IActionResult Index()
         {
             List<IncomingFlightInfoViewModel> incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
-            // TODO: Execute AdmitPassengers depending on timeline
             _airportLogic.AdmitPassengers();
             return View(incomingFlightsInfo);
         }
@@ -30,6 +29,7 @@ namespace WebApplication1.Controllers.Airport
         public IActionResult AvailableFlights()
         {
             List<Flight> departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
+            _airportLogic.DepartPassengers();
             return View(departingFlightsAvailableForBooking);
         }
 
