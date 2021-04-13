@@ -21,6 +21,7 @@ namespace WebApplication1.ApplicationLogic.Airport
             {
                 passenger.Citizen.IsOutOfCity = false;
                 _passengersRepository.Save(passenger);
+                _passengersRepository.Remove(passenger);
             }
         }
     }
