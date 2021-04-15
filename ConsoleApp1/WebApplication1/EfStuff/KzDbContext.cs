@@ -20,6 +20,8 @@ namespace WebApplication1.EfStuff
         public DbSet<SportComplex> SportComplex { get; set; }
         public DbSet<SportEvent> SportEvent { get; set; }
         public DbSet<Fireman> Firemen { get; set; }
+        public DbSet<FireTruck> FireTrucks { get; set; }
+        public DbSet<FiremanTeam> FiremanTeams { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<School> Schools { get; set; }
@@ -36,11 +38,18 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasOne(x => x.House)
                 .WithMany(x => x.Citizens);
+
             modelBuilder.Entity<Citizen>()
                .HasOne(x => x.Fireman)
                .WithOne(x => x.Citizen)
                .HasForeignKey<Fireman>(x => x.CitizenId);
-
+            modelBuilder.Entity<FiremanTeam>()
+                .HasOne(x => x.FireTruck)
+                .WithOne(x => x.FiremanTeam);
+            modelBuilder.Entity<Fireman>()
+                .HasOne(x => x.FiremanTeam)
+                .WithMany(x => x.Firemen)
+                .HasForeignKey(x => x.TeamId);
 
             modelBuilder.Entity<Policeman>()
                 .HasOne(c => c.Citizen)

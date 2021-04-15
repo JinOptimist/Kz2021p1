@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,10 +24,12 @@ using WebApplication1.Services;
 using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
+using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.Models.FiremanModels;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -42,11 +44,11 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -57,7 +59,7 @@ namespace WebApplication1
                     x.GetService<IHttpContextAccessor>())
                 );
 
-            services.AddScoped<CitizenPresentation>(x => 
+            services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
@@ -106,6 +108,12 @@ namespace WebApplication1
             services.AddScoped<FiremanRepository>(x =>
                  new FiremanRepository(x.GetService<KzDbContext>())
              );
+            services.AddScoped<FireTruckRepository>(x =>
+                new FireTruckRepository(x.GetService<KzDbContext>())
+            );
+            services.AddScoped<FiremanTeamRepository>(x =>
+                new FiremanTeamRepository(x.GetService<KzDbContext>())
+            );
 
             services.AddScoped<SchoolRepository>(x =>
                 new SchoolRepository(x.GetService<KzDbContext>())
@@ -151,6 +159,10 @@ namespace WebApplication1
 
             configurationExp.CreateMap<Fireman, FiremanViewModel>();
             configurationExp.CreateMap<FiremanViewModel, Fireman>();
+            configurationExp.CreateMap<FiremanTeam, FiremanTeamViewModel>();
+            configurationExp.CreateMap<FiremanTeamViewModel, FiremanTeam>();
+
+
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
              .ForMember(nameof(FiremanShowViewModel.Name),
@@ -204,12 +216,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "FiremanTeams";
+    Layout = "~/Views/Shared/Fireman/_LayoutFireman.cshtml";
+}
+@model List<WebApplication1.Models.FiremanModels.FiremanTeamViewModel>
+@section Scripts{
+    <script src="~/js/firemanteam.js"></script>
+}
+<h1>
+    All Fireman Teams
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    table {
+        margin-left: 30px;
+    }
+</style>
+
+
+<table>
+    <tr>
+        <th>Team Id</th>
+        <th>Team Name</th>
+        <th>Shift</th>
+        <th>Team State</th>
+        <th>Workers</th>
+        <th>Quantity</th>
+        <th>Truck Id</th>
+    </tr>
+    @foreach (var team in Model)
+    {
+<tr class="team">
+    <td>@team.Id</td>
+    <td>@team.TeamName</td>
+    <td>@team.Shift</td>
+    <td>@team.TeamState</td>
+    <td>
+        @foreach (var worker in team.FiremenNames)
+        {
+            @worker
+        }
+
+    </td>
+    <td>@team.FiremanCount</td>
+    <td>@team.TruckId</td>
+    <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
+</tr>
+    }
+</table>

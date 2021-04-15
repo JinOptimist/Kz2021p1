@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
                .Select(x => new FiremanShowViewModel()
                {
                    Id = x.Id,
-                   Age = x.Citizen.Age,//_citizenRepository.Get(x.CitizenId).Age,
+                   Age = x.Citizen.Age,
                    Name = x.Citizen.Name,
                    Role = x.Role,
                    WorkExperYears = x.WorkExperYears

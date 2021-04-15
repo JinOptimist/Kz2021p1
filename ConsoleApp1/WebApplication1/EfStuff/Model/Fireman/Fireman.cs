@@ -11,8 +11,10 @@ namespace WebApplication1.EfStuff.Model
     {        
         public string Role { get; set; }
         public int WorkExperYears { get; set; } 
-        public long CitizenId { get; set; }
+        public long CitizenId { get; set; }       
+        public long TeamId { get; set; }
         public virtual Citizen Citizen { get; set; }
+        public virtual FiremanTeam FiremanTeam { get; set; }
       
     }
 }
