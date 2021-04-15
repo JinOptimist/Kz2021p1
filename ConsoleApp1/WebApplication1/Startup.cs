@@ -146,40 +146,29 @@ namespace WebApplication1
             configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            var config = new MapperConfiguration(configurationExp);
+            
             configurationExp.AddProfile<PoliceProfiles>();
 
             configurationExp.CreateMap<Fireman, FiremanViewModel>();
             configurationExp.CreateMap<FiremanViewModel, Fireman>();
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
-             .ForMember(nameof(FiremanShowViewModel.Name),
-                    opt => opt.MapFrom(fireman => fireman.Citizen.Name))
-            .ForMember(nameof(FiremanShowViewModel.Age),
-                    opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+                .ForMember(nameof(FiremanShowViewModel.Name),
+                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+                .ForMember(nameof(FiremanShowViewModel.Age),
+                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
             configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
 
+            configurationExp.CreateMap<Bus, BusParkViewModel>();
+            configurationExp.CreateMap<BusParkViewModel, Bus>();
+
+            configurationExp.CreateMap<TripRoute, TripViewModel>();
+            configurationExp.CreateMap<TripViewModel, TripRoute>();
+
+            var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
-
-            var configurationExpNew = new MapperConfigurationExpression();
-
-            configurationExpNew.CreateMap<Bus, BusParkViewModel>();
-            configurationExpNew.CreateMap<BusParkViewModel, Bus>();
-
-            var configNew = new MapperConfiguration(configurationExpNew);
-            var mapperNew = new Mapper(configNew);
-            services.AddScoped<IMapper>(x => mapperNew);
-
-            var configurationExpTrip = new MapperConfigurationExpression();
-
-            configurationExpTrip.CreateMap<TripRoute, TripViewModel>();
-            configurationExpTrip.CreateMap<TripViewModel, TripRoute>();
-
-            var configTrip = new MapperConfiguration(configurationExpTrip);
-            var mapperTrip = new Mapper(configTrip);
-            services.AddScoped<IMapper>(x => mapperTrip);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
