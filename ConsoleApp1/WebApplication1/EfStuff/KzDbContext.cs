@@ -15,14 +15,13 @@ namespace WebApplication1.EfStuff
 
         public DbSet<Restorans> Restorans { get; set; }
 
-        public DbSet<UsersResto> UsersResto { get; set; }
-
-        public DbSet<RolesResto> RolesResto { get; set; }
+        public DbSet<BronResto> BronResto { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /*
             string adminRoleName = "admin";
             string userRoleName = "user";
 
@@ -30,6 +29,7 @@ namespace WebApplication1.EfStuff
             string adminPassword = "123456";
 
             // добавляем роли
+            
             RolesResto adminRole = new RolesResto { Id = 1, Name = adminRoleName };
             RolesResto userRole = new RolesResto { Id = 2, Name = userRoleName };
             UsersResto adminUser = new UsersResto { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
@@ -43,11 +43,15 @@ namespace WebApplication1.EfStuff
 
             modelBuilder.Entity<RolesResto>()
                 .HasMany(x => x.Users)
-                .WithOne(x => x.Role);
+                .WithOne(x => x.Role);*/
 
             modelBuilder.Entity<Citizen>()
                 .HasOne(x => x.House)
                 .WithMany(x => x.Citizens);
+
+            modelBuilder.Entity<BronResto>()
+                .HasOne(x => x.ObjectResto)
+                .WithMany(x => x.Brons);
 
             base.OnModelCreating(modelBuilder);
         }

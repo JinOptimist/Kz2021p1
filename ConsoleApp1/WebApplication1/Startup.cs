@@ -16,6 +16,7 @@ using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
+using WebApplication1.RestoBusiness;
 
 namespace WebApplication1
 {
@@ -53,12 +54,10 @@ namespace WebApplication1
             services.AddScoped<RestoransRepository>(x =>
                 new RestoransRepository(x.GetService<KzDbContext>())
                 );
-            services.AddScoped<UsersRestoRepository>(x =>
-                new UsersRestoRepository(x.GetService<KzDbContext>())
-                ); 
-                 services.AddScoped<RolesRestoRepository>(x =>
-                new RolesRestoRepository(x.GetService<KzDbContext>())
+            services.AddScoped<BronRestoRepository>(x =>
+                new BronRestoRepository(x.GetService<KzDbContext>())
                 );
+            services.AddScoped<BronRestoBusiness>();
 
             RegisterAutoMapper(services);
             RegisterRestoMapper(services);
@@ -85,6 +84,18 @@ namespace WebApplication1
 
             configurationExp.CreateMap<Restorans, RestoViewModel>();
             configurationExp.CreateMap<RestoViewModel, Restorans>();
+            configurationExp.CreateMap<Restorans, AvailableRestoModel>();
+            configurationExp.CreateMap<AvailableRestoModel, OneRestoViewModel>();
+            configurationExp.CreateMap<Restorans, OneRestoViewModel>();
+            configurationExp.CreateMap<OneRestoViewModel, BronViewModel>();
+
+            configurationExp.CreateMap<Restorans, BronViewModel>();
+            configurationExp.CreateMap<Restorans, BronResto>();
+
+            configurationExp.CreateMap<BronResto, BronNumberViewModel>();
+            configurationExp.CreateMap<BronResto, BronAdminViewModel>();
+            configurationExp.CreateMap<BronResto, BronViewModel>();
+            configurationExp.CreateMap<BronViewModel, BronResto>();
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

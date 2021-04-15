@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+
+@model BronViewModel
+
+<form action="@Url.Action("BronResto", "Restorans", new {name= @Model.Name })" method="post">
+
+    <div> Введите Email:@Html.TextBoxFor(x => x.EmailUser)</div>
+    <div> Введите тел.номер:@Html.TextBoxFor(x => x.PhUserNumber)</div>
+    <div> Укажите количество посетителей:@Html.TextBoxFor(x => x.CountOfVisitors)</div>
+    <div>
+        <input type="submit" value="Отправить заявку" />
+    </div>
+</form>
+
+
+

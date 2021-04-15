@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+
+@model List<BronAdminViewModel>
+
+@section Scripts{
+    <script src="~/js/newreqbron.js"></script>
+}
+
+@foreach (var resto in Model)
+{
+<div class="bron">
+    <div>Средний чек: @resto.BronRespNumber</div>
+    <div>@resto.EmailUser</div>
+    <div>@resto.PhUserNumber</div>
+    <div>Тел.номер: @resto.CountOfVisitors</div>
+
+    <form action="@Url.Action("AdminConfirmBron" , "Restorans", new { numb=@resto.BronRespNumber})" method="post">
+        <div>
+            <input type="submit" class="confirm" value="Подтвердить" />
+        </div>
+        <div>
+            <input type="button" class="delete" data-number="@resto.BronRespNumber." value="Удалить бронь" />
+        </div>
+
+    </form>
+</div>
+}
