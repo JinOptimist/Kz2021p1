@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210415150649_FixMerge")]
+    partial class FixMerge
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,24 +222,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FireTruck", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("TruckNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TruckState")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FireTrucks");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
                 {
                     b.Property<long>("Id")
@@ -251,9 +235,6 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("TeamId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("WorkExperYears")
                         .HasColumnType("int");
 
@@ -262,36 +243,7 @@ namespace WebApplication1.Migrations
                     b.HasIndex("CitizenId")
                         .IsUnique();
 
-                    b.HasIndex("TeamId");
-
                     b.ToTable("Firemen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FiremanTeam", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Shift")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeamName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeamState")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("TruckId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TruckId")
-                        .IsUnique();
-
-                    b.ToTable("FiremanTeams");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceAcademy", b =>
@@ -760,115 +712,7 @@ namespace WebApplication1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication1.EfStuff.Model.FiremanTeam", "FiremanTeam")
-                        .WithMany("Firemen")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Citizen");
-
-                    b.Navigation("FiremanTeam");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FiremanTeam", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.FireTruck", "FireTruck")
-                        .WithOne("FiremanTeam")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.FiremanTeam", "TruckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FireTruck");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceAcademy", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("PoliceAcademy")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.PoliceAcademy", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceCallHistory", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithMany("PoliceCallHistories")
-                        .HasForeignKey("CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Policeman", "Policeman")
-                        .WithMany("PoliceCallHistories")
-                        .HasForeignKey("PolicemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-
-                    b.Navigation("Policeman");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Policeman", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("Policeman")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Policeman", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Pupil", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.School", "School")
-                        .WithMany("Pupils")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.SportSection", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.SportComplex", null)
-                        .WithMany("Sections")
-                        .HasForeignKey("SportComplexId");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Student", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.University", "University")
-                        .WithMany("Students")
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Violations", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithMany("Violations")
-                        .HasForeignKey("CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Policeman", "Policeman")
-                        .WithMany("Violations")
-                        .HasForeignKey("PolicemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-
-                    b.Navigation("Policeman");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceAcademy", b =>
