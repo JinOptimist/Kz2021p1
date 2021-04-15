@@ -24,6 +24,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+
             var viewModels = _firemanRepository
                .GetAll()
                .Select(x => new FiremanShowViewModel()
