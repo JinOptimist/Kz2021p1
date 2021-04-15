@@ -15,18 +15,16 @@ namespace WebApplication1.Controllers
 {
     public class RestoransController : Controller
     {
-        private KzDbContext _kzDbContext;
         private BronRestoBusiness _bronRestoBusiness;
         private BronRestoRepository _bronRestoRepository;
         private RestoransRepository _restoransRepository;
         private IMapper MapResto { get; set; }
-        public RestoransController(RestoransRepository restoransRepository, IMapper mapper, BronRestoRepository bronRestoRepository,BronRestoBusiness bronRestoBusiness, KzDbContext kzDbContext)
+        public RestoransController(RestoransRepository restoransRepository, IMapper mapper, BronRestoRepository bronRestoRepository,BronRestoBusiness bronRestoBusiness)
         {
             _restoransRepository = restoransRepository;
             MapResto = mapper;
             _bronRestoRepository = bronRestoRepository;
             _bronRestoBusiness = bronRestoBusiness;
-            _kzDbContext = kzDbContext;
         }
         public IActionResult AvailableResto()
         {
