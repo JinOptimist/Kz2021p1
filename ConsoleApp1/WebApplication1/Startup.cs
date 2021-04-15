@@ -24,6 +24,7 @@ using WebApplication1.Services;
 using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
+using System.Reflection;
 
 namespace WebApplication1
 {
@@ -77,61 +78,20 @@ namespace WebApplication1
 
         private void RegisterRepositories(IServiceCollection services)
         {
-            services.AddScoped<CitizenRepository>(x =>
-                new CitizenRepository(x.GetService<KzDbContext>())
-                );
-
-            services.AddScoped<AdressRepository>(x =>
-                new AdressRepository(x.GetService<KzDbContext>())
-                );
-
-            //--------------------------------------------------------
-
-            services.AddScoped<UniversityRepository>(x =>
-                new UniversityRepository(x.GetService<KzDbContext>())
-                );
-
-            services.AddScoped<StudentRepository>(x =>
-                new StudentRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<IncomingFlightsRepository>(x =>
-                new IncomingFlightsRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<DepartingFlightsRepository>(x =>
-                new DepartingFlightsRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<PassengersRepository>(x =>
-                new PassengersRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<FiremanRepository>(x =>
-                 new FiremanRepository(x.GetService<KzDbContext>())
-             );
-
-            services.AddScoped<SchoolRepository>(x =>
-                new SchoolRepository(x.GetService<KzDbContext>())
-                );
-
-            services.AddScoped<PupilRepository>(x =>
-                new PupilRepository(x.GetService<KzDbContext>())
-                );
-
-            //--------------------------------------------------------
-
-            services.AddScoped<BusRepository>(x =>
-                new BusRepository(x.GetService<KzDbContext>())
-                );
-
-            services.AddScoped<TripRouteRepository>(x =>
-                new TripRouteRepository(x.GetService<KzDbContext>())
-                );
-
-
-            services.AddScoped<SportComplexRepository>(x =>
-                new SportComplexRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<SportEventRepository>(x =>
-                new SportEventRepository(x.GetService<KzDbContext>())
-                );
+            foreach (var repositoryType in Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(type =>
+                        type.BaseType?.IsGenericType == true
+                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+            {
+                services.AddScoped(repositoryType, x =>
+                {
+                    var constructor = repositoryType.GetConstructors().Single();
+                    var parameters = new object[] { x.GetService<KzDbContext>() };
+                    return constructor.Invoke(parameters);
+                });
+            }
         }
 
         private void RegisterAutoMapper(IServiceCollection services)
@@ -142,15 +102,14 @@ namespace WebApplication1
                 .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
+
             configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
             configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
+
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
             
             configurationExp.AddProfile<PoliceProfiles>();
-
-            configurationExp.CreateMap<Fireman, FiremanViewModel>();
-            configurationExp.CreateMap<FiremanViewModel, Fireman>();
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
                 .ForMember(nameof(FiremanShowViewModel.Name),
@@ -160,15 +119,20 @@ namespace WebApplication1
 
             configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
 
-            configurationExp.CreateMap<Bus, BusParkViewModel>();
-            configurationExp.CreateMap<BusParkViewModel, Bus>();
-
-            configurationExp.CreateMap<TripRoute, TripViewModel>();
-            configurationExp.CreateMap<TripViewModel, TripRoute>();
+            MapBothSide<Fireman, FiremanViewModel>(configurationExp);
+            MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
+            MapBothSide<Bus, BusParkViewModel>(configurationExp);
+            MapBothSide<TripRoute, TripViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
+        }
+
+        public void MapBothSide<Type1, Type2>(MapperConfigurationExpression configurationExp)
+        {
+            configurationExp.CreateMap<Type1, Type2>();
+            configurationExp.CreateMap<Type2, Type1>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
