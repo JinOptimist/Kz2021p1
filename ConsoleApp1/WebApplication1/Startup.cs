@@ -65,7 +65,8 @@ namespace WebApplication1
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
             services.AddScoped<AirportPresentation>(x =>
                 new AirportPresentation(
-                    x.GetService<FlightsRepository>()));
+                    x.GetService<FlightsRepository>(),
+                    x.GetService<IMapper>()));
             services.AddScoped<AirportLogic>(x => 
                 new AirportLogic(
                                 x.GetService<PassengersRepository>(),

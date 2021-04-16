@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using WebApplication1.ApplicationLogic.Airport;
-using WebApplication1.Controllers.CustomFilterAttributes;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.Models.Airport;
 using WebApplication1.Presentation.Airport;
@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers.Airport
             return View(departingFlightsAvailableForBooking);
         }
 
-        [IsAuthenticatedCitizen]
+        [Authorize]
         public IActionResult BookTicket(long id)
         {
             if (!_airportLogic.FlightIsValid(id)) return RedirectToAction("AvailableFlights");
