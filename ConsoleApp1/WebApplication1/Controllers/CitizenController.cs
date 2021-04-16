@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -18,12 +21,16 @@ namespace WebApplication1.Controllers
     {
         private CitizenRepository _citizenRepository;
         private CitizenPresentation _citizenPresentation;
+        private UserService _userService;
+        private IMapper _mapper;
 
-        public CitizenController(CitizenRepository citizenRepository, 
-            CitizenPresentation citizenPresentation)
+        public CitizenController(CitizenRepository citizenRepository,
+            CitizenPresentation citizenPresentation, UserService userService, IMapper mapper)
         {
             _citizenRepository = citizenRepository;
             _citizenPresentation = citizenPresentation;
+            _userService = userService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -35,7 +42,12 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            var url = Request.Query["ReturnUrl"];
+            var viewModel = new LoginViewModel()
+            {
+                ReturnUrl = url
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -57,7 +69,12 @@ namespace WebApplication1.Controllers
             var claimsPrincipal = _citizenPresentation.GetClaimsPrincipal(user);
             await HttpContext.SignInAsync(claimsPrincipal);
 
-            return View();
+            if (!string.IsNullOrEmpty(viewModel.ReturnUrl))
+            {
+                return Redirect(viewModel.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Exit()
@@ -85,16 +102,14 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult FullProfile()
         {
-            var model = new FullProfileViewModel() { 
-                Age = 30,
-                Job = "Строитель",
-                Name = "Иванов",
-                RegistrationDate = DateTime.Now.AddDays(-20)
-            };
+            var user = _userService.GetUser();
 
-            return View(model);
+            var viewModel = _mapper.Map<FullProfileViewModel>(user);
+
+            return View(viewModel);
         }
 
         [HttpPost]
