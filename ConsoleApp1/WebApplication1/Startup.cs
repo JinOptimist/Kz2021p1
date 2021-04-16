@@ -116,24 +116,23 @@ namespace WebApplication1
 
         private void RegisterAutoMapper(IServiceCollection services)
         {
-            MapperConfigurationExpression configurationExp = new MapperConfigurationExpression();
+            var configurationExp = new MapperConfigurationExpression();
 
             configurationExp.CreateMap<Adress, AdressViewModel>()
                 .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
-                .ForMember(nameof(FiremanShowViewModel.Name),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
-                .ForMember(nameof(FiremanShowViewModel.Age),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
-            configurationExp.CreateMap<FiremanViewModel, Fireman>();
+            configurationExp.CreateMap<AdressViewModel, Adress>();
 
+            configurationExp.AddProfile<PoliceProfiles>();
+            configurationExp.AddProfile<AirportProfiles>();
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
                 .ForMember(nameof(FiremanShowViewModel.Name),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Name))
                 .ForMember(nameof(FiremanShowViewModel.Age),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Age));
-            MapperConfiguration config = new MapperConfiguration(configurationExp);
-            Mapper mapper = new Mapper(config);
+
+            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
+
             MapBothSide<Fireman, FiremanViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
@@ -141,22 +140,13 @@ namespace WebApplication1
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
-            configurationExp.CreateMap<Bus, BusParkViewModel>();
-
-            MapperConfigurationExpression configurationExpNew = new MapperConfigurationExpression();
+            services.AddScoped<IMapper>(x => mapper);
         }
 
         public void MapBothSide<Type1, Type2>(MapperConfigurationExpression configurationExp)
         {
             configurationExp.CreateMap<Type1, Type2>();
             configurationExp.CreateMap<Type2, Type1>();
-            configurationExp.CreateMap<TripViewModel, TripRoute>();
-
-            MapperConfiguration config = new MapperConfiguration(configurationExp);
-            Mapper mapper = new Mapper(config);
-            services.AddScoped<IMapper>(x => mapper);
-
-            MapperConfigurationExpression configurationExpNew = new MapperConfigurationExpression();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
