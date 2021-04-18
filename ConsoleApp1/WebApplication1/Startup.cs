@@ -24,6 +24,7 @@ using WebApplication1.Services;
 using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
+using WebApplication1.Services.Education;
 
 namespace WebApplication1
 {
@@ -49,6 +50,8 @@ namespace WebApplication1
 			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
+            //AddDataToDB.AddData(connectionString);
+          
             RegisterRepositories(services);
 
             services.AddScoped<UserService>(x =>
@@ -59,7 +62,7 @@ namespace WebApplication1
 
             services.AddScoped<CitizenPresentation>(x => 
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
-
+                       
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
 
@@ -72,7 +75,7 @@ namespace WebApplication1
                 });
 
             services.AddHttpContextAccessor();
-            services.AddPaging();
+            //services.AddPaging();
         }
 
         private void RegisterRepositories(IServiceCollection services)
@@ -146,8 +149,21 @@ namespace WebApplication1
             configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            var config = new MapperConfiguration(configurationExp);
+            
             configurationExp.AddProfile<PoliceProfiles>();
+
+            configurationExp.CreateMap<University, UniversityViewModel>()
+              .ForMember(nameof(UniversityViewModel.StudentCount),
+                  opt => opt.MapFrom(univer => univer.Students.Count()));
+            configurationExp.CreateMap<UniversityViewModel, University>();
+            configurationExp.CreateMap<School, SchoolViewModel>()
+             .ForMember(nameof(SchoolViewModel.PupilCount),
+                 opt => opt.MapFrom(school => school.Pupils.Count()));
+            configurationExp.CreateMap<SchoolViewModel, School>();
+            configurationExp.CreateMap<Student, StudentViewModel>();
+            configurationExp.CreateMap<StudentViewModel, Student>();
+            configurationExp.CreateMap<Pupil, PupilViewModel>();
+            configurationExp.CreateMap<PupilViewModel, Pupil>();
 
             configurationExp.CreateMap<Fireman, FiremanViewModel>();
             configurationExp.CreateMap<FiremanViewModel, Fireman>();
@@ -159,10 +175,14 @@ namespace WebApplication1
                     opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
             configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
-
+            var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
-
+            services.AddScoped<StudentPresentation>(x =>
+              new StudentPresentation(x.GetService<StudentRepository>(), mapper));
+            services.AddScoped<PupilPresentation>(x =>
+              new PupilPresentation(x.GetService<PupilRepository>(), x.GetService<StudentRepository>(), mapper));
+            /*
             var configurationExpNew = new MapperConfigurationExpression();
 
             configurationExpNew.CreateMap<Bus, BusParkViewModel>();
@@ -179,7 +199,7 @@ namespace WebApplication1
 
             var configTrip = new MapperConfiguration(configurationExpTrip);
             var mapperTrip = new Mapper(configTrip);
-            services.AddScoped<IMapper>(x => mapperTrip);
+            services.AddScoped<IMapper>(x => mapperTrip);*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

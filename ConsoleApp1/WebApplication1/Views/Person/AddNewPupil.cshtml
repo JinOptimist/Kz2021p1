@@ -1,0 +1,54 @@
+﻿@model PupilViewModel
+
+<h1>
+    Add
+</h1>
+<form action="/Person/AddNewPupil" method="post">
+    <div>
+        IIN: @Html.TextBoxFor(x => x.IIN)
+    </div>
+    <div>
+        Surname: @Html.TextBoxFor(x => x.Surname)
+    </div>
+    <div>
+        Name: @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        Patronymic: @Html.TextBoxFor(x => x.Patronymic)
+    </div>
+    <div>
+        Birthday: @Html.TextBoxFor(x => x.Birthday)  @* сделать селект из чисел*@
+    </div>
+    <div>
+        Email: @Html.TextBoxFor(x => x.Email)
+    </div>
+    <div>
+        School Id: @Html.TextBoxFor(x => x.SchoolId) @* сделать селект из сущ. School ID*@
+    </div>
+    <div>
+        Subject: @Html.TextBoxFor(x => x.Subject) @* сделать селект из subject, но сначало создать Enumerable faculty*@
+    </div>
+    <div>
+        Average Mark: @Html.TextBoxFor(x => x.AverageMark) @* сделать селект 0-12*@
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        Class Year: @Html.TextBoxFor(x => x.ClassYear)   @* сделать селект 1-4*@
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>    
+
+    <div>
+        Graduated Year: @Html.TextBoxFor(x => x.GraduatedYear) @* сделать селект 1990-2021*@
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+
+    <div>
+        ENT: @Html.TextBoxFor(x => x.ENT) @* сделать селект 50-140*@
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+
+    <div>
+        <input type="submit" value="Add" />
+    </div>
+</form>

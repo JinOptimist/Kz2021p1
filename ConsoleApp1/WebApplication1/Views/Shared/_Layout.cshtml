@@ -38,121 +38,132 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="@Url.Action("Index", "Airport") ">Аэропорт</a>
-                        </li>
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a href="@Url.Action("Login", "Citizen")" class="nav-link text-dark">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="@Url.Action("Register", "Citizen")" class="nav-link text-dark">Register</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a href="@Url.Action("Exit", "Citizen")" class="nav-link text-dark">Exit</a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Index", "Citizen")">Пользователи</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark" href="@Url.Action("FullProfile", "Citizen")">Полный профиль</a>
-                        </li>
+                        @* <li class="nav-item active">
+                                <a class="nav-link" href="#">Main page <span class="sr-only">(current)</span></a>
+                            </li>*@
+
+
                         <li class="nav-item dropdown">
-                            <a asp-controller="police" asp-action="main" class="dropdown-toggle nav-link text-dark">Полиция <b class="caret"></b></a>
+                            <a class="dropdown-toggle list-group-item">Citizens <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="main">Главная</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="news">Новости</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item nav-link text-dark"
-                                       asp-controller="police" asp-action="duties">Полицейские на смене</a>
-                                </li>
-                                @if (userService.IsPolicment())
+                                @if (!User.Identity.IsAuthenticated)
                                 {
                                     <li>
-                                        <a class="dropdown-item nav-link text-dark"
-                                           asp-controller="police" asp-action="users">Список жителей</a>
+                                        <a class="dropdown-item nav-link text-dark" href="@Url.Action("Login", "Citizen")">Login</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item nav-link text-dark" href="@Url.Action("Register", "Citizen")">Register</a>
                                     </li>
                                 }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="dropdown-item nav-link text-dark" href="@Url.Action("Exit", "Citizen")">Exit</a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Index", "Citizen")">Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("FullProfile", "Citizen")">Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Index", "Adress")">Addresses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Add", "Adress")">Add address</a>
+                                </li>
+                            </ul>
+                        </li>
 
+
+                        <li class="nav-item dropdown">
+                            <a asp-controller="police" asp-action="main" class="dropdown-toggle list-group-item">Police department <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="main">Main</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="news">News</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="duties">Policemens</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="users">Citizens</a>
+                                </li>
                                 <li class="divider"></li>
                             </ul>
                         </li>
 
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Index", "Adress")">Адреса</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Add", "Adress")">добавить адресс</a>
-                        </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Education
-                            </a>
+                            <a class="dropdown-toggle list-group-item">Fire department <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Main", "Fireman")">Fireman</a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+
+
+                        <li class="nav-item dropdown">
+                           
+                            <a class="dropdown-toggle list-group-item text-dark"> Education</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @*University*@
-
                                 <li>
-                                    <a class="nav-link text-dark"
-                                       href="@Url.Action("UniversityList", "EducationalInstitution")">Universities</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="index">Main</a>
                                 </li>
-                                @*School*@
-
                                 <li>
-                                    <a class="nav-link text-dark"
-                                       href="@Url.Action("SchoolList", "EducationalInstitution")">Schools</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="UniversityList">Universities</a>
                                 </li>
-
-                                @*Student*@
                                 <li>
-                                    <a class="nav-link text-dark"
-                                       href="@Url.Action("StudentListAndSearch", "Person")">Students</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="SchoolList">Schools</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="Person" asp-action="StudentListAndSearch">Students</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="Person" asp-action="PupilListAndSearch">Pupils</a>
                                 </li>
 
-                                @*Pupil*@
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle list-group-item">Sport <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
                                 <li>
-                                    <a class="nav-link text-dark"
-                                       href="@Url.Action("PupilListAndSearch", "Person")">Pupils</a>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Index", "SportComplex")">Sport complexes</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("AddComplex", "SportComplex")">Add sport complexes</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Index", "SportEvent")">Sport events</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("AddEvent", "SportEvent")">Add sport event</a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Index", "SportComplex")">Список спорт-комплексов</a>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle list-group-item">Transport <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("Index", "Airport")">Airport</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" href="@Url.Action("CityBusSystemMainPage", "Bus")">Bus System</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("AddComplex", "SportComplex")">Добавить спорт-комплекс</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Index", "SportEvent")">Спортивные мероприятия</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("AddEvent", "SportEvent")">Добавить мероприятие</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark"
-                               href="@Url.Action("Main", "Fireman")">Пожарные главная страница</a>
-                        </li>
-                        <li class="list-group-item">@Html.ActionLink("City Bus System", "CityBusSystemMainPage", "Bus")</li>
                     </ul>
                 </div>
             </div>

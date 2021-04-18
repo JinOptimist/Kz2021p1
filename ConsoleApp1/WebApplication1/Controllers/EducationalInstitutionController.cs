@@ -22,6 +22,11 @@ namespace WebApplication1.Controllers
             Mapper = mapper;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         public IActionResult UniversityList()
         {
             var universities = UniversityRepository
