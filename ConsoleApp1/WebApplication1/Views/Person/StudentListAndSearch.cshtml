@@ -6,18 +6,16 @@
 @{
     ViewData["Title"] = "StudentListAndSearch";
 }
+@section Scripts{
+    <script src="~/js/Education/student.js"></script>
+}
 
 <h1 style="display:flex; justify-content:center; align-items:center">Student Page</h1>
 
-<nav aria-label="nav example" style="margin:10px">
-    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
-</nav>
 
+<div class="container mb-5" >
 
-
-<div class="container">
-
-    <form asp-action="StudentListAndSearch" method="post">
+    <form asp-action="StudentGrantByGpa" method="post">
         <p>
             <b style="margin: 10px;"> Select: </b>
             @Html.RadioButton("select", "issueGrant") <text class="marginForText">Выдать Грант</text>
@@ -39,11 +37,20 @@
 
         </p>
     </form>
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+    }
 
     <form asp-action="StudentListAndSearch" method="get">
+
         <p>
             <b style="margin: 10px;"> Search By: </b>
-            @Html.RadioButton("searchBy", "iin", true) <text class="marginForText">IIN</text>
+            @Html.RadioButton("searchBy", "iin") <text class="marginForText">IIN</text>
             @Html.RadioButton("searchBy", "name") <text class="marginForText">Name</text>
             @Html.RadioButton("searchBy", "courseYear") <text class="marginForText">Course Year</text>
             @Html.RadioButton("searchBy", "universityID") <text class="marginForText">University ID</text>
@@ -59,14 +66,12 @@
 
             <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
 
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="StudentListAndSearch">Get All Students</a>
+            <a class="btn btn-primary" style="margin-left:15px" asp-action="StudentList">Get All Students</a>
         </p>
     </form>
 
-</div>
+    <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewStudent">Add New Student</a>
 
-
-<div class="container" style="margin:30px">
 
     <table border="1" class="table">
         <thead>
@@ -82,7 +87,7 @@
             {
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr class="user">
 
                         <td>
                             @Html.ActionLink(@item.IIN, "StudentFullInfo", new { IINStudent = item.IIN })
@@ -94,16 +99,27 @@
                         {
                             <td>
 
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Выдать грант", "StudentGrant", "Person", new { IDStudent = item.Id })</button>
+                                <button class="btn btn-light" type="submit">@Html.ActionLink("Выдать грант", "StudentGrantIndividual", "Person", new { IDStudent = item.Id })</button>
 
                             </td>
                         }
                         else
                         {
                             <td>
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Забрать грант", "StudentGrant", "Person", new { IDStudent = item.Id })</button>
+                                <button class="btn btn-light" type="submit">@Html.ActionLink("Забрать грант", "StudentGrantIndividual", "Person", new { IDStudent = item.Id })</button>
                             </td>
                         }
+
+                        @* TODO: Implement these buttons work*@
+
+                        <td>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("EDIT", "AddNewStudent", "Person", new { IDStudent = item.Id })</button>
+                        </td>
+
+                        <td>
+                            <input class="btn btn-light deleteStudent" data-name="@item.IIN" type="button" value="Delete" />
+                        </td>
+
                     </tr>
                 }
             }
@@ -111,8 +127,14 @@
         </tbody>
     </table>
 
-    <nav aria-label="nav example" style="margin:10px">
-        <vc:pager paging-list="@Model" />
+
+    <nav aria-label="nav example">
+        @if (this.Model != null)
+        {
+            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+            //<vc:pager paging-list="@Model" />
+        }
+
     </nav>
 
 </div>
@@ -122,7 +144,7 @@
         margin-right: 25px;
     }
 
-    ul.pagination li{
-        margin:10px;
+    ul.pagination li {
+        margin: 10px;
     }
 </style>

@@ -5,6 +5,10 @@
     ViewData["Title"] = "PupilListAndSearch";
 }
 
+@section Scripts{
+    <script src="~/js/Education/pupil.js"></script>
+}
+
 <h1 style="display:flex; justify-content:center; align-items:center">Pupil Page</h1>
 <div class="container">
     <form asp-action="PupilListAndSearch" method="get">
@@ -26,11 +30,11 @@
 
             <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
 
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="PupilListAndSearch">Get All Pupil</a>
+            <a class="btn btn-primary" style="margin-left:15px" asp-action="PupilList">Get All Pupil</a>
         </p>
     </form>
 
-    <form asp-action="PupilListAndSearch" method="post">
+    <form asp-action="PupilGrant" method="post">
 
         <p>
             <input type="number"
@@ -42,10 +46,11 @@
                    style="width:300px;" />
 
 
-            <input type="submit" value="Выдать Грант" asp-action="PupilListAndSearch" class="btn btn-primary" style="margin-left:15px" />
+            <input type="submit" value="Выдать Грант" asp-action="PupilGrant" class="btn btn-primary" style="margin-left:15px" />
 
         </p>
     </form>
+    <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewPupil">Add New Pupil</a>
 </div>
 
 <div class="container">
@@ -64,13 +69,20 @@
             {
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr class="user">
                         <td>
                             @Html.ActionLink(@item.IIN, "PupilFullInfo", new { IINPupil = item.IIN })
                         </td>
                         <td> @item.Surname @item.Name @item.Patronymic </td>
                         <td> @item.ClassYear </td>
                         <td> @item.SchoolId</td>
+                        <td>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("EDIT", "AddNewPupil", "Person", new { IDStudent = item.Id })</button>
+                        </td>
+
+                        <td>
+                            <input class="btn btn-light deletePupil" data-name="@item.IIN" type="button" value="Delete" />
+                        </td>
                     </tr>
                 }
             }

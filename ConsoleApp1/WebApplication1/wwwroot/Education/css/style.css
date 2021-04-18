@@ -1,0 +1,554 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6{
+    margin: 0;
+    color: #212353;
+}
+
+a{
+    text-decoration: none;
+    color: #212353; /* изменить потом*/
+}
+
+/* Container */
+
+.container{
+    width: 100%;
+    max-width: 1190px;
+    margin: auto;
+}
+
+.flexContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ptb_50{
+    padding: 20px 0;
+}
+
+/* section 1 ABOUT -INTRO */
+
+#about .container{
+    background: url(../img/section1.png) no-repeat bottom right;
+    background-size: 70%;
+}
+
+.textWrapper{
+    max-width: 45%;
+}
+
+.intro_title{
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.intro_subtext{
+    padding-top: 20px;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+}
+
+.btnWrapper{
+    padding-top: 50px;
+}
+
+.btnLearnMore{   
+    display: inline-block;
+    padding: 15px 2.5rem;
+    background-color: rgb(129, 6, 129);
+    border-radius: 50px;
+    color: #ffffff;    
+}
+
+.btnLearnMore:hover{    
+    background: #f6f882;
+    border-radius: 50px;
+    color: #220469;
+}
+
+/* Section 2 */
+
+.section2_inner{
+    display: flex;
+    padding: 24px 20px;
+    background: rgba(240, 99, 184, 0.15);
+    border-radius: 50px;
+}
+
+.img2Wrapper{
+    max-width: 100%;
+    padding-right: 65px; 
+}
+
+.titleWrapper{
+   text-align: left;
+   padding: 90px 90px 0 0;     
+}
+.sec2Title{
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.sec2_text{
+    margin: 0;
+    padding-top: 30px;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+}
+
+/* section 3 */
+
+#features{
+    width: 100%;
+} 
+
+
+.featTextWrapper{
+    text-align: center;
+    width: 100%;
+    padding: 30px;
+} 
+
+.feat_title{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.feat_subtext{
+    font-size: 18px;
+    margin-top: 45px; 
+}
+
+/* section_3 FOUR ELEMENTS */
+
+.fourelem{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sec3TextWrapper{
+    padding: 20px 0 0 35px;
+    color: #4B5D68;
+}
+
+.fourelem_title{
+    width: 100%;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.fourelem_subtext{
+    padding: 20px 30px 0 0px;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+}
+
+.imgFourElem{
+    padding-left: 70px;    
+}
+
+.fourOneImg,.fourTwoImg, .fourThreeImg, .fourFourImg{
+    display: flex;
+    align-items: center;
+}
+
+.fourOne, .fourTwo, .fourThree, .fourFour{
+    display: flex;
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-bottom: 20px;
+    padding: 50px 0;
+}
+
+.fourOne{    
+    background: url(../img/sec3FeatRectangle1.png) no-repeat bottom right;
+}
+ 
+.fourTwo{   
+    background: url(../img/sec3FeatRectangle2.png) no-repeat bottom right; 
+}
+
+.fourThree{
+    padding-top: 50px;   
+    background: url(../img/sec3FeatRectangle3.png) no-repeat bottom right;
+}
+
+.fourFour{
+    padding-top: 50px;    
+    background: url(../img/sec3FeatRectangle4.png) no-repeat bottom right;  
+}
+
+.LearnMore{
+    font-weight: bold;
+}
+
+
+/* FOOTER-------------------- */
+
+.footer{
+    position: relative;
+}
+
+
+/* FOOTER 2 */
+
+.foot2{
+    width: 100%;
+    display: flex;
+}
+
+.footLogo{
+    width: 40%;
+}
+
+.footLogoText{
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 15px;
+}
+
+.footerNavsWrapper{
+    display: flex;
+    width: 100%;
+    text-align: left;
+    margin: 25px 0 0 0;
+}
+
+.footerNav{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 50px;
+}
+
+.footTitle{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.menu{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 2.7;
+}
+
+/* icons */
+
+.icons{
+    display: flex;    
+}
+
+.circle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px 0 0;
+    width: 50px;
+    height: 50px;
+    background: #020311;
+    border-radius: 50%;
+    opacity: 0.2;
+}
+
+.circle:hover{
+    background: #f5a0f1;
+    opacity: 1;
+}
+
+.iconsNav{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.icon {
+    color: #ffffff;
+}
+
+.foot2textWrapper{
+    max-width: 100%;
+}
+
+.cursor{
+    cursor: pointer;
+}
+
+/* media */
+
+@media screen and (max-width: 426px){
+
+    .container{
+        padding: 0 15px;
+        width: 100%;
+    }
+
+    .ptb_50{
+        padding: 20px 0 0 0;
+    }
+       
+    #about{
+        max-width: 100%;        
+    }
+
+    #about .container{
+        background: url(../img/section1.png) no-repeat bottom right 35px;
+        background-size: 50%;
+    }
+    
+    .textWrapper, .intro_title, .intro_subtext, .sec2_text{
+        max-width: 100%;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+    .font25{
+        font-size: 25px;
+    }
+
+    .font12{
+        font-size: 12px;
+    }
+
+    .btnWrapper {
+        padding-top: 20px;
+    }
+
+    .btnLearnMore{
+        display: inline-block;
+        padding: 8px 1rem;
+        background-color: rgb(129, 6, 129);
+        border-radius: 30px;
+        font-size: 12px;
+    
+        color: #ffffff; 
+    }
+
+    /* section 2 */
+    
+    .section2_inner{        
+        flex-wrap: wrap; 
+        justify-content: center;      
+    }
+
+    .img2sec{
+        width: 250px;
+    } 
+    
+    .img2Wrapper{
+        padding: 0;
+    }
+    
+    .titleWrapper{
+       padding: 0;
+        margin: 0;
+        max-width: 90%;
+    }    
+
+    /* section 3 */
+
+    .feat_subtext{
+        padding: 20px 0;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .imgFourElem{
+        width: 150px;
+        padding: 0;
+    }
+    
+    .fourOne, .fourTwo, .fourThree, .fourFour{  
+        margin: 0;
+        margin-bottom: 20px;
+        padding: 20px 0;
+        max-width: 100%;
+        flex: 0 0 100%;
+        background-size: cover;        
+    }
+
+    .sec3TextWrapper{
+        padding: 0 0 0 20px;
+    }
+
+    .fourelem_title{
+        font-size: 15px;
+    }
+
+    .fourelem_subtext{
+        margin: 0;
+    }
+
+
+    /* FOOTER */
+    /* FOOT2 */
+
+    .foot2{
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .footTitle{
+        margin: 15px 0;
+    }
+
+    .circle{
+        width: 40px;
+        height: 40px;
+    }
+
+}
+
+@media screen and (min-width: 426px) and (max-width: 769px) {
+
+    .container{
+        padding: 0 15px;
+        width: 100%;
+    }
+
+    .ptb_50{
+        padding: 20px 0 0 0;
+    }
+
+    
+    #about{
+        max-width: 100%;        
+    }
+
+    #about .container{
+        background: url(../img/section1.png) no-repeat bottom right 15px;
+        background-size: 50%;
+    }
+    
+    .textWrapper, .intro_title, .intro_subtext, .sec2_text{
+        max-width: 100%;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+    .font25{
+        font-size: 40px;
+    }
+
+    .sec2Title{
+        font-size: 30px;
+    }
+
+    .font12{
+        font-size: 14px;
+    }
+
+    .btnWrapper {
+        padding-top: 20px;
+    }
+
+    .btnLearnMore{
+        display: inline-block;
+        padding: 8px 1rem;
+        background-color: rgb(129, 6, 129);
+        border-radius: 30px;
+        font-size: 12px;
+    
+        color: #ffffff; 
+    }
+
+    /* section 2 */
+    
+    .section2_inner{        
+        flex-wrap: wrap; 
+        justify-content: center;      
+    }
+
+    .img2sec{
+        width: 250px;
+    } 
+    
+    .img2Wrapper{
+        padding: 0;
+    }
+    
+    .titleWrapper{
+       padding: 0;
+        margin: 0;
+        max-width: 90%;
+    }
+
+    /* section 3 */
+
+    .feat_subtext{
+        padding: 20px 0;
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .imgFourElem{
+        width: 150px;
+        padding: 0;
+    }
+    
+    .fourOne, .fourTwo, .fourThree, .fourFour{  
+        margin: 0;
+        padding: 0 0 15px 15px;
+        margin-bottom: 20px;
+        max-width: 100%;
+        flex: 0 0 100%;
+        background-size: cover; 
+        justify-content: space-between;       
+    }
+
+    .sec3TextWrapper{
+        padding: 20px 35px 0 0;
+    }
+    
+
+    .fourelem_title{
+        font-size: 15px;
+    }
+
+    .fourelem_subtext{
+        margin: 0;
+    }
+
+   
+
+    /* FOOTER */
+
+    .footer{
+        position: relative;
+    }
+
+    /* FOOT2 */
+
+    .foot2{
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .footTitle{
+        margin: 15px 0;
+    }
+
+    .circle{
+        width: 50px;
+        height: 50px;
+    }
+}
+
