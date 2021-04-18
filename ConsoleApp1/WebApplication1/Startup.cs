@@ -71,8 +71,7 @@ namespace WebApplication1
                     config.AccessDeniedPath = "/Citizen/Login";
                 });
 
-            services.AddHttpContextAccessor();
-            services.AddPaging();
+            services.AddHttpContextAccessor();            
         }
 
         private void RegisterRepositories(IServiceCollection services)

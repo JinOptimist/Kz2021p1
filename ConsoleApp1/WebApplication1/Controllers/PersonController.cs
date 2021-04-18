@@ -85,7 +85,7 @@ namespace WebApplication1.Controllers
         {
             ViewData["minGpaValue"] = minGpaValue;
 
-            if (minGpaValue != null)
+            if (minGpaValue != 0)
             {
                 if (select == "issueGrant")
                 {
@@ -141,7 +141,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> PupilListAndSearch(string searchBy, string searchPupil)
+        public IActionResult PupilListAndSearch(string searchBy, string searchPupil)
         {
             ViewData["GetStudentDetails"] = searchPupil;
 
@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PupilListAndSearch(int minValueForGrant)
+        public IActionResult PupilListAndSearch(int minValueForGrant)
         {
             ViewData["PostMinValueForGrant"] = minValueForGrant;
 
@@ -194,7 +194,7 @@ namespace WebApplication1.Controllers
             // регистрации ученика в качестве студента
 
 
-            if (minValueForGrant != null)
+            if (minValueForGrant != 0)
             {
                 var pupils = PupilRepository.GetAll();
                 foreach (var pupil in pupils)
