@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.EfStuff;
 
 namespace WebApplication1
 {
@@ -13,7 +14,10 @@ namespace WebApplication1
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .Seed()
+                .Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
