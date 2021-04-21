@@ -40,7 +40,7 @@ namespace WebApplication1.Presentation.Airport
         {
             return _flightsRepository
                 .GetAll()
-                .Where(flight => flight.FlightStatus == FlightStatus.OnTime && flight.FlightType == FlightType.DepartingFlight)
+                .Where(flight => flight.FlightStatus == FlightStatus.OnTime && flight.FlightType == FlightType.DepartingFlight && flight.Passengers.Count() < 100)
                 .ToList();
         }
 
