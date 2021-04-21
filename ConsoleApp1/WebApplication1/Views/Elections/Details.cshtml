@@ -1,0 +1,150 @@
+﻿@model CandidateElectionViewModel
+@using WebApplication1.Services
+@using WebApplication1.Models
+@using Microsoft.AspNetCore.Routing
+@inject UserService userService
+
+@section Scripts{
+    <script src="~/js/elections/candidate.js"></script>
+}
+
+@{
+    var userId = userService.GetUser().Id;
+}
+@{
+    ViewBag.Title = Model.Election.Name;
+}
+
+<div class="bg-primary mb-4 p-2 text-white d-flex justify-content-between ">
+    <h5 >Информация о выборах</h5>
+    <div>
+        <a asp-controller="Elections" asp-action="Register" asp-route-id="@Model.Election.Id" class="btn btn-success align-self-center  border-light"> Участвовать в выборах</a>
+    </div>
+</div>
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<table class="table">
+    
+    <thead>
+    <tr>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <th scope="row">ID</th>
+        <td>@Model.Election.Id</td>
+    </tr>
+    <tr>
+        <th scope="row">Название</th>
+        <td>@Model.Election.Name</td>
+    </tr>
+    <tr>
+        <th scope="row">Описание</th>
+        <td>@Model.Election.Description</td>
+    </tr>
+    <tr>
+        <th scope="row">Начало</th>
+        <td>@Model.Election.Start</td>
+    </tr>
+    <tr>
+        <th scope="row">Окончание</th>
+        <td>@Model.Election.End</td>
+    </tr>
+
+    <tr>
+        <th scope="row">Количество кадидатов</th>
+        <td>@Model.Candidates.Count()</td>
+    </tr>
+
+    </tbody>
+</table>
+
+
+<div class="mb-1 mt-4 bg-primary text-white p-2">
+    <h5 class="card-title">
+        Список кандидатов
+    </h5>
+</div>
+
+<table class="table table-sm table-bordered m-1 р-1" id="tbCandidates">
+    <tr>
+        <th>
+            Имя
+        </th>
+        <th>
+            Возраст
+        </th>
+        <th>
+            Место работы
+        </th>
+        <th>
+            Лозунг
+        </th>
+        <th>
+            Город
+        </th>
+        <th>
+            Идея
+        </th>
+        <th>
+            Количество голосов
+        </th>
+
+        <th>
+            Голосование
+        </th>
+    </tr>
+    @if (Model.Candidates.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" class="text-center">
+                Нет зарегистрированных кандидатов
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var electionCandidate in Model.Candidates)
+        {
+            <tr id="userRow">
+
+                <td>
+                    @electionCandidate.Candidate.Name
+                </td>
+                <td>
+                    @electionCandidate.Candidate.Age
+                </td>
+                <td>
+                    @electionCandidate.Candidate.Job
+                </td>
+                <td>
+                    @electionCandidate.Candidate.Slogan
+                </td>
+                <td>
+                    @electionCandidate.Candidate.City
+                </td>
+                <td>
+                    @electionCandidate.Candidate.Idea
+                </td>
+                <td>
+                    количество голосов
+                </td>
+                <td>
+                    <button type="button" data-name="@electionCandidate.Candidate.Name" id="voteBtn" class="btn btn-sm btn-success">
+                        Отдать голос
+                    </button>
+                </td>
+                <td>
+                    @if (@userId.Equals(@electionCandidate.Candidate.CitizenId))
+                    {
+                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@electionCandidate.CandidateId">Редактировать</a>
+                        <button  type="button" data-electionId="@Model.Election.Id"  data-candidateId="@electionCandidate.CandidateId" id="deleteCandidateBtn" class="btn btn-sm btn-danger">Удалить</button>
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>

@@ -1,0 +1,37 @@
+﻿@model ElectionViewModel
+@section Scripts{
+    <script src="~/js/elections/election.js"></script>
+}
+
+<div class=" mb-1 bg-primary text-white p-2">
+
+    <h4 class="card-title">
+        Создать выборы
+    </h4>
+
+</div>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Название выборов</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Описание</label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Start">Начало выборов</label>
+        <input asp-for="Start" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="End">Окончание выборов</label>
+        <input asp-for="End" class="form-control" />
+    </div>
+    <button type="submit" id="createBtn" class="btn btn-primary">
+        Создать
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+</form>
