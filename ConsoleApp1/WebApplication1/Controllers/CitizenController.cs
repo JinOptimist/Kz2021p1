@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApplication1.Controllers.CustomFilterAttributes;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
@@ -19,6 +20,7 @@ using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
+    [Localized]
     public class CitizenController : Controller
     {
         private CitizenRepository _citizenRepository;
