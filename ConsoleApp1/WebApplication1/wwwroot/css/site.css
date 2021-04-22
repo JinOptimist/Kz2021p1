@@ -210,4 +210,9 @@ body {
     .navbar-nav .nav-item .dropdown-menu {
         margin-top: 0;
     }
-}	
+}
+
+.avatar {
+    max-width: 100px;
+    max-height: 100px;
+}

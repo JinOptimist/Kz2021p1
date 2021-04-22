@@ -8,6 +8,8 @@ namespace WebApplication1.EfStuff.Model
 	{
 		public string Name { get; set; }
 
+		public string AvatarUrl { get; set; }
+
 		public string Password { get; set; }
 
 		public int Age { get; set; }
