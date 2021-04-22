@@ -9,9 +9,6 @@
         var candidateId = clicked.attr('data-candidateId');
         var electionId = clicked.attr('data-electionId');
         
-    /*    var url = '/Elections/DeleteCandidate?candidateId=' + candidateId + '&electionId=' + electionId;*/
-      //  var url = '/Elections/DeleteCandidate/' + candidateId + '/' + electionId;
-
         var url = `/Elections/DeleteCandidate/${candidateId}/${electionId}`
 
         console.log("url is", url)
@@ -24,8 +21,6 @@
             console.log("answer No")
            
         });
-
-    
         
     });
 
