@@ -100,7 +100,7 @@ namespace WebApplication1.Controllers
             var isRegistered =  _candidateElectionRepository.Add(candidate, election);
             if (isRegistered == true)
             {
-               Message = $" {candidate.Name}, Вы уже зарегистрированы!";
+                Message = $" {candidate.Name}, Вы уже зарегистрированы в выборах № {id}. Проверьте свое имя в списке кандидатов";
             }
             else
             {
