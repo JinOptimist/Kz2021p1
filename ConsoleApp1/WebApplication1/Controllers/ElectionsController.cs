@@ -22,6 +22,8 @@ namespace WebApplication1.Controllers
         private CandidateElectionRepository _candidateElectionRepository;
         private UserService _userService;
         private IMapper _mapper;
+        [TempData]
+        public string Message { get; set; }
 
         public ElectionsController(CitizenRepository citizenRepository,
             CandidateRepository candidatesRepository,
@@ -36,8 +38,7 @@ namespace WebApplication1.Controllers
             _userService = userService;
             _mapper = mapper;
         }
-        public string Message { get; set; }
-
+       
         public IActionResult Register()
         {
             var user = _userService.GetUser();
@@ -82,6 +83,8 @@ namespace WebApplication1.Controllers
             return View(viewModel);
         }
         
+  
+        
         [HttpPost]
       [Route("Elections/Register/{id}")]
         public IActionResult Register([FromRoute] long id, CandidateViewModel newCandidate)
@@ -94,12 +97,16 @@ namespace WebApplication1.Controllers
          
             var election = _electionRepository.Get(id);
             
-            _candidateElectionRepository.Add(candidate, election);
-        
-             //   TempData["status"] = "Oops";
-             //   return RedirectToAction("Index", "Elections");
-
-             Message = "Success!";
+            var isRegistered =  _candidateElectionRepository.Add(candidate, election);
+            if (isRegistered == true)
+            {
+               Message = $" {candidate.Name}, Вы уже зарегистрированы!";
+            }
+            else
+            {
+                Message = $"{candidate.Name}, Спасибо за регистрацию!";
+            }
+            
             return RedirectToAction("Details", "Elections",  new { id = id });
         }
 
@@ -120,8 +127,7 @@ namespace WebApplication1.Controllers
          public JsonResult DeleteCandidate(long candidateId, long electionId)
         {
 
-            var citizen = _userService.GetUser();
-            var result =  _candidateElectionRepository.IsRemovedCandidateOfElection(candidateId, electionId );
+            var result =  _candidateElectionRepository.RemoveCandidateOfElection(candidateId, electionId );
 
             return Json(result);
         }

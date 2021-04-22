@@ -29,6 +29,11 @@ namespace WebApplication1.EfStuff
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
 
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Ballot> Ballots { get; set; }
+        public DbSet<Election> Elections { get; set; }
+        public DbSet<ElectionBallot> ElectionBallots { get; set; }
+        public DbSet<CandidateElection> CandidateElections { get; set; }
         public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -91,6 +96,42 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+            
+            modelBuilder.Entity<Citizen>()
+                .HasMany(pc => pc.Candidates)
+                .WithOne(c => c.Citizen);
+            
+            modelBuilder.Entity<Citizen>()
+                .HasMany(pc => pc.Ballots)
+                .WithOne(c => c.Citizen);
+
+
+            modelBuilder.Entity<CandidateElection>()
+                .HasKey(ce => new {ce.CandidateId, ce.ElectionId});
+            modelBuilder.Entity<CandidateElection>()
+                .HasOne(ce => ce.Candidate)
+                .WithMany(c => c.CandidateElections)
+                .HasForeignKey(ce => ce.CandidateId);
+            modelBuilder.Entity<CandidateElection>()
+                .HasOne(ce => ce.Election)
+                .WithMany(e => e.CandidateElections)
+                .HasForeignKey(ce => ce.ElectionId);
+
+          
+            modelBuilder.Entity<ElectionBallot>()
+                .HasKey(eb => new {eb.ElectionId, eb.BallotId});
+            modelBuilder.Entity<ElectionBallot>()
+                .HasOne(eb => eb.Election)
+                .WithMany(e => e.ElectionBallots)
+                .HasForeignKey(eb => eb.ElectionId);
+            modelBuilder.Entity<ElectionBallot>()
+                .HasOne(eb => eb.Ballot)
+                .WithMany(b => b.ElectionBallots)
+                .HasForeignKey(eb => eb.BallotId);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Candidate)
+                .WithMany(c => c.Ballots);
 
             base.OnModelCreating(modelBuilder);
         }

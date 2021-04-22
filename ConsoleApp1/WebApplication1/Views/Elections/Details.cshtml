@@ -5,7 +5,7 @@
 @inject UserService userService
 
 @section Scripts{
-    <script src="~/js/elections/candidate.js"></script>
+    <script src="~/js/elections/details.js"></script>
 }
 
 @{
@@ -16,13 +16,32 @@
 }
 
 <div class="bg-primary mb-4 p-2 text-white d-flex justify-content-between ">
-    <h5 >Информация о выборах</h5>
+    <h5 >
+    <a class="navbar-brand text-decoration-none text-reset"  asp-action="Index">Информация о выборах</a>
+    </h5>
     <div>
-        <a asp-controller="Elections" asp-action="Register" asp-route-id="@Model.Election.Id" class="btn btn-success align-self-center  border-light"> Участвовать в выборах</a>
+        <a asp-controller="Elections" asp-action="Register" asp-route-id="@Model.Election.Id"
+           class="btn btn-success align-self-center  border-light" id="registerCandidate" data-id="@Model.Election.Id">
+             Участвовать в выборах
+        </a>
     </div>
 </div>
 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
+@{
+    if (TempData["Message"] != null && TempData["Message"].ToString().Contains("уже") )
+    {
+        <div class="alert alert-warning" role="alert">
+           @TempData["Message"]
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success" role="alert">
+          @TempData["Message"]
+        </div>
+    }
+}
 <table class="table">
     
     <thead>
@@ -34,7 +53,7 @@
 
     <tbody>
     <tr>
-        <th scope="row">ID</th>
+        <th scope="row">Номер выборов</th>
         <td>@Model.Election.Id</td>
     </tr>
     <tr>
@@ -55,7 +74,7 @@
     </tr>
 
     <tr>
-        <th scope="row">Количество кадидатов</th>
+        <th scope="row">Количество кандидатов</th>
         <td>@Model.Candidates.Count()</td>
     </tr>
 
@@ -134,7 +153,7 @@
                 </td>
                 <td>
                     <button type="button" data-name="@electionCandidate.Candidate.Name" id="voteBtn" class="btn btn-sm btn-success">
-                        Отдать голос
+                        Отдать голос &nbsp; ✋
                     </button>
                 </td>
                 <td>

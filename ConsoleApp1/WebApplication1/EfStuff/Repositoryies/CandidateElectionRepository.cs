@@ -18,11 +18,11 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
         }
         
-          public void Add(Candidate candidate, Election election)
+          public bool Add(Candidate candidate, Election election)
                 {
                     if (ExistingPair(candidate, election.Id).Count > 0)
                     {
-                        throw new Exception("You already registered in this election");
+                        return true;
                     }
 
                     
@@ -34,6 +34,7 @@ namespace WebApplication1.EfStuff.Repositoryies
         
                     _dbSet.Add(candidateElection);
                     _kzDbContext.SaveChanges();
+                    return false;
                 }
        
         public  List<CandidateElection> GetCandidatesByElectionId(long id)
@@ -56,6 +57,7 @@ namespace WebApplication1.EfStuff.Repositoryies
         }
         
       
+
         private IList<CandidateElection> FindExistingPair(long candidate, long electionId)
         {
               return  _dbSet
@@ -64,24 +66,18 @@ namespace WebApplication1.EfStuff.Repositoryies
                  .ToList();
         }
 
-        public bool IsRemovedCandidateOfElection(long candidateId, long electionId)
+        public bool RemoveCandidateOfElection(long candidateId, long electionId)
         {
-            var existingPair = FindExistingPair(candidateId, electionId).ToList();
-            if (existingPair != null)
-            {
-                
-                var candidate = _dbSet.Find(candidateId);
-                _dbSet.Remove(candidate);
-                _kzDbContext.SaveChanges();
-                
-                return true;
-            }
-            return false;
+            var candidate = _kzDbContext.CandidateElections.FirstOrDefault(
+                  c => c.CandidateId == candidateId
+                       && c.ElectionId == electionId);
+            _dbSet.Remove(candidate);
+            _kzDbContext.SaveChanges();
+
+            return true;
+
         }
-        
-        public CandidateElection GetByCandidateId(long candidateId)
-        {
-            return _dbSet.SingleOrDefault(x => x.CandidateId == candidateId);
-        }
+
+
     }
 }
