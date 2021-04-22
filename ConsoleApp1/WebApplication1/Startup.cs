@@ -59,7 +59,8 @@ namespace WebApplication1
                 );
 
             services.AddScoped<CitizenPresentation>(x => 
-                new CitizenPresentation(x.GetService<CitizenRepository>()));
+                new CitizenPresentation(x.GetService<CitizenRepository>(), 
+                    x.GetService<KzDbContext>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);

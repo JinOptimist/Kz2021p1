@@ -1,15 +1,25 @@
 ﻿@model LoginViewModel
 
 <div class="container align-content-center back">
-    <div class="row justify-content-center">
-        <div class="col-sm-4">
-            <h4 class="text-info text-center mt-5">Вход</h4>
-                    
+    <div class="row justify-content-center " >
+        <div style="height: 20px;" class="mb-3">
+        @{
+            if (TempData.Peek("Message") != null)
+            {
+                <div class="alert alert-warning" role="alert">
+                    @TempData.Peek("Message")
+                </div>
+            }
+        }
+        </div>
+        <div class="col-sm-4 mt-2">
+            <h4 class="text-info text-center  mt-5 ">Вход</h4>
+
             <form action="/Citizen/Login" method="post">
 
                 @Html.HiddenFor(x => x.ReturnUrl)
 
-                <div class="form-group mt-4 mb-4">
+                <div class="form-group mb-4">
 
                     <label for="email">Имя</label>
 
@@ -36,7 +46,6 @@
                     })
                     <small>
                         @Html.ValidationMessageFor(x => x.Name, "", new {@class = "help-block form-text text-muted"})
-
                     </small>
                 </div>
 

@@ -23,7 +23,8 @@ namespace WebApplication1.Controllers
         private CitizenPresentation _citizenPresentation;
         private UserService _userService;
         private IMapper _mapper;
-
+        [TempData]
+        public string Message { get; set; }
         public CitizenController(CitizenRepository citizenRepository,
             CitizenPresentation citizenPresentation, UserService userService, IMapper mapper)
         {
@@ -97,8 +98,13 @@ namespace WebApplication1.Controllers
                 return View(viewModel);
             }
 
-            _citizenPresentation.Save(viewModel);
-            return RedirectToAction("Index", "Home");
+            if (_citizenPresentation.IsValidSave(viewModel))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
+            Message =  $"{viewModel.Name}, Вы уже регистрировались ранее"; 
+            return RedirectToAction("Login", "Citizen");   
         }
 
         [HttpGet]

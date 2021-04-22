@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
@@ -12,10 +13,12 @@ namespace WebApplication1.Presentation
     public class CitizenPresentation
     {
         private CitizenRepository _citizenRepository;
+        private KzDbContext _kzDbContext;
 
-        public CitizenPresentation(CitizenRepository citizenRepository)
+        public CitizenPresentation(CitizenRepository citizenRepository, KzDbContext kzDbContext)
         {
             _citizenRepository = citizenRepository;
+            _kzDbContext = kzDbContext;
         }
 
         public List<FullProfileViewModel> GetIndexViewModel()
@@ -42,15 +45,22 @@ namespace WebApplication1.Presentation
             return claimsPrincipal;
         }
 
-        public void Save(LoginViewModel viewModel)
+        public bool IsValidSave(LoginViewModel viewModel)
         {
             var citizen = new Citizen()
             {
                 Name = viewModel.Name,
                 Password = viewModel.Password
             };
-
+            if (CandidateExist(citizen))
+            {
+             return false;   
+            }
             _citizenRepository.Save(citizen);
+            return true;
         }
+        
+        public bool CandidateExist(Citizen citizen) => _kzDbContext.Citizens.Any(c => c.Name == citizen.Name);
+
     }
 }

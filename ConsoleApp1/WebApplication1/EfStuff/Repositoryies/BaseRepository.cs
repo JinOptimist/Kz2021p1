@@ -50,5 +50,7 @@ namespace WebApplication1.EfStuff.Repositoryies
             _dbSet.Remove(model);
             _kzDbContext.SaveChanges();            
         }
+
+      
     }
 }
