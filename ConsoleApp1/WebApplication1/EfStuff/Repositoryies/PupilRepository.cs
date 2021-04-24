@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Education;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
@@ -14,5 +15,7 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             return _kzDbContext.Pupils.SingleOrDefault(x => x.IIN.Equals(pupilIIN));
         }
+
+        
     }
 }

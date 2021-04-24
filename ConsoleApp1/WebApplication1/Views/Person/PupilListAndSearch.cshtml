@@ -1,5 +1,6 @@
-﻿@model List<PupilViewModel>
-
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PupilViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *,ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "PupilListAndSearch";
@@ -31,6 +32,7 @@
             <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
 
             <a class="btn btn-primary" style="margin-left:15px" asp-action="PupilList">Get All Pupil</a>
+            <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewPupil">Add New Pupil</a>
         </p>
     </form>
 
@@ -50,7 +52,7 @@
 
         </p>
     </form>
-    <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewPupil">Add New Pupil</a>
+
 </div>
 
 <div class="container">
@@ -71,13 +73,13 @@
                 {
                     <tr class="user">
                         <td>
-                            @Html.ActionLink(@item.IIN, "PupilFullInfo", new { IINPupil = item.IIN })
+                            @Html.ActionLink(@item.IIN, "PupilFullInfo", new { pupilId = item.Id })
                         </td>
                         <td> @item.Surname @item.Name @item.Patronymic </td>
                         <td> @item.ClassYear </td>
                         <td> @item.SchoolId</td>
                         <td>
-                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("EDIT", "AddNewPupil", "Person", new { IDStudent = item.Id })</button>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditPupilData", "Person", new { IDPupil = item.Id })</button>
                         </td>
 
                         <td>
@@ -90,4 +92,22 @@
         </tbody>
     </table>
 
+    <nav aria-label="nav example">
+        @if (this.Model != null)
+        {
+            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+        }
+
+    </nav>
+
 </div>
+
+<style>
+    .marginForText {
+        margin-right: 25px;
+    }
+
+    ul.pagination li {
+        margin: 10px;
+    }
+</style>

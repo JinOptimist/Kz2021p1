@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Routing;
 using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
@@ -20,19 +21,20 @@ namespace WebApplication1.Presentation
         {
             _pupilRepository = pupilRepository;
             _studentRepository = studentRepository;
-            Mapper = mapper;           
+            Mapper = mapper;
         }
 
-        public List<PupilViewModel> GetPupilList()
+        public PagingList<PupilViewModel> GetPupilList(int page)
         {
             var pupils = _pupilRepository
                   .GetAll()
                   .Select(x => Mapper.Map<PupilViewModel>(x))
                   .ToList();
-            return pupils;
+            var model = PagingList.Create(pupils, 3, page);
+            model.Action = "PupilListAndSearch";
+            return model;
         }
-
-        public List<PupilViewModel> GetPupilListAndSearch(string searchBy, string searchPupil)
+        public PagingList<PupilViewModel> GetPupilListAndSearch(string searchBy, string searchPupil, int page)
         {
             var query = from x in _pupilRepository.GetAll() select x;
             if (!String.IsNullOrEmpty(searchPupil))
@@ -54,33 +56,44 @@ namespace WebApplication1.Presentation
                     query = query.Where(x => x.SchoolId == int.Parse(searchPupil)).OrderBy(s => s.ClassYear);
                 }
             }
-            List<PupilViewModel> pupilViewModel = new List<PupilViewModel>();
+            List<PupilViewModel> pupilViewModels = new List<PupilViewModel>();
             foreach (var item in query)
             {
-                pupilViewModel.Add(Mapper.Map<PupilViewModel>(item));
+                pupilViewModels.Add(Mapper.Map<PupilViewModel>(item));
             }
-            return pupilViewModel;
+            var model = PagingList.Create(pupilViewModels, 3, page);
+            model.RouteValue = new RouteValueDictionary {
+                                    {"searchBy", searchBy},
+                                    {"searchPupil", searchPupil} };
+
+            model.Action = "PupilListAndSearch";
+            return model;
         }
 
-        public PupilViewModel GetPupilFullInfo(string IINPupil)
+        public PupilViewModel GetPupilById(long pupilId)
         {
-            var pupil = _pupilRepository.GetPupilByIIN(IINPupil);
+            var pupil = _pupilRepository.Get(pupilId);
             var pupilViewModel = Mapper.Map<PupilViewModel>(pupil);
             return pupilViewModel;
         }
 
-        public void GetAddNewPupil(PupilViewModel pupilViewModel)
+        public void GetAddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
             var pupil = Mapper.Map<Pupil>(pupilViewModel);
 
             _pupilRepository.Save(pupil);
         }
+        /*
+                public void RemovePupil(PupilViewModel pupilViewModel)
+                {
+                    var pupil = Mapper.Map<Pupil>(pupilViewModel);
+                    _pupilRepository.Remove(pupil);
+                }*/
 
         public void GetPupilGrant(int minValueForGrant)
         {
-            // добавить вытаскивание айди универа рандомно
-            // enum faculty добавить и тоже рандомно присвоивать при выдаче гранта и 
-            // регистрации ученика в качестве студента
+            var allFaculties = _studentRepository.GetAllFaculties();
+            Random rand = new Random();
 
             var pupils = _pupilRepository.GetAll();
             foreach (var pupil in pupils)
@@ -92,14 +105,15 @@ namespace WebApplication1.Presentation
                     studentVIewModel.Name = pupil.Name;
                     studentVIewModel.Surname = pupil.Surname;
                     studentVIewModel.Patronymic = pupil.Patronymic;
+                    studentVIewModel.Avatar = pupil.Avatar;
                     studentVIewModel.Birthday = pupil.Birthday;
                     studentVIewModel.Email = pupil.Email;
-                    studentVIewModel.Faculty = "Biology";
+                    studentVIewModel.Faculty = allFaculties.Where(x => x.GetHashCode() == rand.Next(0, allFaculties.Count())).SingleOrDefault().ToString();
                     studentVIewModel.CourseYear = 1;
                     studentVIewModel.Gpa = 2.67;
                     studentVIewModel.EnteredYear = DateTime.Now;
                     studentVIewModel.GraduatedYear = null;
-                    studentVIewModel.UniversityId = 100; // Random()
+                    studentVIewModel.UniversityId = rand.Next(100, 101); // Random()
 
                     if (pupil.ENT >= minValueForGrant)
                     {
@@ -118,6 +132,26 @@ namespace WebApplication1.Presentation
                         _pupilRepository.Remove(pupil);
                     }
                 }
+            }
+        }
+
+        public void EndStudyYearForSchool()
+        {
+            List<Pupil> pupils = _pupilRepository.GetAll();
+            Random rand = new Random();
+            foreach (Pupil pupil in pupils)
+            {
+                if (pupil.ClassYear != 11)
+                {
+                    pupil.ClassYear = pupil.ClassYear + 1;
+                }
+                else
+                {
+                    pupil.ENT = rand.Next(50, 140);
+                    pupil.GraduatedYear = DateTime.Now;
+                    // Certificate
+                }
+                _pupilRepository.Save(pupil);
             }
         }
     }

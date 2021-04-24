@@ -39,6 +39,7 @@ namespace WebApplication1.Controllers
         {
             var university = UniversityRepository.Get(IDUniversity);
             var universityViewModel = Mapper.Map<UniversityViewModel>(university);
+            universityViewModel.StudentCount = university.Students.Count();
             return View(universityViewModel);
         }
 
@@ -54,6 +55,7 @@ namespace WebApplication1.Controllers
         {
             var school = SchoolRepository.Get(IDSchool);
             var schoolViewModel = Mapper.Map<SchoolViewModel>(school);
+            schoolViewModel.PupilCount = school.Pupils.Count();
             return View(schoolViewModel);
         }
     }

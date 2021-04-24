@@ -20,6 +20,9 @@ namespace WebApplication1.EfStuff.Model
 
         [MaxLength(30)]
         public string Patronymic { get; set; }
+
+        [MaxLength(30)]
+        public string Avatar { get; set; }
         public string Birthday { get; set; }
         [Required]
         [MaxLength(30)]

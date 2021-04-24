@@ -1,64 +1,73 @@
 ﻿@model StudentViewModel
 
-    <div class="container">
-        <h1>
-            Add
-        </h1>
-        <div class="row">
-            <div class="col-sm-6 offset-3">
-
-
-                <form action="/Person/AddNewStudent" method="post">
-                    <div>
-                        IIN: @Html.TextBoxFor(x => x.IIN, new { Class = "form-control" })
-                    </div>
-                    <div>
-                        Surname: @Html.TextBoxFor(x => x.Surname, new { Class = "form-control" })
-                    </div>
-                    <div>
-                        Name: @Html.TextBoxFor(x => x.Name, new { Class = "form-control" })
-                    </div>
-                    <div>
-                        Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { Class = "form-control" })
-                    </div>
-                    <div>
-                        @*Birthday: @Html.TextBoxFor(x => x.Birthday)*@  @* сделать селект из чисел*@
-                        @*@Html.ListBox("countires", new MultiSelectList(new string[] { "Россия", "США", "Китай", "Индия" }))*@
-                       @* <select asp-for="CompanyId" asp-items="ViewBag.Companies"></select>*@
-
-                    </div>
-                    <div>
-                        Email: @Html.TextBoxFor(x => x.Email, new { Class = "form-control" })
-                    </div>
-                    <div>
-                        UnversityId: @Html.TextBoxFor(x => x.UniversityId) @* сделать селект из сущ. уник ID*@
-                    </div>
-                    <div>
-                        Faculty: @Html.TextBoxFor(x => x.Faculty) @* сделать селект из факультетов, но сначало создать Enumerable faculty*@
-                    </div>
-                    <div>
-                        OnGrant: @Html.TextBoxFor(x => x.OnGrant) @* сделать селект Yes/No*@
-                        @Html.ValidationMessageFor(x => x.Name)
-                    </div>
-                    <div>
-                        Course Year: @Html.TextBoxFor(x => x.CourseYear)   @* сделать селект 1-4*@
-                    </div>
-                    <div>
-                        Entered Year: @Html.TextBoxFor(x => x.EnteredYear) @* сделать селект 1990-2021*@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>Add New Student</h1>
+            <form action="/Person/AddNewOrEditStudent" method="post">
+                <div>
+                    IIN: @Html.TextBoxFor(x => x.IIN, new { Class = "form-control", @maxlength = "12" })
+                </div>
+                <div>
+                    Surname: @Html.TextBoxFor(x => x.Surname, new { Class = "form-control" })
+                </div>
+                <div>
+                    Name: @Html.TextBoxFor(x => x.Name, new { Class = "form-control" })
+                </div>
+                <div>
+                    Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { Class = "form-control" })
+                </div>
+                @*upload file (загрузить аватарку)*@
+                <div>
+                    Birthday:
+                    <div class="row">
+                        @Html.EditorFor(model => model.Birthday, "Date", new { Class = "form-control" })
                     </div>
 
-                    <div>
-                        Graduated Year: @Html.TextBoxFor(x => x.GraduatedYear) @* сделать селект 1990-2021*@
+                </div>
+                <div>
+                    Email: @Html.TextBoxFor(x => x.Email, new { Class = "form-control" })
+                </div>
+                <div style="margin-top:20px">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select asp-for="UniversityId" class="form-control" asp-items="new SelectList(Enumerable.Range(100, 2))"><option>University Id</option></select>
+                        </div>
+                        <div class="col-sm-4">
+                            <select asp-for="OnGrant" class="form-control">
+                                <option selected>On Grant</option>
+                                <option>1</option>
+                                <option>0</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option>Course Year</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:20px">
+                    <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties"><option>Faculty</option></select>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.EnteredYear, "Date", new { Class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-6">
+                            @Html.EditorFor(model => model.GraduatedYear, "Date", new { Class = "form-control" })
+                        </div>
                     </div>
 
-                    <div>
-                        Gpa: @Html.TextBoxFor(x => x.Gpa) @* сделать селект 0-4*@
-                    </div>
+                </div>
+                <div>
+                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { Class = "form-control" })
+                </div>
 
-                    <div>
-                        <input type="submit" value="Add" />
-                    </div>
-                </form>
-            </div>
+                <div style="margin-bottom:50px">
+                    <input class="btn btn-primary" type="submit" value="Add New Student" />
+                </div>
+            </form>
         </div>
     </div>
+</div>

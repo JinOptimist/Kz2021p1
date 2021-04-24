@@ -1,0 +1,78 @@
+﻿@model StudentViewModel
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>Edit Student Data</h1>
+
+            <form action="/Person/AddNewOrEditStudent" method="post">
+                <div>
+                    @Html.HiddenFor(model => model.Id)
+                </div>
+                <div>
+                    IIN: @Html.TextBoxFor(x => x.IIN, new { @Value = Model.IIN, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IIN)
+                </div>
+                <div>
+                    Surname: @Html.TextBoxFor(x => x.Surname, new { @Value = Model.Surname, Class = "form-control" })
+                </div>
+                <div>
+                    Name: @Html.TextBoxFor(x => x.Name, new { @Value = Model.Name, Class = "form-control" })
+                </div>
+                <div>
+                    Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { @Value = Model.Patronymic, Class = "form-control" })
+                </div>
+                <div>
+                    Birthday: @Html.TextBoxFor(x => x.Birthday, new { @Value = Model.Birthday, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Birthday)
+                </div>
+                <div>
+                    Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
+                </div>
+                <div style="margin-top:20px">
+                    <div class="row">                        
+                        <div class="col-sm-4">
+                            Unversity Id:
+                            <select asp-for="UniversityId" class="form-control" asp-items="new SelectList(Enumerable.Range(100, 2))"><option>@Model.UniversityId</option></select>
+                        </div>                        
+                        <div class="col-sm-4">
+                            On Grant:
+                            <select asp-for="OnGrant" class="form-control">
+                                <option selected>@Model.OnGrant</option>
+                                <option>1</option>
+                                <option>0</option>
+                            </select>
+                        </div>                       
+                        <div class="col-sm-4">
+                            CourseYear:
+                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option>@Model.CourseYear</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:20px">
+                    Faculty:
+                    <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties"><option>@Model.Faculty</option></select>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Entered Year: @Html.TextBoxFor(x => x.EnteredYear, new { @Value = Model.EnteredYear, @readonly = true, Class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-6">
+                            Graduated Year: @Html.TextBoxFor(x => x.GraduatedYear, new { @Value = Model.EnteredYear, @readonly = true, Class = "form-control" })
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })               </div>
+
+                <div style="margin-bottom:50px">
+                    <input type="submit" value="Save Changes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

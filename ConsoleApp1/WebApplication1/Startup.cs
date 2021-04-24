@@ -3,32 +3,26 @@ using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReflectionIT.Mvc.Paging;
-using System;
 using System.Linq;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.Airport;
-using WebApplication1.ViewModels;
 using WebApplication1.Services;
 using WebApplication1.Profiles;
-using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -43,11 +37,11 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -58,7 +52,7 @@ namespace WebApplication1
                     x.GetService<IHttpContextAccessor>())
                 );
 
-            services.AddScoped<CitizenPresentation>(x => 
+            services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
@@ -72,7 +66,7 @@ namespace WebApplication1
                     config.AccessDeniedPath = "/Citizen/Login";
                 });
 
-            services.AddHttpContextAccessor();            
+            services.AddHttpContextAccessor();
         }
 
         private void RegisterRepositories(IServiceCollection services)
@@ -102,12 +96,6 @@ namespace WebApplication1
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
-            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
-            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
-
-            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
-            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            
             configurationExp.AddProfile<PoliceProfiles>();
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
@@ -116,16 +104,25 @@ namespace WebApplication1
                 .ForMember(nameof(FiremanShowViewModel.Age),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
-            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
-
             MapBothSide<Fireman, FiremanViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<IncomingFlightInfo, IncomingFlightInfoViewModel>(configurationExp);
+            MapBothSide<DepartingFlightInfo, DepartingFlightInfoViewModel>(configurationExp);
+
+            MapBothSide<Student, StudentViewModel>(configurationExp);
+            MapBothSide<Pupil, PupilViewModel>(configurationExp);
+            MapBothSide<University, UniversityViewModel>(configurationExp);
+            MapBothSide<School, SchoolViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
+            services.AddScoped<StudentPresentation>(x =>
+              new StudentPresentation(x.GetService<StudentRepository>(), mapper));
+            services.AddScoped<PupilPresentation>(x =>
+              new PupilPresentation(x.GetService<PupilRepository>(), x.GetService<StudentRepository>(), mapper));
         }
 
         public void MapBothSide<Type1, Type2>(MapperConfigurationExpression configurationExp)
@@ -156,12 +153,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

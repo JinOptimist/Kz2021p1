@@ -1,5 +1,4 @@
-﻿@*@model List<StudentViewModel>*@
-@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
 @using ReflectionIT.Mvc.Paging
 @addTagHelper *,ReflectionIT.Mvc.Paging
 
@@ -13,7 +12,7 @@
 <h1 style="display:flex; justify-content:center; align-items:center">Student Page</h1>
 
 
-<div class="container mb-5" >
+<div class="container mb-5">
 
     <form asp-action="StudentGrantByGpa" method="post">
         <p>
@@ -67,11 +66,17 @@
             <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
 
             <a class="btn btn-primary" style="margin-left:15px" asp-action="StudentList">Get All Students</a>
+            <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewStudent">Add New Student</a>
+
+            <a class="btn btn-danger" 
+               type="submit" 
+               style="margin-left:15px"
+               asp-action="EndOfStudy"
+               onclick="return confirm('Are you sure?');">
+                End Study Year
+            </a>
         </p>
     </form>
-
-    <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewStudent">Add New Student</a>
-
 
     <table border="1" class="table">
         <thead>
@@ -90,30 +95,37 @@
                     <tr class="user">
 
                         <td>
-                            @Html.ActionLink(@item.IIN, "StudentFullInfo", new { IINStudent = item.IIN })
+                            @Html.ActionLink(@item.IIN, "StudentFullInfo", new { studentId = item.Id })
                         </td>
                         <td>@item.Surname @item.Name @item.Patronymic </td>
                         <td> @item.CourseYear </td>
                         <td> @item.UniversityId </td>
                         @if (item.OnGrant == false)
                         {
+                            @*<td>
+
+                                    <button class="btn btn-light" type="submit">@Html.ActionLink("Выдать грант", "StudentGrantIndividual", "Person", new { studentId = item.Id })</button>
+
+                                </td>*@
+
                             <td>
-
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Выдать грант", "StudentGrantIndividual", "Person", new { IDStudent = item.Id })</button>
-
+                                <input class="btn btn-light grant" data-name="@item.Id" type="button" value="Выдать грант" />
                             </td>
                         }
                         else
                         {
+                            @* <td>
+                                    <button class="btn btn-light" type="submit">@Html.ActionLink("Забрать грант", "StudentGrantIndividual", "Person", new { studentId = item.Id })</button>
+                                </td>*@
                             <td>
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Забрать грант", "StudentGrantIndividual", "Person", new { IDStudent = item.Id })</button>
+                                <input class="btn btn-light grant" data-name="@item.Id" type="button" value="Забрать грант" />
                             </td>
                         }
 
                         @* TODO: Implement these buttons work*@
 
                         <td>
-                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("EDIT", "AddNewStudent", "Person", new { IDStudent = item.Id })</button>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditStudentData", "Person", new { IDStudent = item.Id })</button>
                         </td>
 
                         <td>
