@@ -1,19 +1,20 @@
 ﻿@model LoginViewModel
 
-    <h1>
-        Login
-    </h1>
-    <form action="/Citizen/Login" method="post">
-        <div>
-            Name: @Html.TextBoxFor(x => x.Name)
-            @Html.ValidationMessageFor(x => x.Name)
-        </div>
-        <div>
-            Password:
-            @Html.TextBoxFor(x => x.Password)
-            @Html.ValidationMessageFor(x => x.Password)
-        </div>
-        <div>
-            <input type="submit" value="Login" />
-        </div>
-    </form>
+<h1>
+    Login
+</h1>
+<form action="/Citizen/Login" method="post">
+    @Html.HiddenFor(x => x.ReturnUrl)
+    <div>
+        Name: @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        Password:
+        @Html.TextBoxFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+    </div>
+    <div>
+        <input type="submit" value="Login" />
+    </div>
+</form>

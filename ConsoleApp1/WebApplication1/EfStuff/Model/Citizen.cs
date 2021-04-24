@@ -8,13 +8,17 @@ namespace WebApplication1.EfStuff.Model
 	{
 		public string Name { get; set; }
 
+		public string AvatarUrl { get; set; }
+
 		public string Password { get; set; }
 
 		public int Age { get; set; }
 
 		public DateTime CreatingDate { get; set; }
 
-        public virtual Adress House { get; set; } 
+		public Local Local { get; set; }
+
+		public virtual Adress House { get; set; } 
         public virtual Fireman Fireman { get; set; }
         public bool IsOutOfCity { get; set; }
 		public virtual Policeman Policeman { get; set; }
