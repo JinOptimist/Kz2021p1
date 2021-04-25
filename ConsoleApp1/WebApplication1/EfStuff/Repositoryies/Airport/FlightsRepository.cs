@@ -6,9 +6,9 @@ using WebApplication1.EfStuff.Model.Airport;
 
 namespace WebApplication1.EfStuff.Repositoryies.Airport
 {
-    public class PassengersRepository : BaseRepository<Passenger>
+    public class FlightsRepository : BaseRepository<Flight>
     {
-        public PassengersRepository(KzDbContext kzDbContext) : base(kzDbContext)
+        public FlightsRepository(KzDbContext kzDbContext) : base(kzDbContext)
         {
         }
     }

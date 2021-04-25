@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210411085722_FixRel")]
+    partial class FixRel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,78 +125,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Passengers");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.DepartingFlightInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Airline")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DepartureTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Destination")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FlightId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DepartingFlightsInfo");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.IncomingFlightInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Airline")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ETA")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FlightId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Origin")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IncomingFlightsInfo");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("CitizenId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("FlightId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Passengers");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Bus", b =>
                 {
                     b.Property<long>("Id")
@@ -251,9 +181,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatingDate")
                         .HasColumnType("datetime2");
 
@@ -262,9 +189,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<bool>("IsOutOfCity")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Local")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -743,6 +667,25 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("PlanePassenger")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Airport.Passenger", "CitizenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Flight", "Flight")
+                        .WithMany("Passengers")
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("Flight");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Bus", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.TripRoute", "RoutePlan")
@@ -861,95 +804,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Policeman");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceAcademy", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("PoliceAcademy")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.PoliceAcademy", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.PoliceCallHistory", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithMany("PoliceCallHistories")
-                        .HasForeignKey("CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Policeman", "Policeman")
-                        .WithMany("PoliceCallHistories")
-                        .HasForeignKey("PolicemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-
-                    b.Navigation("Policeman");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Policeman", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("Policeman")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Policeman", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Pupil", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.School", "School")
-                        .WithMany("Pupils")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.SportSection", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.SportComplex", null)
-                        .WithMany("Sections")
-                        .HasForeignKey("SportComplexId");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Student", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.University", "University")
-                        .WithMany("Students")
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Violations", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithMany("Violations")
-                        .HasForeignKey("CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Policeman", "Policeman")
-                        .WithMany("Violations")
-                        .HasForeignKey("PolicemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-
-                    b.Navigation("Policeman");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Navigation("Citizens");
@@ -963,6 +817,8 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.Navigation("Fireman");
+
+                    b.Navigation("PlanePassenger");
 
                     b.Navigation("PoliceAcademy");
 
