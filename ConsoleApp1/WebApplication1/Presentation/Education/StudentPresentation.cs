@@ -14,12 +14,14 @@ namespace WebApplication1.Presentation
     public class StudentPresentation
     {
         private StudentRepository _studentRepository;
+        private UniversityRepository _universityRepository;
         private IMapper Mapper { get; set; }
 
-        public StudentPresentation(StudentRepository studentRepository, IMapper mapper)
+        public StudentPresentation(StudentRepository studentRepository, UniversityRepository universityRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
-            Mapper = mapper;
+            _universityRepository = universityRepository;
+            Mapper = mapper;            
         }
 
         public PagingList<StudentViewModel> GetStudentList(int page)
@@ -119,6 +121,28 @@ namespace WebApplication1.Presentation
                     _studentRepository.Remove(student);
                 }*/
 
+        public List<University> GetUniversityList()
+        {
+            return _universityRepository.GetAll();
+        }
+
+        public University GetUniversityByUniversityName(string universityName)
+        {
+            return _universityRepository.GetUniversityByName(universityName);
+        }
+
+        public List<string> GetListOfUniversityNames()
+        {
+            var all = GetUniversityList();
+            List<string> universityNames = new List<string>();
+            foreach (var university in all)
+            {
+                universityNames.Add(university.Name);
+            }
+
+            return universityNames;
+        }
+
         public void EndStudyYearForUniversity()
         {
             List<Student> students = _studentRepository.GetAll();
@@ -141,7 +165,5 @@ namespace WebApplication1.Presentation
             
             //return message;
         }
-
-        //public 
     }
 }

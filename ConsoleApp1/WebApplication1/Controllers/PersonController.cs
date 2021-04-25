@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Threading;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
@@ -13,7 +14,8 @@ namespace WebApplication1.Controllers
         private PupilPresentation _pupilPresentation;
         private StudentRepository _studentRepository;
         private PupilRepository _pupilRepository;
-        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation, StudentRepository studentRepository, PupilRepository pupilRepository)
+        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation, 
+            StudentRepository studentRepository, PupilRepository pupilRepository)
         {
             _studentPresentation = studentPresentation;
             _pupilPresentation = pupilPresentation;
@@ -83,24 +85,35 @@ namespace WebApplication1.Controllers
             //return View("StudentListAndSearch");
         }
 
+        [HttpGet]
         public IActionResult AddNewStudent()
         {
-
             var allFaculties = _studentRepository.GetAllFaculties();
-            var test = new SelectList(allFaculties);
-            ViewBag.Faculties = test;
+            ViewBag.Faculties = new SelectList(allFaculties);                      
+
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
             return View();
         }
 
+        [HttpGet]
         public IActionResult EditStudentData(long IDStudent)
         {
             var student = _studentPresentation.GetStudentById(IDStudent);
+
+            var allFaculties = _studentRepository.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
+
             return View(student);
         }
 
         [HttpPost]
         public IActionResult AddNewOrEditStudent(StudentViewModel studentViewModel)
-        {
+        {            
+            var university = _studentPresentation.GetUniversityByUniversityName(studentViewModel.University.Name);
+            studentViewModel.UniversityId = university.Id;
+            studentViewModel.University = null;
             _studentPresentation.GetAddNewOrEditStudent(studentViewModel);
             return RedirectToAction("StudentList");
         }
@@ -143,20 +156,28 @@ namespace WebApplication1.Controllers
             return View(pupilViewModel);
         }
 
+        [HttpGet]
         public IActionResult AddNewPupil()
         {
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
             return View();
         }
 
+        [HttpGet]
         public IActionResult EditPupilData(long IDPupil)
         {
-            var pupil = _pupilPresentation.GetPupilById(IDPupil);
+            var pupil = _pupilPresentation.GetPupilById(IDPupil);            
+
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
             return View(pupil);
         }
 
         [HttpPost]
         public IActionResult AddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
+            var school = _pupilPresentation.GetSchoolBySchoolName(pupilViewModel.School.Name);
+            pupilViewModel.SchoolId = school.Id;
+            pupilViewModel.School = null;
             _pupilPresentation.GetAddNewOrEditPupil(pupilViewModel);
             return RedirectToAction("PupilList");
         }

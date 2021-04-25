@@ -29,18 +29,19 @@
                 <div>
                     Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
                 </div>
+                <div>
+                    School:
+                    <select asp-for="School.Name" class="form-control" asp-items="ViewBag.Schools"><option>@Model.School.Name</option></select>
+                </div>
                 <div style="margin-top:20px">
 
-                    <div class="row">                        
-                        <div class="col-sm-4">
-                            School Id:
-                            <select asp-for="SchoolId" class="form-control" asp-items="new SelectList(Enumerable.Range(10, 5))"><option>@Model.SchoolId</option></select>
-                        </div>                        
-                        <div class="col-sm-4">
+                    <div class="row">
+
+                        <div class="col-sm-6">
                             Class Year:
                             <select asp-for="ClassYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 11))"><option>@Model.ClassYear</option></select>
-                        </div>                       
-                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-6">
                             Average Mark:
                             <select asp-for="AverageMark" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 12))"><option>@Model.AverageMark</option></select>
                         </div>
@@ -53,11 +54,17 @@
                     @Html.HiddenFor(model => model.ENT)
                 </div>
 
-                <div style="margin-bottom:50px">
-                    <input type="submit" value="Save Changes" />
+                <div class="margin20" style="margin-bottom:50px">
+                    <input class="btn btn-primary" type="submit" value="Save Changes" />
                 </div>
             </form>
 
         </div>
     </div>
 </div>
+
+<style>
+    .margin20 {
+        margin-top: 20px;
+    }
+</style>

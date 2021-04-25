@@ -15,13 +15,15 @@ namespace WebApplication1.Presentation
     {
         private PupilRepository _pupilRepository;
         private StudentRepository _studentRepository;
+        private SchoolRepository _schoolRepository;
         private IMapper Mapper { get; set; }
 
-        public PupilPresentation(PupilRepository pupilRepository, StudentRepository studentRepository, IMapper mapper)
+        public PupilPresentation(PupilRepository pupilRepository, StudentRepository studentRepository, SchoolRepository schoolRepository, IMapper mapper)
         {
             _pupilRepository = pupilRepository;
             _studentRepository = studentRepository;
-            Mapper = mapper;
+            _schoolRepository = schoolRepository;
+            Mapper = mapper;            
         }
 
         public PagingList<PupilViewModel> GetPupilList(int page)
@@ -113,7 +115,7 @@ namespace WebApplication1.Presentation
                     studentVIewModel.Gpa = 2.67;
                     studentVIewModel.EnteredYear = DateTime.Now;
                     studentVIewModel.GraduatedYear = null;
-                    studentVIewModel.UniversityId = rand.Next(100, 101); // Random()
+                    studentVIewModel.UniversityId = rand.Next(1, 2); // Random()
 
                     if (pupil.ENT >= minValueForGrant)
                     {
@@ -133,6 +135,28 @@ namespace WebApplication1.Presentation
                     }
                 }
             }
+        }
+
+        public List<School> GetSchoolList()
+        {
+            return _schoolRepository.GetAll();
+        }
+
+        public School GetSchoolBySchoolName(string schoolName)
+        {
+            return _schoolRepository.GetSchoolByName(schoolName);
+        }
+
+        public List<string> GetListOfSchoolNames()
+        {
+            var all = GetSchoolList();
+            List<string> schoolNames = new List<string>();
+            foreach (var school in all)
+            {
+                schoolNames.Add(school.Name);
+            }
+
+            return schoolNames;
         }
 
         public void EndStudyYearForSchool()

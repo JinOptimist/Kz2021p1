@@ -31,19 +31,20 @@
                     Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
                 </div>
                 <div style="margin-top:20px">
-                    <div class="row">                        
+                    <div class="row">
+                        
                         <div class="col-sm-4">
-                            Unversity Id:
-                            <select asp-for="UniversityId" class="form-control" asp-items="new SelectList(Enumerable.Range(100, 2))"><option>@Model.UniversityId</option></select>
-                        </div>                        
+                            Unversity:
+                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option>@Model.University.Name</option></select>
+                        </div>
                         <div class="col-sm-4">
                             On Grant:
                             <select asp-for="OnGrant" class="form-control">
                                 <option selected>@Model.OnGrant</option>
-                                <option>1</option>
-                                <option>0</option>
+                                <option>true</option>
+                                <option>false</option>
                             </select>
-                        </div>                       
+                        </div>
                         <div class="col-sm-4">
                             CourseYear:
                             <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option>@Model.CourseYear</option></select>
@@ -67,12 +68,19 @@
 
                 </div>
                 <div>
-                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })               </div>
+                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })
+                </div>
 
-                <div style="margin-bottom:50px">
-                    <input type="submit" value="Save Changes" />
+                <div class="margin20" style="margin-bottom:50px">
+                    <input class="btn btn-primary" type="submit" value="Save Changes" />
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .margin20 {
+        margin-top: 20px;
+    }
+</style>

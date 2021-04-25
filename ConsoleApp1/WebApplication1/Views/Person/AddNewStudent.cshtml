@@ -28,16 +28,17 @@
                 <div>
                     Email: @Html.TextBoxFor(x => x.Email, new { Class = "form-control" })
                 </div>
-                <div style="margin-top:20px">
-                    <div class="row">
+                <div class="margin20">
+                    <div class="row">                       
                         <div class="col-sm-4">
-                            <select asp-for="UniversityId" class="form-control" asp-items="new SelectList(Enumerable.Range(100, 2))"><option>University Id</option></select>
+                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option>University</option></select>
                         </div>
+                       
                         <div class="col-sm-4">
                             <select asp-for="OnGrant" class="form-control">
                                 <option selected>On Grant</option>
-                                <option>1</option>
-                                <option>0</option>
+                                <option>true</option>
+                                <option>false</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -45,16 +46,18 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-top:20px">
+                <div class="margin20">
                     <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties"><option>Faculty</option></select>
                 </div>
                 <div style="margin-top:20px">
                     <div class="row">
                         <div class="col-sm-6">
+                            Entered Year:
                             @Html.EditorFor(model => model.EnteredYear, "Date", new { Class = "form-control" })
                         </div>
 
                         <div class="col-sm-6">
+                            Graduated Year:
                             @Html.EditorFor(model => model.GraduatedYear, "Date", new { Class = "form-control" })
                         </div>
                     </div>
@@ -64,10 +67,16 @@
                     Gpa: @Html.TextBoxFor(x => x.Gpa, new { Class = "form-control" })
                 </div>
 
-                <div style="margin-bottom:50px">
+                <div class="margin20" style="margin-bottom:50px">
                     <input class="btn btn-primary" type="submit" value="Add New Student" />
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .margin20{
+        margin-top:20px;
+    }
+</style>
