@@ -13,13 +13,11 @@ namespace WebApplication1.EfStuff.Repositoryies
         }
         public BronResto GetByName(string name)
         {
-            return _kzDbContext.BronResto.SingleOrDefault(x => x.ObjectResto.Name == name);
+            return _kzDbContext.BronResto.SingleOrDefault(x => x.Restoranses.Name == name);
         }
-
         public BronResto GetByBrNumber(int number)
         {
             return _kzDbContext.BronResto.FirstOrDefault(x => x.BronRespNumber == number);
         }
-
     }
 }

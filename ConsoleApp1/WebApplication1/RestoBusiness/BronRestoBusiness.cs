@@ -12,7 +12,7 @@ namespace WebApplication1.RestoBusiness
 
     public class BronRestoBusiness
     {
-        private int number = 10000;
+        Random random = new Random();
         private BronRestoRepository _bronRestoRepository;
         private RestoransRepository _restoransRepository;
         private IMapper MapResto { get; set; }
@@ -24,17 +24,16 @@ namespace WebApplication1.RestoBusiness
         }
         public BronResto BronR(BronViewModel model)
         {
-            int num = _bronRestoRepository.GetAll().Count;
             var restmod = _restoransRepository.GetByName(model.Name);
             var bronrestModel = MapResto.Map<BronResto>(model);
-            bronrestModel.ObjectResto = restmod;
-            bronrestModel.BronRespNumber = NewBronRespNumber(num);
+            bronrestModel.Restoranses = restmod;
+            bronrestModel.BronRespNumber = NewBronRespNumber();
             return bronrestModel;
         }
 
-        private int NewBronRespNumber(int numcount)
+        private int NewBronRespNumber()
         {
-            return number+ numcount;
+            return random.Next(1000,1500);
         }
     }
 }

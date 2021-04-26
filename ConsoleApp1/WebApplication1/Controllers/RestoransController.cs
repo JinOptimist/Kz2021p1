@@ -29,14 +29,13 @@ namespace WebApplication1.Controllers
         public IActionResult AvailableResto()
         {
             var viewModels = _restoransRepository.GetAll()
-                .Select(x => MapResto.Map<AvailableRestoModel>(x)).Where(x => x.Access == true && x.NumberOfTables != 0)
+                .Select(x => MapResto.Map<AvailableRestoModel>(x))
+                .Where(x => x.Access && x.NumberOfTables != 0)
                 .ToList();
             return View(viewModels);
         }
-
         public IActionResult Index()
         {
-
             var viewModels = _restoransRepository.GetAll()
                 .Select(x => MapResto.Map<RestoViewModel>(x))
                 .ToList();
@@ -46,7 +45,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult CreateResto()
         {
-            var model = new RestoViewModel() { };
+            var model = new RestoViewModel();
             return View(model);
         }
 
@@ -85,12 +84,8 @@ namespace WebApplication1.Controllers
         public IActionResult BronView(string name)
         {
             var restomodel = _restoransRepository.GetByName(name);
-            var modelforBron = MapResto.Map<BronViewModel>(restomodel);
-            if (restomodel.NumberOfTables-- == 0)
-            {
-                return RedirectToAction("AvailableResto", "Restorans");
-            }
-            return View(modelforBron);
+            var modelbv= MapResto.Map<BronViewModel>(restomodel);
+            return View(modelbv);
         }
 
         [HttpPost]
@@ -98,14 +93,12 @@ namespace WebApplication1.Controllers
         {
             var bronrestModel=_bronRestoBusiness.BronR(model);
             _bronRestoRepository.Save(bronrestModel);
-            return RedirectToAction("WaitConfirm", "Restorans", new { bronnumber = bronrestModel.BronRespNumber });
+            return RedirectToAction("WaitConfirm", "Restorans", new BronNumberViewModel { BronRespNumber= bronrestModel.BronRespNumber} );
         }
 
-        public IActionResult WaitConfirm(int bronnumber)
+        public IActionResult WaitConfirm(BronNumberViewModel bronnumber)
         {
-            var brnumber = new BronNumberViewModel();
-            brnumber.BronRespNumber = bronnumber;
-            return View(brnumber);
+            return View(bronnumber);
         }
 
         [HttpPost]
@@ -114,17 +107,16 @@ namespace WebApplication1.Controllers
             var bbbrrr = _bronRestoRepository.GetByBrNumber(model.BronRespNumber);
             if (!bbbrrr.StateReservation)
             {
-                return RedirectToAction("WaitConfirm", "Restorans", new { bronnumber = model.BronRespNumber });
+                return RedirectToAction("WaitConfirm", "Restorans", new BronNumberViewModel { BronRespNumber = bbbrrr.BronRespNumber });
             }
             return View(model);
         }
-     
-
 
         public IActionResult NewRequestBron()
         {
             var viewModels = _bronRestoRepository.GetAll()
-                .Select(x => MapResto.Map<BronAdminViewModel>(x)).Where(x=> !x.StateReservation)
+                .Select(x => MapResto.Map<BronAdminViewModel>(x))
+                .Where(x=> !x.StateReservation)
                 .ToList();
             return View(viewModels);
         }
@@ -133,7 +125,7 @@ namespace WebApplication1.Controllers
         {
             var br = _bronRestoRepository.GetByBrNumber(numb);
             br.StateReservation = true;
-            _bronRestoRepository.SaveChang(br);
+            _bronRestoRepository.Save(br);
             return RedirectToAction("NewRequestBron");
         }
 
@@ -146,7 +138,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult CheckBron(BronNumberViewModel vmodel)
         {
-            return RedirectToAction("WaitAdminConfirm", new { model=vmodel });
+            return RedirectToAction("WaitAdminConfirm", vmodel);
         }
 
         public JsonResult RemoveBron(int number)
@@ -159,6 +151,5 @@ namespace WebApplication1.Controllers
             _bronRestoRepository.Remove(bron);
             return Json(true);
         }
-
     }
 }

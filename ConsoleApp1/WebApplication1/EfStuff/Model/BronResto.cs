@@ -7,18 +7,42 @@ namespace WebApplication1.EfStuff.Model
 {
     public class BronResto : BaseModel
     {
-        //public string Name { get; set; }  // Название Ресторана
-        // public string Address { get; set; } // Адресс
-        // public string PhoneNumber { get; set; } // Номер телефона ресторана
-        public int BronRespNumber { get; set; } // номер брони клиента
-        public int NumberOfTables { get; set; } // Количество забронированных столов
-        public string PhUserNumber { get; set; } // Номер телефона клиента
-        public string EmailUser { get; set; } // email клиента
-        public int CountOfVisitors { get; set; } // Количество посетителей для одной брони
-        public DateTime DateOfVisitors { get; set; } // Время бронирование
-        public bool StateReservation { get; set; } // состояние брони
+        /// <summary>
+     /// Номер брони клиента
+     /// </summary>
+        public int BronRespNumber { get; set; }
 
-        public virtual Restorans ObjectResto { get; set; }
+        /// <summary>
+        /// Количество забронированных столов
+        /// </summary>
+        public int NumberOfTables { get; set; }
+
+        /// <summary>
+        /// омер телефона клиента
+        /// </summary>
+        public string PhUserNumber { get; set; }
+
+        /// <summary>
+        /// Email клиента
+        /// </summary>
+        public string EmailUser { get; set; } 
+
+        /// <summary>
+        /// Количество посетителей для одной брони
+        /// </summary>
+        public int CountOfVisitors { get; set; }
+
+        /// <summary>
+        /// Время бронирование
+        /// </summary>
+        public DateTime DateOfVisitors { get; set; } 
+
+        /// <summary>
+        /// Состояние брони
+        /// </summary>
+        public bool StateReservation { get; set; } 
+
+        public virtual Restorans Restoranses { get; set; }
 
     }
 }

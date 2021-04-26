@@ -19,27 +19,6 @@ namespace WebApplication1.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("FloorCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HouseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Adress");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.BronResto", b =>
                 {
                     b.Property<long>("Id")
@@ -62,46 +41,20 @@ namespace WebApplication1.Migrations
                     b.Property<int>("NumberOfTables")
                         .HasColumnType("int");
 
-                    b.Property<long?>("ObjectRestoId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PhUserNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("RestoransesId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("StateReservation")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ObjectRestoId");
+                    b.HasIndex("RestoransesId");
 
                     b.ToTable("BronResto");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("HouseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseId");
-
-                    b.ToTable("Citizens");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Restorans", b =>
@@ -154,11 +107,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.BronResto", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.Restorans", "ObjectResto")
+                    b.HasOne("WebApplication1.EfStuff.Model.Restorans", "Restoranses")
                         .WithMany("Brons")
-                        .HasForeignKey("ObjectRestoId");
+                        .HasForeignKey("RestoransesId");
 
-                    b.Navigation("ObjectResto");
+                    b.Navigation("Restoranses");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>

@@ -10,8 +10,8 @@ using WebApplication1.EfStuff;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    [Migration("20210414101114_AddBronRestoM1")]
-    partial class AddBronRestoM1
+    [Migration("20210426111026_AddMain")]
+    partial class AddMain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,18 +64,18 @@ namespace WebApplication1.Migrations
                     b.Property<int>("NumberOfTables")
                         .HasColumnType("int");
 
-                    b.Property<long?>("ObjectRestoId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PhUserNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("RestoransesId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("StateReservation")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ObjectRestoId");
+                    b.HasIndex("RestoransesId");
 
                     b.ToTable("BronResto");
                 });
@@ -156,11 +156,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.BronResto", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.Restorans", "ObjectResto")
+                    b.HasOne("WebApplication1.EfStuff.Model.Restorans", "Restoranses")
                         .WithMany("Brons")
-                        .HasForeignKey("ObjectRestoId");
+                        .HasForeignKey("RestoransesId");
 
-                    b.Navigation("ObjectResto");
+                    b.Navigation("Restoranses");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
