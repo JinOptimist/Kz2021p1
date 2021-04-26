@@ -19,11 +19,13 @@ namespace WebApplication1.Presentation.Airport
         private CitizenRepository _citizenRepository { get; set; }
         private UserService _userService { get; set; }
         private IMapper _mapper { get; set; }
-        public AirportPresentation(FlightsRepository flightsRepository, IMapper mapper, PassengersRepository passengersRepository)
+        public AirportPresentation(FlightsRepository flightsRepository, IMapper mapper, PassengersRepository passengersRepository
+            , UserService userService)
         {
             _flightsRepository = flightsRepository;
             _mapper = mapper;
             _passengersRepository = passengersRepository;
+            _userService = userService;
         }
 
 

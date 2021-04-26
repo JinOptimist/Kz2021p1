@@ -149,6 +149,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                console.log(question, parent, response)
                 createAnswer(question, parent, response);
             },
             error: (response) => {
@@ -158,7 +159,7 @@
     })
 
     function createAnswer(questionTitle, card, questionId) {
-
+        console.log('title', questionTitle, 'card', card)
         const markUp = `
             <h3>Question: ${questionTitle}</h3>
             <p>Answers: </p>
@@ -171,6 +172,7 @@
             <button id="add-answer" class="btn btn-success mt-2">Add answer</button>
             <button id="save-answer" class="btn btn-success mt-2">Save</button>
         `;
+
         card.html(markUp);
     }
 
@@ -264,6 +266,7 @@
 
 
     function createQuizer(questionAndAnswer) {
+        console.log(questionAndAnswer);
         let questionNumber = 0;
         for (let key in questionAndAnswer) {
             questionNumber++;
@@ -294,14 +297,14 @@
         const lastButton = $(buttons).length - 1;
         for (let answer in answers) {
             if (questionNumber !== 1) {
-                $(createAnswer(answers[answer]["description"], questionId, questionNumber, answers[answer]["answerId"])).insertBefore(buttons[lastButton]).hide()
+                $(createAnswerForTrainee(answers[answer]["description"], questionId, questionNumber, answers[answer]["answerId"])).insertBefore(buttons[lastButton]).hide()
             } else {
-                $(createAnswer(answers[answer]["description"], questionId, questionNumber, answers[answer]["answerId"])).insertBefore(buttons[lastButton]);
+                $(createAnswerForTrainee(answers[answer]["description"], questionId, questionNumber, answers[answer]["answerId"])).insertBefore(buttons[lastButton]);
             }
         }
     }
 
-    function createAnswer(description, questionId, questionNumber, answerId) {
+    function createAnswerForTrainee(description, questionId, questionNumber, answerId) {
         return ` <div class="input-group-prepend mt-2 ">
                     <div class="input-group-text" style="width: 100%;">
                         <input type="radio" class="mx-2 my-2 radio-answer" 

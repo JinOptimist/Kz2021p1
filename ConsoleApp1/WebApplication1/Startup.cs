@@ -70,7 +70,8 @@ namespace WebApplication1
                 new AirportPresentation(
                     x.GetService<FlightsRepository>(),
                     x.GetService<IMapper>(),
-                    x.GetService<PassengersRepository>()));
+                    x.GetService<PassengersRepository>(),
+                    x.GetService<UserService>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);

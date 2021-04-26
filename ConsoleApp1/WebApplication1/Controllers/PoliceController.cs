@@ -246,7 +246,7 @@ namespace WebApplication1.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("/police/get-quizer")]
-		[IsTrainee]
+		
 		public IActionResult GetQuizerPage()
 		{
 			return PartialView("Views/Shared/Police/Quizer.cshtml");
