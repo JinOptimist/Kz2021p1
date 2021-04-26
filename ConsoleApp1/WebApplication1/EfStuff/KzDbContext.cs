@@ -12,11 +12,7 @@ namespace WebApplication1.EfStuff
     public class KzDbContext : DbContext
     {
         public DbSet<Citizen> Citizens { get; set; }
-
         public DbSet<Adress> Adress { get; set; }
-        public DbSet<IncomingFlightInfo> IncomingFlightsInfo { get; set; }
-        public DbSet<DepartingFlightInfo> DepartingFlightsInfo { get; set; }
-        public DbSet<Passenger> Passengers { get; set; }
         public DbSet<SportComplex> SportComplex { get; set; }
         public DbSet<SportEvent> SportEvent { get; set; }
         public DbSet<Fireman> Firemen { get; set; }
@@ -27,13 +23,16 @@ namespace WebApplication1.EfStuff
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
-		public DbSet<Policeman> Policemen { get; set; }
-		public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
-		public DbSet<Violations> Violations { get; set; }
-		public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
-		public DbSet<Answer> Answers { get; set; }
-		public DbSet<Question> Qestions { get; set; }
-		public DbSet<Shift> Shifts { get; set; }
+		    public DbSet<Policeman> Policemen { get; set; }
+		    public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
+		    public DbSet<Violations> Violations { get; set; }
+		    public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
+		    public DbSet<Answer> Answers { get; set; }
+		    public DbSet<Question> Qestions { get; set; }
+		    public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<Passenger> Passengers { get; set; }
+
 
 		public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -104,6 +103,13 @@ namespace WebApplication1.EfStuff
                 .HasOne(p => p.Policeman)
                 .WithMany(s => s.Shifts);
 
+            modelBuilder.Entity<Flight>()
+                .HasMany(f => f.Passengers)
+                .WithOne(p => p.Flight);
+                
+            modelBuilder.Entity<Passenger>()
+                .HasOne(p => p.Citizen)
+                .WithOne(c => c.PlanePassenger);
 
             base.OnModelCreating(modelBuilder);
         }

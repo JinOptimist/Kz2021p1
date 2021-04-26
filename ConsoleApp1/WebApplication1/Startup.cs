@@ -26,10 +26,12 @@ using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
 using Azure.Storage.Blobs;
+using WebApplication1.Profiles.Airport;
+using WebApplication1.Presentation.Airport;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -48,10 +50,10 @@ namespace WebApplication1
                 new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
             services.AddScoped<IBlobService, BlobService>();
             services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+			      services.AddRazorPages()
+				      .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -62,8 +64,13 @@ namespace WebApplication1
                     x.GetService<IHttpContextAccessor>())
                 );
 
-            services.AddScoped<CitizenPresentation>(x => 
+            services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
+            services.AddScoped<AirportPresentation>(x =>
+                new AirportPresentation(
+                    x.GetService<FlightsRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<PassengersRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
@@ -96,6 +103,13 @@ namespace WebApplication1
                     return constructor.Invoke(parameters);
                 });
             }
+
+            services.AddScoped<SportComplexRepository>(x =>
+                new SportComplexRepository(x.GetService<KzDbContext>())
+                );
+            services.AddScoped<SportEventRepository>(x =>
+                new SportEventRepository(x.GetService<KzDbContext>())
+                );
         }
 
         private void RegisterAutoMapper(IServiceCollection services)
@@ -107,14 +121,8 @@ namespace WebApplication1
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
-            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
-            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
-
-            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
-            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            
             configurationExp.AddProfile<PoliceProfiles>();
-
+            configurationExp.AddProfile<AirportProfiles>();
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
                 .ForMember(nameof(FiremanShowViewModel.Name),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Name))
@@ -161,12 +169,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }
