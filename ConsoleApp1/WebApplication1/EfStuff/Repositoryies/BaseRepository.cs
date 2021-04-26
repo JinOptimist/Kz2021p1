@@ -32,13 +32,16 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             if (model.Id > 0)
             {
+                //_dbSet.Update(model);
                 _kzDbContext.Entry(model).State = EntityState.Modified;
             }
             else
             {
                 _dbSet.Add(model);
             }
+
             _kzDbContext.SaveChanges();
+
             return model;
         }
         public void Remove(DbModel model)

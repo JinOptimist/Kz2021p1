@@ -114,20 +114,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Restoranses");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Adress", "House")
-                        .WithMany("Citizens")
-                        .HasForeignKey("HouseId");
-
-                    b.Navigation("House");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
-                {
-                    b.Navigation("Citizens");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Restorans", b =>
                 {
                     b.Navigation("Brons");
