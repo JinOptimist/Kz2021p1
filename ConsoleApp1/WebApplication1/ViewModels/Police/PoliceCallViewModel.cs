@@ -8,6 +8,7 @@ namespace WebApplication1.ViewModels
     {
 		[Required(ErrorMessage = "Please write decription about situation")]
 		public string Description { get; set; }
+
 		[Required]
 		public CallPriority CallPriority { get; set; }
 	}

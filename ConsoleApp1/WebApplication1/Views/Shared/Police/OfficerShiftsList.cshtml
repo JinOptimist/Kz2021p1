@@ -1,0 +1,32 @@
+﻿@model  IEnumerable<SheriffShiftVM>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Is Ative</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (SheriffShiftVM user in Model)
+        {
+        <tr class="policeman" data-policemanid="@user.PolicemanId" data-shiftid="@user.Id">
+            <td>@user.Name</td>
+            <td class="start-date">@user.StartDate</td>
+            <td class="end-date">@user.EndDate</td>
+            <td>@user.isActive</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-outline-success change-shift" id="change-shift" data-izimodal-open="#set-shift-form">Change</button>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div id="set-shift-form" class="p-2" data-iziModal-group="shift-form">
+    @await Html.PartialAsync("/Views/Shared/Police/ShiftForm.cshtml", new BasePolicemanShiftVM())
+</div>
