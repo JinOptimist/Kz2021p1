@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Compile Remove="Interfaces\**" />
+    <Content Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Content Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <None Remove="Interfaces\**" />
   </ItemGroup>
 

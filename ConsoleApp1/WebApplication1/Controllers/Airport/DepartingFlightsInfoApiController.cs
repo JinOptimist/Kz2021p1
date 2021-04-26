@@ -14,12 +14,12 @@ namespace WebApplication1.Controllers.Airport
     [ApiController]
     public class DepartingFlightsInfoApiController : ControllerBase
     {
-        private DepartingFlightsRepository _departingFlightsRepository { get; set; }
+        private FlightsRepository _flightsRepository { get; set; }
         private IMapper _mapper { get; set; }
 
-        public DepartingFlightsInfoApiController(DepartingFlightsRepository departingFlightsRepository, IMapper mapper)
+        public DepartingFlightsInfoApiController(FlightsRepository flightsRepository, IMapper mapper)
         {
-            _departingFlightsRepository = departingFlightsRepository;
+            _flightsRepository = flightsRepository;
             _mapper = mapper;
         }
 
@@ -27,14 +27,14 @@ namespace WebApplication1.Controllers.Airport
         [HttpGet]
         public ActionResult<IEnumerable<DepartingFlightInfoViewModel>> GetDepartingFlightsInfo()
         {
-            return _departingFlightsRepository.GetAll().Select(flight => _mapper.Map<DepartingFlightInfoViewModel>(flight)).ToList();
+            return _flightsRepository.GetAll().Where(f => f.FlightType == FlightType.DepartingFlight).Select(flight => _mapper.Map<DepartingFlightInfoViewModel>(flight)).ToList();
         }
 
         // GET: api/DepartingFlightsInfo/5
         [HttpGet("{id}")]
-        public ActionResult<DepartingFlightInfo> GetDepartingFlightInfo(int id)
+        public ActionResult<Flight> GetDepartingFlightInfo(int id)
         {
-            var departingFlightInfo = _departingFlightsRepository.Get(id);
+            var departingFlightInfo = _flightsRepository.GetAll().SingleOrDefault(f => f.Id == id && f.FlightType == FlightType.DepartingFlight);
 
             if (departingFlightInfo == null)
             {
@@ -44,42 +44,27 @@ namespace WebApplication1.Controllers.Airport
             return departingFlightInfo;
         }
 
-        // PUT: api/DepartingFlightsInfo/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public IActionResult PutDepartingFlightInfo(int id, DepartingFlightInfo departingFlightInfo)
-        {
-            if (!_departingFlightsRepository.PutEntity(id, departingFlightInfo))
-            {
-                return NotFound();
-            }
-            return NoContent();
-
-        }
-
         // POST: api/DepartingFlightsInfo
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<DepartingFlightInfo> PostDepartingFlightInfo(DepartingFlightInfo departingFlightInfo)
+        public ActionResult<Flight> PostDepartingFlightInfo(Flight departingFlightInfo)
         {
-            _departingFlightsRepository.Save(departingFlightInfo);
+            _flightsRepository.Save(departingFlightInfo);
 
             return CreatedAtAction("GetDepartingFlightInfo", new { id = departingFlightInfo.Id }, departingFlightInfo);
         }
 
         // DELETE: api/DepartingFlightsInfo/5
         [HttpDelete("{id}")]
-        public ActionResult<DepartingFlightInfo> DeleteDepartingFlightInfo(int id)
+        public ActionResult<Flight> DeleteDepartingFlightInfo(int id)
         {
-            //var departingFlightInfo = await _context.DepartingFlightsInfo.Find(id);
-            var departingFlightInfo = _departingFlightsRepository.Get(id);
+            var departingFlightInfo = _flightsRepository.Get(id);
             if (departingFlightInfo == null)
             {
                 return NotFound();
             }
-            _departingFlightsRepository.Remove(departingFlightInfo);
+            _flightsRepository.Remove(departingFlightInfo);
 
             return departingFlightInfo;
         }

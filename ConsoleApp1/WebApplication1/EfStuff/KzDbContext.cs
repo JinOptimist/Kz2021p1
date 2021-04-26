@@ -12,11 +12,7 @@ namespace WebApplication1.EfStuff
     public class KzDbContext : DbContext
     {
         public DbSet<Citizen> Citizens { get; set; }
-
         public DbSet<Adress> Adress { get; set; }
-        public DbSet<IncomingFlightInfo> IncomingFlightsInfo { get; set; }
-        public DbSet<DepartingFlightInfo> DepartingFlightsInfo { get; set; }
-        public DbSet<Passenger> Passengers { get; set; }
         public DbSet<SportComplex> SportComplex { get; set; }
         public DbSet<SportEvent> SportEvent { get; set; }
         public DbSet<Fireman> Firemen { get; set; }
@@ -25,9 +21,10 @@ namespace WebApplication1.EfStuff
         public DbSet<School> Schools { get; set; }
         public DbSet<Pupil> Pupils { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
-
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<Passenger> Passengers { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -91,6 +88,13 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+
+            modelBuilder.Entity<Flight>()
+                .HasMany(f => f.Passengers)
+                .WithOne(p => p.Flight);
+            modelBuilder.Entity<Passenger>()
+                .HasOne(p => p.Citizen)
+                .WithOne(c => c.PlanePassenger);
 
             base.OnModelCreating(modelBuilder);
         }
