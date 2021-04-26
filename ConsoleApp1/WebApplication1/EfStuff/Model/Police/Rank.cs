@@ -3,6 +3,7 @@
 	public enum Rank
     {
         Officer,
-        Sheriff
+        Sheriff,
+        Trainee
     }
 }

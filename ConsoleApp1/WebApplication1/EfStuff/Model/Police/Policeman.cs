@@ -10,14 +10,14 @@ namespace WebApplication1.EfStuff.Model
 	public class Policeman : BaseModel
     {
 		[Required]
-		public Rank Rank { get; set; }
+		public Rank Rank { get; set; } = Rank.Trainee;
 
 		[Required]
 		[Column(TypeName = "decimal(18,4)")]
-		public decimal Salary { get; set; }
+		public decimal Salary { get; set; } = 1000;
 
 		[Required]
-		public DateTime StartWork { get; set; }
+		public DateTime StartWork { get; set; } = DateTime.Now;
 
 		[Required]
 		[ForeignKey("Citizen")]
@@ -26,9 +26,8 @@ namespace WebApplication1.EfStuff.Model
 		[Required]
 		public virtual Citizen Citizen { get; set; }
 
-		[JsonIgnore]
 		public virtual ICollection<Violations> Violations { get; set; }
-		[JsonIgnore]
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
+		public virtual ICollection<Shift> Shifts { get; set; }
 	}
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.Services.Police;
+using WebApplication1.Presentation.Police;
 
 namespace WebApplication1.Extensions
 {
@@ -10,7 +10,7 @@ namespace WebApplication1.Extensions
     {
         public static IServiceCollection AddPoliceServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddScoped<IPoliceService, PoliceService>();
+            services.AddScoped<IPolicePresentation, PolicePresentation>();
 
             services.AddScoped<PoliceRepository>(p => new PoliceRepository(
                 p.GetService<KzDbContext>()));

@@ -25,11 +25,17 @@ namespace WebApplication1.EfStuff
         public DbSet<School> Schools { get; set; }
         public DbSet<Pupil> Pupils { get; set; }
         public DbSet<Certificate> Certificates { get; set; }
-
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+		public DbSet<Policeman> Policemen { get; set; }
+		public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
+		public DbSet<Violations> Violations { get; set; }
+		public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
+		public DbSet<Answer> Answers { get; set; }
+		public DbSet<Question> Qestions { get; set; }
+		public DbSet<Shift> Shifts { get; set; }
 
-        public KzDbContext(DbContextOptions options) : base(options) { }
+		public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,7 +80,8 @@ namespace WebApplication1.EfStuff
 
             modelBuilder.Entity<Policeman>()
                 .HasMany(v => v.Violations)
-                .WithOne(v => v.Policeman);
+                .WithOne(v => v.Policeman)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Citizen>()
                 .HasMany(v => v.Violations)
@@ -86,11 +93,17 @@ namespace WebApplication1.EfStuff
 
             modelBuilder.Entity<Policeman>()
                 .HasMany(pc => pc.PoliceCallHistories)
-                .WithOne(p => p.Policeman);
+                .WithOne(p => p.Policeman)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+
+            modelBuilder.Entity<Shift>()
+                .HasOne(p => p.Policeman)
+                .WithMany(s => s.Shifts);
+
 
             base.OnModelCreating(modelBuilder);
         }

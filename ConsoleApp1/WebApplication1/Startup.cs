@@ -25,6 +25,7 @@ using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
+using Azure.Storage.Blobs;
 
 namespace WebApplication1
 {
@@ -43,7 +44,10 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
+            services.AddSingleton(x => 
+                new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddOpenApiDocument();
 			services.AddRazorPages()
 				 .AddRazorRuntimeCompilation();
 
