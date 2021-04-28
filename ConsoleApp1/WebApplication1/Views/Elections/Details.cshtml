@@ -50,7 +50,6 @@
                 <th scope="row">Количество кандидатов</th>
                 <td>@Model.Candidates.Count()</td>
             </tr>
-
             </tbody>
         </table>
     </div>
@@ -76,7 +75,7 @@
         </div>
         @foreach (var candidate in Model.Candidates)
         {
-            if (candidate.Ballots != null)
+            if (candidate.Ballots.Any())
             {
                 <div class="row">
                     <div id="container" ></div>
@@ -164,7 +163,8 @@
                     @candidate.Idea
                 </td>
                 <td>
-                    @candidate.Ballots.Count()
+                    @candidate.Ballots.Count(x => x.ElectionId == Model.Id)
+                    
                 </td>
                 <td>
                     @if (Model.IsVoted)
@@ -224,7 +224,7 @@
     {
         <tr>
             <th>@candidate.Name</th>
-            <td>@candidate.Ballots.Count()</td>
+            <td>@candidate.Ballots.Count(x => x.ElectionId == Model.Id)</td>
         </tr>
     }
     </tbody>

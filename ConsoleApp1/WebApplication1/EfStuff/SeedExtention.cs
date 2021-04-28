@@ -200,17 +200,7 @@ namespace WebApplication1.EfStuff
                 Start = DateTime.Now,
                 Description = "Lorem dolor just to test archiving it will be empty elections"
             };
-            congressmanElection.End = congressmanElection.Start.AddMilliseconds(100);
-            electionRepository.Save(congressmanElection);
             
-            var missUniverseElection = new Election
-            {
-                Name = "Miss Universe Election",
-                Start = DateTime.Now,
-                Description = "Dummy election dolor just to test archiving it will be empty elections"
-            };
-            missUniverseElection.End = missUniverseElection.Start.AddMilliseconds(20);
-            electionRepository.Save(missUniverseElection);
             
             var presidentElection = new Election
             {
@@ -240,7 +230,18 @@ namespace WebApplication1.EfStuff
             mayorElection.End = mayorElection.Start.AddDays(1);
             electionRepository.Save(mayorElection);
             
-            //Выборы президента
+            congressmanElection.End = congressmanElection.Start.AddMilliseconds(100);
+            electionRepository.Save(congressmanElection);
+            
+            var missUniverseElection = new Election
+            {
+                Name = "Miss Universe Election",
+                Start = DateTime.Now,
+                Description = "Dummy election dolor just to test archiving it will be empty elections"
+            };
+            missUniverseElection.End = missUniverseElection.Start.AddMilliseconds(20);
+            electionRepository.Save(missUniverseElection);
+            
             presidentElection.Candidates.Add(johnCandidate);
             electionRepository.Save(presidentElection);
             
@@ -259,7 +260,6 @@ namespace WebApplication1.EfStuff
             presidentElection.Candidates.Add(jeremyCandidate);
             electionRepository.Save(presidentElection);
             
-            //Выборы шерифа
             sheriffElection.Candidates.Add(jeremyCandidate);
             electionRepository.Save(sheriffElection);
             
@@ -269,7 +269,6 @@ namespace WebApplication1.EfStuff
             sheriffElection.Candidates.Add(julieCandidate);
             electionRepository.Save(sheriffElection);
             
-            //Выборы мэра
             mayorElection.Candidates.Add(wendyCandidate);
             electionRepository.Save(mayorElection);
             
@@ -281,7 +280,7 @@ namespace WebApplication1.EfStuff
             
             mayorElection.Candidates.Add(jeremyCandidate);
             electionRepository.Save(mayorElection);
-
+            
             var ballot1 = new Ballot
             {
                 CitizenId = john.Id,
@@ -291,7 +290,8 @@ namespace WebApplication1.EfStuff
 
             ballotRepository.Save(ballot1);
             
-            var ballot2 = new Ballot
+            
+           var ballot2 = new Ballot
             {
                 CitizenId = arthur.Id,
                 ElectionId = presidentElection.Id,
@@ -312,16 +312,17 @@ namespace WebApplication1.EfStuff
             var ballot4 = new Ballot
             {
                 CitizenId = julie.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = sheriffElection.Id,
                 VoteTime = DateTime.Now
             };
             
             ballotRepository.Save(ballot4);
             
+            
             var ballot5 = new Ballot
             {
                 CitizenId = erik.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = sheriffElection.Id,
                 VoteTime = DateTime.Now
             };
 
@@ -330,16 +331,15 @@ namespace WebApplication1.EfStuff
             var ballot6 = new Ballot
             {
                 CitizenId = jeremy.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = mayorElection.Id,
                 VoteTime = DateTime.Now
             };
-
             ballotRepository.Save(ballot6);
             
             var ballot7 = new Ballot
             {
                 CitizenId = john.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = mayorElection.Id,
                 VoteTime = DateTime.Now
             };
 
@@ -348,7 +348,7 @@ namespace WebApplication1.EfStuff
             var ballot8 = new Ballot
             {
                 CitizenId = arthur.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = sheriffElection.Id,
                 VoteTime = DateTime.Now
             };
 
@@ -357,7 +357,7 @@ namespace WebApplication1.EfStuff
             var ballot9 = new Ballot
             {
                 CitizenId = wendy.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = sheriffElection.Id,
                 VoteTime = DateTime.Now
             };
 
@@ -366,16 +366,17 @@ namespace WebApplication1.EfStuff
             var ballot10 = new Ballot
             {
                 CitizenId = julie.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = sheriffElection.Id,
                 VoteTime = DateTime.Now
             };
             
             ballotRepository.Save(ballot10);
             
+            
             var ballot11 = new Ballot
             {
                 CitizenId = erik.Id,
-                ElectionId = presidentElection.Id,
+                ElectionId = mayorElection.Id,
                 VoteTime = DateTime.Now
             };
 
@@ -390,7 +391,7 @@ namespace WebApplication1.EfStuff
 
             ballotRepository.Save(ballot12);
             
-            johnCandidate.Ballots.Add(ballot1);
+            johnCandidate.Ballots.Add(ballot1); //John's ballot
             candidateRepository.Save(johnCandidate);
             
             johnCandidate.Ballots.Add(ballot2);
@@ -399,13 +400,13 @@ namespace WebApplication1.EfStuff
             johnCandidate.Ballots.Add(ballot3);
             candidateRepository.Save(johnCandidate);
             
-            johnCandidate.Ballots.Add(ballot4);
+            erikCandidate.Ballots.Add(ballot4);
             candidateRepository.Save(johnCandidate);
             
-            arthurCandidate.Ballots.Add(ballot5);
+            julieCandidate.Ballots.Add(ballot5);
             candidateRepository.Save(arthurCandidate);
             
-            arthurCandidate.Ballots.Add(ballot6);
+            julieCandidate.Ballots.Add(ballot6);
             candidateRepository.Save(arthurCandidate);
             
             julieCandidate.Ballots.Add(ballot7);
@@ -422,7 +423,10 @@ namespace WebApplication1.EfStuff
             
             wendyCandidate.Ballots.Add(ballot11);
             candidateRepository.Save(wendyCandidate);
-
+            
+            wendyCandidate.Ballots.Add(ballot12);
+            candidateRepository.Save(wendyCandidate);
+            
         }
     }
 }

@@ -111,6 +111,7 @@ namespace WebApplication1.Controllers
             {
                 viewModel.IsVoted = true;
             }
+            else viewModel.IsVoted = false;
             
             return View(viewModel);
         }
@@ -267,6 +268,8 @@ namespace WebApplication1.Controllers
             {
                 return Json( ex.Message);
             }
-        }
+        } 
+        
+        
     }
 }
