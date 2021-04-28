@@ -28,6 +28,10 @@ namespace WebApplication1.EfStuff
 
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+        
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Election> Elections { get; set; }
+        public DbSet<Ballot> Ballots { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -91,6 +95,34 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+            
+            modelBuilder.Entity<Citizen>()
+                .HasMany(pc => pc.Candidates)
+                .WithOne(c => c.Citizen);
+            
+            modelBuilder
+                .Entity<Election>()
+                .HasMany(e => e.Candidates)
+                .WithMany(e => e.Elections)
+                .UsingEntity<CandidateElection>(
+                    e => e.HasOne(e => e.Candidate).WithMany(),
+                    e => e.HasOne(e => e.Election).WithMany())
+                .Property(e => e.CandidateRegistrationTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Citizen)
+                .WithMany(b => b.Ballots);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Ballots)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Candidate>()
+                .HasOne(b => b.Ballot)
+                .WithMany(c => c.Candidates)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -100,6 +132,5 @@ namespace WebApplication1.EfStuff
             optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
         }
-
     }
 }
