@@ -106,6 +106,7 @@ namespace WebApplication1.Controllers
             var usedBallot = ballots.FirstOrDefault(
                 c => c.CitizenId == citizen.Id
                      && c.ElectionId == election.Id);
+            
             if (usedBallot != null)
             {
                 viewModel.IsVoted = true;
