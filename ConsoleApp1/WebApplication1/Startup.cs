@@ -123,6 +123,9 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<CandidateViewModel, Citizen >(configurationExp);
+            MapBothSide<CandidateViewModel, Candidate>(configurationExp);
+            MapBothSide<ElectionViewModel, Election>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
