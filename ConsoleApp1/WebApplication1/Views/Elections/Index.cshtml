@@ -1,0 +1,131 @@
+﻿@model List<ElectionViewModel>
+@using WebApplication1.Services
+@inject UserService userService
+
+@section Scripts{
+    <script src="~/js/government/election.js"></script>
+}
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css" />
+}
+
+<div class="d-flex justify-content-between mb-1  p-1">
+    <h4 class="title">
+        <i class="fas fa-vote-yea pl-1 pr-2"></i>
+        Избирательный центр
+    </h4>
+    
+    <div>
+        <a asp-action="Index" 
+           asp-controller="Home" 
+           class="btn alert-primary  btn-sm">
+            <i class="fas fa-arrow-circle-up mr-1"></i>
+            Вернуться на главную
+        </a>
+        <a asp-action="Archive" 
+           class="btn alert-primary btn-sm">
+            <i class="fas fa-file-archive pl-1 mr-1"></i>
+            Посмотреть архивные выборы
+        </a>
+        <a asp-action="Create"
+           class="btn alert-primary  btn-sm">
+            Создать новые выборы &nbsp;
+            <i class="fas fa-plus ml-1"></i>
+        </a>
+    </div>
+    
+</div>
+@{
+    if (TempData["Message"] != null)
+    {
+        <h3>Message: @TempData["Message"]</h3>
+    }
+    TempData.Keep("Message");
+}
+
+
+<div class="p-2 mt-3" >
+    <h4 class="text-secondary subtitle">
+        Список актуальных выборов
+    </h4>
+</div>
+
+
+<table class="table table-sm table-bordered m-1 р-1" id="tbElections">
+    <tr class="alert alert-success">
+        <th>
+            ID
+        </th>
+        <th>
+            Название
+        </th>
+        <th>
+            Описание
+        </th>
+        <th>
+            Время начала
+        </th>
+        <th>
+            Время окончания
+        </th>
+        <th>
+            
+        </th>
+        
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" class="text-center">
+                Нет зарегистрированных Выборов
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var election in Model)
+        {
+            <tr id="electionsRow" style="font-size:14px">
+                <td>
+                    @election.Id
+                </td>
+                <td>
+                    @election.Name
+                </td>
+                <td style="max-width: 45px">
+                    @election.Description
+                </td>
+                <td>
+                    @election.Start
+                </td>
+                <td>
+                    @election.End
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary"
+                       asp-action="EditElection"
+                       asp-route-id="@election.Id">
+                        Редактировать
+                        <i class="far fa-edit pl-1"></i>
+                    </a>
+                    
+                    <button type="button"
+                            data-name="@election.Id"
+                            id="deleteElectionBtn"
+                            class="btn btn-sm btn-outline-danger">
+                        Удалить
+                        <i class="far fa-trash-alt pl-1"></i>
+                    </button>
+                    
+                    <a class="btn btn-sm btn-outline-success" id="detailsBtn"
+                       asp-route-id="@election.Id"
+                       data-id="@election.Id" 
+                       asp-action="Details">
+                        Посмотреть
+                        <i class="far fa-folder-open ml-1"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    }
+</table>
