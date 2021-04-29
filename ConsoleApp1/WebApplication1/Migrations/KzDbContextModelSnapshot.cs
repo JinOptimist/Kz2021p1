@@ -373,7 +373,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Birthday")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClassYear")
+                    b.Property<int>("ClassYear")
                         .HasColumnType("int");
 
                     b.Property<int?>("ENT")
@@ -520,7 +520,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Birthday")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CourseYear")
+                    b.Property<int>("CourseYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
