@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+
+@model BronNumberViewModel  
+
+@section Scripts{
+    <script src="~/js/restoran.js"></script>
+}
+
+
+
+<div>
+    <div>Ваш номер брони: @Model.BronRespNumber</div>
+    <div>Пожалуйста, ждите подтверждение администратора</div>
+
+    <form action="@Url.Action("WaitAdminConfirm" , "Restorans", Model)" method="post">
+        <div>
+            <input type="submit" value="Обновить" />
+        </div>
+    </form>
+</div>
+
+
+

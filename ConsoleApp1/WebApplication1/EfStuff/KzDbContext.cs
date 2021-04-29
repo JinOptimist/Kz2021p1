@@ -29,6 +29,12 @@ namespace WebApplication1.EfStuff
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
 
+        public DbSet<Restorans> Restorans { get; set; }
+
+        public DbSet<BronResto> BronResto { get; set; }
+
+        public DbSet<AdminResto> AdminResto { get; set; }
+
         public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -91,6 +97,19 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+
+            modelBuilder.Entity<BronResto>()
+                           .HasOne(x => x.Restoranses)
+                           .WithMany(x => x.Brons);
+
+            modelBuilder.Entity<AdminResto>()
+               .HasOne(x => x.Citizen)
+               .WithOne(x => x.AdminResto)
+               .HasForeignKey<AdminResto>(x => x.CitizenId); ;
+
+            modelBuilder.Entity<AdminResto>()
+               .HasOne(x => x.Restoran)
+               .WithMany(x => x.AdminResto);
 
             base.OnModelCreating(modelBuilder);
         }

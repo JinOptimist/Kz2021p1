@@ -25,6 +25,7 @@ using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
+using WebApplication1.RestoBusiness;
 
 namespace WebApplication1
 {
@@ -50,6 +51,8 @@ namespace WebApplication1
 			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
+            services.AddScoped<BronRestoBusiness>();
+
             RegisterRepositories(services);
 
             services.AddScoped<UserService>(x =>
@@ -58,11 +61,18 @@ namespace WebApplication1
                     x.GetService<IHttpContextAccessor>())
                 );
 
+            services.AddScoped<AdminRestoService>(x =>
+               new AdminRestoService(
+                   x.GetService<AdminRestoRepository>(),
+                   x.GetService<IHttpContextAccessor>())
+               );
+
             services.AddScoped<CitizenPresentation>(x => 
                 new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
+
 
             services.AddAuthentication(AuthMethod)
                 .AddCookie(AuthMethod, config =>
@@ -71,6 +81,12 @@ namespace WebApplication1
                     config.LoginPath = "/Citizen/Login";
                     config.AccessDeniedPath = "/Citizen/Login";
                 });
+
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForAdminResto", policy => {
+                    policy.RequireClaim("AdminResto", "Zhanar", "Aigul");
+                });
+            });
 
             services.AddHttpContextAccessor();
             services.AddPaging();
@@ -123,6 +139,17 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+
+            MapBothSide<Restorans, RestoViewModel>(configurationExp);
+            MapBothSide<Restorans, AvailableRestoModel>(configurationExp);
+            MapBothSide<OneRestoViewModel, AvailableRestoModel>(configurationExp);
+            MapBothSide<Restorans, OneRestoViewModel>(configurationExp);
+            MapBothSide<BronViewModel, OneRestoViewModel>(configurationExp);
+            MapBothSide<Restorans, BronViewModel>(configurationExp);
+            MapBothSide<Restorans, BronResto>(configurationExp);
+            MapBothSide<BronNumberViewModel, BronResto>(configurationExp);
+            MapBothSide<BronAdminViewModel, BronResto>(configurationExp);
+            MapBothSide<BronViewModel, BronResto>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

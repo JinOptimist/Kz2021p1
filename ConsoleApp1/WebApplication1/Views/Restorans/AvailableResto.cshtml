@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+@model List<AvailableRestoModel>
+
+@section Scripts{
+    <script src="~/js/restoran.js"></script>
+}
+
+@foreach (var resto in Model)
+{
+    <div class="resto">
+        <div>@resto.Name</div>
+        <div>@resto.Address</div>
+        <div>Тел.номер: @resto.PhoneNumber</div>
+        <div>Средний чек: @resto.AverageCheck</div>
+        <form action="@Url.Action("OneResto" , "Restorans", new { name = @resto.Name})" method="post">
+           <div>
+                <input type="submit" value="Подробнее" />
+           </div>
+        </form>
+    </div>
+}
+
+

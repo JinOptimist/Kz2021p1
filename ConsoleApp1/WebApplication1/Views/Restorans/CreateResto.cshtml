@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+@model RestoViewModel
+
+<form action="@Url.Action("CreateResto", "Restorans")" method="post">
+    <div>
+        Имя: @Html.TextBoxFor(x => x.Name)
+    </div>
+    <div>
+        Адресс: @Html.TextBoxFor(x => x.Address)
+    </div>
+    <div>
+        Тел.ном: @Html.TextBoxFor(x => x.PhoneNumber)
+    </div>
+    <div>
+        Средний чек: @Html.TextBoxFor(x => x.AverageCheck)
+    </div>
+    <div>
+        Количество мест: @Html.TextBoxFor(x => x.NumberOfSeats)
+    </div>
+    <div>
+        Количество столов: @Html.TextBoxFor(x => x.NumberOfTables)
+    </div>
+    <div>
+        Кухня: @Html.TextBoxFor(x => x.Сuisine)
+    </div>
+    <div>
+        WiFi: @Html.TextBoxFor(x => x.WiFi)
+    </div>
+    <div>
+        Танцпол: @Html.TextBoxFor(x => x.DanceFloor)
+    </div>
+    <div>
+        Караоке: @Html.TextBoxFor(x => x.Karaoke)
+    </div>
+    <div>
+        Парковка: @Html.TextBoxFor(x => x.Parking)
+    </div>
+    <div>
+        Доступ: @Html.TextBoxFor(x => x.Access)
+    </div>
+    <div>
+        <input type="submit" value="Создать Ресторан" />
+    </div>
+</form>
+

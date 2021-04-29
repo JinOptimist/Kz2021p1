@@ -34,6 +34,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\AdminsResto\Login.cshtml" />
+    <None Include="Views\AdminsResto\Register.cshtml" />
+    <None Include="Views\Restorans\AvailableResto.cshtml" />
+    <None Include="Views\Restorans\BronView.cshtml" />
+    <None Include="Views\Restorans\CheckBron.cshtml" />
+    <None Include="Views\Restorans\CreateResto.cshtml" />
+    <None Include="Views\Restorans\Index.cshtml" />
+    <None Include="Views\Restorans\NewRequestBron.cshtml" />
+    <None Include="Views\Restorans\OneResto.cshtml" />
+    <None Include="Views\Restorans\WaitAdminConfirm.cshtml" />
+    <None Include="Views\Restorans\WaitConfirm.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="ReflectionIT.Mvc.Paging" Version="4.0.0" />
   </ItemGroup>
