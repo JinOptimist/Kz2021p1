@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1.EfStuff
 {
@@ -22,6 +23,7 @@ namespace WebApplication1.EfStuff
         public DbSet<Fireman> Firemen { get; set; }
         public DbSet<FireTruck> FireTrucks { get; set; }
         public DbSet<FiremanTeam> FiremanTeams { get; set; }
+        public DbSet<FireIncident> FireIncidents { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<School> Schools { get; set; }
@@ -48,8 +50,10 @@ namespace WebApplication1.EfStuff
                 .WithOne(x => x.FiremanTeam);
             modelBuilder.Entity<Fireman>()
                 .HasOne(x => x.FiremanTeam)
-                .WithMany(x => x.Firemen)
-                .HasForeignKey(x => x.TeamId);
+                .WithMany(x => x.Firemen);
+            modelBuilder.Entity<FireIncident>()
+                .HasOne(x => x.FiremanTeam)
+                .WithMany(x => x.FireIncidents);
 
             modelBuilder.Entity<Policeman>()
                 .HasOne(c => c.Citizen)

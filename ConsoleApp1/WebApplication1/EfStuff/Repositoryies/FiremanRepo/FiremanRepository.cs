@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Firemen;
 
-namespace WebApplication1.EfStuff.Repositoryies
+namespace WebApplication1.EfStuff.Repositoryies.FiremanRepo
 {
     public class FiremanRepository : BaseRepository<Fireman>
     {

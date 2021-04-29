@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1.EfStuff.Model
 {

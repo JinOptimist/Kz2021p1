@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public string Role { get; set; }
         public int WorkExperYears { get; set; }
         public string Name { get; set; }     
-        
+        public string TeamName { get; set; }
   
     }
 }

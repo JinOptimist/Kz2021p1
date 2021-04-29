@@ -38,5 +38,7 @@ namespace WebApplication1.Services
         //}
         public bool IsPolicment()
              => GetUser()?.Policeman != null;
+        public bool IsFireAdmin()
+            => GetUser()?.Fireman?.Role == "FireAdmin";
     }
 }

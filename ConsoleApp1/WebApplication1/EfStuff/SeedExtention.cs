@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1.EfStuff
 {
@@ -20,6 +22,7 @@ namespace WebApplication1.EfStuff
                 CreateDefaultCitizen(scope.ServiceProvider);
 
                 CreateDefaultAdress(scope.ServiceProvider);
+                CreateDefaultFireAdmin(scope.ServiceProvider);
             }
 
             return host;
@@ -43,6 +46,31 @@ namespace WebApplication1.EfStuff
                     Age = 30
                 };
                 citizenRepository.Save(admin);
+            }
+        }
+        private static void CreateDefaultFireAdmin(IServiceProvider serviceProvider)
+        {
+            var firemanRepository = serviceProvider.GetService<FiremanRepository>();
+            var citizenRepository = serviceProvider.GetService<CitizenRepository>();
+
+            var firecitizen = citizenRepository.GetByName("FireAdmin");
+            if (firecitizen == null)
+            {
+                firecitizen = new Citizen()
+                {
+                    Name = "FireAdmin",
+                    Password = "fireadmin",
+                    Age = 40
+                };
+                citizenRepository.Save(firecitizen);
+                var fireadmin = new Fireman()
+                {
+                    Role = "FireAdmin",
+                    WorkExperYears = 10,
+                    CitizenId = firecitizen.Id,
+                    Citizen = firecitizen
+                };
+                firemanRepository.Save(fireadmin);
             }
         }
     }

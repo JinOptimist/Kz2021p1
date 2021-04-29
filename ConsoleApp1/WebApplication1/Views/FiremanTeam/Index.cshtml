@@ -1,10 +1,12 @@
 ﻿@{
     ViewData["Title"] = "FiremanTeams";
-    Layout = "~/Views/Shared/Fireman/_LayoutFireman.cshtml";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
 }
 @model List<WebApplication1.Models.FiremanModels.FiremanTeamViewModel>
+@using WebApplication1.Services
+@inject UserService userService
 @section Scripts{
-    <script src="~/js/firemanteam.js"></script>
+    <script src="~/js/Fireman/firemanteam.js"></script>
 }
 <h1>
     All Fireman Teams
@@ -26,27 +28,24 @@
         <th>Team Name</th>
         <th>Shift</th>
         <th>Team State</th>
-        <th>Workers</th>
         <th>Quantity</th>
         <th>Truck Id</th>
+        <th>Edit</th>
     </tr>
     @foreach (var team in Model)
     {
-<tr class="team">
-    <td>@team.Id</td>
-    <td>@team.TeamName</td>
-    <td>@team.Shift</td>
-    <td>@team.TeamState</td>
-    <td>
-        @foreach (var worker in team.FiremenNames)
-        {
-            @worker
-        }
-
-    </td>
-    <td>@team.FiremanCount</td>
-    <td>@team.TruckId</td>
-    <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
-</tr>
+        <tr class="team">
+            <td>@team.Id</td>
+            <td>@team.TeamName</td>
+            <td>@team.Shift</td>
+            <td>@team.TeamState</td>
+            <td>@team.FiremanCount</td>
+            <td>@team.TruckId</td>
+            @if (userService.IsFireAdmin())
+            {
+                <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
+                <td><a href="FiremanTeam/Edit/@team.Id">edit</a></td>
+            }
+        </tr>
     }
 </table>

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.EfStuff.Model
+namespace WebApplication1.EfStuff.Model.Firemen
 {
     public class FireTruck : BaseModel
     {

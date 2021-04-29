@@ -10,8 +10,8 @@ using WebApplication1.EfStuff;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    [Migration("20210415132021_FireTeamTruck")]
-    partial class FireTeamTruck
+    [Migration("20210419211226_AddFireIncident")]
+    partial class AddFireIncident
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -222,7 +222,44 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FireTruck", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FireIncident", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Dead")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("FiremanId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Injured")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("TeamId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FiremanId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("FireIncidents");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FireTruck", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -240,7 +277,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("FireTrucks");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.Fireman", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,11 +287,11 @@ namespace WebApplication1.Migrations
                     b.Property<long>("CitizenId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("FiremanTeamId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("TeamId")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("WorkExperYears")
                         .HasColumnType("int");
@@ -264,12 +301,12 @@ namespace WebApplication1.Migrations
                     b.HasIndex("CitizenId")
                         .IsUnique();
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("FiremanTeamId");
 
                     b.ToTable("Firemen");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FiremanTeam", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -754,30 +791,43 @@ namespace WebApplication1.Migrations
                     b.Navigation("House");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FireIncident", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("Fireman")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("WebApplication1.EfStuff.Model.Firemen.Fireman", null)
+                        .WithMany("FireIncidents")
+                        .HasForeignKey("FiremanId");
 
-                    b.HasOne("WebApplication1.EfStuff.Model.FiremanTeam", "FiremanTeam")
-                        .WithMany("Firemen")
+                    b.HasOne("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", "FiremanTeam")
+                        .WithMany("FireIncidents")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FiremanTeam");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.Fireman", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("Fireman")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Firemen.Fireman", "CitizenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", "FiremanTeam")
+                        .WithMany("Firemen")
+                        .HasForeignKey("FiremanTeamId");
 
                     b.Navigation("Citizen");
 
                     b.Navigation("FiremanTeam");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FiremanTeam", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.FireTruck", "FireTruck")
+                    b.HasOne("WebApplication1.EfStuff.Model.Firemen.FireTruck", "FireTruck")
                         .WithOne("FiremanTeam")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.FiremanTeam", "TruckId")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", "TruckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -891,13 +941,20 @@ namespace WebApplication1.Migrations
                     b.Navigation("Violations");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FireTruck", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FireTruck", b =>
                 {
                     b.Navigation("FiremanTeam");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.FiremanTeam", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.Fireman", b =>
                 {
+                    b.Navigation("FireIncidents");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Firemen.FiremanTeam", b =>
+                {
+                    b.Navigation("FireIncidents");
+
                     b.Navigation("Firemen");
                 });
 

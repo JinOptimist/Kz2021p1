@@ -27,6 +27,7 @@ using WebApplication1.Presentation;
 using System.Reflection;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1
 {
@@ -111,20 +112,13 @@ namespace WebApplication1
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
             
-            configurationExp.AddProfile<PoliceProfiles>();
-
-            configurationExp.CreateMap<Fireman, FiremanViewModel>();
-            configurationExp.CreateMap<FiremanViewModel, Fireman>();
-
-            configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
-                .ForMember(nameof(FiremanShowViewModel.Name),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
-                .ForMember(nameof(FiremanShowViewModel.Age),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+            configurationExp.AddProfile<PoliceProfiles>();                
 
             configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
 
             MapBothSide<Fireman, FiremanViewModel>(configurationExp);
+            MapBothSide<FiremanTeam, FiremanTeamViewModel>(configurationExp);
+            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);

@@ -4,9 +4,9 @@
 }
 @model WebApplication1.Models.FiremanModels.FiremanTeamViewModel
 
-<h1>New Team Information</h1>
+<h1>Edit team information</h1>
 
-<form action="@Url.Action("CreateFiremanTeam", "FiremanTeam")" method="post">
+<form action="@Url.Action("Edit", "FiremanTeam")" method="post">
     <div>
         Team Name : @Html.TextBoxFor(x => x.TeamName)
     </div>
@@ -20,6 +20,6 @@
         Truck Id : @Html.TextBoxFor(x => x.TruckId)
     </div>
     <div>
-        <input type="submit" value="Add new team">
+        <input type="submit" value="Save">
     </div>
 </form>

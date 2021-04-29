@@ -1,8 +1,8 @@
 ﻿@model FiremanViewModel
 
-<h1>New Worker among Firemen!</h1>
+<h1>Edit worker</h1>
 
-<form action="@Url.Action("CreateFireman", "Fireman")" method="post">
+<form action="@Url.Action("Edit", "Fireman")" method="post">
     <div>
         Name : @Html.TextBoxFor(x => x.Name)
     </div>
@@ -16,6 +16,6 @@
         Team Name : @Html.TextBoxFor(x => x.TeamName)
     </div>
     <div>
-        <input type="submit" value="Add new worker">
+        <input type="submit" value="Save">
     </div>
 </form>

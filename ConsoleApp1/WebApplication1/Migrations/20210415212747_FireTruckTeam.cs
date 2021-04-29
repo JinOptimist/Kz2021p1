@@ -1,22 +1,16 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    public partial class FireTeamTruck : Migration
+    public partial class FireTruckTeam : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "Police");
-
             migrationBuilder.AddColumn<long>(
-                name: "TeamId",
+                name: "FiremanTeamId",
                 table: "Firemen",
                 type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-            
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "FireTrucks",
@@ -31,8 +25,6 @@ namespace WebApplication1.Migrations
                 {
                     table.PrimaryKey("PK_FireTrucks", x => x.Id);
                 });
-
-          
 
             migrationBuilder.CreateTable(
                 name: "FiremanTeams",
@@ -56,12 +48,10 @@ namespace WebApplication1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-           
             migrationBuilder.CreateIndex(
-                name: "IX_Firemen_TeamId",
+                name: "IX_Firemen_FiremanTeamId",
                 table: "Firemen",
-                column: "TeamId");
-           
+                column: "FiremanTeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FiremanTeams_TruckId",
@@ -69,100 +59,34 @@ namespace WebApplication1.Migrations
                 column: "TruckId",
                 unique: true);
 
-           
             migrationBuilder.AddForeignKey(
-                name: "FK_Firemen_FiremanTeams_TeamId",
+                name: "FK_Firemen_FiremanTeams_FiremanTeamId",
                 table: "Firemen",
-                column: "TeamId",
+                column: "FiremanTeamId",
                 principalTable: "FiremanTeams",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Firemen_FiremanTeams_TeamId",
+                name: "FK_Firemen_FiremanTeams_FiremanTeamId",
                 table: "Firemen");
-
-            migrationBuilder.DropTable(
-                name: "Buses");
-
-            migrationBuilder.DropTable(
-                name: "CertificatePupil");
-
-            migrationBuilder.DropTable(
-                name: "CertificateStudent");
-
-            migrationBuilder.DropTable(
-                name: "DepartingFlightsInfo");
 
             migrationBuilder.DropTable(
                 name: "FiremanTeams");
 
             migrationBuilder.DropTable(
-                name: "IncomingFlightsInfo");
-
-            migrationBuilder.DropTable(
-                name: "Passengers");
-
-            migrationBuilder.DropTable(
-                name: "PoliceAcademy",
-                schema: "Police");
-
-            migrationBuilder.DropTable(
-                name: "PoliceCallHistory",
-                schema: "Police");
-
-            migrationBuilder.DropTable(
-                name: "SportEvent");
-
-            migrationBuilder.DropTable(
-                name: "SportSection");
-
-            migrationBuilder.DropTable(
-                name: "Violations",
-                schema: "Police");
-
-            migrationBuilder.DropTable(
-                name: "TripRoute");
-
-            migrationBuilder.DropTable(
-                name: "Pupils");
-
-            migrationBuilder.DropTable(
-                name: "Certificates");
-
-            migrationBuilder.DropTable(
-                name: "Students");
-
-            migrationBuilder.DropTable(
                 name: "FireTrucks");
 
-            migrationBuilder.DropTable(
-                name: "SportComplex");
-
-            migrationBuilder.DropTable(
-                name: "Policemen",
-                schema: "Police");
-
-            migrationBuilder.DropTable(
-                name: "Schools");
-
-            migrationBuilder.DropTable(
-                name: "Universities");
-
             migrationBuilder.DropIndex(
-                name: "IX_Firemen_TeamId",
+                name: "IX_Firemen_FiremanTeamId",
                 table: "Firemen");
 
             migrationBuilder.DropColumn(
-                name: "TeamId",
+                name: "FiremanTeamId",
                 table: "Firemen");
-
-            migrationBuilder.DropColumn(
-                name: "IsOutOfCity",
-                table: "Citizens");
         }
     }
 }

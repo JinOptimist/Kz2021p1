@@ -4,12 +4,12 @@
         clicked.attr('disabled', 'disabled');
 
         var id = clicked.attr('data-name');
-        var url = '/Fireman/Remove?id=' + id;
+        var url = '/FireIncident/Remove?id=' + id;
         $.get(url).done(function (answer) {
             if (answer) {
-                clicked.closest('.worker').remove();
+                clicked.closest('.incident').remove();
             }
         })
 
-    }) 
+    })
 })
