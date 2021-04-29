@@ -14,6 +14,7 @@ using WebApplication1.Controllers.CustomFilterAttributes;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
 using WebApplication1.Services;
@@ -23,14 +24,14 @@ namespace WebApplication1.Controllers
     [Localized]
     public class CitizenController : Controller
     {
-        private CitizenRepository _citizenRepository;
+        private ICitizenRepository _citizenRepository;
         private CitizenPresentation _citizenPresentation;
-        private UserService _userService;
+        private IUserService _userService;
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
 
-        public CitizenController(CitizenRepository citizenRepository,
-            CitizenPresentation citizenPresentation, UserService userService, IMapper mapper,
+        public CitizenController(ICitizenRepository citizenRepository,
+            CitizenPresentation citizenPresentation, IUserService userService, IMapper mapper,
             IWebHostEnvironment webHostEnvironment)
         {
             _citizenRepository = citizenRepository;
@@ -112,10 +113,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public IActionResult FullProfile()
         {
-            var user = _userService.GetUser();
-
-            var viewModel = _mapper.Map<FullProfileViewModel>(user);
-
+            var viewModel =_citizenPresentation.FullProfile();
             return View(viewModel);
         }
 
@@ -148,19 +146,7 @@ namespace WebApplication1.Controllers
 
         public JsonResult Remove(string name)
         {
-            Thread.Sleep(2000);
-
-            var citizen = _citizenRepository.GetByName(name);
-            if (citizen == null)
-            {
-                return Json(false);
-            }
-
-            _citizenRepository.Remove(citizen);
-
-            return Json(true);
+            return Json(_citizenPresentation.Remove(name));
         }
-
-
     }
 }
