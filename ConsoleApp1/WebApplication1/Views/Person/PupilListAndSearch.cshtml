@@ -47,9 +47,7 @@
                    name="minValueForGrant"
                    style="width:300px;" />
 
-
             <input type="submit" value="Выдать Грант" asp-action="PupilGrant" class="btn btn-primary" style="margin-left:15px" />
-
         </p>
     </form>
 
@@ -76,7 +74,14 @@
                             @Html.ActionLink(@item.IIN, "PupilFullInfo", new { pupilId = item.Id })
                         </td>
                         <td> @item.Surname @item.Name @item.Patronymic </td>
-                        <td> @item.ClassYear </td>
+                        @if (item.ClassYear == 0)
+                        {
+                            <td>Gradueted</td>
+                        }
+                        else
+                        {
+                            <td> @item.ClassYear </td>
+                        }
                         <td> @item.SchoolId</td>
                         <td>
                             <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditPupilData", "Person", new { IDPupil = item.Id })</button>

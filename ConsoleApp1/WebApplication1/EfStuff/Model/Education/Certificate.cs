@@ -11,7 +11,6 @@ namespace WebApplication1.EfStuff.Model
         [Required]
         [MaxLength(50)]
         public string Type { get; set; }
-
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Pupil> Pupils { get; set; }
     }

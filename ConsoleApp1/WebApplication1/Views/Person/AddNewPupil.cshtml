@@ -4,10 +4,11 @@
 
     <div class="row">
         <div class="col-sm-6 offset-3">
-
             <h1>Add New Pupil</h1>
-            <form action="/Person/AddNewOrEditPupil" method="post">
-                @*upload file (загрузить аватарку)*@
+            <form action="/Person/AddNewOrEditPupil" method="post"  enctype="multipart/form-data">
+                <div>
+                    Avatar: <input class="form-control" type="file" name="@nameof(PupilViewModel.AvatarFile)" />
+                </div>
                 <div>
                     IIN: @Html.TextBoxFor(x => x.IIN, new { Class = "form-control", @maxlength = "12" })
                 </div>

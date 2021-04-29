@@ -58,7 +58,9 @@ namespace WebApplication1.Presentation
                     query = query.Where(x => x.UniversityId == int.Parse(searchStudent)).OrderBy(s => s.CourseYear);
                 }
             }
+
             List<StudentViewModel> studentViewModels = new List<StudentViewModel>();
+
             foreach (var item in query)
             {
                 studentViewModels.Add(Mapper.Map<StudentViewModel>(item));
@@ -114,12 +116,6 @@ namespace WebApplication1.Presentation
             var student = Mapper.Map<Student>(studentViewModel);
             _studentRepository.Save(student);
         }
-        /*
-                public void RemoveStudent(StudentViewModel studentViewModel)
-                {
-                    var student = Mapper.Map<Student>(studentViewModel);
-                    _studentRepository.Remove(student);
-                }*/
 
         public List<University> GetUniversityList()
         {
@@ -143,11 +139,22 @@ namespace WebApplication1.Presentation
             return universityNames;
         }
 
+        public List<long> GetListOfUniversityIds()
+        {
+            var all = GetUniversityList();
+            List<long> universityIds = new List<long>();
+            foreach (var university in all)
+            {
+                universityIds.Add(university.Id);
+            }
+
+            return universityIds;
+        }
+
         public void EndStudyYearForUniversity()
         {
             List<Student> students = _studentRepository.GetAll();
             int fourthCourseStudentsCount = 0;
-            //string message;
             foreach (Student student in students)
             {
                 if (student.CourseYear != 4)
@@ -156,14 +163,13 @@ namespace WebApplication1.Presentation
                 }
                 else
                 {
+                    student.CourseYear = null;
                     student.GraduatedYear = DateTime.Now;
                     // Certificate
                     fourthCourseStudentsCount++;
                 }
                 _studentRepository.Save(student);
-            }
-            
-            //return message;
+            }            
         }
     }
 }

@@ -57,7 +57,7 @@ namespace WebApplication1.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Subject = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ClassYear = table.Column<int>(type: "int", nullable: false),
+                    ClassYear = table.Column<int>(type: "int", nullable: true),
                     AverageMark = table.Column<double>(type: "float", nullable: false),
                     GraduatedYear = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ENT = table.Column<int>(type: "int", nullable: true),
@@ -87,7 +87,7 @@ namespace WebApplication1.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Faculty = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CourseYear = table.Column<int>(type: "int", nullable: false),
+                    CourseYear = table.Column<int>(type: "int", nullable: true),
                     Gpa = table.Column<double>(type: "float", nullable: false),
                     OnGrant = table.Column<bool>(type: "bit", nullable: false),
                     EnteredYear = table.Column<DateTime>(type: "datetime2", nullable: false),

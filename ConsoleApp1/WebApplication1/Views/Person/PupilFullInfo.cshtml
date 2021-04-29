@@ -7,7 +7,14 @@
     <h1>@Model.Surname @Model.Name @Model.Patronymic</h1>
 
     <div class="card" style="width: 28rem; margin-bottom: 50px">
-        <img src="/Image/Umbrella-Academy210738983.png" class="card-img-top" alt="...">
+        @if (Model.Avatar == null)
+        {
+            <img src="/Education/img/ava1.png" class="card-img-top" alt="...">
+        }
+        else
+        {
+            <img src="@Model.Avatar" class="card-img-top" alt="...">
+        }
         <div class="card-body">
             <h5 class="card-title" style="display:flex; justify-content:center; align-items:center;">Full Info</h5>
             <p class="card-text">Email:<b>@Model.Email</b></p>

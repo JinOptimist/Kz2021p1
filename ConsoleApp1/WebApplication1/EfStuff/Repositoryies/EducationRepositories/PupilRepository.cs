@@ -15,7 +15,5 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             return _kzDbContext.Pupils.SingleOrDefault(x => x.IIN.Equals(pupilIIN));
         }
-
-        
     }
 }

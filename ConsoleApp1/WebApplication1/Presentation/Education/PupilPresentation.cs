@@ -23,7 +23,7 @@ namespace WebApplication1.Presentation
             _pupilRepository = pupilRepository;
             _studentRepository = studentRepository;
             _schoolRepository = schoolRepository;
-            Mapper = mapper;            
+            Mapper = mapper;
         }
 
         public PagingList<PupilViewModel> GetPupilList(int page)
@@ -85,17 +85,14 @@ namespace WebApplication1.Presentation
 
             _pupilRepository.Save(pupil);
         }
-        /*
-                public void RemovePupil(PupilViewModel pupilViewModel)
-                {
-                    var pupil = Mapper.Map<Pupil>(pupilViewModel);
-                    _pupilRepository.Remove(pupil);
-                }*/
 
-        public void GetPupilGrant(int minValueForGrant)
+        public void GetPupilGrant(List<long> universityIds, int minValueForGrant)
         {
             var allFaculties = _studentRepository.GetAllFaculties();
             Random rand = new Random();
+
+            int randomForFacultyHashCode = rand.Next(0, allFaculties.Count());
+            int index = rand.Next(0, universityIds.Count());
 
             var pupils = _pupilRepository.GetAll();
             foreach (var pupil in pupils)
@@ -110,12 +107,12 @@ namespace WebApplication1.Presentation
                     studentVIewModel.Avatar = pupil.Avatar;
                     studentVIewModel.Birthday = pupil.Birthday;
                     studentVIewModel.Email = pupil.Email;
-                    studentVIewModel.Faculty = allFaculties.Where(x => x.GetHashCode() == rand.Next(0, allFaculties.Count())).SingleOrDefault().ToString();
+                    studentVIewModel.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
                     studentVIewModel.CourseYear = 1;
                     studentVIewModel.Gpa = 2.67;
                     studentVIewModel.EnteredYear = DateTime.Now;
                     studentVIewModel.GraduatedYear = null;
-                    studentVIewModel.UniversityId = rand.Next(1, 2); // Random()
+                    studentVIewModel.UniversityId = universityIds.ElementAt(index); // Random()
 
                     if (pupil.ENT >= minValueForGrant)
                     {
@@ -172,6 +169,7 @@ namespace WebApplication1.Presentation
                 else
                 {
                     pupil.ENT = rand.Next(50, 140);
+                    pupil.ClassYear = null;
                     pupil.GraduatedYear = DateTime.Now;
                     // Certificate
                 }
