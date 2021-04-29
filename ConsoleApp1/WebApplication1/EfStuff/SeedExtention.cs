@@ -70,56 +70,16 @@ namespace WebApplication1.EfStuff
                 Local = Local.Rus
             };
             citizenRepository.Save(john);
-
-            var arthur = new Citizen
+            
+            var presidentElection = new Election
             {
-                Name = "Arthur Poe" ,
-                Password = "123!",
-                Age = 30,
-                CreatingDate = DateTime.Now,
-                Local = Local.Rus
+                Name = "President Election",
+                Start = DateTime.Now,
+                Description = "Lorem ipsum d"
+                
             };
-            citizenRepository.Save(arthur);
-
-            var wendy = new Citizen
-            {
-                Name = "Wendy Toe",
-                Password = "123!",
-                Age = 21,
-                CreatingDate = DateTime.Now,
-                Local = Local.Eng
-            };
-            citizenRepository.Save(wendy);
-
-            var julie = new Citizen
-            {
-                Name = "Julie Doe",
-                Password = "123!",
-                Age = 34,
-                CreatingDate = DateTime.Now,
-                Local = Local.Eng
-            };
-            citizenRepository.Save(julie);
-
-            var erik = new Citizen
-            {
-                Name = "Erik Roe",
-                Password = "123!",
-                Age = 24,
-                CreatingDate = DateTime.Now,
-                Local = Local.Eng
-            };
-            citizenRepository.Save(erik);
-
-            var   jeremy = new Citizen
-            {
-                Name = "Jeremy Moe",
-                Password = "123!",
-                Age = 44,
-                CreatingDate = DateTime.Now,
-                Local = Local.Rus
-            };
-            citizenRepository.Save(jeremy);
+            presidentElection.End = presidentElection.Start.AddHours(24);
+            electionRepository.Save(presidentElection);
             
             var  johnCandidate = new Candidate
             {
@@ -131,7 +91,20 @@ namespace WebApplication1.EfStuff
                 Slogan = "Lorem!",
                 Job = "Учитель"
             };
-            candidateRepository.Save(johnCandidate);
+            
+           presidentElection.Candidates.Add(johnCandidate);
+           candidateRepository.Save(johnCandidate);
+           electionRepository.Save(presidentElection);
+
+            var arthur = new Citizen
+            {
+                Name = "Arthur Poe" ,
+                Password = "123!",
+                Age = 30,
+                CreatingDate = DateTime.Now,
+                Local = Local.Rus
+            };
+            citizenRepository.Save(arthur);
             
             var arthurCandidate = new Candidate
             {
@@ -144,7 +117,19 @@ namespace WebApplication1.EfStuff
                 Job = "Предприниматель"
             };
             
+            presidentElection.Candidates.Add(arthurCandidate);
             candidateRepository.Save(arthurCandidate);
+            electionRepository.Save(presidentElection);
+            
+            var wendy = new Citizen
+            {
+                Name = "Wendy Toe",
+                Password = "123!",
+                Age = 21,
+                CreatingDate = DateTime.Now,
+                Local = Local.Eng
+            };
+            citizenRepository.Save(wendy);
             
             var wendyCandidate = new Candidate
             {
@@ -156,7 +141,19 @@ namespace WebApplication1.EfStuff
                 Slogan = "Lorem ipsum dolor sit",
                 Job = "Таксист"
             };
+            presidentElection.Candidates.Add(wendyCandidate);
             candidateRepository.Save(wendyCandidate);
+            electionRepository.Save(presidentElection);
+            
+            var julie = new Citizen
+            {
+                Name = "Julie Doe",
+                Password = "123!",
+                Age = 34,
+                CreatingDate = DateTime.Now,
+                Local = Local.Eng
+            };
+            citizenRepository.Save(julie);
             
             var julieCandidate = new Candidate
             {
@@ -168,7 +165,19 @@ namespace WebApplication1.EfStuff
                 Slogan = "Lorem ipsum dolor sit am",
                 Job = "Архитектор"
             };
+            presidentElection.Candidates.Add(julieCandidate);
             candidateRepository.Save(julieCandidate);
+            electionRepository.Save(presidentElection);
+            
+            var erik = new Citizen
+            {
+                Name = "Erik Roe",
+                Password = "123!",
+                Age = 24,
+                CreatingDate = DateTime.Now,
+                Local = Local.Eng
+            };
+            citizenRepository.Save(erik);
             
             var erikCandidate = new Candidate
             {
@@ -180,7 +189,31 @@ namespace WebApplication1.EfStuff
                 Slogan = "Lorem ips",
                 Job = "Программист"
             };
+            presidentElection.Candidates.Add(erikCandidate);
             candidateRepository.Save(erikCandidate);
+            electionRepository.Save(presidentElection);
+            
+            
+            
+            var sheriffElection = new Election
+            {
+                Name = "Sheriff Election",
+                Start = DateTime.Now,
+                Description = "Lorem dolor"
+            };
+            
+            sheriffElection.End = presidentElection.Start.AddHours(8);
+            electionRepository.Save(sheriffElection);
+            
+            var   jeremy = new Citizen
+            {
+                Name = "Jeremy Moe",
+                Password = "123!",
+                Age = 44,
+                CreatingDate = DateTime.Now,
+                Local = Local.Rus
+            };
+            citizenRepository.Save(jeremy);
             
             var jeremyCandidate = new Candidate
             {
@@ -192,94 +225,14 @@ namespace WebApplication1.EfStuff
                 Slogan = "Lorem ips",
                 Job = "Строитель"
             };
-            candidateRepository.Save(jeremyCandidate);
-            
-            var congressmanElection = new Election
-            {
-                Name = "Congressman Election",
-                Start = DateTime.Now,
-                Description = "Lorem dolor just to test archiving it will be empty elections"
-            };
-            
-            
-            var presidentElection = new Election
-            {
-                Name = "President Election",
-                Start = DateTime.Now,
-                Description = "Lorem ipsum d"
-                
-            };
-            presidentElection.End = presidentElection.Start.AddHours(24);
-            electionRepository.Save(presidentElection);
-            
-            var sheriffElection = new Election
-            {
-                Name = "Sheriff Election",
-                Start = DateTime.Now,
-                Description = "Lorem dolor"
-            };
-            sheriffElection.End = presidentElection.Start.AddHours(8);
-            electionRepository.Save(sheriffElection);
-            
-            var mayorElection = new Election
-            {
-                Name = "Mayor Election",
-                Start = DateTime.Now,
-                Description = "Lorem ipsum"
-            };
-            mayorElection.End = mayorElection.Start.AddDays(1);
-            electionRepository.Save(mayorElection);
-            
-            congressmanElection.End = congressmanElection.Start.AddMilliseconds(100);
-            electionRepository.Save(congressmanElection);
-            
-            var missUniverseElection = new Election
-            {
-                Name = "Miss Universe Election",
-                Start = DateTime.Now,
-                Description = "Dummy election dolor just to test archiving it will be empty elections"
-            };
-            missUniverseElection.End = missUniverseElection.Start.AddMilliseconds(20);
-            electionRepository.Save(missUniverseElection);
-            
-            presidentElection.Candidates.Add(johnCandidate);
-            electionRepository.Save(presidentElection);
-            
-            presidentElection.Candidates.Add(arthurCandidate);
-            electionRepository.Save(presidentElection);
-            
-            presidentElection.Candidates.Add(wendyCandidate);
-            electionRepository.Save(presidentElection);
-            
-            presidentElection.Candidates.Add(julieCandidate);
-            electionRepository.Save(presidentElection);
-            
-            presidentElection.Candidates.Add(erikCandidate);
-            electionRepository.Save(presidentElection);
-            
-            presidentElection.Candidates.Add(jeremyCandidate);
-            electionRepository.Save(presidentElection);
             
             sheriffElection.Candidates.Add(jeremyCandidate);
+            candidateRepository.Save(jeremyCandidate);
             electionRepository.Save(sheriffElection);
-            
-            sheriffElection.Candidates.Add(erikCandidate);
-            electionRepository.Save(sheriffElection);
-            
+
             sheriffElection.Candidates.Add(julieCandidate);
+            candidateRepository.Save(julieCandidate);
             electionRepository.Save(sheriffElection);
-            
-            mayorElection.Candidates.Add(wendyCandidate);
-            electionRepository.Save(mayorElection);
-            
-            mayorElection.Candidates.Add(julieCandidate);
-            electionRepository.Save(mayorElection);
-            
-            mayorElection.Candidates.Add(erikCandidate);
-            electionRepository.Save(mayorElection);
-            
-            mayorElection.Candidates.Add(jeremyCandidate);
-            electionRepository.Save(mayorElection);
             
             var ballot1 = new Ballot
             {
@@ -291,7 +244,7 @@ namespace WebApplication1.EfStuff
             ballotRepository.Save(ballot1);
             
             
-           var ballot2 = new Ballot
+            var ballot2 = new Ballot
             {
                 CitizenId = arthur.Id,
                 ElectionId = presidentElection.Id,
@@ -328,105 +281,21 @@ namespace WebApplication1.EfStuff
 
             ballotRepository.Save(ballot5);
             
-            var ballot6 = new Ballot
-            {
-                CitizenId = jeremy.Id,
-                ElectionId = mayorElection.Id,
-                VoteTime = DateTime.Now
-            };
-            ballotRepository.Save(ballot6);
             
-            var ballot7 = new Ballot
-            {
-                CitizenId = john.Id,
-                ElectionId = mayorElection.Id,
-                VoteTime = DateTime.Now
-            };
-
-            ballotRepository.Save(ballot7);
-            
-            var ballot8 = new Ballot
-            {
-                CitizenId = arthur.Id,
-                ElectionId = sheriffElection.Id,
-                VoteTime = DateTime.Now
-            };
-
-            ballotRepository.Save(ballot8);
-            
-            var ballot9 = new Ballot
-            {
-                CitizenId = wendy.Id,
-                ElectionId = sheriffElection.Id,
-                VoteTime = DateTime.Now
-            };
-
-            ballotRepository.Save(ballot9);
-            
-            var ballot10 = new Ballot
-            {
-                CitizenId = julie.Id,
-                ElectionId = sheriffElection.Id,
-                VoteTime = DateTime.Now
-            };
-            
-            ballotRepository.Save(ballot10);
-            
-            
-            var ballot11 = new Ballot
-            {
-                CitizenId = erik.Id,
-                ElectionId = mayorElection.Id,
-                VoteTime = DateTime.Now
-            };
-
-            ballotRepository.Save(ballot11);
-            
-            var ballot12 = new Ballot
-            {
-                CitizenId = jeremy.Id,
-                ElectionId = presidentElection.Id,
-                VoteTime = DateTime.Now
-            };
-
-            ballotRepository.Save(ballot12);
-            
-            johnCandidate.Ballots.Add(ballot1); //John's ballot
+            johnCandidate.Ballots.Add(ballot1); 
             candidateRepository.Save(johnCandidate);
             
-            johnCandidate.Ballots.Add(ballot2);
+            arthurCandidate.Ballots.Add(ballot2);
             candidateRepository.Save(johnCandidate);
             
-            johnCandidate.Ballots.Add(ballot3);
+            wendyCandidate.Ballots.Add(ballot3);
             candidateRepository.Save(johnCandidate);
             
-            erikCandidate.Ballots.Add(ballot4);
+            julieCandidate.Ballots.Add(ballot4);
             candidateRepository.Save(johnCandidate);
             
-            julieCandidate.Ballots.Add(ballot5);
-            candidateRepository.Save(arthurCandidate);
-            
-            julieCandidate.Ballots.Add(ballot6);
-            candidateRepository.Save(arthurCandidate);
-            
-            julieCandidate.Ballots.Add(ballot7);
-            candidateRepository.Save(julieCandidate);
-            
-            erikCandidate.Ballots.Add(ballot8);
-            candidateRepository.Save(erikCandidate);
-            
-            jeremyCandidate.Ballots.Add(ballot9);
+            jeremyCandidate.Ballots.Add(ballot5);
             candidateRepository.Save(jeremyCandidate);
-            
-            jeremyCandidate.Ballots.Add(ballot10);
-            candidateRepository.Save(jeremyCandidate);
-            
-            wendyCandidate.Ballots.Add(ballot11);
-            candidateRepository.Save(wendyCandidate);
-            
-            wendyCandidate.Ballots.Add(ballot12);
-            candidateRepository.Save(wendyCandidate);
-            
         }
     }
 }

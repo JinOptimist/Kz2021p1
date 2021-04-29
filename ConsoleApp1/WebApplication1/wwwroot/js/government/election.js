@@ -10,7 +10,12 @@
         var url = '/Elections/DeleteElections?id=' + id;
         
         $.get(url).done(function (answer) {
-            clicked.closest("tr").remove()
+            if(answer)
+            {
+                clicked.closest("tr").remove();
+                console.log(answer)
+            }
+            console.log( "something went wrong", answer)
 
         })
     });

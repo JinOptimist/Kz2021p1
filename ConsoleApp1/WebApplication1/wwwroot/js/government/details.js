@@ -12,11 +12,11 @@
 
         $.get(url).done(function (answer) {
             if (answer) {
-                clicked.closest("tr").remove()
-                location.reload();
+                clicked.closest("tr").remove();
+                console.log(answer)
             }
 
-            console.log(answer)
+            console.log('something went wrong', answer)
         });
     });
 

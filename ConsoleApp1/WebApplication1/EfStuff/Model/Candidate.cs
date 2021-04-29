@@ -13,6 +13,7 @@ namespace WebApplication1.EfStuff.Model
 	{
         public string Name { get; set; }
         public int Age { get; set; }
+        
         public string AvatarUrl { get; set; }
         public string Job { get; set; }
         public string Slogan { get; set; }
@@ -24,6 +25,8 @@ namespace WebApplication1.EfStuff.Model
         public long CitizenId { get; set; }  
         
         public virtual Citizen Citizen { get; set; }
+        
+        public virtual Election Election {get; set;}
         
         public virtual ICollection<Election> Elections { get; } = new List<Election>();
         

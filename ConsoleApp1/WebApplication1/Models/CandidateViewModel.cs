@@ -25,8 +25,9 @@ namespace WebApplication1.Models
 
         public Idea Idea { get; set; }
 
-        public DateTime RegistrationDate { get; set; }
-
+     //   public virtual Election Election {get; set;}
+        
+        public virtual ICollection<Election> Elections { get; } = new List<Election>();
         public long CitizenId { get; set; }
         
         public long ElectionId { get; set; }

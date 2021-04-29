@@ -128,6 +128,7 @@ namespace WebApplication1.Controllers
             var candidate = _mapper.Map<Candidate>(newCandidate);
          
             var election = _electionRepository.Get(id);
+            var citizen = _userService.GetUser();
 
             if (election.Candidates.Any(x => x.CitizenId == candidate.CitizenId))
             {
@@ -135,10 +136,11 @@ namespace WebApplication1.Controllers
                     "Такой кандидат уже зарегистрирован на эти выборы");
                 return View(newCandidate);
             }
-            
-            election.Candidates.Add(candidate);
+
             _candidateRepository.Save(candidate);
-            
+            election.Candidates.Add(candidate);
+            _electionRepository.Save(election);
+     
             return RedirectToAction("Details", "Elections",  new { id = id });
         }
 

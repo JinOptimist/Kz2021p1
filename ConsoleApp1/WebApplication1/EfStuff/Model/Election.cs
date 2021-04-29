@@ -16,6 +16,7 @@ namespace WebApplication1.EfStuff.Model
         
         public DateTime End { get; set; }
         
+        public virtual Candidate Candidate { get; set; }
         public virtual ICollection<Candidate> Candidates { get; } = new List<Candidate>();
         
     }

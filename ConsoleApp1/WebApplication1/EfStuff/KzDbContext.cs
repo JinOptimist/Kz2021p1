@@ -100,15 +100,13 @@ namespace WebApplication1.EfStuff
                 .HasMany(pc => pc.Candidates)
                 .WithOne(c => c.Citizen);
             
-            modelBuilder
-                .Entity<Election>()
-                .HasMany(e => e.Candidates)
-                .WithMany(e => e.Elections)
-                .UsingEntity<CandidateElection>(
-                    e => e.HasOne(e => e.Candidate).WithMany(),
-                    e => e.HasOne(e => e.Election).WithMany())
-                .Property(e => e.CandidateRegistrationTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
+            modelBuilder.Entity<Candidate>()
+                .HasOne(c => c.Election)
+                .WithMany(b => b.Candidates);
+            
+            modelBuilder.Entity<Election>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Elections);
 
             modelBuilder.Entity<Ballot>()
                 .HasOne(c => c.Citizen)

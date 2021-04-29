@@ -19,7 +19,6 @@
     <div class="form-group">
         <label asp-for="CitizenId">CitizenId</label>
         <input asp-for="CitizenId" class="form-control" readonly value="@userService.GetUser().Id" />
-        
     </div>
     <div class="form-group">
         <label asp-for="Name">Имя</label>
@@ -39,7 +38,6 @@
 
     <div class="form-group">
         <label asp-for="City">Город</label>
-
         <select asp-for="City" asp-items="Html.GetEnumSelectList<City>()" class="custom-select form-control">
         </select>
 
