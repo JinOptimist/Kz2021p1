@@ -26,14 +26,6 @@ namespace WebApplication1.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Avatar",
-                table: "Students");
-
-            migrationBuilder.DropColumn(
-                name: "Avatar",
-                table: "Pupils");
-
             migrationBuilder.AlterColumn<int>(
                 name: "CourseYear",
                 table: "Students",
@@ -53,13 +45,6 @@ namespace WebApplication1.Migrations
                 oldClrType: typeof(int),
                 oldType: "int",
                 oldNullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Subject",
-                table: "Pupils",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true);
         }
     }
 }
