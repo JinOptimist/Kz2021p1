@@ -1,27 +1,38 @@
-using AutoMapper;
+п»їusing AutoMapper;
 using AutoMapper.Configuration;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReflectionIT.Mvc.Paging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.Airport;
+using WebApplication1.ViewModels;
+using WebApplication1.Services;
+using WebApplication1.Profiles;
+using Newtonsoft.Json;
+using WebApplication1.Presentation;
+using System.Reflection;
 using WebApplication1.RestoBusiness;
 
 namespace WebApplication1
 {
-    public class Startup
+	public class Startup
     {
+        public const string AuthMethod = "Smile";
+
         public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,37 +43,71 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            services.AddControllersWithViews().AddNewtonsoftJson();
+			services.AddOpenApiDocument();
+			services.AddRazorPages()
+				 .AddRazorRuntimeCompilation();
+
+			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
-            //services.AddDbContext<KzDbContext>(options => options.UseInMemoryDatabase());
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options => //CookieAuthenticationOptions
-                {
-                   options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/AccauntRUsers/Login");
-                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/AccauntRUsers/Login");
-                });
-
-            services.AddScoped<CitizenRepository>(x =>
-                new CitizenRepository(x.GetService<KzDbContext>())
-                );
-
-            services.AddScoped<AdressRepository>(x =>
-                new AdressRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<RestoransRepository>(x =>
-                new RestoransRepository(x.GetService<KzDbContext>())
-                );
-            services.AddScoped<BronRestoRepository>(x =>
-                new BronRestoRepository(x.GetService<KzDbContext>())
-                );
             services.AddScoped<BronRestoBusiness>();
 
-            RegisterAutoMapper(services);
-            RegisterRestoMapper(services);
+            RegisterRepositories(services);
 
-            services.AddControllersWithViews();
+            services.AddScoped<UserService>(x =>
+                new UserService(
+                    x.GetService<CitizenRepository>(),
+                    x.GetService<IHttpContextAccessor>())
+                );
+
+            services.AddScoped<AdminRestoService>(x =>
+               new AdminRestoService(
+                   x.GetService<AdminRestoRepository>(),
+                   x.GetService<IHttpContextAccessor>())
+               );
+
+            services.AddScoped<CitizenPresentation>(x => 
+                new CitizenPresentation(x.GetService<CitizenRepository>()));
+
+            services.AddPoliceServices(Configuration);
+            RegisterAutoMapper(services);
+
+
+            services.AddAuthentication(AuthMethod)
+                .AddCookie(AuthMethod, config =>
+                {
+                    config.Cookie.Name = "Smile";
+                    config.LoginPath = "/Citizen/Login";
+                    config.AccessDeniedPath = "/Citizen/Login";
+                });
+
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForAdminResto", policy => {
+                    policy.RequireClaim("AdminResto", "Zhanar", "Aigul");
+                });
+            });
+
+            services.AddHttpContextAccessor();
+            services.AddPaging();
+        }
+
+        private void RegisterRepositories(IServiceCollection services)
+        {
+            foreach (var repositoryType in Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(type =>
+                        type.BaseType?.IsGenericType == true
+                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+            {
+                services.AddScoped(repositoryType, x =>
+                {
+                    var constructor = repositoryType.GetConstructors().Single();
+                    var parameters = new object[] { x.GetService<KzDbContext>() };
+                    return constructor.Invoke(parameters);
+                });
+            }
         }
 
         private void RegisterAutoMapper(IServiceCollection services)
@@ -70,36 +115,51 @@ namespace WebApplication1
             var configurationExp = new MapperConfigurationExpression();
 
             configurationExp.CreateMap<Adress, AdressViewModel>()
-                .ForMember(nameof(AdressViewModel.CitizenCount), 
+                .ForMember(nameof(AdressViewModel.CitizenCount),
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
+
+            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
+            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
+
+            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
+            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
+            
+            configurationExp.AddProfile<PoliceProfiles>();
+
+            configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
+                .ForMember(nameof(FiremanShowViewModel.Name),
+                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+                .ForMember(nameof(FiremanShowViewModel.Age),
+                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+
+            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
+
+            MapBothSide<Fireman, FiremanViewModel>(configurationExp);
+            MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
+            MapBothSide<Bus, BusParkViewModel>(configurationExp);
+            MapBothSide<TripRoute, TripViewModel>(configurationExp);
+
+            MapBothSide<Restorans, RestoViewModel>(configurationExp);
+            MapBothSide<Restorans, AvailableRestoModel>(configurationExp);
+            MapBothSide<OneRestoViewModel, AvailableRestoModel>(configurationExp);
+            MapBothSide<Restorans, OneRestoViewModel>(configurationExp);
+            MapBothSide<BronViewModel, OneRestoViewModel>(configurationExp);
+            MapBothSide<Restorans, BronViewModel>(configurationExp);
+            MapBothSide<Restorans, BronResto>(configurationExp);
+            MapBothSide<BronNumberViewModel, BronResto>(configurationExp);
+            MapBothSide<BronAdminViewModel, BronResto>(configurationExp);
+            MapBothSide<BronViewModel, BronResto>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
         }
-        private void RegisterRestoMapper(IServiceCollection services)
+
+        public void MapBothSide<Type1, Type2>(MapperConfigurationExpression configurationExp)
         {
-            var configurationExp = new MapperConfigurationExpression();
-
-            configurationExp.CreateMap<Restorans, RestoViewModel>();
-            configurationExp.CreateMap<RestoViewModel, Restorans>();
-            configurationExp.CreateMap<Restorans, AvailableRestoModel>();
-            configurationExp.CreateMap<AvailableRestoModel, OneRestoViewModel>();
-            configurationExp.CreateMap<Restorans, OneRestoViewModel>();
-            configurationExp.CreateMap<OneRestoViewModel, BronViewModel>();
-
-            configurationExp.CreateMap<Restorans, BronViewModel>();
-            configurationExp.CreateMap<Restorans, BronResto>();
-
-            configurationExp.CreateMap<BronResto, BronNumberViewModel>();
-            configurationExp.CreateMap<BronResto, BronAdminViewModel>();
-            configurationExp.CreateMap<BronResto, BronViewModel>();
-            configurationExp.CreateMap<BronViewModel, BronResto>();
-
-            var config = new MapperConfiguration(configurationExp);
-            var mapper = new Mapper(config);
-            services.AddScoped<IMapper>(x => mapper);
+            configurationExp.CreateMap<Type1, Type2>();
+            configurationExp.CreateMap<Type2, Type1>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,15 +180,16 @@ namespace WebApplication1
 
             app.UseRouting();
 
-            app.UseAuthentication();    // аутентификация
-            app.UseAuthorization();     // авторизация
+            app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-    }
+            app.UseAuthorization();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=Home}/{action=Index}/{id?}");
+			});
+		}
+	}
 }

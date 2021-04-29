@@ -21,6 +21,6 @@ namespace WebApplication1.EfStuff.Model
         public bool Karaoke { get; set; }
         public bool Parking { get; set; }
         public virtual List<BronResto> Brons { get; set; }
-
+        public virtual List<AdminResto> AdminResto { get; set; }
     }
 }

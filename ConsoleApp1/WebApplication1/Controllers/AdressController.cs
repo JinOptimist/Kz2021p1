@@ -7,18 +7,21 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class AdressController : Controller
     {
         private AdressRepository AdressRepository { get; set; }
+        private UserService UserService { get; set; }
         private IMapper Mapper { get; set; }
 
-        public AdressController(AdressRepository adressRepository, IMapper mapper)
+        public AdressController(AdressRepository adressRepository, IMapper mapper, UserService userService)
         {
             AdressRepository = adressRepository;
             Mapper = mapper;
+            UserService = userService;
         }
 
         public IActionResult Index()
@@ -33,7 +36,10 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            var model = new AdressViewModel();
+            var model = new AdressViewModel()
+            {
+                UserName = UserService.GetUser().Name
+            };
             return View(model);
         }
 

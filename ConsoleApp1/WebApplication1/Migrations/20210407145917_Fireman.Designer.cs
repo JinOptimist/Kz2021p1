@@ -10,8 +10,8 @@ using WebApplication1.EfStuff;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    [Migration("20210426111026_AddMain")]
-    partial class AddMain
+    [Migration("20210407145917_Fireman")]
+    partial class Fireman
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,44 +42,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Adress");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.BronResto", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BronRespNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountOfVisitors")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOfVisitors")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmailUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfTables")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhUserNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("RestoransesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("StateReservation")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RestoransesId");
-
-                    b.ToTable("BronResto");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.Property<long>("Id")
@@ -99,6 +61,9 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HouseId");
@@ -106,61 +71,28 @@ namespace WebApplication1.Migrations
                     b.ToTable("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Restorans", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Access")
-                        .HasColumnType("bit");
+                    b.Property<long>("CitizenId")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AverageCheck")
+                    b.Property<int>("WorkExperYears")
                         .HasColumnType("int");
-
-                    b.Property<bool>("DanceFloor")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Karaoke")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfTables")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Parking")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("WiFi")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Сuisine")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restorans");
-                });
+                    b.HasIndex("CitizenId")
+                        .IsUnique();
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.BronResto", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Restorans", "Restoranses")
-                        .WithMany("Brons")
-                        .HasForeignKey("RestoransesId");
-
-                    b.Navigation("Restoranses");
+                    b.ToTable("Firemen");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
@@ -172,14 +104,25 @@ namespace WebApplication1.Migrations
                     b.Navigation("House");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("Fireman")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Fireman", "CitizenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Citizen");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Navigation("Citizens");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Restorans", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
-                    b.Navigation("Brons");
+                    b.Navigation("Fireman");
                 });
 #pragma warning restore 612, 618
         }

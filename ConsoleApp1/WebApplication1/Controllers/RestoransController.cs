@@ -19,13 +19,14 @@ namespace WebApplication1.Controllers
         private BronRestoRepository _bronRestoRepository;
         private RestoransRepository _restoransRepository;
         private IMapper MapResto { get; set; }
-        public RestoransController(RestoransRepository restoransRepository, IMapper mapper, BronRestoRepository bronRestoRepository,BronRestoBusiness bronRestoBusiness)
+        public RestoransController(RestoransRepository restoransRepository, IMapper mapper, BronRestoRepository bronRestoRepository, BronRestoBusiness bronRestoBusiness)
         {
             _restoransRepository = restoransRepository;
             MapResto = mapper;
             _bronRestoRepository = bronRestoRepository;
             _bronRestoBusiness = bronRestoBusiness;
         }
+        [Authorize]
         public IActionResult AvailableResto()
         {
             var viewModels = _restoransRepository.GetAll()
@@ -34,6 +35,7 @@ namespace WebApplication1.Controllers
                 .ToList();
             return View(viewModels);
         }
+
         public IActionResult Index()
         {
             var viewModels = _restoransRepository.GetAll()
@@ -111,7 +113,7 @@ namespace WebApplication1.Controllers
             }
             return View(model);
         }
-
+        [Authorize(Policy = "OnlyForAdminResto")]
         public IActionResult NewRequestBron()
         {
             var viewModels = _bronRestoRepository.GetAll()

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    public partial class AddMain : Migration
+    public partial class AddPublicCatering : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,6 +67,7 @@ namespace WebApplication1.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BronResto");
+
             migrationBuilder.DropTable(
                 name: "Restorans");
         }

@@ -69,3 +69,150 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.navbar-nav .nav-item:hover {
+    text-decoration: underline;
+}
+
+.navbar-nav b:hover {
+    transform: translate(0, 10px);
+    transition: .2s;
+}
+
+.police-call {
+    position: fixed;
+    right: 5%;
+    bottom: 12%;
+}
+
+.dws {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pulse, .bloc, .phone {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.bloc {
+    cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.pulse {
+    background: #5CC2E2;
+    position: relative;
+    transition: .5s;
+}
+
+.phone {
+    font-size: 50px;
+    line-height: 94px;
+    animation: phone .9s ease-in-out infinite;
+}
+
+.text {
+    position: absolute;
+    opacity: 0;
+    text-transform: uppercase;
+    font-weight: 700;
+    top: 28px;
+    font-size: 12px;
+    transform: scaleX(-1);
+    transition: .5s ease-in-out;
+}
+
+.phone span {
+    transition: .5s ease-in-out;
+    font-size: 50px !important;
+}
+
+.pulse:hover {
+    background: #29AEE3;
+}
+
+    .pulse:hover span {
+        transition: .5s ease-in-out;
+        transform: scale(0);
+    }
+
+    .pulse:hover .text {
+        transform: scaleX(1);
+        transition: .5s ease-in-out;
+        opacity: 1;
+    }
+
+    .pulse:hover::before,
+    .pulse:hover::after {
+        content: '';
+        position: absolute;
+        border: 1px solid #29AEE3;
+        left: -20px;
+        right: -20px;
+        top: -20px;
+        bottom: -20px;
+        border-radius: 50%;
+        animation: pulse 1.8s linear infinite;
+        opacity: 0;
+    }
+
+    .pulse:hover::after {
+        animation-delay: .5s;
+    }
+
+@keyframes phone {
+    0%, 100% {
+        transform: rotate(-20deg);
+    }
+
+    50% {
+        transform: rotate(21deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+@media all and (min-width: 992px) {
+    .navbar-nav .nav-item .dropdown-menu {
+        display: none;
+    }
+
+    .navbar-nav .nav-item:hover .nav-link {
+        color: #fff;
+    }
+
+    .navbar-nav .nav-item:hover .dropdown-menu {
+        display: block;
+    }
+
+    .navbar-nav .nav-item .dropdown-menu {
+        margin-top: 0;
+    }
+}
+
+.avatar {
+    max-width: 100px;
+    max-height: 100px;
+}

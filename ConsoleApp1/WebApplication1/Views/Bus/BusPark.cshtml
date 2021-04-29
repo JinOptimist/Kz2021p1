@@ -1,0 +1,32 @@
+﻿@model BusParkViewModel
+<h3>Our Bus Park</h3>
+
+
+
+<form action="@Url.Action("CreateBus", "Bus")" method="post">
+    <br>
+    <div>
+        Bus model: <input class="form-control" type="text" name="model">
+        @*Bus model: @Html.TextBoxFor(x => x.Model, new { Class = "form-control" })*@
+    </div>
+    <br>
+    <div>
+        Bus type: <input class="form-control" type="text" name="type">
+        @*Bus type: @Html.TextBoxFor(x => x.Type, new { Class = "form-control" })*@
+    </div>
+    <br>
+    <div>
+        Bus capacity: <input class="form-control" type="text" name="capacity">
+        @*Bus capacity: @Html.TextBoxFor(x => x.Capacity, new { Class = "form-control" })*@
+    </div>
+    <br>
+    <div>
+        Bus price: <input class="form-control" type="text" name="price">
+        @*Bus price:  @Html.TextBoxFor(x => x.Price, new { Class = "form-control" })*@
+    </div>
+    <br>
+    <div>
+        <button class="btn btn-secondary" type="submit">Add</button>
+    </div>
+    <br>
+</form>

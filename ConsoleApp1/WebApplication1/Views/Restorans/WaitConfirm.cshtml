@@ -14,7 +14,7 @@
     <div>Ваш номер брони: @Model.BronRespNumber</div>
     <div>Пожалуйста, ждите подтверждение администратора</div>
 
-    <form action="@Url.Action("WaitAdminConfirm" , "Restorans")" method="post">
+    <form action="@Url.Action("WaitAdminConfirm" , "Restorans", Model)" method="post">
         <div>
             <input type="submit" value="Обновить" />
         </div>
