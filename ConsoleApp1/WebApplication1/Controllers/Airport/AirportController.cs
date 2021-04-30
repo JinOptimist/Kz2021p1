@@ -8,6 +8,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models.Airport;
 using WebApplication1.Services;
 
@@ -17,12 +18,12 @@ namespace WebApplication1.Controllers.Airport
     {
         private IncomingFlightsRepository _incomingFlightsRepository { get; set; }
         private DepartingFlightsRepository _departingFlightsRepository { get; set; }
-        private UserService _userService { get; set; }
+        private IUserService _userService { get; set; }
         private PassengersRepository _passengersRepository { get; set; }
         private IMapper _mapper { get; set; }
-        private CitizenRepository _citizenRepository { get; set; }
+        private ICitizenRepository _citizenRepository { get; set; }
 
-        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, UserService userService, PassengersRepository passengersRepository, IMapper mapper, CitizenRepository citizenRepository)
+        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, IUserService userService, PassengersRepository passengersRepository, IMapper mapper, ICitizenRepository citizenRepository)
         {
             _incomingFlightsRepository = incomingFlightsRepository;
             _departingFlightsRepository = departingFlightsRepository;
