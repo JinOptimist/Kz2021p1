@@ -25,7 +25,6 @@ using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1
 {
@@ -53,17 +52,14 @@ namespace WebApplication1
 
             RegisterRepositories(services);
 
-            services.AddScoped<IUserService>(x =>
+            services.AddScoped<UserService>(x =>
                 new UserService(
-                    x.GetService<ICitizenRepository>(),
+                    x.GetService<CitizenRepository>(),
                     x.GetService<IHttpContextAccessor>())
                 );
 
-            services.AddScoped<CitizenPresentation>(x =>
-                new CitizenPresentation(
-                    x.GetService<ICitizenRepository>(),
-                    x.GetService<IUserService>(),
-                    x.GetService<IMapper>()));
+            services.AddScoped<CitizenPresentation>(x => 
+                new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);

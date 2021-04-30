@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff
 {
@@ -32,7 +31,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultCitizen(IServiceProvider serviceProvider)
         {
-            var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
+            var citizenRepository = serviceProvider.GetService<CitizenRepository>();
 
             var admin = citizenRepository.GetByName(AdminName);
             if (admin == null)

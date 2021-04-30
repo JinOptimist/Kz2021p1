@@ -5,16 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
-        private ICitizenRepository _citizenRepository;
+        private CitizenRepository _citizenRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(ICitizenRepository citizenRepository, IHttpContextAccessor httpContextAccessor)
+        public UserService(CitizenRepository citizenRepository, IHttpContextAccessor httpContextAccessor)
         {
             _citizenRepository = citizenRepository;
             _httpContextAccessor = httpContextAccessor;

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -14,9 +13,9 @@ namespace WebApplication1.Controllers
     public class FiremanController : Controller
     {
         private FiremanRepository _firemanRepository { get; set; }
-        private ICitizenRepository _citizenRepository { get; set; }
+        private CitizenRepository _citizenRepository { get; set; }
         private IMapper _mapper { get; set; }
-        public FiremanController(FiremanRepository workerRepository, IMapper mapper, ICitizenRepository citizenRepository)
+        public FiremanController(FiremanRepository workerRepository, IMapper mapper, CitizenRepository citizenRepository)
         {
             _firemanRepository = workerRepository;
             _mapper = mapper;
