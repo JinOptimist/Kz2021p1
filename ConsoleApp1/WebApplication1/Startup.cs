@@ -73,8 +73,6 @@ namespace WebApplication1
                    x.GetService<IHttpContextAccessor>())
                );
 
-            services.AddScoped<CitizenPresentation>(x => 
-                new CitizenPresentation(x.GetService<CitizenRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
