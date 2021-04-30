@@ -19,6 +19,7 @@ namespace WebApplication1.Controllers
         private BronRestoRepository _bronRestoRepository;
         private RestoransRepository _restoransRepository;
         private IMapper MapResto { get; set; }
+        
         public RestoransController(RestoransRepository restoransRepository, IMapper mapper, BronRestoRepository bronRestoRepository, BronRestoBusiness bronRestoBusiness)
         {
             _restoransRepository = restoransRepository;
