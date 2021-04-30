@@ -20,9 +20,9 @@ namespace WebApplication1.Controllers
 
         private readonly IPoliceService _policeService;
         private readonly IMapper _mapper;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public PoliceController(IPoliceService policeService, IMapper mapper, UserService userService)
+        public PoliceController(IPoliceService policeService, IMapper mapper, IUserService userService)
         {
             _policeService = policeService;
             _mapper = mapper;
