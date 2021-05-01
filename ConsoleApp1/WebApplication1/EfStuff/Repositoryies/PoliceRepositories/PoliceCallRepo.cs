@@ -1,8 +1,9 @@
 ﻿using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-	public class PoliceCallRepo : BaseRepository<PoliceCallHistory>
+	public class PoliceCallRepo : BaseRepository<PoliceCallHistory>, IPoliceCallRepo
 	{
 		public PoliceCallRepo(KzDbContext kzDbContext) : base(kzDbContext)
 		{

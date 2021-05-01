@@ -18,11 +18,9 @@ namespace WebApplication1.EfStuff.Model
 		public string Description { get; set; }
 
 		public long CitizenId { get; set; }
-		[JsonIgnore]
 		public virtual Citizen Citizen { get; set; }
 
 		public long PolicemanId {get; set;}
-		[JsonIgnore]
 		public virtual Policeman Policeman { get; set; }
 
 	}

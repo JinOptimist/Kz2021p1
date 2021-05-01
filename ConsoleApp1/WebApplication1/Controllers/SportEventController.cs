@@ -9,14 +9,15 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
 using System.IO;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Controllers
 {
     public class SportEventController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
-        private SportEventRepository _SportEventRepository;
-        public SportEventController(SportEventRepository sportEventRepository, IWebHostEnvironment hostEnvironment)
+        private ISportEventRepository _SportEventRepository;
+        public SportEventController(ISportEventRepository sportEventRepository, IWebHostEnvironment hostEnvironment)
         {
             _SportEventRepository = sportEventRepository;
             this._hostEnvironment = hostEnvironment;

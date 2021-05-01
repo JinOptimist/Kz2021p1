@@ -1,4 +1,4 @@
-﻿@section PoliceMain {
+﻿@section Police {
     <link rel="stylesheet" type="text/css" src="~/css/police/main.css">
     <script src="~/js/Police/police.js"></script>
 }
@@ -15,8 +15,8 @@
                 <div class="carousel-caption">
                     <h1>Become a police </h1>
                     <p>If you want protect you country, your city and have good expirience job with good people. You must think about police.</p>
-                    <p><a class="btn btn-lg btn-primary" role="button" id="becomePolice" data-izimodal-open="#modal-custom">Join us</a></p>
-                    <div id="modal-custom" data-iziModal-group="policec-academy-form">
+                    <p><a class="btn btn-lg btn-primary" role="button" id="becomePolice" data-izimodal-open="#academy-request">Join us</a></p>
+                    <div id="academy-request" data-iziModal-group="policec-academy-form">
                         @if (User.Identity.IsAuthenticated)
                         {
                             @await Html.PartialAsync("_PoliceAcademyRequest")

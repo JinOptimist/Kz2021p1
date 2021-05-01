@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
 
@@ -13,13 +14,11 @@ namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
-        private StudentPresentation _studentPresentation;
-        private PupilPresentation _pupilPresentation;
-        private StudentRepository _studentRepository;
-        private PupilRepository _pupilRepository;
-        private IWebHostEnvironment _webHostEnvironment;
-        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation,
-            StudentRepository studentRepository, PupilRepository pupilRepository, IWebHostEnvironment webHostEnvironment)
+        private IStudentRepository StudentRepository { get; set; }
+        private IPupilRepository PupilRepository { get; set; }
+        private IMapper Mapper { get; set; }
+
+        public PersonController(IStudentRepository studentRepository, IPupilRepository pupilRepository, IMapper mapper)
         {
             _studentPresentation = studentPresentation;
             _pupilPresentation = pupilPresentation;

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,10 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ReflectionIT.Mvc.Paging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
@@ -18,7 +22,10 @@ using WebApplication1.Models.Airport;
 using WebApplication1.Services;
 using WebApplication1.Profiles;
 using WebApplication1.Presentation;
-using System.Reflection;
+using WebApplication1.Presentation.Airport;
+using WebApplication1.Profiles;
+using WebApplication1.Profiles.Airport;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
@@ -45,17 +52,13 @@ namespace WebApplication1
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
-
-            services.AddScoped<UserService>(x =>
-                new UserService(
-                    x.GetService<CitizenRepository>(),
-                    x.GetService<IHttpContextAccessor>())
-                );
-
-            services.AddScoped<CitizenPresentation>(x =>
-                new CitizenPresentation(x.GetService<CitizenRepository>()));
-
             services.AddPoliceServices(Configuration);
+
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICitizenPresentation, CitizenPresentation>();
+            services.AddScoped<IAirportPresentation, AirportPresentation>();
+
             RegisterAutoMapper(services);
 
             services.AddAuthentication(AuthMethod)
@@ -71,19 +74,22 @@ namespace WebApplication1
 
         private void RegisterRepositories(IServiceCollection services)
         {
-            foreach (var repositoryType in Assembly
+			IEnumerable<Type> implementationsType = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(type =>
-                        type.BaseType?.IsGenericType == true
-                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+                        !type.IsInterface && type.GetInterface(typeof(IBaseRepository<>).Name) != null);
+
+            foreach (Type implementationType in implementationsType)
             {
-                services.AddScoped(repositoryType, x =>
-                {
-                    var constructor = repositoryType.GetConstructors().Single();
-                    var parameters = new object[] { x.GetService<KzDbContext>() };
-                    return constructor.Invoke(parameters);
-                });
+				IEnumerable<Type> servicesType = implementationType
+                    .GetInterfaces()
+                    .Where(r => !r.Name.Contains(typeof(IBaseRepository<>).Name));
+
+				foreach (Type serviceType in servicesType)
+				{
+                    services.AddScoped(serviceType, implementationType);
+                }
             }
         }
 
@@ -97,7 +103,7 @@ namespace WebApplication1
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
             configurationExp.AddProfile<PoliceProfiles>();
-
+            configurationExp.AddProfile<AirportProfiles>();
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
                 .ForMember(nameof(FiremanShowViewModel.Name),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Name))

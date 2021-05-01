@@ -7,7 +7,7 @@ using WebApplication1.EfStuff.Model;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-    public abstract class BaseRepository<DbModel> where DbModel : BaseModel
+    public abstract class BaseRepository<DbModel> : IBaseRepository<DbModel> where DbModel : BaseModel
     {
         protected KzDbContext _kzDbContext;
         protected DbSet<DbModel> _dbSet;
@@ -39,7 +39,7 @@ namespace WebApplication1.EfStuff.Repositoryies
             {
                 _dbSet.Add(model);
             }
-            
+
             _kzDbContext.SaveChanges();
 
             return model;
@@ -48,7 +48,18 @@ namespace WebApplication1.EfStuff.Repositoryies
         public void Remove(DbModel model)
         {
             _dbSet.Remove(model);
-            _kzDbContext.SaveChanges();            
+            _kzDbContext.SaveChanges();
         }
+
+        public void Update(DbModel model)
+        {
+            _kzDbContext.Entry(model).State = EntityState.Modified;
+            _kzDbContext.SaveChanges();
+        }
+        
+        public IQueryable<DbModel> GetAllAsIQueryable()
+		    {
+			    return _dbSet.AsQueryable();
+		    }
     }
 }
