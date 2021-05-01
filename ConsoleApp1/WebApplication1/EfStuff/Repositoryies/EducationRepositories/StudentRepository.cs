@@ -29,7 +29,6 @@ namespace WebApplication1.EfStuff.Repositoryies
             var allFaculties = Enum.GetValues(typeof(Faculties)).Cast<Faculties>().ToList();
 
             return allFaculties;
-
         }
     }
 }

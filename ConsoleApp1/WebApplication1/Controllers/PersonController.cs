@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
@@ -16,13 +19,15 @@ namespace WebApplication1.Controllers
         private PupilPresentation _pupilPresentation;
         private StudentRepository _studentRepository;
         private PupilRepository _pupilRepository;
-        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation, 
-            StudentRepository studentRepository, PupilRepository pupilRepository)
+        private IWebHostEnvironment _webHostEnvironment;
+        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation,
+            StudentRepository studentRepository, PupilRepository pupilRepository, IWebHostEnvironment webHostEnvironment)
         {
             _studentPresentation = studentPresentation;
             _pupilPresentation = pupilPresentation;
             _studentRepository = studentRepository;
             _pupilRepository = pupilRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult StudentList(int page = 1)
@@ -73,7 +78,7 @@ namespace WebApplication1.Controllers
             {
                 _studentPresentation.GetStudentGrantIndividual(student.Id, false);
                 //ViewBag.Message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
-                string message= $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
+                string message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
                 return Json(message);
             }
             else
@@ -91,7 +96,7 @@ namespace WebApplication1.Controllers
         public IActionResult AddNewStudent()
         {
             var allFaculties = _studentRepository.GetAllFaculties();
-            ViewBag.Faculties = new SelectList(allFaculties);                      
+            ViewBag.Faculties = new SelectList(allFaculties);
 
             ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
             return View();
@@ -111,11 +116,25 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewOrEditStudent(StudentViewModel studentViewModel)
-        {            
+        public async Task<IActionResult> AddNewOrEditStudent(StudentViewModel studentViewModel)
+        {
             var university = _studentPresentation.GetUniversityByUniversityName(studentViewModel.University.Name);
             studentViewModel.UniversityId = university.Id;
             studentViewModel.University = null;
+
+            if (studentViewModel.AvatarFile != null)
+            {
+                var fileExtention = Path.GetExtension(studentViewModel.AvatarFile.FileName);
+                var fileName = $"{studentViewModel.Id}{fileExtention}";
+                var path = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "Image", "Avatars", fileName);
+                using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    await studentViewModel.AvatarFile.CopyToAsync(fileStream);
+                }
+                studentViewModel.Avatar = $"/Image/Avatars/{fileName}";
+            }
             _studentPresentation.GetAddNewOrEditStudent(studentViewModel);
             return RedirectToAction("StudentList");
         }
@@ -168,18 +187,33 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult EditPupilData(long IDPupil)
         {
-            var pupil = _pupilPresentation.GetPupilById(IDPupil);            
+            var pupil = _pupilPresentation.GetPupilById(IDPupil);
 
             ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
             return View(pupil);
         }
 
         [HttpPost]
-        public IActionResult AddNewOrEditPupil(PupilViewModel pupilViewModel)
+        public async Task<IActionResult> AddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
             var school = _pupilPresentation.GetSchoolBySchoolName(pupilViewModel.School.Name);
             pupilViewModel.SchoolId = school.Id;
             pupilViewModel.School = null;
+
+            if (pupilViewModel.AvatarFile != null)
+            {
+                var fileExtention = Path.GetExtension(pupilViewModel.AvatarFile.FileName);
+                var fileName = $"{pupilViewModel.Id}{fileExtention}";
+                var path = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "Image", "Avatars", fileName);
+                using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    await pupilViewModel.AvatarFile.CopyToAsync(fileStream);
+                }
+                pupilViewModel.Avatar = $"/Image/Avatars/{fileName}";
+            }
+
             _pupilPresentation.GetAddNewOrEditPupil(pupilViewModel);
             return RedirectToAction("PupilList");
         }
@@ -205,17 +239,17 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult PupilGrant(int minValueForGrant)
         {
-            ViewData["PostMinValueForGrant"] = minValueForGrant;      
-
-            _pupilPresentation.GetPupilGrant(minValueForGrant);
+            ViewData["PostMinValueForGrant"] = minValueForGrant;
+            var universityIds = _studentPresentation.GetListOfUniversityIds();
+            _pupilPresentation.GetPupilGrant(universityIds, minValueForGrant);
 
             return RedirectToAction("PupilList");
         }
 
         public IActionResult EndOfStudy()
         {
-           // _pupilPresentation.EndStudyYearForSchool();
-           // _studentPresentation.EndStudyYearForUniversity();
+            _pupilPresentation.EndStudyYearForSchool();
+            _studentPresentation.EndStudyYearForUniversity();
             return View();
         }
     }

@@ -15,7 +15,6 @@
 
     $('.grant').click(function () {
         var clicked = $(this);
-        //clicked.attr('disabled', 'disabled');
 
         var studentId = clicked.attr('data-name');
         var url = '/Person/StudentGrantIndividual?studentId=' + studentId;

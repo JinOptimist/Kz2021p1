@@ -4,7 +4,10 @@
     <div class="row">
         <div class="col-sm-6 offset-3">
             <h1>Add New Student</h1>
-            <form action="/Person/AddNewOrEditStudent" method="post">
+            <form action="/Person/AddNewOrEditStudent" method="post" enctype="multipart/form-data">
+                <div>
+                    Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />                   
+                </div>
                 <div>
                     IIN: @Html.TextBoxFor(x => x.IIN, new { Class = "form-control", @maxlength = "12" })
                 </div>
@@ -16,8 +19,7 @@
                 </div>
                 <div>
                     Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { Class = "form-control" })
-                </div>
-                @*upload file (загрузить аватарку)*@
+                </div>                
                 <div>
                     Birthday:
                     <div class="row">
@@ -29,11 +31,11 @@
                     Email: @Html.TextBoxFor(x => x.Email, new { Class = "form-control" })
                 </div>
                 <div class="margin20">
-                    <div class="row">                       
+                    <div class="row">
                         <div class="col-sm-4">
                             <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option>University</option></select>
                         </div>
-                       
+
                         <div class="col-sm-4">
                             <select asp-for="OnGrant" class="form-control">
                                 <option selected>On Grant</option>

@@ -1,20 +1,27 @@
-﻿@model FullProfileViewModel
+﻿@using WebApplication1.Localization
+@model FullProfileViewModel
 
 <h1>
-    Полный профиль @Model.Name.
+    @Resource.FullProfile_Title @Model.Name
 </h1>
-
-<form action="@Url.Action("CreateUser", "Citizen")" method="post">
+<div>
+    <img class="avatar" src="@Model.AvatarUrl" />
+</div>
+<form action="@Url.Action("CreateUser", "Citizen")" method="post" enctype="multipart/form-data">
     <div>
-        Имя: @Html.TextBoxFor(x => x.Name)
+        Аватар: <input type="file" name="@nameof(FullProfileViewModel.AvatarFile)" />
     </div>
     <div>
-        Возраст: @Html.TextBoxFor(x => x.Age)
+        @Html.DisplayNameFor(x => x.Name): @Html.TextBoxFor(x => x.Name)
+    </div>
+    <div>
+        @Html.DisplayNameFor(x => x.Age): @Html.TextBoxFor(x => x.Age)
+        @Html.ValidationMessageFor(x => x.Age)
     </div>
     <div>
         Профессия: @Html.TextBoxFor(x => x.Job)
     </div>
     <div>
-        <input type="submit" value="Создать пользователя" />
+        <input type="submit" value="@Resource.FullProfile_CreateUser" />
     </div>
 </form>

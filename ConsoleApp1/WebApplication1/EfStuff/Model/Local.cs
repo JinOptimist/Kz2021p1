@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.EfStuff.Model
 {
-    public class School : EducationalInstitution
+    public enum Local
     {
-        public virtual ICollection<Pupil> Pupils { get; set; }
+        Rus = 1,
+        Eng = 2,
     }
 }
