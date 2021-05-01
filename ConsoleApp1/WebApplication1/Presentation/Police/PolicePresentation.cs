@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 using WebApplication1.Services;
 using WebApplication1.Utils.Police;
 using WebApplication1.ViewModels;
@@ -15,28 +17,28 @@ namespace WebApplication1.Presentation.Police
 	public class PolicePresentation : IPolicePresentation
 	{
 		// TODO: Implement with contracts
-		private readonly PoliceRepository _policeRepo;
-		private readonly CitizenRepository _citizenRepo;
-		private readonly PoliceAcademyRepository _policeAcademyRepo;
-		private readonly UserService _userService;
-		private readonly ViolationsRepository _violationsRepository;
-		private readonly PoliceCallRepo _policeCallRepo;
+		private readonly IPoliceRepository _policeRepo;
+		private readonly ICitizenRepository _citizenRepo;
+		private readonly IPoliceAcademyRepository _policeAcademyRepo;
+		private readonly IUserService _userService;
+		private readonly IViolationsRepository _violationsRepository;
+		private readonly IPoliceCallRepo _policeCallRepo;
 		private readonly IBlobService _blobService;
 		private readonly IMapper _mapper;
-		private readonly QuestionsRepo _questionsRepo;
-		private readonly AnswerRepo _answerRepo;
-		private readonly ShiftRepo _shiftRepo;
+		private readonly IQuestionsRepo _questionsRepo;
+		private readonly IAnswerRepo _answerRepo;
+		private readonly IShiftRepo _shiftRepo;
 
 		public PolicePresentation(
-			PoliceRepository policeRepo,
-			CitizenRepository citizenRepo,
-			PoliceAcademyRepository policeAcademyRepo,
-			UserService userService,
-			ViolationsRepository violationsRepository,
-			PoliceCallRepo policeCallRepo,
-			QuestionsRepo questionsRepo,
-			AnswerRepo answerRepo,
-			ShiftRepo shiftRepo,
+			IPoliceRepository policeRepo,
+			ICitizenRepository citizenRepo,
+			IPoliceAcademyRepository policeAcademyRepo,
+			IUserService userService,
+			IViolationsRepository violationsRepository,
+			IPoliceCallRepo policeCallRepo,
+			IQuestionsRepo questionsRepo,
+			IAnswerRepo answerRepo,
+			IShiftRepo shiftRepo,
 			IMapper mapper,
 			IBlobService blobService
 			)

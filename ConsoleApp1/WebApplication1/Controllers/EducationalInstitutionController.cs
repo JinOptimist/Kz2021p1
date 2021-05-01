@@ -5,17 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class EducationalInstitutionController : Controller
     {
-        private UniversityRepository UniversityRepository { get; set; }
-        private SchoolRepository SchoolRepository { get; set; }
+        private IUniversityRepository UniversityRepository { get; set; }
+        private ISchoolRepository SchoolRepository { get; set; }
         private IMapper Mapper { get; set; }
 
-        public EducationalInstitutionController(UniversityRepository universityRepository, SchoolRepository schoolRepository, IMapper mapper)
+        public EducationalInstitutionController(IUniversityRepository universityRepository, ISchoolRepository schoolRepository, IMapper mapper)
         {
             UniversityRepository = universityRepository;
             SchoolRepository = schoolRepository;

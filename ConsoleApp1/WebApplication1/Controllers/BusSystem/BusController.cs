@@ -8,14 +8,15 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Controllers.BusSystem
 {
     public class BusController : Controller
     {
-        private BusRepository _busRepository;
+        private IBusRepository _busRepository;
 
-        public BusController(BusRepository busRepository)
+        public BusController(IBusRepository busRepository)
         {
             _busRepository = busRepository;
         }

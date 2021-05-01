@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
 using WebApplication1.Models.Airport;
 
 namespace WebApplication1.Controllers.Airport
@@ -14,10 +15,10 @@ namespace WebApplication1.Controllers.Airport
     [ApiController]
     public class IncomingFlightsInfoApiController : ControllerBase
     {
-        private FlightsRepository _flightsRepository { get; set; }
+        private IFlightsRepository _flightsRepository { get; set; }
         private IMapper _mapper { get; set; }
 
-        public IncomingFlightsInfoApiController(IMapper mapper, FlightsRepository flightsRepository)
+        public IncomingFlightsInfoApiController(IMapper mapper, IFlightsRepository flightsRepository)
         {
             _mapper = mapper;
             _flightsRepository = flightsRepository;

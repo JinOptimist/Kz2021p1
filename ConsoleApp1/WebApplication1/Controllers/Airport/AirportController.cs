@@ -9,9 +9,9 @@ namespace WebApplication1.Controllers.Airport
 {
     public class AirportController : Controller
     {
-        private AirportPresentation _airpotPresentation { get; set; }
+        private IAirportPresentation _airpotPresentation { get; set; }
 
-        public AirportController(AirportPresentation airpotPresentation)
+        public AirportController(IAirportPresentation airpotPresentation)
         {
             _airpotPresentation = airpotPresentation;
         }

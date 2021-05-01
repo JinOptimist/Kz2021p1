@@ -1,23 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Services
 {
-	public class UserService
-	{
-		private CitizenRepository _citizenRepository;
-		private IHttpContextAccessor _httpContextAccessor;
+	public class UserService : IUserService
+    {
+        private ICitizenRepository _citizenRepository;
+        private IHttpContextAccessor _httpContextAccessor;
 
-		public UserService(CitizenRepository citizenRepository, IHttpContextAccessor httpContextAccessor)
-		{
-			_citizenRepository = citizenRepository;
-			_httpContextAccessor = httpContextAccessor;
-		}
+        public UserService(ICitizenRepository citizenRepository, IHttpContextAccessor httpContextAccessor)
+        {
+            _citizenRepository = citizenRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
 		public Citizen GetUser()
 		{

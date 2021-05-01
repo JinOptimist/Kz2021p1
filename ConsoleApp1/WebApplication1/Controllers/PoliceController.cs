@@ -20,10 +20,10 @@ namespace WebApplication1.Controllers
 
 		private readonly IPolicePresentation _policePresentation;
 		private readonly IMapper _mapper;
-		private readonly UserService _userService;
+		private readonly IUserService _userService;
 		private readonly IBlobService _blobService;
 
-		public PoliceController(IPolicePresentation policePresentation, IMapper mapper, UserService userService, IBlobService blobService)
+		public PoliceController(IPolicePresentation policePresentation, IMapper mapper, IUserService userService, IBlobService blobService)
 		{
 			_policePresentation = policePresentation;
 			_mapper = mapper;
@@ -67,7 +67,7 @@ namespace WebApplication1.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet("/police/police-personal-cabinet")]
-		[IsPolicmen]
+		
 		public IActionResult PolicePersonalCabinet()
 		{
 			Citizen user = _userService.GetUser();

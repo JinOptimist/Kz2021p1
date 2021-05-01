@@ -7,17 +7,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
-        private StudentRepository StudentRepository { get; set; }
-        private PupilRepository PupilRepository { get; set; }
+        private IStudentRepository StudentRepository { get; set; }
+        private IPupilRepository PupilRepository { get; set; }
         private IMapper Mapper { get; set; }
 
-        public PersonController(StudentRepository studentRepository, PupilRepository pupilRepository, IMapper mapper)
+        public PersonController(IStudentRepository studentRepository, IPupilRepository pupilRepository, IMapper mapper)
         {
             StudentRepository = studentRepository;
             PupilRepository = pupilRepository;

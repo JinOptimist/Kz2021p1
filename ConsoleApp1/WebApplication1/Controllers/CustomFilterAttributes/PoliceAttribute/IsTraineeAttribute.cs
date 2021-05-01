@@ -8,8 +8,8 @@ namespace WebApplication1.Controllers.CustomFilterAttributes
     {
 		public override void OnActionExecuting(ActionExecutingContext context)
 		{
-			UserService userService = context.HttpContext.RequestServices
-				.GetService(typeof(UserService)) as UserService;
+			IUserService userService = context.HttpContext.RequestServices
+				.GetService(typeof(IUserService)) as IUserService;
 
 			if (!userService.IsTrainee())
 			{

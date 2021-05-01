@@ -8,8 +8,8 @@ namespace WebApplication1.Controllers.CustomFilterAttributes
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var userServirce = context.HttpContext
-                .RequestServices.GetService(typeof(UserService)) as UserService;
+			IUserService userServirce = context.HttpContext
+                .RequestServices.GetService(typeof(IUserService)) as IUserService;
 
             if (!userServirce.IsPolicmen())
             {

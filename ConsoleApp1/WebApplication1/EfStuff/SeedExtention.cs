@@ -1,17 +1,15 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApplication1.EfStuff.Repositoryies;
-using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff
 {
-    public static class SeedExtention
+	public static class SeedExtention
     {
         public const string AdminName = "admin";
 
@@ -30,7 +28,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultFlights(IServiceProvider serviceProvider)
         {
-            FlightsRepository flightsRepository = serviceProvider.GetService<FlightsRepository>();
+            IFlightsRepository flightsRepository = serviceProvider.GetService<IFlightsRepository>();
             if (flightsRepository.GetAll().Count == 0)
             {
                 Random random = new Random();
@@ -72,7 +70,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultCitizen(IServiceProvider serviceProvider)
         {
-            var citizenRepository = serviceProvider.GetService<CitizenRepository>();
+            var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
 
             var admin = citizenRepository.GetByName(AdminName);
             if (admin == null)
