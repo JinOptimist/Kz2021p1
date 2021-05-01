@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace WebApplication1.EfStuff.Model.Education
+{
+    public enum Faculties
+    {
+        BIOLOGY_AND_BIOTECHNOLOGY,
+        ORIENTAL_STUDIES,
+        INTERNATIONAL_RELATIONS_DEPARTMENT,
+        PHYSICS_AND_TECHNOLOGY,
+        HIGH_SCHOOL_OF_ECONOMICS_AND_BUSINESS,
+        GEOGRAPHY_AND_ENVIRONMENTAL_SCIENCES,
+        PHILOLOGY_AND_WORLD_LANGUAGES,
+        LAW,
+        JOURNALISM_DEPARTMENT,
+        PHILOSOPHY_AND_POLITICAL_SCIENCE,
+        MEDICINE_AND_HEALTH_CARE,
+        MECHANICAL_MATHEMATICS,
+        HISTORY_DEPARTMENT,
+        CHEMISTRY_AND_CHEMICAL_TECHNOLOGY,
+        INFORMATION_TECHNOLOGY
+    }
+}

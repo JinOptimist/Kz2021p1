@@ -1,35 +1,28 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using ReflectionIT.Mvc.Paging;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
 
 namespace WebApplication1.Controllers
 {
-    // This is tmpBranchWithLastChanges
+    // test/ I want to see tmp2Branch code in tmpBranchWithLastChanges or opposite
+    // So lets test it
     public class PersonController : Controller
     {
-        private StudentRepository _studentRepository;
-        private PupilRepository _pupilRepository;
         private StudentPresentation _studentPresentation;
         private PupilPresentation _pupilPresentation;
-        private IMapper Mapper { get; set; }
-
-        public PersonController(StudentRepository studentRepository, PupilRepository pupilRepository, StudentPresentation studentPresentation, IMapper mapper, PupilPresentation pupilPresentation)
+        private StudentRepository _studentRepository;
+        private PupilRepository _pupilRepository;
+        public PersonController(StudentPresentation studentPresentation, PupilPresentation pupilPresentation, 
+            StudentRepository studentRepository, PupilRepository pupilRepository)
         {
+            _studentPresentation = studentPresentation;
+            _pupilPresentation = pupilPresentation;
             _studentRepository = studentRepository;
             _pupilRepository = pupilRepository;
-            _studentPresentation = studentPresentation;
-            Mapper = mapper;
-            _pupilPresentation = pupilPresentation;
         }
 
         public IActionResult StudentList(int page = 1)
@@ -48,12 +41,11 @@ namespace WebApplication1.Controllers
             return View(viewModels);
         }
 
-        public IActionResult StudentFullInfo(string IINStudent)
+        public IActionResult StudentFullInfo(long studentId)
         {
-            var studentViewModel = _studentPresentation.GetStudentFullInfo(IINStudent);
+            var studentViewModel = _studentPresentation.GetStudentById(studentId);
             return View(studentViewModel);
         }
-
 
         [HttpPost]
         public IActionResult StudentGrantByGpa(string select, double minGpaValue)
@@ -69,99 +61,141 @@ namespace WebApplication1.Controllers
                 ViewBag.Message = $"Grant for students with a Gpa less than or equal to 3 has been canceled {minGpaValue}";
             }
 
-            return RedirectToAction("StudentList");
+            return View("StudentListAndSearch");
         }
 
         [HttpGet]
-        public IActionResult StudentGrantIndividual(long IDStudent)
+        public IActionResult StudentGrantIndividual(long studentId)
         {
 
-            var student = _studentRepository.Get(IDStudent);
+            var student = _studentPresentation.GetStudentById(studentId);
             if (student.OnGrant == true)
             {
-                _studentRepository.UpdateStudentGrantData(student.Id, false);
-                ViewBag.Message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
+                _studentPresentation.GetStudentGrantIndividual(student.Id, false);
+                //ViewBag.Message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
+                string message= $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
+                return Json(message);
             }
             else
             {
-                _studentRepository.UpdateStudentGrantData(student.Id, true);
-                ViewBag.Message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
+                _studentPresentation.GetStudentGrantIndividual(student.Id, true);
+                //ViewBag.Message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
+                string message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
+                return Json(message);
             }
 
-            return RedirectToAction("StudentList");
+            //return View("StudentListAndSearch");
         }
 
+        [HttpGet]
         public IActionResult AddNewStudent()
         {
+            var allFaculties = _studentRepository.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);                      
+
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditStudentData(long IDStudent)
+        {
+            var student = _studentPresentation.GetStudentById(IDStudent);
+
+            var allFaculties = _studentRepository.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
+
+            return View(student);
         }
 
         [HttpPost]
-        public IActionResult AddNewStudent(StudentViewModel studentViewModel)
-        {
-            _studentPresentation.GetAddNewStudent(studentViewModel);
-            return View();
+        public IActionResult AddNewOrEditStudent(StudentViewModel studentViewModel)
+        {            
+            var university = _studentPresentation.GetUniversityByUniversityName(studentViewModel.University.Name);
+            studentViewModel.UniversityId = university.Id;
+            studentViewModel.University = null;
+            _studentPresentation.GetAddNewOrEditStudent(studentViewModel);
+            return RedirectToAction("StudentList");
         }
 
         public JsonResult RemoveStudent(string iin)
         {
             Thread.Sleep(2000);
 
+            // var student = _studentPresentation.GetStudentFullInfo(iin);
             var student = _studentRepository.GetStudentByIIN(iin);
             if (student == null)
             {
                 return Json(false);
             }
 
+            // _studentPresentation.RemoveStudent(student);
             _studentRepository.Remove(student);
 
             return Json(true);
         }
 
-
-        public IActionResult PupilList()
+        public IActionResult PupilList(int page = 1)
         {
-            var pupilViewModels = _pupilPresentation.GetPupilList();
+            var pupilViewModels = _pupilPresentation.GetPupilList(page);
             return View("PupilListAndSearch", pupilViewModels);
         }
 
         [HttpGet]
-        public IActionResult PupilListAndSearch(string searchBy, string searchPupil)
+        public IActionResult PupilListAndSearch(string searchBy, string searchPupil, int page = 1)
         {
             ViewData["GetStudentDetails"] = searchPupil;
 
-            var pupilViewModels = _pupilPresentation.GetPupilListAndSearch(searchBy, searchPupil);
+            var pupilViewModels = _pupilPresentation.GetPupilListAndSearch(searchBy, searchPupil, page);
             return View(pupilViewModels);
         }
 
-        public IActionResult PupilFullInfo(string IINPupil)
+        public IActionResult PupilFullInfo(long pupilId)
         {
-            var pupilViewModel = _pupilPresentation.GetPupilFullInfo(IINPupil);
+            var pupilViewModel = _pupilPresentation.GetPupilById(pupilId);
             return View(pupilViewModel);
         }
 
+        [HttpGet]
         public IActionResult AddNewPupil()
         {
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
             return View();
         }
 
-        [HttpPost]
-        public IActionResult AddNewPupil(PupilViewModel pupilViewModel)
+        [HttpGet]
+        public IActionResult EditPupilData(long IDPupil)
         {
-            _pupilPresentation.GetAddNewPupil(pupilViewModel);
-            return View();
+            var pupil = _pupilPresentation.GetPupilById(IDPupil);            
+
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
+            return View(pupil);
+        }
+
+        [HttpPost]
+        public IActionResult AddNewOrEditPupil(PupilViewModel pupilViewModel)
+        {
+            var school = _pupilPresentation.GetSchoolBySchoolName(pupilViewModel.School.Name);
+            pupilViewModel.SchoolId = school.Id;
+            pupilViewModel.School = null;
+            _pupilPresentation.GetAddNewOrEditPupil(pupilViewModel);
+            return RedirectToAction("PupilList");
         }
 
         public JsonResult RemovePupil(string iin)
         {
             Thread.Sleep(2000);
 
+            //var pupil = _pupilPresentation.GetPupilFullInfo(iin);
             var pupil = _pupilRepository.GetPupilByIIN(iin);
             if (pupil == null)
             {
                 return Json(false);
             }
 
+            //_pupilPresentation.RemovePupil(pupil);
             _pupilRepository.Remove(pupil);
 
             return Json(true);
@@ -171,14 +205,18 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult PupilGrant(int minValueForGrant)
         {
-            ViewData["PostMinValueForGrant"] = minValueForGrant;
-
-            // проверка значения инпута (если пользователь ввел букву например 
-            // или текст а не числовое значение)           
+            ViewData["PostMinValueForGrant"] = minValueForGrant;      
 
             _pupilPresentation.GetPupilGrant(minValueForGrant);
 
             return RedirectToAction("PupilList");
+        }
+
+        public IActionResult EndOfStudy()
+        {
+           // _pupilPresentation.EndStudyYearForSchool();
+           // _studentPresentation.EndStudyYearForUniversity();
+            return View();
         }
     }
 }

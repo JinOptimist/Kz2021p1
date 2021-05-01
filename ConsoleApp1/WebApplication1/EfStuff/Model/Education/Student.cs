@@ -23,7 +23,7 @@ namespace WebApplication1.EfStuff.Model
         public long UniversityId { get; set; } // FK
         public virtual University University { get; set; }  // навигационное свойство
 
-        public virtual ICollection<Certificate> Certificates { get; set; } // = new List<Course>();
+        public virtual ICollection<Certificate> Certificates { get; set; }
 
     }
 }

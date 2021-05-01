@@ -14,12 +14,14 @@ namespace WebApplication1.Presentation
     public class StudentPresentation
     {
         private StudentRepository _studentRepository;
+        private UniversityRepository _universityRepository;
         private IMapper Mapper { get; set; }
 
-        public StudentPresentation(StudentRepository studentRepository, IMapper mapper)
+        public StudentPresentation(StudentRepository studentRepository, UniversityRepository universityRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
-            Mapper = mapper;
+            _universityRepository = universityRepository;
+            Mapper = mapper;            
         }
 
         public PagingList<StudentViewModel> GetStudentList(int page)
@@ -65,15 +67,15 @@ namespace WebApplication1.Presentation
             var model = PagingList.Create(studentViewModels, 3, page);
             model.RouteValue = new RouteValueDictionary {
                                     {"searchBy", searchBy},
-                                    {  "searchStudent", searchStudent} };
+                                    {"searchStudent", searchStudent} };
 
             model.Action = "StudentListAndSearch";
             return model;
         }
 
-        public StudentViewModel GetStudentFullInfo(string IINStudent)
+        public StudentViewModel GetStudentById(long studentId)
         {
-            var student = _studentRepository.GetStudentByIIN(IINStudent);
+            var student = _studentRepository.Get(studentId);
             var studentViewModel = Mapper.Map<StudentViewModel>(student);
             return studentViewModel;
         }
@@ -98,20 +100,70 @@ namespace WebApplication1.Presentation
                 foreach (var student in studentsYesGrant)
                 {
                     _studentRepository.UpdateStudentGrantData(student.Id, false);
-                }               
+                }
             }
         }
 
-        public void GetAddNewStudent(StudentViewModel studentViewModel)
+        public void GetStudentGrantIndividual(long id, bool onGrant)
+        {
+            _studentRepository.UpdateStudentGrantData(id, onGrant);
+        }
+
+        public void GetAddNewOrEditStudent(StudentViewModel studentViewModel)
         {
             var student = Mapper.Map<Student>(studentViewModel);
             _studentRepository.Save(student);
         }
+        /*
+                public void RemoveStudent(StudentViewModel studentViewModel)
+                {
+                    var student = Mapper.Map<Student>(studentViewModel);
+                    _studentRepository.Remove(student);
+                }*/
 
-      /*  public StudentViewModel GetSt(string IINStudent)
+        public List<University> GetUniversityList()
         {
-            return null;
+            return _universityRepository.GetAll();
         }
-*/
+
+        public University GetUniversityByUniversityName(string universityName)
+        {
+            return _universityRepository.GetUniversityByName(universityName);
+        }
+
+        public List<string> GetListOfUniversityNames()
+        {
+            var all = GetUniversityList();
+            List<string> universityNames = new List<string>();
+            foreach (var university in all)
+            {
+                universityNames.Add(university.Name);
+            }
+
+            return universityNames;
+        }
+
+        public void EndStudyYearForUniversity()
+        {
+            List<Student> students = _studentRepository.GetAll();
+            int fourthCourseStudentsCount = 0;
+            //string message;
+            foreach (Student student in students)
+            {
+                if (student.CourseYear != 4)
+                {
+                    student.CourseYear = student.CourseYear + 1;
+                }
+                else
+                {
+                    student.GraduatedYear = DateTime.Now;
+                    // Certificate
+                    fourthCourseStudentsCount++;
+                }
+                _studentRepository.Save(student);
+            }
+            
+            //return message;
+        }
     }
 }

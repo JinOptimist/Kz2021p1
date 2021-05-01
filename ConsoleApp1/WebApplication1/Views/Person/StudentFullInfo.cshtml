@@ -6,13 +6,13 @@
 <div class="container">
     <h1>@Model.Surname @Model.Name @Model.Patronymic</h1>
 
-    <div class="card" style="width: 28rem;">
-        @*<img src="..." class="card-img-top" alt="...">*@
+    <div class="card mb-4" style="width: 28rem; margin-bottom: 50px">
+        <img src="/Education/img/ava1.png" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title" style="display:flex; justify-content:center; align-items:center;">Full Info</h5>
             <p class="card-text">Email: <b>@Model.Email</b></p>
             <p class="card-text">Birthday: <b>@Model.Birthday</b></p>
-            <p class="card-text">University ID: <b>@Model.UniversityId</b></p>
+            <p class="card-text">University: <b>@Model.University.Name</b></p>
             <p class="card-text">Faculty: <b>@Model.Faculty</b></p>
             <p class="card-text">Course Year: <b>@Model.CourseYear</b></p>
             <p class="card-text">Entered Year: <b>@Model.EnteredYear</b></p>

@@ -8,8 +8,6 @@ namespace WebApplication1.EfStuff.Model
 {
     public class Pupil : Person
     {
-        [MaxLength(50)]
-        public string Subject { get; set; }
         public int ClassYear { get; set; }
         public double AverageMark { get; set; }
         public DateTime? GraduatedYear { get; set; }
@@ -17,7 +15,7 @@ namespace WebApplication1.EfStuff.Model
         public long SchoolId { get; set; } // FK
         public virtual School School { get; set; }  // навигационное свойство
 
-        public virtual ICollection<Certificate> Certificates { get; set; } // = new List<Course>();
+        public virtual ICollection<Certificate> Certificates { get; set; }
 
     }
 }
