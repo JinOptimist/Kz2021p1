@@ -61,12 +61,14 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IHttpContextAccessor>())
                 );
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
 
             services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+
             services.AddScoped<AdminRestoService>(x =>
                new AdminRestoService(
                    x.GetService<AdminRestoRepository>(),
