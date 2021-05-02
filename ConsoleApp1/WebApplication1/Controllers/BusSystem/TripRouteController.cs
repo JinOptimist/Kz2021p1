@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Controllers.BusSystem
 {
     public class TripRouteController : Controller
     {
-        private TripRouteRepository _tripRouteRepository;
+        private ITripRouteRepository _tripRouteRepository;
 
-        public TripRouteController(TripRouteRepository tripRouteRepository)
+        public TripRouteController(ITripRouteRepository tripRouteRepository)
         {
             _tripRouteRepository = tripRouteRepository;
         }
