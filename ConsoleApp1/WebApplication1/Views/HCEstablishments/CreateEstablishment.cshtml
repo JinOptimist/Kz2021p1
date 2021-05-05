@@ -1,0 +1,29 @@
+﻿@model HCEstablishmentsViewModel
+
+@{
+    Layout = "~/Views/Shared/_HCLayout.cshtml";
+}
+
+<h1>
+    Add a new Healthcare Establishment
+</h1>
+
+<form action="@Url.Action("CreateEstablishment", "HCEstablishments")" method="post">
+    <div>
+        Name: @Html.TextBoxFor(x => x.Name)
+    </div>
+
+    <div>
+        Address: @Html.TextBoxFor(x => x.Address)
+    </div>
+
+    <div>
+        Contacts: @Html.TextBoxFor(x => x.Contacts)
+    </div>
+
+    <div>
+        Webpage: @Html.TextBoxFor(x => x.Webpage)
+    </div>
+
+    <input type="submit" value="Add new establishment"/>
+</form>

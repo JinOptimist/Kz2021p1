@@ -1,0 +1,21 @@
+﻿@model List<HCWorkerViewModel>
+
+@{
+    Layout = "~/Views/Shared/_HCLayout.cshtml";
+}
+@section Scripts{ 
+<script src="~/js/hcworker.js"></script>
+}
+
+@foreach (var worker in Model)
+            {
+<div class="user">
+    Name: @worker.Name
+    Position: @worker.Position
+    Contacts: @worker.Contacts
+    Citizen ID: @worker.CitizenId
+    Facility ID: @worker.FacilityId
+    Healthcare facility name: @worker.FacilityName
+    <input type="button" worker-id="@worker.Id" class="delete" value="X" />
+</div>
+            }

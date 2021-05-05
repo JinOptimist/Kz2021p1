@@ -39,5 +39,7 @@ namespace WebApplication1.Services
         //}
         public bool IsPolicment()
              => GetUser()?.Policeman != null;
+
+        public bool IsHCWorker() => GetUser()?.HCWorker != null;
     }
 }

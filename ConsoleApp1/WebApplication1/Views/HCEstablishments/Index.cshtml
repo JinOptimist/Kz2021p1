@@ -1,0 +1,20 @@
+﻿@model List<HCEstablishmentsViewModel>
+
+@{
+    Layout = "~/Views/Shared/_HCLayout.cshtml";
+}
+@section Scripts{ 
+<script src="./js/hcestablishment.js"></script>
+}
+
+@foreach (var estabs in Model)
+            {
+                <div class="user">
+                    ID: @estabs.Id
+                    Name: @estabs.Name
+                    Address: @estabs.Address
+                    Contacts: @estabs.Contacts
+                    Webpage: @estabs.Webpage
+                    <input type ="button" estab-id="@estabs.Id" class="delete" value="X" />
+                </div>
+            }
