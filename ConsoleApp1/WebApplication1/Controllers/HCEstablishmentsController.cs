@@ -8,6 +8,7 @@ using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -15,6 +16,7 @@ namespace WebApplication1.Controllers
     {
         private HCEstablishmentsRepository HCEstablishmentsRepository;
         private IMapper Mapper;
+        private UserService _userService;
         public HCEstablishmentsController(HCEstablishmentsRepository establishmentsRepository, IMapper mapper)
         {
             HCEstablishmentsRepository = establishmentsRepository;
@@ -22,10 +24,8 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Index()
         {
-            var viewmodel = HCEstablishmentsRepository
-                .GetAll()
-                .Select(x => Mapper.Map<HCEstablishmentsViewModel>(x))
-                .ToList();
+            var user = _userService.GetUser();
+            var viewmodel = Mapper.Map<HCEstablishments>(user);
 
             return View(viewmodel);
         }
@@ -45,15 +45,9 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult CreateEstablishment(HCEstablishmentsViewModel newEstablishment)
         {
-            var establishments = new HCEstablishments()
-            {
-                Name = newEstablishment.Name,
-                Address = newEstablishment.Address,
-                Contacts = newEstablishment.Contacts,
-                Webpage = newEstablishment.Webpage
-            };
+            var model = Mapper.Map<HCEstablishments>(newEstablishment);
 
-            HCEstablishmentsRepository.Save(establishments);
+            HCEstablishmentsRepository.Save(model);
 
             return RedirectToAction("Index");
         }

@@ -21,9 +21,27 @@ namespace WebApplication1.EfStuff
                 CreateDefaultCitizen(scope.ServiceProvider);
 
                 CreateDefaultAdress(scope.ServiceProvider);
+
+                CreateDefaultHCWorker(scope.ServiceProvider);
             }
 
             return host;
+        }
+
+        private static void CreateDefaultHCWorker(IServiceProvider serviceProvider)
+        {
+            var hcworkerRepository = serviceProvider.GetService<HCWorkerRepository>();
+
+            var admin = hcworkerRepository.GetByName(AdminName);
+            if (admin == null)
+            {
+                admin = new HCWorker()
+                {
+                    Name = AdminName,
+                    Password = "admin",
+                };
+                hcworkerRepository.Save(admin);
+            }
         }
 
         private static void CreateDefaultAdress(IServiceProvider serviceProvider)

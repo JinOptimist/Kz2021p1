@@ -113,9 +113,6 @@ namespace WebApplication1
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
 
-            configurationExp.CreateMap<HCEstablishments, HCEstablishmentsViewModel>();
-            configurationExp.CreateMap<HCWorker, HCWorkerViewModel>();
-
             configurationExp.AddProfile<PoliceProfiles>();
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
@@ -130,6 +127,8 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<HCEstablishments, HCEstablishmentsViewModel>(configurationExp);
+            MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
 
 
             var config = new MapperConfiguration(configurationExp);

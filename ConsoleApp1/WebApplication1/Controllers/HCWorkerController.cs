@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace WebApplication1.Controllers
         private IMapper Mapper;
         private CitizenRepository _citizenRepository;
         private HCEstablishmentsRepository _hcestablishmentsRepository;
+        private UserService _userService;
         public HCWorkerController(HCWorkerRepository workerRepository, IMapper mapper, HCEstablishmentsRepository facilityRepository, CitizenRepository citizenRepository)
         {
             _hcworkerRepository = workerRepository;
@@ -27,12 +29,11 @@ namespace WebApplication1.Controllers
         }
 
         [IsHCWorker]
+        [Authorize]
         public IActionResult Index()
         {
-            var viewmodel = _hcworkerRepository
-                .GetAll()
-                .Select(x => Mapper.Map<HCWorkerViewModel>(x))
-                .ToList();
+            var user = _userService.GetUser();
+            var viewmodel = Mapper.Map<HCWorker>(user);
 
             return View(viewmodel);
         }

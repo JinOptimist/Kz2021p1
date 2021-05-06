@@ -11,5 +11,9 @@ namespace WebApplication1.EfStuff.Repositoryies
         public HCWorkerRepository(KzDbContext kzDbContext) : base(kzDbContext)
         {
         }
+        public HCWorker GetByName(string name)
+        {
+            return _kzDbContext.HCWorker.SingleOrDefault(x => x.Name == name);
+        }
     }
 }
