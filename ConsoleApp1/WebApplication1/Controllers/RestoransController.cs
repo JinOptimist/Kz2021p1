@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
             _bronRestoRepository = bronRestoRepository;
             _bronRestoBusiness = bronRestoBusiness;
         }
-        [Authorize]
+     
         public IActionResult AvailableResto()
         {
             var viewModels = _restoransRepository.GetAll()
@@ -35,6 +35,11 @@ namespace WebApplication1.Controllers
                 .Where(x => x.Access && x.NumberOfTables != 0)
                 .ToList();
             return View(viewModels);
+        }
+
+        public IActionResult MainPage()
+        {
+            return View();
         }
 
         public IActionResult Index()
@@ -61,7 +66,7 @@ namespace WebApplication1.Controllers
             }
             var resto = MapResto.Map<Restorans>(newResto);
             _restoransRepository.Save(resto);
-            return RedirectToAction("Index");
+            return RedirectToAction("MainPage");
         }
 
         public JsonResult Remove(string name)
@@ -83,6 +88,7 @@ namespace WebApplication1.Controllers
             return View(viewModelOne);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult BronView(string name)
         {
@@ -108,6 +114,10 @@ namespace WebApplication1.Controllers
         public IActionResult WaitAdminConfirm(BronNumberViewModel model)
         {
             var bbbrrr = _bronRestoRepository.GetByBrNumber(model.BronRespNumber);
+            if (bbbrrr is null)
+            {
+                return RedirectToAction("CheckBron");
+            }
             if (!bbbrrr.StateReservation)
             {
                 return RedirectToAction("WaitConfirm", "Restorans", new BronNumberViewModel { BronRespNumber = bbbrrr.BronRespNumber });

@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Restorans\MainPage.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\Image\avatars\" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
@@ -40,6 +44,7 @@
     <None Include="Views\Restorans\BronView.cshtml" />
     <None Include="Views\Restorans\CheckBron.cshtml" />
     <None Include="Views\Restorans\CreateResto.cshtml" />
+    <None Include="Views\Restorans\MainPage.cshtml" />
     <None Include="Views\Restorans\Index.cshtml" />
     <None Include="Views\Restorans\NewRequestBron.cshtml" />
     <None Include="Views\Restorans\OneResto.cshtml" />

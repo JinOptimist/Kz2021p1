@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-    public class AdminRestoRepository : BaseRepository<AdminResto>
+    public class AdminRestoRepository : BaseRepository<AdminResto>, IAdminRestoRepository
     {
         public AdminRestoRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
 

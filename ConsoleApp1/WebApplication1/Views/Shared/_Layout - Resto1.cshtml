@@ -1,0 +1,105 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - WebApplication1</title>
+    <link rel="stylesheet" href="~/css/resto1.css" />
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    <img src="https://writegate.ru/wp-content/uploads/2019/07/restoran-ruski.jpg" class="transparent50">
+    <div class="content">
+        <nav class="">
+            <div class="container">
+                <ul class="menu_list1">
+                    <li>
+                        <a class="WebApplication1" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("CreateResto", "Restorans")">Добавить Ресторан</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("NewRequestBron", "Restorans")">Заявки на бронирование</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("AvailableResto", "Restorans")">Доступные</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("CheckBron", "Restorans")">Проверка статуса</a>
+                    </li>
+                </ul>
+
+                <ul class="menu_list2">
+                    <li>
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("Login", "Citizen")">Вход/Регистрация</a>
+                    </li>
+                    <!-- <li>
+                    <a class="nav-link text-dark"
+                        href="@Url.Action("Login", "AdminsResto")">Login Admin</a>
+                    </li>
+                    <li>
+                    <a class="nav-link text-dark"
+                        href="@Url.Action("Register", "AdminsResto")">Register Admin</a>
+                    </li>
+                    <li>
+                    <a class="nav-link text-dark"
+                        href="@Url.Action("Exit", "AdminsResto")">Exit</a>
+                    </li> -->
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main_catering_bl">
+            <div class="catering">
+                <div class="catering_in"><img src="https://my-svadba.ru/photos/company_photo/ca/0a/02/a6/1424775_medium.jpg" class="img_catering_in"></div>
+                <p class="bl_forcater"> <span class="text_forcater">Банкетные залы </span></p>
+            </div>
+            <div class="catering">
+                <div class="catering_in"><img src="https://img.dni24.ru/wp/2019/10/16083454/0d2f5ed17ea2b9fbe16806ea8efa42e1-300x200.jpg" class="img_catering_in"></div>
+
+                <p class="bl_forcater">
+                    <span class="text_forcater">
+                        <a class="nav-link text-dark"
+                           href="@Url.Action("Index", "Restorans")">Рестораны</a>
+                    </span>
+                </p>
+
+            </div>
+            <div class="catering">
+                <div class="catering_in"><img src="https://bar-vintage.ru/wp-content/uploads/2019/05/image9-300x200.jpg" class="img_catering_in"></div>
+                <p class="bl_forcater"><span class="text_forcater">Караоке </span></p>
+            </div>
+            <div class="catering">
+                <div class="catering_in"><img src="https://find-rest.ru/upload/iblock/bca/bca9bb949718100d73bec297b2ec9003.jpg" class="img_catering_in"></div>
+                <p class="bl_forcater"><span class="text_forcater">Пабы,бары </span></p>
+            </div>
+            <div class="catering">
+                <div class="catering_in"><img src="http://vse40.com/images/news/common/2020/06/20200619-3.jpg" class="img_catering_in"></div>
+                <p class="bl_forcater"><span class="text_forcater"> Кафе </span></p>
+            </div>
+            <div class="catering">
+                <div class="catering_in"><img src="https://www.zenicablog.com/wp-content/uploads/2018/09/merkator-ljubljana-300x200.jpg" class="img_catering_in"></div>
+                <p class="bl_forcater"><span class="text_forcater"> Магазины </span></p>
+            </div>
+        </div>
+    </div>
+    <div class="containeras">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="containerfoot">
+            &copy; 2021 - Сайт про прекрасный город
+        </div>
+    </footer>
+</body>
+</html>

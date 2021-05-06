@@ -32,8 +32,9 @@ namespace WebApplication1
 {
 	public class Startup
     {
-        public const string AuthMethod = "Smile";
 
+        public const string AuthMethod = "Smile";
+        public const string AuthAdminR = "Resto";
         public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
@@ -61,7 +62,10 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IHttpContextAccessor>())
                 );
+            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<ICitizenRepository, CitizenRepository>();
+            services.AddScoped<IAdminRestoRepository, AdminRestoRepository>();
 
             services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(
@@ -78,7 +82,6 @@ namespace WebApplication1
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
-
 
             services.AddAuthentication(AuthMethod)
                 .AddCookie(AuthMethod, config =>

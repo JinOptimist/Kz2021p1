@@ -14,6 +14,7 @@ using WebApplication1.Controllers.CustomFilterAttributes;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
 using WebApplication1.RestoBusiness;
@@ -24,25 +25,24 @@ namespace WebApplication1.Controllers
     [Localized]
     public class AdminsRestoController : Controller
     {
-        private AdminRestoRepository _adminRestoRepository;
+        private IAdminRestoRepository _adminRestoRepository;
         private RestoransRepository _restoransRepository;
-        private UserService UserService { get; set; }
+        private IUserService UserService { get; set; }
         private AdminRestoService AdminRestoService { get; set; }
-        public AdminsRestoController(RestoransRepository restoransRepository , AdminRestoRepository adminRestoRepository, 
-            UserService userService, AdminRestoService adminRestoService)
+        public AdminsRestoController(RestoransRepository restoransRepository , IAdminRestoRepository adminRestoRepository,
+            IUserService userService, AdminRestoService adminRestoService)
         {
             _restoransRepository = restoransRepository;
             _adminRestoRepository = adminRestoRepository;
             UserService = userService;
             AdminRestoService = adminRestoService;
         }
-        [Authorize]
+
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Login(LoginAdminViewModel viewModel)
         {
@@ -58,26 +58,29 @@ namespace WebApplication1.Controllers
                 ModelState.AddModelError(nameof(LoginAdminViewModel.LoginAdmin), "Не правильный логин или пароль");
                 return View(viewModel);
             }
-
             var pages = new List<Claim>() {
                 new Claim("AdminResto", adminResto.LoginAdmin.ToString()),
             };
-
-            var claimsIdenity = new ClaimsIdentity(pages, Startup.AuthMethod);
-            AdminRestoService.AddAdminClaim(claimsIdenity);
-
+            var claimsIdenity = AdminRestoService.GetClaimsIdentity(Startup.AuthAdminR);
+            // !(claimsIdenity.AuthenticationType is null) && claimsIdenity.AuthenticationType == Startup.AuthAdminR
+            if ( !(claimsIdenity is null) &&!string.IsNullOrEmpty(claimsIdenity.AuthenticationType)&& claimsIdenity.AuthenticationType == Startup.AuthAdminR)
+            {
+                claimsIdenity.AddClaims(pages);
+            }
+            else
+            {
+                claimsIdenity = new ClaimsIdentity(pages, Startup.AuthAdminR);
+                AdminRestoService.AddAdminClaim(claimsIdenity);
+            }
             await HttpContext.SignInAsync(AdminRestoService.GetClaimsPrincipal());
-
-            return RedirectToAction("Index", "Restorans");
+            return RedirectToAction("MainPage", "Restorans");
         }
-        [Authorize]
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult Register(LoginAdminViewModel viewModel)
         {
@@ -96,13 +99,14 @@ namespace WebApplication1.Controllers
             };
             _adminRestoRepository.Save(adminresto);
 
-            return RedirectToAction("Index", "Restorans");
+            return RedirectToAction("MainPage", "Restorans");
         }
 
         public async Task<IActionResult> Exit()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Restorans");
+            AdminRestoService.RemoveAdminClaim();
+            await HttpContext.SignInAsync(AdminRestoService.GetClaimsPrincipal());
+            return RedirectToAction("MainPage", "Restorans");
         }
     }
 }
