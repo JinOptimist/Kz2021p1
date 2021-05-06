@@ -28,6 +28,10 @@ namespace WebApplication1.EfStuff
 
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+        
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Election> Elections { get; set; }
+        public DbSet<Ballot> Ballots { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -91,6 +95,43 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+            
+            modelBuilder.Entity<Citizen>()
+                .HasMany(pc => pc.Candidates)
+                .WithOne(c => c.Citizen);
+
+            modelBuilder.Entity<Candidate>()
+                .HasOne(c => c.Election)
+                .WithMany(b => b.Candidates)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Election>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Elections)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Citizen)
+                .WithMany(b => b.Ballots);
+
+            modelBuilder.Entity<Citizen>()
+                .HasOne(c => c.Ballot)
+                .WithMany(b => b.Citizens);
+
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Election)
+                .WithMany(b => b.Ballots)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Ballots)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Candidate>()
+                .HasOne(b => b.Ballot)
+                .WithMany(c => c.Candidates);
 
             base.OnModelCreating(modelBuilder);
         }

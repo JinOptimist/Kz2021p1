@@ -49,6 +49,36 @@ namespace WebApplication1.Migrations
                     b.ToTable("CertificateStudent");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Ballot", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("CandidateId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CitizenId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ElectionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("VoteTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("CitizenId");
+
+                    b.HasIndex("ElectionId");
+
+                    b.ToTable("Ballots");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Property<long>("Id")
@@ -171,6 +201,54 @@ namespace WebApplication1.Migrations
                     b.ToTable("Buses");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Candidate", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("BallotId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CitizenId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("City")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ElectionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Idea")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Job")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slogan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BallotId");
+
+                    b.HasIndex("CitizenId");
+
+                    b.HasIndex("ElectionId");
+
+                    b.ToTable("Candidates");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Certificate", b =>
                 {
                     b.Property<long>("Id")
@@ -201,6 +279,12 @@ namespace WebApplication1.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("BallotId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CandidateId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatingDate")
                         .HasColumnType("datetime2");
 
@@ -221,9 +305,47 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BallotId");
+
+                    b.HasIndex("CandidateId");
+
                     b.HasIndex("HouseId");
 
                     b.ToTable("Citizens");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Election", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("BallotId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CandidateId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BallotId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("Elections");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
@@ -690,6 +812,29 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Ballot", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Model.Candidate", "Candidate")
+                        .WithMany("Ballots")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithMany("Ballots")
+                        .HasForeignKey("CitizenId");
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Election", "Election")
+                        .WithMany("Ballots")
+                        .HasForeignKey("ElectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("Election");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Bus", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.TripRoute", "RoutePlan")
@@ -699,13 +844,63 @@ namespace WebApplication1.Migrations
                     b.Navigation("RoutePlan");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Candidate", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Ballot", "Ballot")
+                        .WithMany("Candidates")
+                        .HasForeignKey("BallotId");
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithMany("Candidates")
+                        .HasForeignKey("CitizenId");
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Election", "Election")
+                        .WithMany("Candidates")
+                        .HasForeignKey("ElectionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Ballot");
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("Election");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
+                    b.HasOne("WebApplication1.EfStuff.Ballot", "Ballot")
+                        .WithMany("Citizens")
+                        .HasForeignKey("BallotId");
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
                     b.HasOne("WebApplication1.EfStuff.Model.Adress", "House")
                         .WithMany("Citizens")
                         .HasForeignKey("HouseId");
 
+                    b.Navigation("Ballot");
+
+                    b.Navigation("Candidate");
+
                     b.Navigation("House");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Election", b =>
+                {
+                    b.HasOne("WebApplication1.EfStuff.Ballot", "Ballot")
+                        .WithMany("Elections")
+                        .HasForeignKey("BallotId");
+
+                    b.HasOne("WebApplication1.EfStuff.Model.Candidate", "Candidate")
+                        .WithMany("Elections")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Ballot");
+
+                    b.Navigation("Candidate");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
@@ -808,13 +1003,33 @@ namespace WebApplication1.Migrations
                     b.Navigation("Policeman");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Ballot", b =>
+                {
+                    b.Navigation("Candidates");
+
+                    b.Navigation("Citizens");
+
+                    b.Navigation("Elections");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Navigation("Citizens");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Candidate", b =>
+                {
+                    b.Navigation("Ballots");
+
+                    b.Navigation("Elections");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
+                    b.Navigation("Ballots");
+
+                    b.Navigation("Candidates");
+
                     b.Navigation("Fireman");
 
                     b.Navigation("PoliceAcademy");
@@ -824,6 +1039,13 @@ namespace WebApplication1.Migrations
                     b.Navigation("Policeman");
 
                     b.Navigation("Violations");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Election", b =>
+                {
+                    b.Navigation("Ballots");
+
+                    b.Navigation("Candidates");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Policeman", b =>

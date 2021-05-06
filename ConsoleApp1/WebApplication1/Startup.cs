@@ -64,6 +64,24 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+            
+            services.AddScoped(x =>
+                new ElectionPresentation(
+                    x.GetService<ICandidateRepository>(),
+                    x.GetService<IElectionRepository>(),
+                    x.GetService<IBallotRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+
+            services.AddScoped<IBallotRepository>(x =>
+                new BallotRepository(x.GetService<KzDbContext>())
+            );
+            services.AddScoped<IElectionRepository>(x =>
+                new ElectionRepository(x.GetService<KzDbContext>())
+            );
+            services.AddScoped<ICandidateRepository>(x =>
+                new CandidateRepository(x.GetService<KzDbContext>())
+            );
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
@@ -127,6 +145,10 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<CandidateViewModel, Citizen>(configurationExp);
+            MapBothSide<CandidateViewModel, Candidate>(configurationExp);
+            MapBothSide<ElectionViewModel, Election>(configurationExp);
+            MapBothSide<BallotViewModel, Ballot>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

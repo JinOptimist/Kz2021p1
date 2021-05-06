@@ -1,0 +1,60 @@
+﻿@using WebApplication1.Services
+@model CandidateViewModel
+@inject IUserService userService
+
+@section Scripts{
+    <script src="~/js/government/election.js"></script>
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css"/>
+}
+
+<div class=" mb-1 bg-info text-white p-2 font-weight-bold">
+    <h4>
+        Анкета кандидата
+    </h4>
+</div>
+
+
+<form asp-action="Register" method="post">
+
+    <input type="hidden" asp-for="Election" value="null"/>
+    <input type="hidden" asp-for="Citizen" value="null"/>
+
+    <div class="form-group">
+        <label asp-for="Name">Имя</label>
+        <input asp-for="Name" class="form-control" readonly/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Age">Возраст</label>
+        <input asp-for="Age" class="form-control"/>
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Job">Профессия</label>
+        <input asp-for="Job" class="form-control"/>
+        <span asp-validation-for="Job" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="City">Город</label>
+        <select asp-for="City" asp-items="Html.GetEnumSelectList<City>()" class="custom-select form-control">
+        </select>
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Idea">Идея</label>
+        <select asp-for="Idea" asp-items="Html.GetEnumSelectList<Idea>()" class="custom-select form-control">
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Slogan">Девиз</label>
+        <input asp-for="Slogan" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Отправить</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+</form>

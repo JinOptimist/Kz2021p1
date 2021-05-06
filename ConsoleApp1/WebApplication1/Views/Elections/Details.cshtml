@@ -1,0 +1,236 @@
+﻿@using WebApplication1.Services
+@model ElectionViewModel
+@inject IUserService userService
+
+@{
+    var user = userService.GetUser();
+}
+
+@section Scripts{
+    <script src="~/js/government/details.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+          </script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css"/>
+}
+
+
+<div class="d-flex ">
+
+    <div class="" style="width: 40%">
+        <table class="table mt-5">
+            <thead >
+            <tr style="background-color: #e7edf5; color: #7f7e90;">
+                <th scope="col">Информация о выборах</th>
+                <th scope="col">️</th>
+            </tr>
+            </thead>
+
+            <tbody >
+            <tr>
+                <th scope="row">Номер выборов</th>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th scope="row">Название</th>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th scope="row">Описание</th>
+                <td>@Model.Description</td>
+            </tr>
+            <tr>
+                <th scope="row">Начало</th>
+                <td>@Model.Start</td>
+            </tr>
+            <tr>
+                <th scope="row">Окончание</th>
+                <td>@Model.End</td>
+            </tr>
+            <tr>
+                <th scope="row">Количество кандидатов</th>
+                <td>@Model.Candidates.Count()</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="flex-direction: column" style="width: 60%;">
+
+        <div class="d-flex mb-5">
+            <div class="ml-auto">
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-circle-left"></i>
+                    Вернуться назад
+                </a>
+                <a asp-controller="Elections"
+                   asp-action="Register"
+                   asp-route-id="@Model.Id"
+                   class="btn alert-primary align-self-center btn-sm">
+                    Участвовать в выборах
+                    <i class="fas fa-plus pl-1"></i>
+                </a>
+
+            </div>
+
+        </div>
+        <div style="height: 280px; margin-bottom: 140px;">
+            @if (Model.Candidates.Any(x => x.Ballots.Count() != 0))
+            {
+                <div id="container"></div>
+            }
+        </div>
+    </div>
+</div>
+
+<div style="height: 25px" class="mb-5">
+    @if (Model.IsVoted)
+    {
+        <div
+            style="max-width: 20%; color: #0b2e13">
+            Вы уже проголосовали
+        </div>
+    }
+
+    <div
+        style="max-width: 20%; color: #0b2e13;
+             display:none">
+    </div>
+
+</div>
+
+<table class="table table-sm table-bordered mt-5" id="tbCandidates">
+    <tr class="alert alert-success">
+        <th >
+            Имя
+        </th>
+        <th>
+            Возраст
+        </th>
+        <th >
+            Место работы
+        </th>
+        <th >
+            Лозунг
+        </th>
+        <th>
+            Город
+        </th>
+        <th>
+            Идея
+        </th>
+        <th style="width: 20px">
+            Голоса
+        </th>
+        <th>
+            Голосование
+        </th>
+        <th>
+
+        </th>
+    </tr>
+    @if (Model.Candidates.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" class="text-center">
+                Нет зарегистрированных кандидатов
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var candidate in Model.Candidates)
+        {
+            <tr id="userRow">
+
+                <td>
+                    @candidate.Name
+                </td>
+                <td>
+                    @candidate.Age
+                </td>
+                <td>
+                    @candidate.Job
+                </td>
+                <td>
+                    @candidate.Slogan
+                </td>
+                <td>
+                    @candidate.City
+                </td>
+                <td>
+                    @candidate.Idea
+                </td>
+                <td>
+                    @candidate.Ballots.Count(x => x.Election.Id == Model.Id)
+
+                </td>
+                <td>
+                    @if (Model.IsVoted)
+                    {
+                        <button type="submit"
+                                data-election="@Model.Id"
+                                data-candidate="@candidate.Id"
+                                id="voteBtn" class="voteBtn btn btn-sm btn-outline-success disabled">
+                            Отдать голос
+                            <i class="fas fa-vote-yea pl-1"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit"
+                                data-election="@Model.Id"
+                                data-candidate="@candidate.Id"
+                                id="voteBtn" class="voteBtn btn btn-sm btn-outline-success">
+                            Отдать голос
+                            <i class="fas fa-vote-yea pl-1"></i>
+                        </button>
+                    }
+
+                </td>
+                <td>
+                    @if (user.Id == candidate.Citizen.Id)
+                    {
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-action="EditCandidate"
+                           asp-route-id="@candidate.Id">
+                            Редактировать
+                            <i class="far fa-edit pl-1"></i>
+                        </a>
+
+                        <button type="button" data-id="@candidate.Id"
+                                id="deleteCandidateBtn"
+                                class="btn btn-sm btn-outline-danger">
+                            Удалить
+                            <i class="far fa-trash-alt pl-1"></i>
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<table id="datatable" style="display:none">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Голос(а)</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var candidate in Model.Candidates)
+    {
+        <tr>
+            <th>@candidate.Name</th>
+            <td>@candidate.Ballots.Count(x => x.Election.Id == Model.Id)</td>
+        </tr>
+    }
+    </tbody>
+</table>

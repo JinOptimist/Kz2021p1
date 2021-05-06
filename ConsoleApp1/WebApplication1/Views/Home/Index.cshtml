@@ -2,7 +2,29 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Style{
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Поиск</button>
+        </form>
+    </div>
+}
+@*Some page*@
+else
+{
+    <div class="d-flex align-items-center justify-content-center  " style="height: 80vh; ">
+        <a asp-action="Register" asp-controller="Citizen" style="text-decoration: none">
+            <h1 class="welcome-title" style="font-family: 'Special Elite', cursive; color: #e0d4d4">
+                Welcome to UtopiaCity
+            </h1>
+        </a>
+    </div>
+}
