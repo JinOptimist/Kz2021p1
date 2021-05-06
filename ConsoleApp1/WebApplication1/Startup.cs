@@ -112,13 +112,29 @@ namespace WebApplication1
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
             
-            configurationExp.AddProfile<PoliceProfiles>();                
+            configurationExp.AddProfile<PoliceProfiles>(); 
 
-            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
 
-            MapBothSide<Fireman, FiremanViewModel>(configurationExp);
-            MapBothSide<FiremanTeam, FiremanTeamViewModel>(configurationExp);
-            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
+            configurationExp.CreateMap<FireIncident, FireIncidentViewModel>()
+                .ForMember(nameof(FireIncidentViewModel.TeamName),
+                    opt => opt.MapFrom(incident => incident.FiremanTeam.TeamName));
+            configurationExp.CreateMap<Fireman, FiremanViewModel>()
+                .ForMember(nameof(FiremanViewModel.TeamName),
+                    opt => opt.MapFrom(fireman => fireman.FiremanTeam.TeamName))
+                .ForMember(nameof(FiremanViewModel.Name),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+                .ForMember(nameof(FiremanViewModel.Age),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+            configurationExp.CreateMap<FiremanTeam, FiremanTeamViewModel>()
+                .ForMember(nameof(FiremanTeamViewModel.TruckState),
+                    opt => opt.MapFrom(t => t.FireTruck.TruckState))
+                .ForMember(nameof(FiremanTeamViewModel.FiremanCount),
+                    opt => opt.MapFrom(t => t.Firemen.Count()));
+            configurationExp.CreateMap<FiremanViewModel, Fireman>();
+            configurationExp.CreateMap<FiremanTeamViewModel, FiremanTeam>();
+            configurationExp.CreateMap<FireIncidentViewModel, FireIncident>();
+
+            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);   
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);

@@ -32,8 +32,7 @@ namespace WebApplication1.Controllers.Firemen
                     TruckNumber = x.TruckNumber,
                     TruckState = x.TruckState,
                     TeamName = x.FiremanTeam?.TeamName
-                }
-                ).ToList();
+                }).ToList();
             return View(viewmodels);
         }
         [HttpGet]
@@ -62,6 +61,7 @@ namespace WebApplication1.Controllers.Firemen
             {
                 var team = _firemanTeamRepository.GetByName(model.TeamName);
                 newModel.FiremanTeam = team;
+
             }
             _fireTruckRepository.Save(newModel);
             return RedirectToAction("Index", "FireTruck");
@@ -73,6 +73,10 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return Json(false);
             }
+            var fireman = _firemanTeamRepository.Get(model.FiremanTeam.Id);
+            fireman.TruckId = null;
+            fireman.FireTruck = null;
+            _firemanTeamRepository.Save(fireman);
             _fireTruckRepository.Remove(model);
             return Json(true);
         }

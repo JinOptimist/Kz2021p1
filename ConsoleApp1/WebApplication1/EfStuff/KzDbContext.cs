@@ -45,9 +45,9 @@ namespace WebApplication1.EfStuff
                .HasOne(x => x.Fireman)
                .WithOne(x => x.Citizen)
                .HasForeignKey<Fireman>(x => x.CitizenId);
-            modelBuilder.Entity<FiremanTeam>()
-                .HasOne(x => x.FireTruck)
-                .WithOne(x => x.FiremanTeam);
+            modelBuilder.Entity<FireTruck>()
+                .HasOne(x => x.FiremanTeam)
+                .WithOne(x => x.FireTruck);               
             modelBuilder.Entity<Fireman>()
                 .HasOne(x => x.FiremanTeam)
                 .WithMany(x => x.Firemen);

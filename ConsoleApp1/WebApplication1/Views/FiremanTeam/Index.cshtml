@@ -30,7 +30,11 @@
         <th>Team State</th>
         <th>Quantity</th>
         <th>Truck Id</th>
-        <th>Edit</th>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Delete</th>
+            <th>Edit</th>
+        }
     </tr>
     @foreach (var team in Model)
     {

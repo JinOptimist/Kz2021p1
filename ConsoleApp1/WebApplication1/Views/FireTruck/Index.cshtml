@@ -28,9 +28,12 @@
         <th>Truck Number</th>
         <th>Truck State</th>
         <th>Team Name</th>
-        <th>Remove</th>
-        <th>Edit</th>
-    </tr>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Delete</th>
+            <th>Edit</th>
+        }
+        </tr>
     @foreach (var truck in Model)
     {
 <tr class="truck">

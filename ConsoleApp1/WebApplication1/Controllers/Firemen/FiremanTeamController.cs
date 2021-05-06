@@ -31,16 +31,7 @@ namespace WebApplication1.Controllers.Firemen
         public IActionResult Index()
         {
             var viewModels = _firemanTeamRepository.GetAll()
-                .Select(x => new FiremanTeamViewModel()
-                {
-                    Id = x.Id,
-                    TeamName = x.TeamName,
-                    TruckId = x.TruckId,
-                    Shift = x.Shift,
-                    TeamState = x.TeamState,
-                    TruckState = x.FireTruck.TruckState,
-                    FiremanCount = x.Firemen.Count()
-                }).ToList();
+                .Select(x => _mapper.Map<FiremanTeamViewModel>(x)).ToList();
             return View(viewModels);
         }
         [HttpGet]
@@ -56,13 +47,8 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return View();
             }
-            var newModel = new FiremanTeam()
-            {
-                TeamName = model.TeamName,
-                TruckId = model.TruckId,
-                Shift = model.Shift,
-                TeamState = model.TeamState
-            };
+            var newModel = _mapper.Map<FiremanTeam>(model);
+
             var truck = _fireTruckRepository.Get(model.TruckId);
            
             newModel.FireTruck = truck;
@@ -87,10 +73,8 @@ namespace WebApplication1.Controllers.Firemen
             var firemanteam = _firemanTeamRepository.Get(id);
             var model = _mapper.Map<FiremanTeamViewModel>(firemanteam);
 
-
             model.TruckState = firemanteam.FireTruck.TruckState;
             model.FiremanCount = firemanteam.Firemen.Count();
-
 
             return View(model);
         }

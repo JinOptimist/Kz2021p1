@@ -14,7 +14,7 @@ namespace WebApplication1.EfStuff.Model.Firemen
         public int Injured { get; set; }
         public int Dead { get; set; }
         [ForeignKey("FiremanTeam")]
-        public long TeamId { get; set; }
+        public long? TeamId { get; set; }
         public virtual FiremanTeam FiremanTeam { get; set; }
     }
 }

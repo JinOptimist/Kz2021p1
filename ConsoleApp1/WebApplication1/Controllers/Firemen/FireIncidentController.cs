@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +14,19 @@ namespace WebApplication1.Controllers.Firemen
     {
         private FireIncidentRepository _fireIncidentRepository { get; set; }
         private FiremanTeamRepository _firemanTeamRepository { get; set; }
+        private IMapper _mapper { get; set; }
 
-        public FireIncidentController (FireIncidentRepository fireIncidentRepository, FiremanTeamRepository firemanTeamRepository)
+        public FireIncidentController (FireIncidentRepository fireIncidentRepository, FiremanTeamRepository firemanTeamRepository, IMapper mapper)
         {
             _fireIncidentRepository = fireIncidentRepository;
             _firemanTeamRepository = firemanTeamRepository;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
         {
             var viewmodels = _fireIncidentRepository.GetAll()
-                .Select(x => new FireIncidentViewModel()
-                {
-                   Id = x.Id,
-                   Address = x.Address,
-                   Date = x.Date,
-                   Reason = x.Reason,
-                   Injured = x.Injured,
-                   Dead = x.Dead,
-                   TeamName = x.FiremanTeam.TeamName
-                }
-                ).ToList();
+                .Select(x => _mapper.Map<FireIncidentViewModel>(x)).ToList();
             return View(viewmodels);
         }
         [HttpGet]
@@ -49,14 +42,7 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return View();
             }
-            var newModel = new FireIncident()
-            {
-                Address = model.Address,
-                Date = model.Date,
-                Reason = model.Reason,
-                Injured = model.Injured,
-                Dead = model.Dead
-            };
+            var newModel = _mapper.Map<FireIncident>(model);     
           
             var team = _firemanTeamRepository.GetByName(model.TeamName);
             newModel.FiremanTeam = team;
@@ -74,6 +60,36 @@ namespace WebApplication1.Controllers.Firemen
             _fireIncidentRepository.Remove(model);
             return Json(true);
         }
+        [HttpGet]
+        public IActionResult Edit(long id)
+        {
+            var fireincident = _fireIncidentRepository.Get(id);
+            var model = _mapper.Map<FireIncidentViewModel>(fireincident);
 
+            model.TeamName = fireincident.FiremanTeam?.TeamName;
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Edit(FireIncidentViewModel model)
+        {
+            var incident = _fireIncidentRepository.Get(model.Id);
+            if (incident != null)
+            {
+                incident.Address = model.Address;
+                incident.Date = model.Date;
+                incident.Reason = model.Reason;
+                incident.Injured = model.Injured;
+                incident.Dead = model.Dead;
+                incident.Date = model.Date;
+
+                var team = _firemanTeamRepository.GetByName(model.TeamName);
+
+                incident.TeamId = team.Id;
+                incident.FiremanTeam = team;
+
+                _fireIncidentRepository.Save(incident);
+            }
+            return RedirectToAction("Index", "FireIncident");
+        }
     }
 }

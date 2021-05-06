@@ -27,6 +27,13 @@
                             <a class="nav-link text-dark"
                                href="@Url.Action("Index", "Home")">Home page</a>
                         </li>
+                        @if (!userService.IsFireAdmin())
+                        {
+                            <li>
+                                <a class="nav-link text-dark"
+                                    href="@Url.Action("MyProfile", "Fireman")">My Profile</a>
+                            </li>
+                        }                        
                         @if (userService.IsFireAdmin())
                         {
                             <li>

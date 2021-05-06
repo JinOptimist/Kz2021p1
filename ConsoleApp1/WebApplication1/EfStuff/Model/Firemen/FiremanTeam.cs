@@ -8,10 +8,10 @@ namespace WebApplication1.EfStuff.Model.Firemen
 {
     public class FiremanTeam : BaseModel
     {
-        public string TeamName { get; set; }
-        [ForeignKey("FireTruck")]
-        public long TruckId { get; set; }
+        public string TeamName { get; set; }         
         public string Shift { get; set; }
+        [ForeignKey("FireTruck")]
+        public long? TruckId { get; set; }
         public string TeamState { get; set; }
         public virtual FireTruck FireTruck { get; set; }
         public virtual List<Fireman> Firemen { get; set; }

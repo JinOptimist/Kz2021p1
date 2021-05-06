@@ -1,4 +1,4 @@
-﻿@model List<FiremanShowViewModel>
+﻿@model List<FiremanViewModel>
 @using WebApplication1.Services
 @inject UserService userService
 @section Scripts{
@@ -26,9 +26,12 @@
         <th>Role</th>
         <th>Work Experience (years)</th>
         <th>Team Name</th>
-        <th>Remove</th>
-        <th>Edit</th>
-    </tr>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Remove</th>
+            <th>Edit</th>
+        }
+        </tr>
     @foreach (var worker in Model)
     {
         <tr class="worker">
