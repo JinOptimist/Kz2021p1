@@ -33,6 +33,7 @@ namespace WebApplication1
 	public class Startup
     {
         public const string AuthMethod = "Smile";
+        public const string AuthAdminR = "Resto";
         public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
