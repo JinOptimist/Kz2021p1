@@ -28,6 +28,8 @@ namespace WebApplication1.EfStuff.Model
 		public virtual ICollection<Violations> Violations  {get; set; }
 		[JsonIgnore]
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
+
+		public virtual AdminResto AdminResto { get; set; }
 	}
 }
 

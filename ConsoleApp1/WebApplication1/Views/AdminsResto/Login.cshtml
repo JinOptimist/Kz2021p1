@@ -1,0 +1,20 @@
+﻿@model LoginAdminViewModel
+
+<h1>
+    Login for Admin
+</h1>
+<form action="/AdminsResto/Login" method="post">
+    <div>
+        Login for Admin: @Html.TextBoxFor(x => x.LoginAdmin)
+        @Html.ValidationMessageFor(x => x.LoginAdmin)
+    </div>
+    <div>
+        Password for Admin:
+        @Html.TextBoxFor(x => x.PasswordAdmin)
+        @Html.ValidationMessageFor(x => x.PasswordAdmin)
+    </div>
+
+    <div>
+        <input type="submit" value="Login" />
+    </div>
+</form>

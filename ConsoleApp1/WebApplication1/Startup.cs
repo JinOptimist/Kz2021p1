@@ -26,13 +26,14 @@ using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
 using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.RestoBusiness;
 
 namespace WebApplication1
 {
 	public class Startup
     {
         public const string AuthMethod = "Smile";
-
+        public const string AuthAdminR = "Resto";
         public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             Configuration = configuration;
@@ -51,6 +52,8 @@ namespace WebApplication1
 			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
+            services.AddScoped<BronRestoBusiness>();
+
             RegisterRepositories(services);
 
             services.AddScoped<IUserService>(x =>
@@ -58,12 +61,23 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IHttpContextAccessor>())
                 );
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
+            services.AddScoped<IAdminRestoRepository, AdminRestoRepository>();
 
             services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+
+            services.AddScoped<AdminRestoService>(x =>
+               new AdminRestoService(
+                   x.GetService<AdminRestoRepository>(),
+                   x.GetService<IHttpContextAccessor>())
+               );
+
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
@@ -75,6 +89,12 @@ namespace WebApplication1
                     config.LoginPath = "/Citizen/Login";
                     config.AccessDeniedPath = "/Citizen/Login";
                 });
+
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("OnlyForAdminResto", policy => {
+                    policy.RequireClaim("AdminResto", "Zhanar", "Aigul");
+                });
+            });
 
             services.AddHttpContextAccessor();
             services.AddPaging();
@@ -127,6 +147,17 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+
+            MapBothSide<Restorans, RestoViewModel>(configurationExp);
+            MapBothSide<Restorans, AvailableRestoModel>(configurationExp);
+            MapBothSide<OneRestoViewModel, AvailableRestoModel>(configurationExp);
+            MapBothSide<Restorans, OneRestoViewModel>(configurationExp);
+            MapBothSide<BronViewModel, OneRestoViewModel>(configurationExp);
+            MapBothSide<Restorans, BronViewModel>(configurationExp);
+            MapBothSide<Restorans, BronResto>(configurationExp);
+            MapBothSide<BronNumberViewModel, BronResto>(configurationExp);
+            MapBothSide<BronAdminViewModel, BronResto>(configurationExp);
+            MapBothSide<BronViewModel, BronResto>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

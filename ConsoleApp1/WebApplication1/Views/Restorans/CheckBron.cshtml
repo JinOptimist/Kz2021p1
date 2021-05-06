@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+@model BronNumberViewModel
+@section Scripts{
+    <script src="~/js/restoran.js"></script>
+}
+
+
+    <form action="@Url.Action("WaitAdminConfirm" , "Restorans")" method="post">
+        <div>Введите ваш номер брони: @Html.TextBoxFor(x => x.BronRespNumber) </div>
+        <div>
+            <input type="submit" value="Проверить" />
+        </div>
+    </form>
+
+
+
+

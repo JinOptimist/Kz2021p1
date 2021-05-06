@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+@model BronNumberViewModel
+
+@section Scripts{
+    <script src="~/js/restoran.js"></script>
+}
+
+    <div>
+        <div>Ваш заказ под номером @Model.BronRespNumber принято администратором </div>
+        <div>Ждем вас в нашем ресторане в указанном вами время</div>
+
+        <form action="@Url.Action("Index" , "Restorans")">
+           <div>
+                <input type="submit" value="Завершить" />
+           </div>
+        </form>
+
+
+
+    </div>
+
+
+

@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+
+@model List<RestoViewModel>
+
+@section Scripts{
+    <script src="~/js/restoran.js"></script>
+}
+
+
+@foreach (var resto in Model)
+{
+<div class="resto">
+    <div> @resto.Name</div>
+    <div >@resto.Address</div>
+    <div>Тел.номер: @resto.PhoneNumber</div>
+    <div>Средний чек: @resto.AverageCheck</div>
+    <div>Количество мест: @resto.NumberOfSeats</div>
+    <div>Количество свободных столов: @resto.NumberOfTables</div>
+    <div>Кухня: @resto.Сuisine</div>
+    <div>
+        Дополнительно: @(@resto.WiFi? "Wifi,":"") @(@resto.DanceFloor? "DanceFloor,":"") @(@resto.Karaoke? "Karaoke.":"")
+    </div>
+    <div> </div>
+</div>
+
+}
+
+
+

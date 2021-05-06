@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "_Layout - Resto";
+}
+
+@model OneRestoViewModel
+
+@section Scripts{
+    <script src="~/js/oneresto.js"></script>
+}
+
+<div>@Model.Name</div>
+<div>@Model.Address</div>
+<div>Тел.номер: @Model.PhoneNumber</div>
+<div>Средний чек: @Model.AverageCheck</div>
+<div>Количество мест: @Model.NumberOfSeats</div>
+<div>Количество столов: @Model.NumberOfTables</div>
+<div>Кухня: @Model.Сuisine</div>
+<div>
+    Дополнительно: @(Model.WiFi? "Wifi,":"") @(Model.DanceFloor? "DanceFloor,":"") @(Model.Karaoke? "Karaoke.":"")
+</div>
+
+<form action="@Url.Action("AvailableResto","Restorans")" method="post">
+    <div>
+        <input type="submit"  value="Назад" />
+    </div>
+</form>
+
+<form action="@Url.Action("BronView","Restorans", new { name = @Model.Name })" method="post">
+    <div>
+        <input type="submit" data-name=@Model.Name value="Забронировать" />
+    </div>
+</form>
