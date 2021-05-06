@@ -1,34 +1,38 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Model.Education;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Presentation
 {
-    public class StudentPresentation
+    public class StudentPresentation : IStudentPresentation
     {
-        private StudentRepository _studentRepository;
-        private UniversityRepository _universityRepository;
-        private IMapper Mapper { get; set; }
+        private IStudentRepository _studentRepository;
+        private IUniversityRepository _universityRepository;
+        private IMapper _mapper;
 
-        public StudentPresentation(StudentRepository studentRepository, UniversityRepository universityRepository, IMapper mapper)
+        public StudentPresentation(IStudentRepository studentRepository, 
+            IUniversityRepository universityRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
             _universityRepository = universityRepository;
-            Mapper = mapper;            
+            _mapper = mapper;
         }
 
         public PagingList<StudentViewModel> GetStudentList(int page)
         {
             var students = _studentRepository
                .GetAll()
-               .Select(x => Mapper.Map<StudentViewModel>(x))
+               .Select(x => _mapper.Map<StudentViewModel>(x))
                .ToList();
             var model = PagingList.Create(students, 3, page);
 
@@ -63,7 +67,7 @@ namespace WebApplication1.Presentation
 
             foreach (var item in query)
             {
-                studentViewModels.Add(Mapper.Map<StudentViewModel>(item));
+                studentViewModels.Add(_mapper.Map<StudentViewModel>(item));
             }
 
             var model = PagingList.Create(studentViewModels, 3, page);
@@ -78,7 +82,7 @@ namespace WebApplication1.Presentation
         public StudentViewModel GetStudentById(long studentId)
         {
             var student = _studentRepository.Get(studentId);
-            var studentViewModel = Mapper.Map<StudentViewModel>(student);
+            var studentViewModel = _mapper.Map<StudentViewModel>(student);
             return studentViewModel;
         }
 
@@ -111,10 +115,30 @@ namespace WebApplication1.Presentation
             _studentRepository.UpdateStudentGrantData(id, onGrant);
         }
 
-        public void GetAddNewOrEditStudent(StudentViewModel studentViewModel)
+        public void GetAddNewOrEditStudentAsync(StudentViewModel studentViewModel)
         {
-            var student = Mapper.Map<Student>(studentViewModel);
+            var student = _mapper.Map<Student>(studentViewModel);
             _studentRepository.Save(student);
+        }
+
+        public bool Remove(string iin)
+        {
+            var student = _studentRepository.GetStudentByIIN(iin);
+            if (student == null)
+            {
+                return false;
+            }
+
+            _studentRepository.Remove(student);
+
+            return true;
+        }
+
+        public List<Faculties> GetAllFaculties()
+        {
+            var allFaculties = Enum.GetValues(typeof(Faculties)).Cast<Faculties>().ToList();
+
+            return allFaculties;
         }
 
         public List<University> GetUniversityList()
@@ -169,7 +193,7 @@ namespace WebApplication1.Presentation
                     fourthCourseStudentsCount++;
                 }
                 _studentRepository.Save(student);
-            }            
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
@@ -27,7 +29,9 @@ namespace WebApplication1.EfStuff
 
                 CreateDefaultStudents(scope.ServiceProvider);
 
-                CreateDefaultPupils(scope.ServiceProvider);                
+                CreateDefaultPupils(scope.ServiceProvider);
+
+                //CreateDefaultFlights(scope.ServiceProvider);
             }
 
             return host;
@@ -94,7 +98,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultUniversities(IServiceProvider serviceProvider)
         {
-            var universityRepository = serviceProvider.GetService<UniversityRepository>();
+            var universityRepository = serviceProvider.GetService<IUniversityRepository>();
             var universities = universityRepository.GetAll();
             if (universities == null)
             {
@@ -140,7 +144,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultSchools(IServiceProvider serviceProvider)
         {
-            var schoolRepository = serviceProvider.GetService<SchoolRepository>();
+            var schoolRepository = serviceProvider.GetService<ISchoolRepository>();
             var schools = schoolRepository.GetAll();
             if (schools == null)
             {
@@ -184,7 +188,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultStudents(IServiceProvider serviceProvider)
         {
-            var studentRepository = serviceProvider.GetService<StudentRepository>();
+            var studentRepository = serviceProvider.GetService<IStudentRepository>();
             var students = studentRepository.GetAll();
 
             List<string> studentIins = new List<string>() { "980704401339", "971104401334", "960915401335", "990521401336", "001210401337", "010229401338" };
@@ -229,7 +233,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultPupils(IServiceProvider serviceProvider)
         {
-            var pupilRepository = serviceProvider.GetService<PupilRepository>();
+            var pupilRepository = serviceProvider.GetService<IPupilRepository>();
             var pupils = pupilRepository.GetAll();
 
             List<string> pupilIins = new List<string>() { "061231401442", "050131401441", "041005401442", "070915401443", "051105401442", "051104401442" };

@@ -6,31 +6,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Presentation
 {
-    public class PupilPresentation
+    public class PupilPresentation : IPupilPresentation
     {
-        private PupilRepository _pupilRepository;
-        private StudentRepository _studentRepository;
-        private SchoolRepository _schoolRepository;
-        private IMapper Mapper { get; set; }
+        private IPupilRepository _pupilRepository;
+        private IStudentRepository _studentRepository;
+        private IStudentPresentation _studentPresentation;
+        private ISchoolRepository _schoolRepository;
+        private IMapper _mapper;
 
-        public PupilPresentation(PupilRepository pupilRepository, StudentRepository studentRepository, SchoolRepository schoolRepository, IMapper mapper)
+        public PupilPresentation(IPupilRepository pupilRepository, IStudentRepository studentRepository, 
+            ISchoolRepository schoolRepository, IMapper mapper, IStudentPresentation studentPresentation)
         {
             _pupilRepository = pupilRepository;
             _studentRepository = studentRepository;
             _schoolRepository = schoolRepository;
-            Mapper = mapper;
+            _mapper = mapper;
+            _studentPresentation = studentPresentation;
         }
 
         public PagingList<PupilViewModel> GetPupilList(int page)
         {
             var pupils = _pupilRepository
                   .GetAll()
-                  .Select(x => Mapper.Map<PupilViewModel>(x))
+                  .Select(x => _mapper.Map<PupilViewModel>(x))
                   .ToList();
             var model = PagingList.Create(pupils, 3, page);
             model.Action = "PupilListAndSearch";
@@ -61,7 +64,7 @@ namespace WebApplication1.Presentation
             List<PupilViewModel> pupilViewModels = new List<PupilViewModel>();
             foreach (var item in query)
             {
-                pupilViewModels.Add(Mapper.Map<PupilViewModel>(item));
+                pupilViewModels.Add(_mapper.Map<PupilViewModel>(item));
             }
             var model = PagingList.Create(pupilViewModels, 3, page);
             model.RouteValue = new RouteValueDictionary {
@@ -75,20 +78,20 @@ namespace WebApplication1.Presentation
         public PupilViewModel GetPupilById(long pupilId)
         {
             var pupil = _pupilRepository.Get(pupilId);
-            var pupilViewModel = Mapper.Map<PupilViewModel>(pupil);
+            var pupilViewModel = _mapper.Map<PupilViewModel>(pupil);
             return pupilViewModel;
         }
 
         public void GetAddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
-            var pupil = Mapper.Map<Pupil>(pupilViewModel);
+            var pupil = _mapper.Map<Pupil>(pupilViewModel);
 
             _pupilRepository.Save(pupil);
         }
 
         public void GetPupilGrant(List<long> universityIds, int minValueForGrant)
         {
-            var allFaculties = _studentRepository.GetAllFaculties();
+            var allFaculties = _studentPresentation.GetAllFaculties();
             Random rand = new Random();
 
             int randomForFacultyHashCode = rand.Next(0, allFaculties.Count());
@@ -117,7 +120,7 @@ namespace WebApplication1.Presentation
                     if (pupil.ENT >= minValueForGrant)
                     {
                         studentVIewModel.OnGrant = true;
-                        var student = Mapper.Map<Student>(studentVIewModel);
+                        var student = _mapper.Map<Student>(studentVIewModel);
                         _studentRepository.Save(student);
 
                         _pupilRepository.Remove(pupil);
@@ -125,7 +128,7 @@ namespace WebApplication1.Presentation
                     else
                     {
                         studentVIewModel.OnGrant = false;
-                        var student = Mapper.Map<Student>(studentVIewModel);
+                        var student = _mapper.Map<Student>(studentVIewModel);
                         _studentRepository.Save(student);
 
                         _pupilRepository.Remove(pupil);
@@ -133,6 +136,19 @@ namespace WebApplication1.Presentation
                 }
             }
         }
+               
+        public bool Remove(string iin)
+        {
+            var pupil = _pupilRepository.GetPupilByIIN(iin);
+            if (pupil == null)
+            {
+                return false;
+            }
+
+            _pupilRepository.Remove(pupil);
+
+            return true;
+        }       
 
         public List<School> GetSchoolList()
         {

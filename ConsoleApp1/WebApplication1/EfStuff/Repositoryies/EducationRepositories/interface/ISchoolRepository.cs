@@ -2,8 +2,8 @@
 
 namespace WebApplication1.EfStuff.Repositoryies.Interface
 {
-	public interface IUniversityRepository : IBaseRepository<University>
+	public interface ISchoolRepository : IBaseRepository<School>
     {
-        
+        School GetSchoolByName(string name);
     }
 }

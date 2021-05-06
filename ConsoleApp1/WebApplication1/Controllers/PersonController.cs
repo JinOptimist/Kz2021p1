@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -14,16 +15,14 @@ namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
-        private IStudentRepository StudentRepository { get; set; }
-        private IPupilRepository PupilRepository { get; set; }
-        private IMapper Mapper { get; set; }
+        private IStudentPresentation _studentPresentation;
+        private IPupilPresentation _pupilPresentation;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        public PersonController(IStudentRepository studentRepository, IPupilRepository pupilRepository, IMapper mapper)
+        public PersonController(IStudentPresentation studentPresentation, IPupilPresentation pupilPresentation, IWebHostEnvironment webHostEnvironment)
         {
             _studentPresentation = studentPresentation;
             _pupilPresentation = pupilPresentation;
-            _studentRepository = studentRepository;
-            _pupilRepository = pupilRepository;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -74,25 +73,21 @@ namespace WebApplication1.Controllers
             if (student.OnGrant == true)
             {
                 _studentPresentation.GetStudentGrantIndividual(student.Id, false);
-                //ViewBag.Message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
                 string message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
                 return Json(message);
             }
             else
             {
                 _studentPresentation.GetStudentGrantIndividual(student.Id, true);
-                //ViewBag.Message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
                 string message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
                 return Json(message);
             }
-
-            //return View("StudentListAndSearch");
         }
 
         [HttpGet]
         public IActionResult AddNewStudent()
         {
-            var allFaculties = _studentRepository.GetAllFaculties();
+            var allFaculties = _studentPresentation.GetAllFaculties();
             ViewBag.Faculties = new SelectList(allFaculties);
 
             ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
@@ -104,7 +99,7 @@ namespace WebApplication1.Controllers
         {
             var student = _studentPresentation.GetStudentById(IDStudent);
 
-            var allFaculties = _studentRepository.GetAllFaculties();
+            var allFaculties = _studentPresentation.GetAllFaculties();
             ViewBag.Faculties = new SelectList(allFaculties);
 
             ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
@@ -113,7 +108,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewOrEditStudent(StudentViewModel studentViewModel)
+        public async Task<IActionResult> AddNewOrEditStudentAsync(StudentViewModel studentViewModel)
         {
             var university = _studentPresentation.GetUniversityByUniversityName(studentViewModel.University.Name);
             studentViewModel.UniversityId = university.Id;
@@ -132,25 +127,13 @@ namespace WebApplication1.Controllers
                 }
                 studentViewModel.Avatar = $"/Image/Avatars/{fileName}";
             }
-            _studentPresentation.GetAddNewOrEditStudent(studentViewModel);
+            _studentPresentation.GetAddNewOrEditStudentAsync(studentViewModel);
             return RedirectToAction("StudentList");
         }
 
         public JsonResult RemoveStudent(string iin)
         {
-            Thread.Sleep(2000);
-
-            // var student = _studentPresentation.GetStudentFullInfo(iin);
-            var student = _studentRepository.GetStudentByIIN(iin);
-            if (student == null)
-            {
-                return Json(false);
-            }
-
-            // _studentPresentation.RemoveStudent(student);
-            _studentRepository.Remove(student);
-
-            return Json(true);
+            return Json(_studentPresentation.Remove(iin));
         }
 
         public IActionResult PupilList(int page = 1)
@@ -217,19 +200,7 @@ namespace WebApplication1.Controllers
 
         public JsonResult RemovePupil(string iin)
         {
-            Thread.Sleep(2000);
-
-            //var pupil = _pupilPresentation.GetPupilFullInfo(iin);
-            var pupil = _pupilRepository.GetPupilByIIN(iin);
-            if (pupil == null)
-            {
-                return Json(false);
-            }
-
-            //_pupilPresentation.RemovePupil(pupil);
-            _pupilRepository.Remove(pupil);
-
-            return Json(true);
+            return Json(_pupilPresentation.Remove(iin));
         }
 
 

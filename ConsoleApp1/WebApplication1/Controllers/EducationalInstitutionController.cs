@@ -13,8 +13,8 @@ namespace WebApplication1.Controllers
 {
     public class EducationalInstitutionController : Controller
     {
-        private IUniversityRepository UniversityRepository { get; set; }
-        private ISchoolRepository SchoolRepository { get; set; }
+        private IUniversityRepository _universityRepository;
+        private ISchoolRepository _schoolRepository;
         private IMapper Mapper { get; set; }
 
         public EducationalInstitutionController(IUniversityRepository universityRepository, ISchoolRepository schoolRepository, IMapper mapper)
