@@ -116,8 +116,6 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
-            //MapBothSide<IncomingFlightInfo, IncomingFlightInfoViewModel>(configurationExp);
-            //MapBothSide<DepartingFlightInfo, DepartingFlightInfoViewModel>(configurationExp);
 
             MapBothSide<Student, StudentViewModel>(configurationExp);
             MapBothSide<Pupil, PupilViewModel>(configurationExp);
@@ -127,10 +125,6 @@ namespace WebApplication1
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
             services.AddScoped<IMapper>(x => mapper);
-            /*services.AddScoped<StudentPresentation>(x =>
-              new StudentPresentation(x.GetService<StudentRepository>(), x.GetService<UniversityRepository>(), mapper));
-            services.AddScoped<PupilPresentation>(x =>
-              new PupilPresentation(x.GetService<PupilRepository>(), x.GetService<StudentRepository>(), x.GetService<SchoolRepository>(), mapper));*/
         }
 
         public void MapBothSide<Type1, Type2>(MapperConfigurationExpression configurationExp)
