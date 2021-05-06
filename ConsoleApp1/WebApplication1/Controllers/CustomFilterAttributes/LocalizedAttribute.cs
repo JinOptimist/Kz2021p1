@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers.CustomFilterAttributes
         public override void OnResultExecuted(ResultExecutedContext context)
         {
             var userServirce = context.HttpContext
-                .RequestServices.GetService(typeof(UserService)) as UserService;
+                .RequestServices.GetService(typeof(IUserService)) as IUserService;
 
             CultureInfo culture = null;
             switch (userServirce.GetUser()?.Local)
