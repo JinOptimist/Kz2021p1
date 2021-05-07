@@ -58,12 +58,12 @@ namespace WebApplication1.Presentation
         }
 
 
-        public bool RemoveElections(long id)
+        public bool DeleteElection(long id)
         {
-            var elections = _electionRepository.Get(id);
-            if (elections != null)
+            var election = _electionRepository.Get(id);
+            if (election != null)
             {
-                _electionRepository.Remove(elections);
+                _electionRepository.Remove(election);
                 return true;
             }
 
@@ -82,8 +82,94 @@ namespace WebApplication1.Presentation
             return false;
         }
 
-        public void CreateVote(Citizen citizen, Election election, Candidate candidate)
+      
+
+        public ElectionViewModel Details(long id)
         {
+            var election = _electionRepository.Get(id);
+            var viewModel = _mapper.Map<ElectionViewModel>(election);
+            
+            var citizen = _userService.GetUser();
+            
+            viewModel.IsVoted = GetUsedBallots(citizen.Id, election.Id) != null;
+
+            return viewModel;
+        }
+
+        public CandidateViewModel RegisterCandidate()
+        {
+            var citizen = _userService.GetUser();
+
+            return new CandidateViewModel
+            {
+                Name = citizen.Name,
+                Age = citizen.Age
+            };
+
+        }
+        
+        public bool RegisterCandidate(long id, CandidateViewModel newCandidate)
+        {
+            var election = _electionRepository.Get(id);
+            var citizen = _userService.GetUser();
+           
+            var candidate = _mapper.Map<Candidate>(newCandidate);
+            candidate.Election = election;
+            candidate.Citizen = citizen;
+           
+            if (election.Candidates.Any(x => x.Citizen.Id == candidate.Citizen.Id))
+            {
+                return false;
+            }
+           
+            _candidateRepository.Save(candidate);
+            return true;
+        }
+
+        public CandidateViewModel EditCandidate(long id)
+        {
+            var candidate = _candidateRepository.Get(id);
+            return _mapper.Map<CandidateViewModel>(candidate);
+        }
+        
+        public void EditCandidate(CandidateViewModel viewModel)
+        {
+            var candidate = _mapper.Map<Candidate>(viewModel);
+            _candidateRepository.Save(candidate);
+        }
+
+        public ElectionViewModel EditElection(long id)
+        {
+            var election = _electionRepository.Get(id);
+            return _mapper.Map<ElectionViewModel>(election);
+        }
+        
+        public void EditElection(ElectionViewModel viewModel)
+        {
+            var election = _mapper.Map<Election>(viewModel);
+            _electionRepository.Save(election);
+        }
+
+        public void CreateElection(ElectionViewModel model)
+        {
+            var election = _mapper.Map<Election>(model);
+            _electionRepository.Save(election);
+
+        }
+        
+        public bool CreateVote(long electionId, long candidateId)
+        {
+            
+            var citizen = _userService.GetUser();
+
+            var election = _electionRepository.Get(electionId);
+
+            var usedBallot = GetUsedBallots(citizen.Id, electionId);
+
+            if (usedBallot != null) return false;
+
+            var candidate = _candidateRepository.Get(candidateId);
+            
             var ballot = new Ballot
             {
                 Citizen = citizen,
@@ -93,6 +179,7 @@ namespace WebApplication1.Presentation
             };
 
             _ballotRepository.Save(ballot);
+            return true;
         }
     }
 }

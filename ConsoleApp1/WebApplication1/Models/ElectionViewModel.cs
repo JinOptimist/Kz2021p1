@@ -20,6 +20,5 @@ namespace WebApplication1.Models
 
         public List<CandidateViewModel> Candidates { get; set; }
 
-        public List<Ballot> Ballots { get; set; }
     }
 }

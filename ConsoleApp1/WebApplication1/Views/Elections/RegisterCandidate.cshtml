@@ -17,10 +17,12 @@
 </div>
 
 
-<form asp-action="Register" method="post">
+<form asp-action="RegisterCandidate" method="post">
 
-    <input type="hidden" asp-for="Election" value="null"/>
-    <input type="hidden" asp-for="Citizen" value="null"/>
+    <input type="hidden" asp-for="Election" />
+    <input type="hidden" asp-for="Id" /> 
+    <input type="hidden" asp-for="Citizen" />
+    
 
     <div class="form-group">
         <label asp-for="Name">Имя</label>

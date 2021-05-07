@@ -148,7 +148,6 @@ namespace WebApplication1
             MapBothSide<CandidateViewModel, Citizen>(configurationExp);
             MapBothSide<CandidateViewModel, Candidate>(configurationExp);
             MapBothSide<ElectionViewModel, Election>(configurationExp);
-            MapBothSide<BallotViewModel, Ballot>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

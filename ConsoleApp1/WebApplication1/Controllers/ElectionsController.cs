@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +13,11 @@ namespace WebApplication1.Controllers
 {
     public class ElectionsController : Controller
     {
-        private readonly ICandidateRepository _candidateRepository;
         private readonly ElectionPresentation _electionPresentation;
-        private readonly IElectionRepository _electionRepository;
-        private readonly IMapper _mapper;
-        private readonly IUserService _userService;
 
 
-        public ElectionsController(
-            ElectionPresentation electionPresentation,
-            ICandidateRepository candidatesRepository,
-            IElectionRepository electionRepository,
-            IUserService userService,
-            IMapper mapper)
+        public ElectionsController(ElectionPresentation electionPresentation)
         {
-            _candidateRepository = candidatesRepository;
-            _electionRepository = electionRepository;
-            _userService = userService;
-            _mapper = mapper;
             _electionPresentation = electionPresentation;
         }
 
@@ -57,66 +45,41 @@ namespace WebApplication1.Controllers
         [Route("Elections/Details/{id}")]
         public IActionResult Details(long id)
         {
-            var election = _electionRepository.Get(id);
-            var viewModel = _mapper.Map<ElectionViewModel>(election);
-
-            var citizen = _userService.GetUser();
-
-            viewModel.IsVoted = _electionPresentation.GetUsedBallots(citizen.Id, election.Id) != null;
+            var viewModel = _electionPresentation.Details(id);
 
             return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult RegisterCandidate()
         {
-            var user = _userService.GetUser();
-
-            var viewModel = _mapper.Map<CandidateViewModel>(user);
+            var viewModel = _electionPresentation.RegisterCandidate();
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("Elections/Register/{id}")]
-        public IActionResult Register([FromRoute] long id, CandidateViewModel newCandidate)
+        [Route("Elections/RegisterCandidate/{id}")]
+        public IActionResult RegisterCandidate([FromRoute] long id, CandidateViewModel newCandidate)
         {
             if (!ModelState.IsValid) return View(newCandidate);
 
-            var election = _electionRepository.Get(id);
-            var citizen = _userService.GetUser();
+            var isModelValid = _electionPresentation.RegisterCandidate(id, newCandidate);
 
-            //   newCandidate.Election = election;
-            //   newCandidate.Citizen = citizen; 
-            //   var candidate = _mapper.Map<Candidate>(newCandidate);
-
-            var candidate = new Candidate
-            {
-                Name = newCandidate.Name,
-                Election = election,
-                Citizen = citizen,
-                Age = newCandidate.Age,
-                Slogan = newCandidate.Slogan,
-                Idea = newCandidate.Idea
-            };
-
-
-            if (election.Candidates.Any(x => x.Citizen.Id == candidate.Citizen.Id))
+            if (!isModelValid)
             {
                 ModelState.AddModelError(nameof(CandidateViewModel.Name),
                     "Такой кандидат уже зарегистрирован на эти выборы");
                 return View(newCandidate);
             }
-
-            _candidateRepository.Save(candidate);
-
+            
             return RedirectToAction("Details", "Elections", new {id});
         }
 
 
-        public JsonResult DeleteElections(long id)
+        public JsonResult DeleteElection(long id)
         {
-            return Json(_electionPresentation.RemoveElections(id));
+            return Json(_electionPresentation.DeleteElection(id));
         }
 
         public JsonResult DeleteCandidate(long id)
@@ -127,55 +90,43 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult EditCandidate(long id)
         {
-            var candidate = _candidateRepository.Get(id);
-            var viewModel = _mapper.Map<CandidateViewModel>(candidate);
-
+            var viewModel = _electionPresentation.EditCandidate(id);
             return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult EditCandidate(CandidateViewModel viewModel)
         {
-            var candidate = _mapper.Map<Candidate>(viewModel);
-            _candidateRepository.Save(candidate);
-
+            _electionPresentation.EditCandidate(viewModel);
             return RedirectToAction("Index", "Elections");
         }
 
         [HttpGet]
         public IActionResult EditElection(long id)
         {
-            var election = _electionRepository.Get(id);
-            var viewModel = _mapper.Map<ElectionViewModel>(election);
-
+            var viewModel = _electionPresentation.EditElection(id);
             return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult EditElection(ElectionViewModel viewModel)
         {
-            var election = _mapper.Map<Election>(viewModel);
-
-            _electionRepository.Save(election);
-
+            _electionPresentation.EditElection(viewModel);
             return RedirectToAction("Details", "Elections");
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreateElection()
         {
             return View();
         }
 
 
         [HttpPost]
-        public IActionResult Create(ElectionViewModel model)
+        public IActionResult CreateElection(ElectionViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
-            var election = _mapper.Map<Election>(model);
-            _electionRepository.Save(election);
-
+            _electionPresentation.CreateElection(model);
             return RedirectToAction("Index", "Elections");
         }
 
@@ -183,19 +134,7 @@ namespace WebApplication1.Controllers
         [Route("Elections/Vote/{electionId}/{candidateId}")]
         public JsonResult Vote([FromRoute] long electionId, long candidateId)
         {
-            var citizen = _userService.GetUser();
-
-            var election = _electionRepository.Get(electionId);
-
-            var usedBallot = _electionPresentation.GetUsedBallots(citizen.Id, electionId);
-
-            var candidate = _candidateRepository.Get(candidateId);
-
-            if (usedBallot != null) return Json(false);
-
-            _electionPresentation.CreateVote(citizen, election, candidate);
-            
-            return Json(true);
+            return Json(_electionPresentation.CreateVote(electionId, candidateId));
         }
     }
 }
