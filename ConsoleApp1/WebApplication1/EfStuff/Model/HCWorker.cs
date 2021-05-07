@@ -11,7 +11,6 @@ namespace WebApplication1.EfStuff.Model
         public string Name { get; set; }
         public string Position { get; set; }
         public int Contacts { get; set; }
-        public string Password { get; set; }
         public virtual Citizen Citizen { get; set; }
         public virtual HCEstablishments Facility { get; set; }
         public long CitizenId { get; set; }

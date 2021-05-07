@@ -52,6 +52,9 @@ namespace WebApplication1
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
+            services.AddScoped<IHCWorkerRepository, HCWorkerRepository>();
+            services.AddScoped<IHCEstablishmentsRepository, HCEstablishmentsRepository>();
 
             services.AddScoped<IUserService>(x =>
                 new UserService(
@@ -62,6 +65,12 @@ namespace WebApplication1
             services.AddScoped<CitizenPresentation>(x =>
                 new CitizenPresentation(
                     x.GetService<ICitizenRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+
+            services.AddScoped<HCEstablishmentsPresentation>(x =>
+                new HCEstablishmentsPresentation(
+                    x.GetService<IHCEstablishmentsRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
 
@@ -127,8 +136,8 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
-            MapBothSide<HCEstablishments, HCEstablishmentsViewModel>(configurationExp);
             MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
+            MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);
 
 
             var config = new MapperConfiguration(configurationExp);

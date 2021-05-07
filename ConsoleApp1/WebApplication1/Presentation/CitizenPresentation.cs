@@ -66,7 +66,6 @@ namespace WebApplication1.Presentation
             var user = _userService.GetUser();
 
             var viewModel = _mapper.Map<FullProfileViewModel>(user);
-
             return viewModel;
         }
 

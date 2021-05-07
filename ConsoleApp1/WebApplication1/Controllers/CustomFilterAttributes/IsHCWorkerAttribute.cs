@@ -13,7 +13,7 @@ namespace WebApplication1.Controllers.CustomFilterAttributes
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var userService = context.HttpContext
-                .RequestServices.GetService(typeof(UserService)) as UserService;
+                .RequestServices.GetService(typeof(IUserService)) as IUserService;
 
             if (!userService.IsHCWorker())
             {

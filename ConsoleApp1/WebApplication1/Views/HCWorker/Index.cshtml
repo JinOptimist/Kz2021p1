@@ -1,14 +1,16 @@
 ﻿@model List<HCWorkerViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
 
 @{
     Layout = "~/Views/Shared/_HCLayout.cshtml";
 }
-@section Scripts{ 
-<script src="~/js/hcworker.js"></script>
+@section Scripts{
+    <script src="~/js/hcworker.js"></script>
 }
 
 @foreach (var worker in Model)
-            {
+{
 <div class="user">
     Name: @worker.Name
     Position: @worker.Position
@@ -16,6 +18,10 @@
     Citizen ID: @worker.CitizenId
     Facility ID: @worker.FacilityId
     Healthcare facility name: @worker.FacilityName
-    <input type="button" worker-id="@worker.Id" class="delete" value="X" />
+
+    @if (userService.IsHCWorker())
+    {
+        <input type="button" worker-id="@worker.Id" class="delete" value="X" />
+    }
 </div>
-            }
+}
