@@ -2,11 +2,11 @@
 {
     public enum Idea
     {
-        Libertarian,
-        Conservative,
-        Liberal,
-        Anarchist,
-        Cyberpunk,
-        Other
+        Libertarian = 0,
+        Conservative = 1,
+        Liberal = 2,
+        Anarchist = 3,
+        Cyberpunk = 4,
+        Other = 5
     }
 }

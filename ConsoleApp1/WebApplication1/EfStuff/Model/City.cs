@@ -2,9 +2,9 @@
 {
     public enum City
     {
-        Nursultan,
-        Karaganda,
-        Almaty,
-        Other
+        Nursultan = 0,
+        Karaganda = 1,
+        Almaty = 2,
+        Other = 3
     }
 }
