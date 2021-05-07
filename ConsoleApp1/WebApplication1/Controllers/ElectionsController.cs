@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
-using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -64,14 +58,16 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(newCandidate);
 
-            var isModelValid = _electionPresentation.RegisterCandidate(id, newCandidate);
+            var isRegistered = _electionPresentation.GetRegisteredCandidate(id, newCandidate);
 
-            if (!isModelValid)
+            if (isRegistered)
             {
                 ModelState.AddModelError(nameof(CandidateViewModel.Name),
                     "Такой кандидат уже зарегистрирован на эти выборы");
                 return View(newCandidate);
             }
+            
+            _electionPresentation.RegisterCandidate(id, newCandidate);
             
             return RedirectToAction("Details", "Elections", new {id});
         }
@@ -91,6 +87,7 @@ namespace WebApplication1.Controllers
         public IActionResult EditCandidate(long id)
         {
             var viewModel = _electionPresentation.EditCandidate(id);
+            
             return View(viewModel);
         }
 
@@ -98,6 +95,7 @@ namespace WebApplication1.Controllers
         public IActionResult EditCandidate(CandidateViewModel viewModel)
         {
             _electionPresentation.EditCandidate(viewModel);
+            
             return RedirectToAction("Index", "Elections");
         }
 
@@ -105,6 +103,7 @@ namespace WebApplication1.Controllers
         public IActionResult EditElection(long id)
         {
             var viewModel = _electionPresentation.EditElection(id);
+            
             return View(viewModel);
         }
 
@@ -112,6 +111,7 @@ namespace WebApplication1.Controllers
         public IActionResult EditElection(ElectionViewModel viewModel)
         {
             _electionPresentation.EditElection(viewModel);
+            
             return RedirectToAction("Details", "Elections");
         }
 
@@ -126,7 +126,9 @@ namespace WebApplication1.Controllers
         public IActionResult CreateElection(ElectionViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+            
             _electionPresentation.CreateElection(model);
+            
             return RedirectToAction("Index", "Elections");
         }
 
@@ -134,6 +136,10 @@ namespace WebApplication1.Controllers
         [Route("Elections/Vote/{electionId}/{candidateId}")]
         public JsonResult Vote([FromRoute] long electionId, long candidateId)
         {
+            var usedBallot = _electionPresentation.GetUsedBallots(electionId);
+
+            if (usedBallot != null) return Json(false);
+            
             return Json(_electionPresentation.CreateVote(electionId, candidateId));
         }
     }

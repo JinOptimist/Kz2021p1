@@ -49,12 +49,22 @@ namespace WebApplication1.Presentation
                 .ToList();
         }
 
-        public Ballot GetUsedBallots(long citizenId, long electionId)
+        public Ballot GetUsedBallots(long electionId)
         {
+            var citizen = _userService.GetUser();
+            
             return _ballotRepository.GetAll()
                 .FirstOrDefault(
-                    c => c.Citizen.Id == citizenId
+                    c => c.Citizen.Id == citizen.Id
                          && c.Election.Id == electionId);
+        }
+        
+        public bool GetRegisteredCandidate(long id, CandidateViewModel newCandidate)
+        {
+            var election = _electionRepository.Get(id);
+            var candidate = _mapper.Map<Candidate>(newCandidate);
+            
+            return election.Candidates.Any(x => x.Citizen.Id == candidate.Citizen.Id);
         }
 
 
@@ -82,16 +92,13 @@ namespace WebApplication1.Presentation
             return false;
         }
 
-      
 
         public ElectionViewModel Details(long id)
         {
             var election = _electionRepository.Get(id);
             var viewModel = _mapper.Map<ElectionViewModel>(election);
             
-            var citizen = _userService.GetUser();
-            
-            viewModel.IsVoted = GetUsedBallots(citizen.Id, election.Id) != null;
+            viewModel.IsVoted = GetUsedBallots(election.Id) != null;
 
             return viewModel;
         }
@@ -105,10 +112,9 @@ namespace WebApplication1.Presentation
                 Name = citizen.Name,
                 Age = citizen.Age
             };
-
         }
         
-        public bool RegisterCandidate(long id, CandidateViewModel newCandidate)
+        public void RegisterCandidate(long id, CandidateViewModel newCandidate)
         {
             var election = _electionRepository.Get(id);
             var citizen = _userService.GetUser();
@@ -117,15 +123,10 @@ namespace WebApplication1.Presentation
             candidate.Election = election;
             candidate.Citizen = citizen;
            
-            if (election.Candidates.Any(x => x.Citizen.Id == candidate.Citizen.Id))
-            {
-                return false;
-            }
-           
             _candidateRepository.Save(candidate);
-            return true;
         }
 
+        
         public CandidateViewModel EditCandidate(long id)
         {
             var candidate = _candidateRepository.Get(id);
@@ -161,13 +162,7 @@ namespace WebApplication1.Presentation
         {
             
             var citizen = _userService.GetUser();
-
             var election = _electionRepository.Get(electionId);
-
-            var usedBallot = GetUsedBallots(citizen.Id, electionId);
-
-            if (usedBallot != null) return false;
-
             var candidate = _candidateRepository.Get(candidateId);
             
             var ballot = new Ballot
