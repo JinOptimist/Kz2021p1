@@ -11,9 +11,12 @@ namespace WebApplication1.Models
 
         public long Id { get; set; }
 
-        [Required] public string Name { get; set; }
+        [Required] 
+        public string Name { get; set; }
 
-        [Required] public string Description { get; set; }
+        [Required] 
+        
+        public string Description { get; set; }
 
         public DateTime Start { get; set; }
         public DateTime End { get; set; }

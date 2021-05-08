@@ -14,7 +14,6 @@ namespace WebApplication1.EfStuff.Model
 
         public Idea Idea { get; set; }
 
-
         public virtual Citizen Citizen { get; set; }
 
         public virtual Election Election { get; set; }

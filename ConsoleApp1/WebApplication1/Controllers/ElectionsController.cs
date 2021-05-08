@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Archive()
+        public IActionResult ElectionArchive()
         {
             var archivedElections = _electionPresentation.GetArchivedElections();
 
@@ -36,10 +36,10 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("Elections/Details/{id}")]
-        public IActionResult Details(long id)
+        [Route("Elections/ElectionDetails/{id}")]
+        public IActionResult ElectionDetails(long id)
         {
-            var viewModel = _electionPresentation.Details(id);
+            var viewModel = _electionPresentation.ElectionDetails(id);
 
             return View(viewModel);
         }
@@ -58,7 +58,7 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(newCandidate);
 
-            var isRegistered = _electionPresentation.GetRegisteredCandidate(id, newCandidate);
+            var isRegistered = _electionPresentation.GetRegisteredCandidate(id);
 
             if (isRegistered)
             {
@@ -69,7 +69,7 @@ namespace WebApplication1.Controllers
             
             _electionPresentation.RegisterCandidate(id, newCandidate);
             
-            return RedirectToAction("Details", "Elections", new {id});
+            return RedirectToAction("ElectionDetails", "Elections", new {id});
         }
 
 
@@ -112,7 +112,7 @@ namespace WebApplication1.Controllers
         {
             _electionPresentation.EditElection(viewModel);
             
-            return RedirectToAction("Details", "Elections");
+            return RedirectToAction("ElectionDetails", "Elections");
         }
 
         [HttpGet]

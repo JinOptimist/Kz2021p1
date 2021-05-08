@@ -9,10 +9,8 @@ namespace WebApplication1.EfStuff.Model
 
         public virtual Ballot Ballot { get; set; }
         public virtual ICollection<Ballot> Ballots { get; set; }
-
         public string Description { get; set; }
         public DateTime Start { get; set; }
-
         public DateTime End { get; set; }
 
         public virtual Candidate Candidate { get; set; }

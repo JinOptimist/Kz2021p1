@@ -9,11 +9,15 @@ namespace WebApplication1.Models
     {
         public long Id { get; set; }
 
-        [Required] public string Name { get; set; }
+        [Required] 
+        public string Name { get; set; }
 
-        [Range(18, 120)] [Required] public int Age { get; set; }
+        [Required]
+        [Range(18, 120)]  
+        public int Age { get; set; }
 
-        [Required] public string Job { get; set; }
+        [Required] 
+        public string Job { get; set; }
 
         public string Slogan { get; set; }
 
