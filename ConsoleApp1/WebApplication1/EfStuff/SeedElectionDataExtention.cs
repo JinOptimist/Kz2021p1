@@ -199,6 +199,20 @@ namespace WebApplication1.EfStuff
             sheriffElection.End = sheriffElection.Start.AddHours(24);
 
             electionRepository.Save(sheriffElection);
+            
+            var arthurCandidate2 = new Candidate
+            {
+                Citizen = arthur,
+                Name = arthur.Name,
+                Age = arthur.Age,
+                Idea = Idea.Anarchist,
+                City = City.Almaty,
+                Slogan = "Lorem ipsum dolor sit",
+                Job = "Предприниматель",
+                Election = sheriffElection
+            };
+
+            candidateRepository.Save(arthurCandidate2);
 
 
             var ballot1 = new Ballot
@@ -262,6 +276,16 @@ namespace WebApplication1.EfStuff
             };
 
             ballotRepository.Save(ballot6);
+            
+            var ballotArthur = new Ballot
+            {
+                Citizen = arthur,
+                Election = sheriffElection,
+                VoteTime = DateTime.Now,
+                Candidate = arthurCandidate2
+            };
+
+            ballotRepository.Save(ballotArthur);
         }
     }
 }

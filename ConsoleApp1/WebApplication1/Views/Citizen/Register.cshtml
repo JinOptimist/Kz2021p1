@@ -1,19 +1,55 @@
 ﻿@model LoginViewModel
+<style>
+    a {
+    text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+</style>
+<div class="container align-content-center">
+    <div class="row justify-content-center mt-5">
+        <div class="col-sm-4 mt-2">
+            <h4 class="text-info text-center mt-5">
+               <i class="fas fa-lock"></i>
+            </h4>
+            <h4 class="text-info text-center">Регистрация</h4>
 
-<h1>
-    Register
-</h1>
-<form action="/Citizen/Register" method="post">
-    <div>
-        Name: @Html.TextBoxFor(x => x.Name)
-        @Html.ValidationMessageFor(x => x.Name)
+            <form action="/Citizen/Register" method="post">
+
+                <div class="form-group mb-4">
+
+                    <label for="email">Имя</label>
+
+                    @Html.TextBoxFor(x => x.Name, new
+                    {
+                        @class = "form-control",
+                        @placeholder = "Имя пользователя",
+                        @required = "autofocus"
+
+                    })
+                    <small>
+                        @Html.ValidationMessageFor(x => x.Name, "", new {@class = "help-block form-text text-muted"})
+
+                    </small>
+                </div>
+                <div class="form-group mb-4 ">
+                    <label for="password">Пароль</label>
+                    @Html.TextBoxFor(x => x.Password, new
+                    {
+                        @class = "form-control",
+                        @placeholder = "Пароль"
+                    })
+                    <small>
+                        @Html.ValidationMessageFor(x => x.Name, "", new {@class = "help-block form-text text-muted"})
+                    </small>
+                </div>
+                <div class="mb-4">
+                    <a class="register-link" href="@Url.Action("Login", "Citizen")">Есть регистрация?</a>
+                </div>
+                <button class="btn btn-primary btn-block" value="Register" type="submit">Зарегистрировать</button>
+            </form>
+        </div>
     </div>
-    <div>
-        Password:
-        @Html.TextBoxFor(x => x.Password)
-        @Html.ValidationMessageFor(x => x.Password)
-    </div>
-    <div>
-        <input type="submit" value="Register"/>
-    </div>
-</form>
+</div>
