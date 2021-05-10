@@ -95,7 +95,7 @@
                     <tr class="user">
 
                         <td>
-                            @Html.ActionLink(@item.IIN, "StudentFullInfo", new { studentId = item.Id })
+                            @Html.ActionLink(@item.Iin, "StudentFullInfo", new { studentId = item.Id })
                         </td>
                         <td>@item.Surname @item.Name @item.Patronymic </td>
                         @if (item.CourseYear == 0)
@@ -109,7 +109,7 @@
                         <td> @item.UniversityId </td>
                         @if (item.CourseYear > 0)
                         {
-                            @if (item.OnGrant == false)
+                            @if (item.IsGrant == false)
                             {
                                 <td>
                                     <input class="btn btn-light grant" data-name="@item.Id" type="button" value="Выдать грант" />
@@ -128,11 +128,11 @@
                         }
 
                         <td>
-                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditStudentData", "Person", new { IDStudent = item.Id })</button>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditStudentData", "Person", new { studentId = item.Id })</button>
                         </td>
 
                         <td>
-                            <input class="btn btn-light deleteStudent" data-name="@item.IIN" type="button" value="Delete" />
+                            <input class="btn btn-light deleteStudent" data-name="@item.Iin" type="button" value="Delete" />
                         </td>
 
                     </tr>

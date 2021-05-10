@@ -10,13 +10,13 @@
                 <div>
                     @Html.HiddenFor(model => model.Id)
                 </div>
-                <img src="@Model.Avatar" class="card-img-top">
+                <img src="@Model.AvatarUrl" class="card-img-top">
                 <div>
                     Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />                   
                 </div>
                 <div>
-                    IIN: @Html.TextBoxFor(x => x.IIN, new { @Value = Model.IIN, @readonly = true, Class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.IIN)
+                    IIN: @Html.TextBoxFor(x => x.Iin, new { @Value = Model.Iin, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Iin)
                 </div>
                 <div>
                     Surname: @Html.TextBoxFor(x => x.Surname, new { @Value = Model.Surname, Class = "form-control" })
@@ -43,8 +43,8 @@
                         </div>
                         <div class="col-sm-4">
                             On Grant:
-                            <select asp-for="OnGrant" class="form-control">
-                                <option selected>@Model.OnGrant</option>
+                            <select asp-for="IsGrant" class="form-control">
+                                <option selected>@Model.IsGrant</option>
                                 <option>true</option>
                                 <option>false</option>
                             </select>

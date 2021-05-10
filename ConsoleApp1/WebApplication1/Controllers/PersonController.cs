@@ -70,7 +70,7 @@ namespace WebApplication1.Controllers
         {
 
             var student = _studentPresentation.GetStudentById(studentId);
-            if (student.OnGrant == true)
+            if (student.IsGrant == true)
             {
                 _studentPresentation.GetStudentGrantIndividual(student.Id, false);
                 string message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
@@ -95,9 +95,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditStudentData(long IDStudent)
+        public IActionResult EditStudentData(long studentId)
         {
-            var student = _studentPresentation.GetStudentById(IDStudent);
+            var student = _studentPresentation.GetStudentById(studentId);
 
             var allFaculties = _studentPresentation.GetAllFaculties();
             ViewBag.Faculties = new SelectList(allFaculties);
@@ -125,7 +125,7 @@ namespace WebApplication1.Controllers
                 {
                     await studentViewModel.AvatarFile.CopyToAsync(fileStream);
                 }
-                studentViewModel.Avatar = $"/Image/Avatars/{fileName}";
+                studentViewModel.AvatarUrl = $"/Image/Avatars/{fileName}";
             }
             _studentPresentation.GetAddNewOrEditStudentAsync(studentViewModel);
             return RedirectToAction("StudentList");
@@ -165,9 +165,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditPupilData(long IDPupil)
+        public IActionResult EditPupilData(long pupilId)
         {
-            var pupil = _pupilPresentation.GetPupilById(IDPupil);
+            var pupil = _pupilPresentation.GetPupilById(pupilId);
 
             ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
             return View(pupil);
@@ -191,7 +191,7 @@ namespace WebApplication1.Controllers
                 {
                     await pupilViewModel.AvatarFile.CopyToAsync(fileStream);
                 }
-                pupilViewModel.Avatar = $"/Image/Avatars/{fileName}";
+                pupilViewModel.AvatarUrl = $"/Image/Avatars/{fileName}";
             }
 
             _pupilPresentation.GetAddNewOrEditPupil(pupilViewModel);

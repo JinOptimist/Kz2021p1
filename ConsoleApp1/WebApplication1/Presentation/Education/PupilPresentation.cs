@@ -17,16 +17,19 @@ namespace WebApplication1.Presentation
         private IStudentRepository _studentRepository;
         private IStudentPresentation _studentPresentation;
         private ISchoolRepository _schoolRepository;
+        private ICertificateRepository _certificateRepository;
         private IMapper _mapper;
 
-        public PupilPresentation(IPupilRepository pupilRepository, IStudentRepository studentRepository, 
-            ISchoolRepository schoolRepository, IMapper mapper, IStudentPresentation studentPresentation)
+        public PupilPresentation(IPupilRepository pupilRepository, IStudentRepository studentRepository,
+            ISchoolRepository schoolRepository, IMapper mapper, IStudentPresentation studentPresentation,
+            ICertificateRepository certificateRepository)
         {
             _pupilRepository = pupilRepository;
             _studentRepository = studentRepository;
             _schoolRepository = schoolRepository;
             _mapper = mapper;
             _studentPresentation = studentPresentation;
+            _certificateRepository = certificateRepository;
         }
 
         public PagingList<PupilViewModel> GetPupilList(int page)
@@ -46,7 +49,7 @@ namespace WebApplication1.Presentation
             {
                 if (searchBy == "iin")
                 {
-                    query = query.Where(x => x.IIN.Equals(searchPupil));
+                    query = query.Where(x => x.Iin.Equals(searchPupil));
                 }
                 else if (searchBy == "name")
                 {
@@ -94,20 +97,20 @@ namespace WebApplication1.Presentation
             var allFaculties = _studentPresentation.GetAllFaculties();
             Random rand = new Random();
 
-            int randomForFacultyHashCode = rand.Next(0, allFaculties.Count());
+            int randomForFacultyHashCode = rand.Next(1, allFaculties.Count());
             int index = rand.Next(0, universityIds.Count());
 
             var pupils = _pupilRepository.GetAll();
             foreach (var pupil in pupils)
             {
-                if (pupil.ENT != null)
+                /*if (pupil.ENT != null)
                 {
                     StudentViewModel studentVIewModel = new StudentViewModel();
-                    studentVIewModel.IIN = pupil.IIN;
+                    studentVIewModel.Iin = pupil.Iin;
                     studentVIewModel.Name = pupil.Name;
                     studentVIewModel.Surname = pupil.Surname;
                     studentVIewModel.Patronymic = pupil.Patronymic;
-                    studentVIewModel.Avatar = pupil.Avatar;
+                    studentVIewModel.AvatarUrl = pupil.AvatarUrl;
                     studentVIewModel.Birthday = pupil.Birthday;
                     studentVIewModel.Email = pupil.Email;
                     studentVIewModel.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
@@ -116,10 +119,11 @@ namespace WebApplication1.Presentation
                     studentVIewModel.EnteredYear = DateTime.Now;
                     studentVIewModel.GraduatedYear = null;
                     studentVIewModel.UniversityId = universityIds.ElementAt(index); // Random()
+                    //studentVIewModel.Certificates.Add(pupil.Certificate); //map
 
                     if (pupil.ENT >= minValueForGrant)
                     {
-                        studentVIewModel.OnGrant = true;
+                        studentVIewModel.IsGrant = true;
                         var student = _mapper.Map<Student>(studentVIewModel);
                         _studentRepository.Save(student);
 
@@ -127,8 +131,42 @@ namespace WebApplication1.Presentation
                     }
                     else
                     {
-                        studentVIewModel.OnGrant = false;
+                        studentVIewModel.IsGrant = false;
                         var student = _mapper.Map<Student>(studentVIewModel);
+                        _studentRepository.Save(student);
+
+                        _pupilRepository.Remove(pupil);
+                    }
+                }*/
+
+                if (pupil.ENT != null)
+                {
+                    Student student = new Student();
+                    student.Iin = pupil.Iin;
+                    student.Name = pupil.Name;
+                    student.Surname = pupil.Surname;
+                    student.Patronymic = pupil.Patronymic;
+                    student.AvatarUrl = pupil.AvatarUrl;
+                    student.Birthday = pupil.Birthday;
+                    student.Email = pupil.Email;
+                    student.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
+                    student.CourseYear = 1;
+                    student.Gpa = 2.67;
+                    student.EnteredYear = DateTime.Now;
+                    student.GraduatedYear = null;
+                    student.UniversityId = universityIds.ElementAt(index);
+                    student.Certificates.Add(pupil.Certificate);
+
+                    if (pupil.ENT >= minValueForGrant)
+                    {
+                        student.IsGrant = true;                        
+                        _studentRepository.Save(student);
+
+                        _pupilRepository.Remove(pupil);
+                    }
+                    else
+                    {
+                        student.IsGrant = false;
                         _studentRepository.Save(student);
 
                         _pupilRepository.Remove(pupil);
@@ -136,10 +174,10 @@ namespace WebApplication1.Presentation
                 }
             }
         }
-               
+
         public bool Remove(string iin)
         {
-            var pupil = _pupilRepository.GetPupilByIIN(iin);
+            var pupil = _pupilRepository.GetPupilByIiN(iin);
             if (pupil == null)
             {
                 return false;
@@ -148,7 +186,7 @@ namespace WebApplication1.Presentation
             _pupilRepository.Remove(pupil);
 
             return true;
-        }       
+        }
 
         public List<School> GetSchoolList()
         {
@@ -187,7 +225,7 @@ namespace WebApplication1.Presentation
                     pupil.ENT = rand.Next(50, 140);
                     pupil.ClassYear = null;
                     pupil.GraduatedYear = DateTime.Now;
-                    // Certificate
+                    pupil.Certificate = _certificateRepository.GetCertificateByType("Middle");
                 }
                 _pupilRepository.Save(pupil);
             }

@@ -71,7 +71,7 @@
                 {
                     <tr class="user">
                         <td>
-                            @Html.ActionLink(@item.IIN, "PupilFullInfo", new { pupilId = item.Id })
+                            @Html.ActionLink(@item.Iin, "PupilFullInfo", new { pupilId = item.Id })
                         </td>
                         <td> @item.Surname @item.Name @item.Patronymic </td>
                         @if (item.ClassYear == 0)
@@ -84,11 +84,11 @@
                         }
                         <td> @item.SchoolId</td>
                         <td>
-                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditPupilData", "Person", new { IDPupil = item.Id })</button>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditPupilData", "Person", new { pupilId = item.Id })</button>
                         </td>
 
                         <td>
-                            <input class="btn btn-light deletePupil" data-name="@item.IIN" type="button" value="Delete" />
+                            <input class="btn btn-light deletePupil" data-name="@item.Iin" type="button" value="Delete" />
                         </td>
                     </tr>
                 }

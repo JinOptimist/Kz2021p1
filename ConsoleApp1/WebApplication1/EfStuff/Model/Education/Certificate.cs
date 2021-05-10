@@ -11,6 +11,9 @@ namespace WebApplication1.EfStuff.Model
         [Required]
         [MaxLength(50)]
         public string Type { get; set; }
+
+        [MaxLength(30)]
+        public string CertificateImgUrl { get; set; }
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Pupil> Pupils { get; set; }
     }

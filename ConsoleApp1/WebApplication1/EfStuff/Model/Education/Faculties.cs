@@ -7,20 +7,20 @@ namespace WebApplication1.EfStuff.Model.Education
 {
     public enum Faculties
     {
-        BIOLOGY_AND_BIOTECHNOLOGY,
-        ORIENTAL_STUDIES,
-        INTERNATIONAL_RELATIONS_DEPARTMENT,
-        PHYSICS_AND_TECHNOLOGY,
-        HIGH_SCHOOL_OF_ECONOMICS_AND_BUSINESS,
-        GEOGRAPHY_AND_ENVIRONMENTAL_SCIENCES,
-        PHILOLOGY_AND_WORLD_LANGUAGES,
-        LAW,
-        JOURNALISM_DEPARTMENT,
-        PHILOSOPHY_AND_POLITICAL_SCIENCE,
-        MEDICINE_AND_HEALTH_CARE,
-        MECHANICAL_MATHEMATICS,
-        HISTORY_DEPARTMENT,
-        CHEMISTRY_AND_CHEMICAL_TECHNOLOGY,
-        INFORMATION_TECHNOLOGY
+        Biology_And_Biotechnology = 1,
+        Oriental_Studies = 2,
+        International_Relations_Department = 3,
+        Physics_And_Technology = 4,
+        High_School_Of_Economics_And_Business = 5,
+        Geography_And_Environmental_Sciences = 6,
+        Philology_And_World_Languages = 7,
+        Law = 8,
+        Journalism_Department = 9,
+        Philosophy_And_Political_Science = 10,
+        Medicine_And_Health_Care = 11,
+        Mechanical_Mathematics = 12,
+        History_Department = 13,
+        Chemistry_And_Chemical_Technology = 14,
+        Information_Technology = 15
     }
 }

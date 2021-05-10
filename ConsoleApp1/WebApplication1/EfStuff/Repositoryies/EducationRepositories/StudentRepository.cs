@@ -11,15 +11,15 @@ namespace WebApplication1.EfStuff.Repositoryies
     {
         public StudentRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
 
-        public Student GetStudentByIIN(string studentIIN)
+        public Student GetStudentByIiN(string studentIin)
         {
-            return _kzDbContext.Students.SingleOrDefault(x => x.IIN.Equals(studentIIN));
+            return _kzDbContext.Students.SingleOrDefault(x => x.Iin.Equals(studentIin));
         }
 
-        public void UpdateStudentGrantData(long studentId, bool onGrant)
+        public void UpdateStudentGrantData(long studentId, bool isGrant)
         {
             Student student = _kzDbContext.Students.SingleOrDefault(x => x.Id == studentId);
-            student.OnGrant = onGrant;
+            student.IsGrant = isGrant;
             _kzDbContext.Students.Update(student);
             _kzDbContext.SaveChanges();
         }

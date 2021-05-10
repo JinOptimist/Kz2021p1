@@ -10,13 +10,12 @@ namespace WebApplication1.EfStuff.Model
     {
         [Required]
         [MaxLength(12)]
-        public string IIN { get; set; }
+        public string Iin { get; set; }
 
         [Required]
         [MaxLength(30)]
         public string Name { get; set; }
-
-        [Required]
+               
         [MaxLength(30)]
         public string Surname { get; set; }
 
@@ -24,7 +23,7 @@ namespace WebApplication1.EfStuff.Model
         public string Patronymic { get; set; }
 
         [MaxLength(30)]
-        public string Avatar { get; set; }
+        public string AvatarUrl { get; set; }
 
         public string Birthday { get; set; }
 

@@ -13,7 +13,7 @@ namespace WebApplication1.Presentation
         PagingList<StudentViewModel> GetStudentListAndSearch(string searchBy, string searchStudent, int page = 1);
         StudentViewModel GetStudentById(long studentId);
         void GetStudentGrantByGpa(string select, double minGpaValue);
-        void GetStudentGrantIndividual(long id, bool onGrant);     
+        void GetStudentGrantIndividual(long id, bool isGrant);
         void GetAddNewOrEditStudentAsync(StudentViewModel studentViewModel);
         bool Remove(string iin);
         List<Faculties> GetAllFaculties();

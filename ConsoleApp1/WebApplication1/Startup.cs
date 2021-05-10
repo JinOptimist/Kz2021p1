@@ -24,6 +24,7 @@ using WebApplication1.Profiles;
 using WebApplication1.Presentation;
 using WebApplication1.Presentation.Airport;
 using WebApplication1.Profiles.Airport;
+using WebApplication1.Models.Education;
 
 namespace WebApplication1
 {
@@ -121,6 +122,7 @@ namespace WebApplication1
             MapBothSide<Pupil, PupilViewModel>(configurationExp);
             MapBothSide<University, UniversityViewModel>(configurationExp);
             MapBothSide<School, SchoolViewModel>(configurationExp);
+            MapBothSide<Certificate, CertificateViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

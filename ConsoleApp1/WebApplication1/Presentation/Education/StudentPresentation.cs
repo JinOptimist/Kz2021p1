@@ -18,14 +18,17 @@ namespace WebApplication1.Presentation
     {
         private IStudentRepository _studentRepository;
         private IUniversityRepository _universityRepository;
+        private ICertificateRepository _certificateRepository;
         private IMapper _mapper;
 
-        public StudentPresentation(IStudentRepository studentRepository, 
-            IUniversityRepository universityRepository, IMapper mapper)
+        public StudentPresentation(IStudentRepository studentRepository,
+            IUniversityRepository universityRepository, IMapper mapper,
+            ICertificateRepository certificateRepository)
         {
             _studentRepository = studentRepository;
             _universityRepository = universityRepository;
             _mapper = mapper;
+            _certificateRepository = certificateRepository;
         }
 
         public PagingList<StudentViewModel> GetStudentList(int page)
@@ -47,7 +50,7 @@ namespace WebApplication1.Presentation
             {
                 if (searchBy == "iin")
                 {
-                    query = query.Where(x => x.IIN.Equals(searchStudent));
+                    query = query.Where(x => x.Iin.Equals(searchStudent));
                 }
                 if (searchBy == "name")
                 {
@@ -91,7 +94,7 @@ namespace WebApplication1.Presentation
             if (select == "issueGrant")
             {
                 var studentsNoGrant = _studentRepository.GetAll()
-                     .Where(x => x.OnGrant == false)
+                     .Where(x => x.IsGrant == false)
                      .Where(c => c.CourseYear > 1)
                      .Where(student => student.Gpa >= minGpaValue)
                      .ToList();
@@ -102,7 +105,7 @@ namespace WebApplication1.Presentation
             }
             else
             {
-                var studentsYesGrant = _studentRepository.GetAll().Where(x => x.OnGrant == true).Where(student => student.Gpa <= minGpaValue).ToList();
+                var studentsYesGrant = _studentRepository.GetAll().Where(x => x.IsGrant == true).Where(student => student.Gpa <= minGpaValue).ToList();
                 foreach (var student in studentsYesGrant)
                 {
                     _studentRepository.UpdateStudentGrantData(student.Id, false);
@@ -110,9 +113,9 @@ namespace WebApplication1.Presentation
             }
         }
 
-        public void GetStudentGrantIndividual(long id, bool onGrant)
+        public void GetStudentGrantIndividual(long id, bool isGrant)
         {
-            _studentRepository.UpdateStudentGrantData(id, onGrant);
+            _studentRepository.UpdateStudentGrantData(id, isGrant);
         }
 
         public void GetAddNewOrEditStudentAsync(StudentViewModel studentViewModel)
@@ -123,7 +126,7 @@ namespace WebApplication1.Presentation
 
         public bool Remove(string iin)
         {
-            var student = _studentRepository.GetStudentByIIN(iin);
+            var student = _studentRepository.GetStudentByIiN(iin);
             if (student == null)
             {
                 return false;
@@ -189,7 +192,7 @@ namespace WebApplication1.Presentation
                 {
                     student.CourseYear = null;
                     student.GraduatedYear = DateTime.Now;
-                    // Certificate
+                    student.Certificates.Add(_certificateRepository.GetCertificateByType("High"));
                     fourthCourseStudentsCount++;
                 }
                 _studentRepository.Save(student);

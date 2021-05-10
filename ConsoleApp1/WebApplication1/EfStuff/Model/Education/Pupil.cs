@@ -12,8 +12,8 @@ namespace WebApplication1.EfStuff.Model
         public double AverageMark { get; set; }
         public DateTime? GraduatedYear { get; set; }
         public int? ENT { get; set; }
-        public long SchoolId { get; set; } // FK
-        public virtual School School { get; set; }  // навигационное свойство
-        public virtual ICollection<Certificate> Certificates { get; set; }
+        public long SchoolId { get; set; }
+        public virtual School School { get; set; }
+        public virtual Certificate Certificate { get; set; }
     }
 }

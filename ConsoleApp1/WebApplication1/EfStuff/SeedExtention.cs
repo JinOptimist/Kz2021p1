@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
@@ -99,8 +100,8 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultUniversities(IServiceProvider serviceProvider)
         {
             var universityRepository = serviceProvider.GetService<IUniversityRepository>();
-            var universities = universityRepository.GetAll();
-            if (universities == null)
+            var universities = universityRepository.GetAll().Any();
+            if (!universities)
             {
                 University university1 = new University()
                 {
@@ -145,8 +146,8 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultSchools(IServiceProvider serviceProvider)
         {
             var schoolRepository = serviceProvider.GetService<ISchoolRepository>();
-            var schools = schoolRepository.GetAll();
-            if (schools == null)
+            var schools = schoolRepository.GetAll().Any();
+            if (!schools)
             {
                 School school1 = new School()
                 {
@@ -189,7 +190,7 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultStudents(IServiceProvider serviceProvider)
         {
             var studentRepository = serviceProvider.GetService<IStudentRepository>();
-            var students = studentRepository.GetAll();
+            var students = studentRepository.GetAll().Any();
 
             List<string> studentIins = new List<string>() { "980704401339", "971104401334", "960915401335", "990521401336", "001210401337", "010229401338" };
             List<string> studentNames = new List<string>() { "Samat", "Asem", "Arai", "Sunkar", "Madina", "Askar" };
@@ -204,23 +205,23 @@ namespace WebApplication1.EfStuff
             List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };            
             List<long> studentUniverIds = new List<long>() { 1, 2, 2, 1, 2, 1 };
 
-            if (students == null)
+            if (!students)
             {
                 for (int i = 0; i < studentIins.Count; i++)
                 {
                     Student student = new Student()
                     {
-                        IIN = studentIins[i],
+                        Iin = studentIins[i],
                         Name = studentNames[i],
                         Surname = studentSurnames[i],
                         Patronymic = studentPatronymics[i],
-                        Avatar = null,
+                        AvatarUrl = null,
                         Birthday = studentBirthdays[i],
                         Email = studentEmails[i],
                         Faculty = studentFaculties[i],
                         CourseYear = studentCourseYears[i],
                         Gpa = studentGpas[i],
-                        OnGrant = studentOnGrant[i],
+                        IsGrant = studentOnGrant[i],
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], "d", CultureInfo.InvariantCulture),
                         GraduatedYear = null,
                         UniversityId = studentUniverIds[i]
@@ -234,7 +235,7 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultPupils(IServiceProvider serviceProvider)
         {
             var pupilRepository = serviceProvider.GetService<IPupilRepository>();
-            var pupils = pupilRepository.GetAll();
+            var pupils = pupilRepository.GetAll().Any();
 
             List<string> pupilIins = new List<string>() { "061231401442", "050131401441", "041005401442", "070915401443", "051105401442", "051104401442" };
             List<string> pupilNames = new List<string>() { "Aigerim", "Aliya", "Damir", "Aybek", "Kaisar", "Kairat" };
@@ -246,17 +247,17 @@ namespace WebApplication1.EfStuff
             List<int> pupilAverageMarks = new List<int>() { 12, 10, 9, 11, 9, 9 };
             List<long> pupilSchoolIds = new List<long>() { 1, 2, 3, 1, 2, 3 };
 
-            if (pupils == null)
+            if (!pupils)
             {
                 for (int i = 0; i < pupilIins.Count; i++)
                 {
                     Pupil pupil = new Pupil()
                     {
-                        IIN = pupilIins[i],
+                        Iin = pupilIins[i],
                         Name = pupilNames[i],
                         Surname = pupilSurnames[i],
                         Patronymic = pupilPatronymics[i],
-                        Avatar = null,
+                        AvatarUrl = null,
                         Birthday = pupilBirthdays[i],
                         Email = pupilEmails[i],
                         ClassYear = pupilClassYears[i],
