@@ -38,6 +38,34 @@ namespace WebApplication1Test.Presentation
                 userServiceMock.Object,
                 mapperMock.Object);
         }
+        
+        [Test]
+        [TestCase("888")]
+        [TestCase("12")]
+        [TestCase("1099")]
+        public void Remove_ExistElection(long id)
+        {
+            var testElection = new Election();
+            electionRepositoryMock
+                .Setup(x => x.Get(id))
+                .Returns(testElection);
+
+            var result = electionPresentation.DeleteElection(id);
+
+            electionRepositoryMock
+                .Verify(x => x.Remove(testElection), Times.Once);
+            Assert.IsTrue(result);
+        }
+        
+        [Test]
+        public void Remove_UnexistElection()
+        {
+            var result = electionPresentation.DeleteElection(123);
+
+            electionRepositoryMock
+                .Verify(x => x.Remove(It.IsAny<Election>()), Times.Never);
+            Assert.IsFalse(result);
+        }
 
         [Test]
         [TestCase(1123)]
