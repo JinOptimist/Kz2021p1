@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Controllers.CustomFilterAttributes;
 using WebApplication1.Models;
 using WebApplication1.Presentation;
 
 namespace WebApplication1.Controllers
 {
+    [Localized]
     public class ElectionsController : Controller
     {
         private readonly ElectionPresentation _electionPresentation;

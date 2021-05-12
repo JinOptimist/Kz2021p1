@@ -129,4 +129,67 @@
   <data name="FullProfile_Title" xml:space="preserve">
     <value>Полный профиль</value>
   </data>
+  <data name="CreateElection_Title" xml:space="preserve">
+    <value> Создать выборы</value>
+  </data>
+  <data name="CreateElection_Name" xml:space="preserve">
+    <value>Название выборов</value>
+  </data>
+  <data name="CreateElection_Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="CreateElection_Start" xml:space="preserve">
+    <value>Начало выборов</value>
+  </data>
+  <data name="CreateElection_End" xml:space="preserve">
+    <value>Окончание выборов</value>
+  </data>
+  <data name="CreateElection_CreateBtn" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="CreateElection_CancelBtn" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="ElectionsIndex_Title" xml:space="preserve">
+    <value>Избирательный центр</value>
+  </data>
+  <data name="ElectionsIndex_GoBackBtn" xml:space="preserve">
+    <value>Вернуться на главную</value>
+  </data>
+  <data name="ElectionsIndex_ViewArchive" xml:space="preserve">
+    <value>Посмотреть архивные выборы</value>
+  </data>
+  <data name="ElectionsIndex_Create" xml:space="preserve">
+    <value>Создать новые выборы</value>
+  </data>
+  <data name="ElectionsIndex_ActualList" xml:space="preserve">
+    <value>Список актуальных выборов</value>
+  </data>
+  <data name="ElectionsIndex_Id" xml:space="preserve">
+    <value>Номер выборов</value>
+  </data>
+  <data name="ElectionsIndex_Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="ElectionsIndex_Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="ElectionsIndex_Start" xml:space="preserve">
+    <value>Время начала</value>
+  </data>
+  <data name="ElectionsIndex_End" xml:space="preserve">
+    <value>Время окончания</value>
+  </data>
+  <data name="ElectionsIndex_NoActual" xml:space="preserve">
+    <value>Нет зарегистрированных выборов</value>
+  </data>
+  <data name="ElectionsIndex_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ElectionsIndex_View" xml:space="preserve">
+    <value>Посмотреть</value>
+  </data>
+  <data name="ElectionsIndex_Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
 </root>

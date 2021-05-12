@@ -1,4 +1,5 @@
-﻿@model ElectionViewModel
+﻿@using WebApplication1.Localization
+@model ElectionViewModel
 
 @section Scripts{
     <script src="~/js/government/election.js"></script>
@@ -8,41 +9,41 @@
     <link rel="stylesheet" href="~/css/government/styles.css"/>
 }
 
-<div class=" mb-3 p-2">
+<div class="mb-3 pt-2 pb-2">
     <h4 class="title">
-        Создать выборы
+        @Resource.CreateElection_Title
     </h4>
 </div>
 
 <form asp-action="CreateElection" method="post">
 
     <div class="form-group">
-        <label asp-for="Name">Название выборов</label>
+        <label asp-for="Name">@Resource.CreateElection_Name</label>
         <input asp-for="Name" class="form-control"/>
         <span asp-validation-for="Name" class="text-danger"></span >
     </div>
     <div class="form-group">
-        <label asp-for="Description">Описание</label>
+        <label asp-for="Description">@Resource.CreateElection_Description</label>
         <input asp-for="Description" class="form-control"/>
         <span asp-validation-for="Description" class="text-danger"></span >
     </div>
     <div class="form-group">
-        <label asp-for="Start">Начало выборов</label>
+        <label asp-for="Start">@Resource.CreateElection_Start</label>
         <input asp-for="Start" class="form-control"/>
         <span asp-validation-for="Start" class="text-danger"></span >
 
     </div>
     <div class="form-group">
-        <label asp-for="End">Окончание выборов</label>
+        <label asp-for="End">@Resource.CreateElection_End</label>
         <input asp-for="End" class="form-control"/>
     </div>
 
 
     <div class="mt-3">
         <button type="submit" id="createBtn" class="btn btn-primary">
-            Создать
+        @Resource.CreateElection_CreateBtn
         </button>
-        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">@Resource.CreateElection_CancelBtn</a>
     </div>
 
 </form>
