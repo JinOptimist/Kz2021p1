@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.EfStuff.Model.Firemen;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff
 {
@@ -34,7 +35,7 @@ namespace WebApplication1.EfStuff
 
         private static void CreateDefaultCitizen(IServiceProvider serviceProvider)
         {
-            var citizenRepository = serviceProvider.GetService<CitizenRepository>();
+            var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
 
             var admin = citizenRepository.GetByName(AdminName);
             if (admin == null)

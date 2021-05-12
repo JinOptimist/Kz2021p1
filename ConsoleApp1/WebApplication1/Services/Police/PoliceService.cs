@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Utils.Police;
 
 namespace WebApplication1.Services.Police
@@ -12,17 +13,17 @@ namespace WebApplication1.Services.Police
 	{
 		// TODO: Implement with contracts
 		private readonly PoliceRepository _policeRepo;
-		private readonly CitizenRepository _citizenRepo;
+		private readonly ICitizenRepository _citizenRepo;
 		private readonly PoliceAcademyRepository _policeAcademyRepo;
-		private readonly UserService _userService;
+		private readonly IUserService _userService;
 		private readonly ViolationsRepository _violationsRepository;
 		private readonly PoliceCallRepo _policeCallRepo;
 
 		public PoliceService(
 			PoliceRepository policeRepo,
-			CitizenRepository citizenRepo,
+			ICitizenRepository citizenRepo,
 			PoliceAcademyRepository policeAcademyRepo,
-			UserService userService,
+			IUserService userService,
 			ViolationsRepository violationsRepository,
 			PoliceCallRepo policeCallRepo
 			)

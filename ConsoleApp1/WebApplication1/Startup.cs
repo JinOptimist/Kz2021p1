@@ -25,13 +25,14 @@ using WebApplication1.Profiles;
 using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.Models.FiremanModels;
 using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1
 {
-    public class Startup
+	public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -46,23 +47,26 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-            services.AddOpenApiDocument();
-            services.AddRazorPages()
-                 .AddRazorRuntimeCompilation();
+			services.AddOpenApiDocument();
+			services.AddRazorPages()
+				 .AddRazorRuntimeCompilation();
 
-            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
 
-            services.AddScoped<UserService>(x =>
+            services.AddScoped<IUserService>(x =>
                 new UserService(
-                    x.GetService<CitizenRepository>(),
+                    x.GetService<ICitizenRepository>(),
                     x.GetService<IHttpContextAccessor>())
                 );
 
             services.AddScoped<CitizenPresentation>(x =>
-                new CitizenPresentation(x.GetService<CitizenRepository>()));
+                new CitizenPresentation(
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);

@@ -14,10 +14,10 @@ namespace WebApplication1.Controllers
     public class AdressController : Controller
     {
         private AdressRepository AdressRepository { get; set; }
-        private UserService UserService { get; set; }
+        private IUserService UserService { get; set; }
         private IMapper Mapper { get; set; }
 
-        public AdressController(AdressRepository adressRepository, IMapper mapper, UserService userService)
+        public AdressController(AdressRepository adressRepository, IMapper mapper, IUserService userService)
         {
             AdressRepository = adressRepository;
             Mapper = mapper;
