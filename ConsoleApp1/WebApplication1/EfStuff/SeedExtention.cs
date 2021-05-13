@@ -32,8 +32,8 @@ namespace WebApplication1.EfStuff
             if (flightsRepository.GetAll().Count == 0)
             {
                 Random random = new Random();
-                FlightStatus[] incomingStatuses = new[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };
-                FlightStatus[] departingStatuses = new[] { FlightStatus.Canceled, FlightStatus.OnTime, FlightStatus.Departed, FlightStatus.Canceled };
+                FlightStatus[] incomingStatuses = new FlightStatus[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };
+                FlightStatus[] departingStatuses = new FlightStatus[] { FlightStatus.Canceled, FlightStatus.OnTime, FlightStatus.Departed, FlightStatus.Canceled };
                 string[] places = new[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
                 for (int i = 0; i < random.Next(5, 10); i++)
                 {
