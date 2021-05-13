@@ -18,7 +18,7 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
                 .Where(passenger => passenger.Flight.FlightType == FlightType.IncomingFlight)
                 .ToList();
             return incomingPassengers
-                .Where(passenger => IsValidDepartureTime(passenger.Flight.Date))
+                .Where(passenger => IsValidAddmissionTime(passenger.Flight.Date))
                 .ToList();
         }
 
