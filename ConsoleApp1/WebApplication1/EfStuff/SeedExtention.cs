@@ -267,7 +267,8 @@ namespace WebApplication1.EfStuff
                         AverageMark = pupilAverageMarks[i],
                         GraduatedYear = null,
                         ENT = null,
-                        SchoolId = pupilSchoolIds[i]
+                        SchoolId = pupilSchoolIds[i],
+                        Certificate = null
                     };
 
                     pupilRepository.Save(pupil);
