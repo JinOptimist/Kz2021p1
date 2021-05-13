@@ -35,7 +35,11 @@ namespace WebApplication1.Controllers.Airport
         {
             if (!_airpotPresentation.FlightIsValid(id)) return RedirectToAction("AvailableFlights");
             _airpotPresentation.BookTicket(id);
-            return View("./Views/Airport/BookingConfirmation.cshtml");
+            return RedirectToAction("BookingConfirmation");
+        }
+        public IActionResult BookingConfirmation()
+        {
+            return View();
         }
     }
 }
