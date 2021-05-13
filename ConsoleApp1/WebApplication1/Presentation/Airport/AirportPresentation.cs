@@ -35,8 +35,7 @@ namespace WebApplication1.Presentation.Airport
 		public List<IncomingFlightInfoViewModel> GetIndexViewModel()
 		{
 			return _flightsRepository
-				.GetAll()
-				.Where(flight => flight.FlightType == FlightType.IncomingFlight)
+				.GetAllIncomingFlights()
 				.Select(flights => _mapper.Map<IncomingFlightInfoViewModel>(flights))
 				.ToList();
 		}
