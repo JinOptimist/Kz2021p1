@@ -103,42 +103,6 @@ namespace WebApplication1.Presentation
             var pupils = _pupilRepository.GetAll();
             foreach (var pupil in pupils)
             {
-                /*if (pupil.ENT != null)
-                {
-                    StudentViewModel studentVIewModel = new StudentViewModel();
-                    studentVIewModel.Iin = pupil.Iin;
-                    studentVIewModel.Name = pupil.Name;
-                    studentVIewModel.Surname = pupil.Surname;
-                    studentVIewModel.Patronymic = pupil.Patronymic;
-                    studentVIewModel.AvatarUrl = pupil.AvatarUrl;
-                    studentVIewModel.Birthday = pupil.Birthday;
-                    studentVIewModel.Email = pupil.Email;
-                    studentVIewModel.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
-                    studentVIewModel.CourseYear = 1;
-                    studentVIewModel.Gpa = 2.67;
-                    studentVIewModel.EnteredYear = DateTime.Now;
-                    studentVIewModel.GraduatedYear = null;
-                    studentVIewModel.UniversityId = universityIds.ElementAt(index); // Random()
-                    //studentVIewModel.Certificates.Add(pupil.Certificate); //map
-
-                    if (pupil.ENT >= minValueForGrant)
-                    {
-                        studentVIewModel.IsGrant = true;
-                        var student = _mapper.Map<Student>(studentVIewModel);
-                        _studentRepository.Save(student);
-
-                        _pupilRepository.Remove(pupil);
-                    }
-                    else
-                    {
-                        studentVIewModel.IsGrant = false;
-                        var student = _mapper.Map<Student>(studentVIewModel);
-                        _studentRepository.Save(student);
-
-                        _pupilRepository.Remove(pupil);
-                    }
-                }*/
-
                 if (pupil.ENT != null)
                 {
                     Student student = new Student();
@@ -177,7 +141,7 @@ namespace WebApplication1.Presentation
 
         public bool Remove(string iin)
         {
-            var pupil = _pupilRepository.GetPupilByIiN(iin);
+            var pupil = _pupilRepository.GetPupilByIin(iin);
             if (pupil == null)
             {
                 return false;

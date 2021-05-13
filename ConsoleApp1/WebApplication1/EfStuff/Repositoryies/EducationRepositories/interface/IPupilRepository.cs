@@ -4,6 +4,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface
 {
 	public interface IPupilRepository : IBaseRepository<Pupil>
     {
-        Pupil GetPupilByIiN(string pupilIiN);
+        Pupil GetPupilByIin(string pupilIin);
     }
 }

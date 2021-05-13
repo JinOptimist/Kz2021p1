@@ -8,9 +8,9 @@ namespace WebApplication1.EfStuff.Repositoryies
     {
         public PupilRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
 
-        public Pupil GetPupilByIiN(string pupilIiN)
+        public Pupil GetPupilByIin(string pupilIin)
         {
-            return _kzDbContext.Pupils.SingleOrDefault(x => x.Iin.Equals(pupilIiN));
+            return _kzDbContext.Pupils.SingleOrDefault(x => x.Iin.Equals(pupilIin));
         }
     }
 }
