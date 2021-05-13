@@ -115,37 +115,28 @@
 
 
 
-                    <li class="nav-item dropdown">
-                        <a class="list-group-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Education
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            University
+                        <li class="nav-item dropdown">
+                           
+                            <a class="dropdown-toggle list-group-item text-dark"> Education</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="index">Main</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="UniversityList">Universities</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="EducationalInstitution" asp-action="SchoolList">Schools</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="Person" asp-action="StudentListAndSearch">Students</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="Person" asp-action="PupilListAndSearch">Pupils</a>
+                                </li>
 
-                            <li>
-                                <a class="list-group-item"
-                                   href="@Url.Action("UniversityList", "EducationalInstitution")">Universities</a>
-                            </li>
-                            School
-
-                            <li>
-                                <a class="list-group-item"
-                                   href="@Url.Action("SchoolList", "EducationalInstitution")">Schools</a>
-                            </li>
-
-                            Student
-                            <li>
-                                <a class="list-group-item"
-                                   href="@Url.Action("StudentListAndSearch", "Person")">Students</a>
-                            </li>
-
-                            Pupil
-                            <li>
-                                <a class="list-group-item"
-                                   href="@Url.Action("PupilListAndSearch", "Person")">Pupils</a>
-                            </li>
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
 
 
                     <li class="nav-item dropdown">

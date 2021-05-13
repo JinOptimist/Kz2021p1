@@ -23,7 +23,7 @@ namespace WebApplication1.Presentation.Police
 		private readonly IUserService _userService;
 		private readonly IViolationsRepository _violationsRepository;
 		private readonly IPoliceCallRepo _policeCallRepo;
-		private readonly IBlobService _blobService;
+		//private readonly IBlobService _blobService;
 		private readonly IMapper _mapper;
 		private readonly IQuestionsRepo _questionsRepo;
 		private readonly IAnswerRepo _answerRepo;
@@ -39,8 +39,8 @@ namespace WebApplication1.Presentation.Police
 			IQuestionsRepo questionsRepo,
 			IAnswerRepo answerRepo,
 			IShiftRepo shiftRepo,
-			IMapper mapper,
-			IBlobService blobService
+			IMapper mapper//,
+			//IBlobService blobService
 			)
 		{
 			_policeRepo = policeRepo;
@@ -52,7 +52,7 @@ namespace WebApplication1.Presentation.Police
 			_questionsRepo = questionsRepo;
 			_answerRepo = answerRepo;
 			_mapper = mapper;
-			_blobService = blobService;
+			//_blobService = blobService;
 			_shiftRepo = shiftRepo;
 		}
 
@@ -138,7 +138,7 @@ namespace WebApplication1.Presentation.Police
 			return _mapper.Map<List<UserViolationViewModel>>(userViolations); ;
 		}
 
-		public async Task<UserInfoViewModel> GetUserInfo(long id)
+		/*public async Task<UserInfoViewModel> GetUserInfo(long id)
 		{
 			Citizen user = _citizenRepo.GetAllAsIQueryable()
 									   .Include(p => p.House)
@@ -151,7 +151,7 @@ namespace WebApplication1.Presentation.Police
 			userInfo.Uri = (await _blobService.GetPhotoAsync(id.ToString())).AbsoluteUri;
 
 			return userInfo;
-		}
+		}*/
 
 		public List<PolicemanViewModel> GetAllPolicemen()
 		{

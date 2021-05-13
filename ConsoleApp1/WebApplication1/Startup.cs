@@ -3,6 +3,7 @@ using AutoMapper.Configuration;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,15 +18,17 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
+using WebApplication1.Models.Airport;
+using WebApplication1.Services;
+using WebApplication1.Profiles;
 using WebApplication1.Presentation;
 using WebApplication1.Presentation.Airport;
-using WebApplication1.Profiles;
 using WebApplication1.Profiles.Airport;
-using WebApplication1.Services;
+using WebApplication1.Models.Education;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -39,25 +42,25 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson();
-            services.AddSingleton(x => 
-                new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddOpenApiDocument();
-			services.AddRazorPages()
-	            .AddRazorRuntimeCompilation();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
             var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
-
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
             services.AddPoliceServices(Configuration);
 
-            services.AddScoped<IBlobService, BlobService>();
+           // services.AddScoped<IBlobService, BlobService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICitizenPresentation, CitizenPresentation>();
             services.AddScoped<IAirportPresentation, AirportPresentation>();
+
+            services.AddScoped<IPupilPresentation, PupilPresentation>();
+            services.AddScoped<IStudentPresentation, StudentPresentation>();
+            services.AddScoped<IStudentPresentation, StudentPresentation>();
 
             RegisterAutoMapper(services);
 
@@ -70,7 +73,6 @@ namespace WebApplication1
                 });
 
             services.AddHttpContextAccessor();
-            services.AddPaging();
         }
 
         private void RegisterRepositories(IServiceCollection services)
@@ -111,12 +113,16 @@ namespace WebApplication1
                 .ForMember(nameof(FiremanShowViewModel.Age),
                         opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
-            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
-
             MapBothSide<Fireman, FiremanViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+
+            MapBothSide<Student, StudentViewModel>(configurationExp);
+            MapBothSide<Pupil, PupilViewModel>(configurationExp);
+            MapBothSide<University, UniversityViewModel>(configurationExp);
+            MapBothSide<School, SchoolViewModel>(configurationExp);
+            MapBothSide<Certificate, CertificateViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

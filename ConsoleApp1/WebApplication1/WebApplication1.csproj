@@ -39,6 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="ReflectionIT.Mvc.Paging" Version="4.0.0" />
   </ItemGroup>
