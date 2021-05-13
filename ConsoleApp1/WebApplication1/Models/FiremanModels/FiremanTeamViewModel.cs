@@ -8,7 +8,7 @@ namespace WebApplication1.Models.FiremanModels
     public class FiremanTeamViewModel
     {
         public long Id { get; set; }
-        public string TeamName { get; set; }       
+        public string TeamName { get; set; }
         public long TruckId { get; set; }
         public string Shift { get; set; }
         public string TeamState { get; set; }

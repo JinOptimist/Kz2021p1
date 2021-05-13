@@ -9,6 +9,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 
 namespace WebApplication1.EfStuff
 {
@@ -51,8 +52,8 @@ namespace WebApplication1.EfStuff
         }
         private static void CreateDefaultFireAdmin(IServiceProvider serviceProvider)
         {
-            var firemanRepository = serviceProvider.GetService<FiremanRepository>();
-            var citizenRepository = serviceProvider.GetService<CitizenRepository>();
+            var firemanRepository = serviceProvider.GetService<IFiremanRepository>();
+            var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
 
             var firecitizen = citizenRepository.GetByName("FireAdmin");
             if (firecitizen == null)

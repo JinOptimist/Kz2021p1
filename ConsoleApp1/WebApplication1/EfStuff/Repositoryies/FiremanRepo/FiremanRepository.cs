@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 
 namespace WebApplication1.EfStuff.Repositoryies.FiremanRepo
 {
-    public class FiremanRepository : BaseRepository<Fireman>
+    public class FiremanRepository : BaseRepository<Fireman>, IFiremanRepository
     {
         public FiremanRepository(KzDbContext kzDbContext):base(kzDbContext)    
         {

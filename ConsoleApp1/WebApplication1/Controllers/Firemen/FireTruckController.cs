@@ -7,33 +7,25 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.Presentation.FirePresentation;
 
 namespace WebApplication1.Controllers.Firemen
 {
     public class FireTruckController : Controller
     {
-        private FireTruckRepository _fireTruckRepository { get; set; }
-        private FiremanTeamRepository _firemanTeamRepository { get; set; }
-        private IMapper _mapper { get; set; }
-        public FireTruckController(FiremanTeamRepository firemanTeamRepository, FireTruckRepository fireTruckRepository, IMapper mapper)
+        private FireTruckPresentation _fireTruckPresentation { get; set; }
+        public FireTruckController(FireTruckPresentation fireTruckPresentation)
         {
-            _fireTruckRepository = fireTruckRepository;
-            _firemanTeamRepository = firemanTeamRepository;
-            _mapper = mapper;
+            _fireTruckPresentation = fireTruckPresentation;
         }
 
         public IActionResult Index()
         {
-            var viewmodels = _fireTruckRepository.GetAll()
-                .Select(x => new FireTruckViewModel()
-                {
-                    Id = x.Id,
-                    TruckNumber = x.TruckNumber,
-                    TruckState = x.TruckState,
-                    TeamName = x.FiremanTeam?.TeamName
-                }).ToList();
-            return View(viewmodels);
+            var models = _fireTruckPresentation.GetAllTrucks();
+
+            return View(models);
         }
         [HttpGet]
         public IActionResult AddFireTruck()
@@ -48,59 +40,26 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return View();
             }
-            var newModel = new FireTruck()
-            {
-                TruckNumber = model.TruckNumber,
-                TruckState = model.TruckState,                
-            };
-            if (model.TeamName == "0")
-            {
-                newModel.FiremanTeam = null;
-            }
-            else
-            {
-                var team = _firemanTeamRepository.GetByName(model.TeamName);
-                newModel.FiremanTeam = team;
+            _fireTruckPresentation.AddFireTruck(model);
 
-            }
-            _fireTruckRepository.Save(newModel);
             return RedirectToAction("Index", "FireTruck");
         }
         public JsonResult Remove(long id)
         {
-            var model = _fireTruckRepository.Get(id);
-            if (model == null)
-            {
-                return Json(false);
-            }
-            var fireman = _firemanTeamRepository.Get(model.FiremanTeam.Id);
-            fireman.TruckId = null;
-            fireman.FireTruck = null;
-            _firemanTeamRepository.Save(fireman);
-            _fireTruckRepository.Remove(model);
-            return Json(true);
+            return Json(_fireTruckPresentation.Remove(id));
         }
         [HttpGet]
         public IActionResult Edit(long id)
         {
-            var firetruck = _fireTruckRepository.Get(id);
-            var model = _mapper.Map<FireTruckViewModel>(firetruck);
+            var model = _fireTruckPresentation.GetTruck(id);
 
-            model.TeamName = firetruck.FiremanTeam?.TeamName;
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(FireTruckViewModel model)
         {
-            var firetruck = _fireTruckRepository.Get(model.Id);
-            if (firetruck != null)
-            {
-                firetruck.TruckNumber = model.TruckNumber;
-                firetruck.TruckState = model.TruckState;
-                firetruck.FiremanTeam = _firemanTeamRepository.GetByName(model.TeamName);
-               
-                _fireTruckRepository.Save(firetruck);
-            }
+            _fireTruckPresentation.Edit(model);
+
             return RedirectToAction("Index", "FireTruck");
         }
     }

@@ -9,34 +9,27 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models;
+using WebApplication1.Presentation.FirePresentation;
 using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class FiremanController : Controller
     {
-        private FiremanRepository _firemanRepository { get; set; }
-        private CitizenRepository _citizenRepository { get; set; }
-        private FiremanTeamRepository _firemanTeamRepository { get; set; }
-        private UserService _userService;
+        private FiremanPresentation _firemanPresentation { get; set; }
 
-        private IMapper _mapper { get; set; }
-        public FiremanController(FiremanRepository workerRepository, IMapper mapper, CitizenRepository citizenRepository, FiremanTeamRepository firemanTeamRepository, UserService userService)
+
+        public FiremanController(FiremanPresentation firemanPresentation)
         {
-            _firemanRepository = workerRepository;
-            _mapper = mapper;
-            _citizenRepository = citizenRepository;
-            _firemanTeamRepository = firemanTeamRepository;
-            _userService = userService;
+            _firemanPresentation = firemanPresentation;
         }
 
         public IActionResult Index()
         {
-
-            var viewModels = _firemanRepository
-               .GetAll()
-               .Select(x => _mapper.Map<FiremanViewModel>(x)).ToList();
+            var viewModels = _firemanPresentation.GetAllFiremen();
 
             return View(viewModels);
         }
@@ -53,15 +46,7 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
-            var citizen = _citizenRepository.GetByName(model.Name);
-
-            var m = _mapper.Map<Fireman>(model);
-            m.Citizen = citizen;
-            m.CitizenId = citizen.Id;
-
-            var fireteam = _firemanTeamRepository.GetByName(model.TeamName);
-            m.FiremanTeam = fireteam;
-            _firemanRepository.Save(m);
+            _firemanPresentation.CreateFireman(model);
             return RedirectToAction("Index", "Fireman");
         }
         public IActionResult Main()
@@ -70,67 +55,35 @@ namespace WebApplication1.Controllers
         }
         public JsonResult Remove(long id)
         {
-
-            var fireman = _firemanRepository.Get(id);
-            if (fireman == null)
-            {
-                return Json(false);
-            }
-
-            _firemanRepository.Remove(fireman);
-
-            return Json(true);
+            return Json(_firemanPresentation.Remove(id));
         }
         [HttpGet]
         public IActionResult Edit(long id)
         {
-            var fireman = _firemanRepository.Get(id);
-            var model = _mapper.Map<FiremanViewModel>(fireman);
-           
-            model.Name = fireman.Citizen.Name;
-            model.TeamName = fireman.FiremanTeam?.TeamName;
-            model.Age = fireman.Citizen.Age;
+            var model = _firemanPresentation.GetFireman(id);
 
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(FiremanViewModel model)
         {
-           var fireman = _firemanRepository.Get(model.Id);
-            if (fireman != null)
+            string user = _firemanPresentation.Edit(model);
+            if (user.Equals("fireadmin"))
             {
-                if (!_userService.IsFireAdmin())
-                {
-                    var citizen = _citizenRepository.Get(fireman.CitizenId);
-                    citizen.Name = model.Name;
-                    citizen.Age = model.Age;
-                    fireman.WorkExperYears = model.WorkExperYears;
-                    _firemanRepository.Save(fireman);
-                    _citizenRepository.Save(citizen);
-
-                    return RedirectToAction("MyProfile", "Fireman");
-                }
-                else
-                {
-                    fireman.Role = model.Role;
-                    fireman.FiremanTeam = _firemanTeamRepository.GetByName(model.TeamName);
-                    _firemanRepository.Save(fireman);                    
-                }                
+                return RedirectToAction("Index", "Fireman");
             }
-            return RedirectToAction("Index", "Fireman");
+
+            return RedirectToAction("MyProfile", "Fireman");
         }
         [HttpGet]
         [Authorize]
         public IActionResult MyProfile()
         {
-            var user = _userService.GetUser();
-            var fireman = _firemanRepository.GetByName(user.Name);
-            if (fireman != null)
+            var model = _firemanPresentation.MyProfile();
+            if (model != null)
             {
-                var viewModel = _mapper.Map<FiremanViewModel>(fireman);
-                return View(viewModel);
+                return View(model);
             }
-
             return RedirectToAction("Main", "Fireman");
         }
     }

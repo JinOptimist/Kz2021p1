@@ -1,6 +1,6 @@
 ﻿@model FiremanViewModel
 @using WebApplication1.Services
-@inject UserService userService
+@inject IUserService userService
 <h1>
     My Profile
 </h1>
@@ -25,14 +25,14 @@
         <th>Team Name</th>
         <th>Edit</th>
     </tr>
-        <tr class="worker">
-            <td>@Model.Id</td>
-            <td>@Model.Name</td>
-            <td>@Model.Age</td>
-            <td>@Model.Role</td>
-            <td>@Model.WorkExperYears</td>
-            <td>@Model.TeamName</td>               
-                <td><a href="Edit/@Model.Id">edit</a></td>
-            
-        </tr>
+    <tr class="worker">
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
+        <td>@Model.Age</td>
+        <td>@Model.Role</td>
+        <td>@Model.WorkExperYears</td>
+        <td>@Model.TeamName</td>
+        <td><a href="Edit/@Model.Id">edit</a></td>
+
+    </tr>
 </table>

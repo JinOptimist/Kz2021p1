@@ -1,6 +1,6 @@
 ﻿@model List<FiremanViewModel>
 @using WebApplication1.Services
-@inject UserService userService
+@inject IUserService userService
 @section Scripts{
     <script src="~/js/Fireman/fireman.js"></script>
 }
@@ -31,7 +31,7 @@
             <th>Remove</th>
             <th>Edit</th>
         }
-        </tr>
+    </tr>
     @foreach (var worker in Model)
     {
         <tr class="worker">

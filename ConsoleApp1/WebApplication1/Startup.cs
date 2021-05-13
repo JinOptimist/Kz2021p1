@@ -29,10 +29,13 @@ using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.Models.FiremanModels;
 using WebApplication1.EfStuff.Model.Firemen;
+using System.Collections.Generic;
+using WebApplication1.Presentation.FirePresentation;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -47,11 +50,11 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -66,6 +69,29 @@ namespace WebApplication1
                 new CitizenPresentation(
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FiremanPresentation>(x =>
+                new FiremanPresentation(
+                    x.GetService<IFiremanRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IUserService>()));
+            services.AddScoped<FireIncidentPresentation>(x =>
+                new FireIncidentPresentation(
+                    x.GetService<IFireIncidentRepository>(),
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FiremanTeamPresentation>(x =>
+                new FiremanTeamPresentation(
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IFireTruckRepository>(),
+                    x.GetService<IFiremanRepository>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FireTruckPresentation>(x =>
+                new FireTruckPresentation(
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IFireTruckRepository>(),
                     x.GetService<IMapper>()));
 
             services.AddPoliceServices(Configuration);
@@ -85,19 +111,37 @@ namespace WebApplication1
 
         private void RegisterRepositories(IServiceCollection services)
         {
-            foreach (var repositoryType in Assembly
+            /*  foreach (var repositoryType in Assembly
+                  .GetExecutingAssembly()
+                  .GetTypes()
+                  .Where(type =>
+                          type.BaseType?.IsGenericType == true
+                          && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+              {
+                  services.AddScoped(repositoryType, x =>
+                  {
+                      var constructor = repositoryType.GetConstructors().Single();
+                      var parameters = new object[] { x.GetService<KzDbContext>() };
+                      return constructor.Invoke(parameters);
+                  });
+              }*/
+
+            IEnumerable<Type> implementationsType = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(type =>
-                        type.BaseType?.IsGenericType == true
-                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+                        !type.IsInterface && type.GetInterface(typeof(IBaseRepository<>).Name) != null);
+
+            foreach (Type implementationType in implementationsType)
             {
-                services.AddScoped(repositoryType, x =>
+                IEnumerable<Type> servicesType = implementationType
+                    .GetInterfaces()
+                    .Where(r => !r.Name.Contains(typeof(IBaseRepository<>).Name));
+
+                foreach (Type serviceType in servicesType)
                 {
-                    var constructor = repositoryType.GetConstructors().Single();
-                    var parameters = new object[] { x.GetService<KzDbContext>() };
-                    return constructor.Invoke(parameters);
-                });
+                    services.AddScoped(serviceType, implementationType);
+                }
             }
         }
 
@@ -115,8 +159,8 @@ namespace WebApplication1
 
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            
-            configurationExp.AddProfile<PoliceProfiles>(); 
+
+            configurationExp.AddProfile<PoliceProfiles>();
 
 
             configurationExp.CreateMap<FireIncident, FireIncidentViewModel>()
@@ -138,7 +182,7 @@ namespace WebApplication1
             configurationExp.CreateMap<FiremanTeamViewModel, FiremanTeam>();
             configurationExp.CreateMap<FireIncidentViewModel, FireIncident>();
 
-            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);   
+            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
@@ -176,12 +220,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

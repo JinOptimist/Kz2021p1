@@ -8,8 +8,8 @@ namespace WebApplication1.EfStuff.Model.Firemen
 {
     public class FireTruck : BaseModel
     {
-        public string TruckNumber { get; set; }  
-        public string TruckState {get; set;}
+        public string TruckNumber { get; set; }
+        public string TruckState { get; set; }
         public virtual FiremanTeam FiremanTeam { get; set; }
     }
 }

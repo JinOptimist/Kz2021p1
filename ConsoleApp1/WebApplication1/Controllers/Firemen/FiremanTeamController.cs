@@ -8,30 +8,25 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.Presentation.FirePresentation;
 
 namespace WebApplication1.Controllers.Firemen
 {
     public class FiremanTeamController : Controller
     {
-        private FiremanTeamRepository _firemanTeamRepository { get; set; }
-        private FireTruckRepository _fireTruckRepository { get; set; }
-        private FiremanRepository _firemanRepository { get; set; }
-        private IMapper _mapper { get; set; }
-      
+        private FiremanTeamPresentation _firemanTeamPresentation { get; set; }
 
-        public FiremanTeamController(FiremanTeamRepository firemanTeamRepository, FireTruckRepository fireTruckRepository, FiremanRepository firemanRepository, IMapper mapper)
+        public FiremanTeamController(FiremanTeamPresentation firemanTeamPresentation)
         {
-            _firemanTeamRepository = firemanTeamRepository;
-            _fireTruckRepository = fireTruckRepository;
-            _firemanRepository = firemanRepository;
-            _mapper = mapper;
+            _firemanTeamPresentation = firemanTeamPresentation;
         }
 
         public IActionResult Index()
         {
-            var viewModels = _firemanTeamRepository.GetAll()
-                .Select(x => _mapper.Map<FiremanTeamViewModel>(x)).ToList();
+            var viewModels = _firemanTeamPresentation.GetAllTeams();
+
             return View(viewModels);
         }
         [HttpGet]
@@ -47,50 +42,26 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return View();
             }
-            var newModel = _mapper.Map<FiremanTeam>(model);
+            _firemanTeamPresentation.CreateFiremanTeam(model);
 
-            var truck = _fireTruckRepository.Get(model.TruckId);
-           
-            newModel.FireTruck = truck;
-            
-            truck.FiremanTeam = newModel;
-            _firemanTeamRepository.Save(newModel);
             return RedirectToAction("Index", "FiremanTeam");
         }
         public JsonResult Remove(long id)
         {
-            var team = _firemanTeamRepository.Get(id);
-            if (team == null)
-            {
-                return Json(false);
-            }
-            _firemanTeamRepository.Remove(team);
-            return Json(true);
+            return Json(_firemanTeamPresentation.Remove(id));
         }
         [HttpGet]
         public IActionResult Edit(long id)
         {
-            var firemanteam = _firemanTeamRepository.Get(id);
-            var model = _mapper.Map<FiremanTeamViewModel>(firemanteam);
-
-            model.TruckState = firemanteam.FireTruck.TruckState;
-            model.FiremanCount = firemanteam.Firemen.Count();
+            var model = _firemanTeamPresentation.GetTeam(id);
 
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(FiremanTeamViewModel model)
         {
-            var firemanteam = _firemanTeamRepository.Get(model.Id);
-            if (firemanteam != null)
-            {
-                firemanteam.TeamName = model.TeamName;
-                firemanteam.Shift = model.Shift;
-                firemanteam.TeamState = model.TeamState;
-                firemanteam.TruckId = model.TruckId;
-                firemanteam.FireTruck = _fireTruckRepository.Get(model.TruckId);
-                _firemanTeamRepository.Save(firemanteam);
-            }
+            _firemanTeamPresentation.Edit(model);
+
             return RedirectToAction("Index", "Fireman");
         }
 

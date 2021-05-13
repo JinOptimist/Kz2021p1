@@ -6,28 +6,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.Presentation.FirePresentation;
 
 namespace WebApplication1.Controllers.Firemen
 {
     public class FireIncidentController : Controller
     {
-        private FireIncidentRepository _fireIncidentRepository { get; set; }
-        private FiremanTeamRepository _firemanTeamRepository { get; set; }
-        private IMapper _mapper { get; set; }
+        private FireIncidentPresentation _fireIncidentPresentation { get; set; }
 
-        public FireIncidentController (FireIncidentRepository fireIncidentRepository, FiremanTeamRepository firemanTeamRepository, IMapper mapper)
+        public FireIncidentController(FireIncidentPresentation fireIncidentPresentation)
         {
-            _fireIncidentRepository = fireIncidentRepository;
-            _firemanTeamRepository = firemanTeamRepository;
-            _mapper = mapper;
+            _fireIncidentPresentation = fireIncidentPresentation;
         }
 
         public IActionResult Index()
         {
-            var viewmodels = _fireIncidentRepository.GetAll()
-                .Select(x => _mapper.Map<FireIncidentViewModel>(x)).ToList();
-            return View(viewmodels);
+            var viewModels = _fireIncidentPresentation.GetAllIncidents();
+
+            return View(viewModels);
         }
         [HttpGet]
         public IActionResult AddFireIncident()
@@ -42,53 +40,26 @@ namespace WebApplication1.Controllers.Firemen
             {
                 return View();
             }
-            var newModel = _mapper.Map<FireIncident>(model);     
-          
-            var team = _firemanTeamRepository.GetByName(model.TeamName);
-            newModel.FiremanTeam = team;
-            
-            _fireIncidentRepository.Save(newModel);
+            _fireIncidentPresentation.AddFireIncident(model);
+
             return RedirectToAction("Index", "FireIncident");
         }
         public JsonResult Remove(long id)
         {
-            var model = _fireIncidentRepository.Get(id);
-            if (model == null)
-            {
-                return Json(false);
-            }
-            _fireIncidentRepository.Remove(model);
-            return Json(true);
+            return Json(_fireIncidentPresentation.Remove(id));
         }
         [HttpGet]
         public IActionResult Edit(long id)
         {
-            var fireincident = _fireIncidentRepository.Get(id);
-            var model = _mapper.Map<FireIncidentViewModel>(fireincident);
+            var model = _fireIncidentPresentation.GetIncident(id);
 
-            model.TeamName = fireincident.FiremanTeam?.TeamName;
             return View(model);
         }
         [HttpPost]
         public IActionResult Edit(FireIncidentViewModel model)
         {
-            var incident = _fireIncidentRepository.Get(model.Id);
-            if (incident != null)
-            {
-                incident.Address = model.Address;
-                incident.Date = model.Date;
-                incident.Reason = model.Reason;
-                incident.Injured = model.Injured;
-                incident.Dead = model.Dead;
-                incident.Date = model.Date;
+            _fireIncidentPresentation.Edit(model);
 
-                var team = _firemanTeamRepository.GetByName(model.TeamName);
-
-                incident.TeamId = team.Id;
-                incident.FiremanTeam = team;
-
-                _fireIncidentRepository.Save(incident);
-            }
             return RedirectToAction("Index", "FireIncident");
         }
     }

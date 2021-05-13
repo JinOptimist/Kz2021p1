@@ -4,7 +4,7 @@
 }
 @model List<WebApplication1.Models.FiremanModels.FireIncidentViewModel>
 @using WebApplication1.Services
-@inject UserService userService
+@inject IUserService userService
 @section Scripts{
     <script src="~/js/Fireman/fireincident.js"></script>
 }
@@ -35,7 +35,7 @@
             <th>Delete</th>
             <th>Edit</th>
         }
-        </tr>
+    </tr>
     @foreach (var incident in Model)
     {
         <tr class="incident">
