@@ -11,6 +11,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Education;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
+using WebApplication1.Models.Education;
 
 namespace WebApplication1.Presentation
 {
@@ -37,7 +38,7 @@ namespace WebApplication1.Presentation
                .GetAll()
                .Select(x => _mapper.Map<StudentViewModel>(x))
                .ToList();
-            var model = PagingList.Create(students, 3, page);
+            var model = PagingList.Create(students, 5, page);
 
             model.Action = "StudentListAndSearch";
             return model;
@@ -73,7 +74,7 @@ namespace WebApplication1.Presentation
                 studentViewModels.Add(_mapper.Map<StudentViewModel>(item));
             }
 
-            var model = PagingList.Create(studentViewModels, 3, page);
+            var model = PagingList.Create(studentViewModels, 5, page);
             model.RouteValue = new RouteValueDictionary {
                                     {"searchBy", searchBy},
                                     {"searchStudent", searchStudent} };
@@ -126,7 +127,7 @@ namespace WebApplication1.Presentation
 
         public bool Remove(string iin)
         {
-            var student = _studentRepository.GetStudentByIiN(iin);
+            var student = _studentRepository.GetStudentByIin(iin);
             if (student == null)
             {
                 return false;
@@ -134,6 +135,28 @@ namespace WebApplication1.Presentation
 
             _studentRepository.Remove(student);
 
+            return true;
+        }
+
+        public bool CancelCertificate(string iin, string certificateType)
+        {
+           /* var student = _studentRepository.GetStudentByIin(iin);
+            var certificate = GetCertificateViewModelByType(certificateType);
+            student.Certificates.Remove(_mapper.Map<Certificate>(certificate));
+
+            _studentRepository.Save(student);*/
+
+
+            var student = _studentRepository.GetStudentByIin(iin);
+            var certificate = student.Certificates.SingleOrDefault(x => x.Type.Equals(certificateType));
+            if (certificate == null)
+            {
+                return false;
+            }
+
+            student.Certificates.Remove(certificate);
+
+            _studentRepository.Save(student);
             return true;
         }
 
@@ -177,6 +200,54 @@ namespace WebApplication1.Presentation
 
             return universityIds;
         }
+
+        public CertificateViewModel GetCertificateViewModelByType(string certificateType)
+        {
+            return _mapper.Map<CertificateViewModel>(_certificateRepository.GetCertificateByType(certificateType));
+        }
+
+        public List<string> GetListOfCertificateNames()
+        {
+            var all = _certificateRepository.GetAll();
+            List<string> certificateTypes = new List<string>();
+            foreach (var certificate in all)
+            {
+                certificateTypes.Add(certificate.Type);
+            }
+
+            return certificateTypes;
+        }
+
+        public PagingList<StudentViewModel> GetStudentByFacultyAndCourseYear(string faculty, int courseYear, int page)
+        {
+            List<Student> query = new List<Student>();
+
+            if (!String.IsNullOrEmpty(faculty))
+            {
+                query = _studentRepository.GetStudentsByFaculty(faculty);
+            }
+            if (courseYear > 0)
+            {
+                query = _studentRepository.GetStudentsByCourseYear(courseYear);
+            }
+
+            List<StudentViewModel> studentViewModels = new List<StudentViewModel>();
+
+            foreach (var item in query)
+            {
+                studentViewModels.Add(_mapper.Map<StudentViewModel>(item));
+            }
+
+            var model = PagingList.Create(studentViewModels, 5, page);
+            model.RouteValue = new RouteValueDictionary {
+                                    {"faculty", faculty},
+                                    {"courseYear", courseYear} };
+
+            model.Action = "SearchStudentByFacultyAndCourseYears";
+            return model;
+        }
+
+
 
         public void EndStudyYearForUniversity()
         {

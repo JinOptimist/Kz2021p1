@@ -12,7 +12,7 @@ using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff
 {
-	public static class SeedExtention
+    public static class SeedExtention
     {
         public const string AdminName = "admin";
 
@@ -190,6 +190,8 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultStudents(IServiceProvider serviceProvider)
         {
             var studentRepository = serviceProvider.GetService<IStudentRepository>();
+            var certificateRepository = serviceProvider.GetService<ICertificateRepository>();
+            var certificate = certificateRepository.GetCertificateByType("Middle");
             var students = studentRepository.GetAll().Any();
 
             List<string> studentIins = new List<string>() { "980704401339", "971104401334", "960915401335", "990521401336", "001210401337", "010229401338" };
@@ -202,7 +204,7 @@ namespace WebApplication1.EfStuff
             List<int> studentCourseYears = new List<int>() { 3, 4, 3, 4, 2, 2 };
             List<double> studentGpas = new List<double>() { 4.0, 3.67, 3.3, 2.67, 3.0, 2.3 };
             List<bool> studentOnGrant = new List<bool>() { true, true, true, false, true, false };
-            List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };            
+            List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };
             List<long> studentUniverIds = new List<long>() { 1, 2, 2, 1, 2, 1 };
 
             if (!students)
@@ -224,7 +226,8 @@ namespace WebApplication1.EfStuff
                         IsGrant = studentOnGrant[i],
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], "d", CultureInfo.InvariantCulture),
                         GraduatedYear = null,
-                        UniversityId = studentUniverIds[i]
+                        UniversityId = studentUniverIds[i],
+                        Certificates = (ICollection<Certificate>)certificate
                     };
 
                     studentRepository.Save(student);

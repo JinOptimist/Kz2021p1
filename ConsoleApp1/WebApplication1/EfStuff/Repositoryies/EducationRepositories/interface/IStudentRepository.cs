@@ -6,7 +6,9 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface
 {
 	public interface IStudentRepository : IBaseRepository<Student>
     {
-        Student GetStudentByIiN(string studentIiN);
+        Student GetStudentByIin(string studentIiN);
+        List<Student> GetStudentsByFaculty(string faculty);
+        List<Student> GetStudentsByCourseYear(int courseYear);
         void UpdateStudentGrantData(long studentId, bool isGrant);
     }
 }

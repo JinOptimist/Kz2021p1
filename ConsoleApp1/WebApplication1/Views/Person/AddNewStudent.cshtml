@@ -33,7 +33,7 @@
                 <div class="margin20">
                     <div class="row">
                         <div class="col-sm-4">
-                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option disabled>University</option></select>
+                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option selected disabled>University</option></select>
                         </div>
 
                         <div class="col-sm-4">
@@ -44,13 +44,13 @@
                             </select>
                         </div>
                         <div class="col-sm-4">
-                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option disabled>Course Year</option></select>
+                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option selected disabled>Course Year</option></select>
                         </div>
                     </div>
                 </div>
                 <div class="margin20">
                     <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties">
-                        <option disabled>Faculty</option>
+                        <option selected disabled>Faculty</option>
                     </select>
                 </div>
                 <div style="margin-top:20px">
@@ -70,8 +70,18 @@
                     </div>
 
                 </div>
-                <div>
-                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { Class = "form-control" })
+                <div style="margin-top:20px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Gpa: @Html.TextBoxFor(x => x.Gpa, new { Class = "form-control" })
+                        </div>
+                        <div class="col-sm-6">
+                            Certificate:  <input disabled
+                                                 class="form-control"
+                                                 placeholder="Middle" />
+
+                        </div>
+                    </div>
                 </div>
 
                 <div class="margin20" style="margin-bottom:50px">

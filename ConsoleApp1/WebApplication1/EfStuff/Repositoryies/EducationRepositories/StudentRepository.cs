@@ -11,9 +11,19 @@ namespace WebApplication1.EfStuff.Repositoryies
     {
         public StudentRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
 
-        public Student GetStudentByIiN(string studentIin)
+        public Student GetStudentByIin(string studentIin)
         {
             return _kzDbContext.Students.SingleOrDefault(x => x.Iin.Equals(studentIin));
+        }
+
+        public List<Student> GetStudentsByFaculty(string faculty)
+        {
+            return _kzDbContext.Students.Where(x => x.Faculty.Equals(faculty)).ToList();
+        }
+
+        public List<Student> GetStudentsByCourseYear(int courseYear)
+        {
+            return _kzDbContext.Students.Where(x => x.CourseYear == courseYear).ToList();
         }
 
         public void UpdateStudentGrantData(long studentId, bool isGrant)

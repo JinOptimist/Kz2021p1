@@ -15,9 +15,9 @@ namespace WebApplication1.Models
         public bool IsGrant { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime EnteredYear { get; set; }
-         [DataType(DataType.Date)]
-         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
-       /* [DisplayFormat(DataFormatString = "{0:d}")]*/
+        /*  [DataType(DataType.Date)]
+          [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]*/
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? GraduatedYear { get; set; }
         public long? UniversityId { get; set; }
         public UniversityViewModel University { get; set; }

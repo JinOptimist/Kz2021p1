@@ -34,11 +34,11 @@
                 <div class="margin20">
                     <div class="row">
                         <div style="margin-top:20px" class="col-sm-6">
-                            <select asp-for="School.Name" class="form-control" asp-items="ViewBag.Schools"><option disabled>Schools</option></select>
+                            <select asp-for="School.Name" class="form-control" asp-items="ViewBag.Schools"><option selected disabled>Schools</option></select>
                         </div>
 
                         <div class="col-sm-6">
-                            <select asp-for="ClassYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 11))"><option disabled>Class Year</option></select>
+                            <select asp-for="ClassYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 11))"><option selected disabled>Class Year</option></select>
                         </div>
                     </div>
                 </div>
@@ -46,11 +46,11 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <select asp-for="AverageMark" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 12))"><option disabled>Average Mark</option></select>
+                            <select asp-for="AverageMark" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 12))"><option selected disabled>Average Mark</option></select>
                         </div>
 
                         <div class="col-sm-6">
-                            <select asp-for="ENT" class="form-control" asp-items="new SelectList(Enumerable.Range(50, 91))"><option disabled>ENT</option></select>
+                            <select asp-for="ENT" class="form-control" asp-items="new SelectList(Enumerable.Range(50, 91))"><option selected disabled>ENT</option></select>
                         </div>
                     </div>
                 </div>

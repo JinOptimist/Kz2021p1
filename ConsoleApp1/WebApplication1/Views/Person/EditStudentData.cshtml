@@ -12,7 +12,7 @@
                 </div>
                 <img src="@Model.AvatarUrl" class="card-img-top">
                 <div>
-                    Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />                   
+                    Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />
                 </div>
                 <div>
                     IIN: @Html.TextBoxFor(x => x.Iin, new { @Value = Model.Iin, @readonly = true, Class = "form-control" })
@@ -71,8 +71,25 @@
                     </div>
 
                 </div>
-                <div>
-                    Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })
+
+                <div style="margin-top:20px">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-6">
+                 
+                            <div class="col-sm-6">
+                                Certificate:  <input disabled
+                                                     class="form-control"
+                                                     placeholder="Middle" />
+
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="margin20" style="margin-bottom:50px">

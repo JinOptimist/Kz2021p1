@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
+using WebApplication1.Models.Education;
 using WebApplication1.Presentation;
 
 namespace WebApplication1.Controllers
@@ -114,6 +116,12 @@ namespace WebApplication1.Controllers
             studentViewModel.UniversityId = university.Id;
             studentViewModel.University = null;
 
+            if (studentViewModel.Id == 0)
+            {
+                studentViewModel.Certificates = new List<CertificateViewModel>();
+                studentViewModel.Certificates.Add(_studentPresentation.GetCertificateViewModelByType("Middle"));
+            }
+
             if (studentViewModel.AvatarFile != null)
             {
                 var fileExtention = Path.GetExtension(studentViewModel.AvatarFile.FileName);
@@ -134,6 +142,11 @@ namespace WebApplication1.Controllers
         public JsonResult RemoveStudent(string iin)
         {
             return Json(_studentPresentation.Remove(iin));
+        }
+
+        public JsonResult CancelCertificate(string iin, string certificateType)
+        {
+            return Json(_studentPresentation.CancelCertificate(iin, certificateType));
         }
 
         public IActionResult PupilList(int page = 1)
@@ -220,5 +233,27 @@ namespace WebApplication1.Controllers
             _studentPresentation.EndStudyYearForUniversity();
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult Certificate(int page = 1)
+        {
+            var viewModels = _studentPresentation.GetStudentList(page);
+            viewModels.Action = "Certificate";
+
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            return View(viewModels);
+        }
+        [HttpGet]
+        public IActionResult SearchStudentByFacultyAndCourseYear(string faculty, int courseYear, int page = 1)
+        {
+            var studentViewModels = _studentPresentation.GetStudentByFacultyAndCourseYear(faculty, courseYear, page);
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+            return View("Certificate", studentViewModels);
+        }
+
     }
 }
