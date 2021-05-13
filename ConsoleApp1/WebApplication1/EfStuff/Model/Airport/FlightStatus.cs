@@ -7,11 +7,11 @@ namespace WebApplication1.EfStuff.Model.Airport
 {
     public enum FlightStatus
     {
-        Departed,
-        OnTime,
-        Expected,
-        Landed,
-        Canceled,
-        Delayed
+        Departed = 0,
+        OnTime = 1,
+        Expected = 2,
+        Landed = 3,
+        Canceled = 4,
+        Delayed = 5
     }
 }

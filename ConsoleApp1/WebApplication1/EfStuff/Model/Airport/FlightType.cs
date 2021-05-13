@@ -7,7 +7,7 @@ namespace WebApplication1.EfStuff.Model.Airport
 {
     public enum FlightType
     {
-        DepartingFlight,
-        IncomingFlight
+        DepartingFlight = 0,
+        IncomingFlight = 1
     }
 }
