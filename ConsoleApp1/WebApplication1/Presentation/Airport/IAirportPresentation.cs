@@ -14,7 +14,5 @@ namespace WebApplication1.Presentation.Airport
 		bool FlightIsValid(long id);
 		List<AvailableFlightsViewModel> GetAvailableFlights();
 		List<IncomingFlightInfoViewModel> GetIndexViewModel();
-		bool IsValidAddmissionTime(DateTime flightDate);
-		bool IsValidDepartureTime(DateTime flightDate);
 	}
 }

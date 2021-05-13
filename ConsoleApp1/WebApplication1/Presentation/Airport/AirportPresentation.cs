@@ -51,7 +51,7 @@ namespace WebApplication1.Presentation.Airport
 		public void AdmitPassengers()
 		{
 			List<Flight> arrivedFlights = new List<Flight>();
-			foreach (var passenger in _passengersRepository.GetAll().Where(passenger => passenger.Flight.FlightType == FlightType.IncomingFlight && IsValidAddmissionTime(passenger.Flight.Date)))
+			foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForAdmission())
 			{
 				if (!arrivedFlights.Contains(passenger.Flight))
 				{
@@ -67,7 +67,7 @@ namespace WebApplication1.Presentation.Airport
 		public void DepartPassengers()
 		{
 			List<Flight> departedFlights = new List<Flight>();
-			foreach (var passenger in _passengersRepository.GetAll().Where(passenger => passenger.Flight.FlightType == FlightType.DepartingFlight && IsValidDepartureTime(passenger.Flight.Date)))
+			foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
 			{
 				if (!departedFlights.Contains(passenger.Flight))
 				{
@@ -96,23 +96,6 @@ namespace WebApplication1.Presentation.Airport
 				CitizenId = citizen.Id
 			};
 			_passengersRepository.Save(passenger);
-		}
-
-		public bool IsValidDepartureTime(DateTime flightDate)
-		{
-			DateTime now = DateTime.Now;
-			if (flightDate.Day == now.Day && flightDate.AddMinutes(-30) <= now && now >= flightDate)
-				return true;
-			return false;
-		}
-
-		public bool IsValidAddmissionTime(DateTime flightDate)
-		{
-			DateTime now = DateTime.Now;
-			DateTime add30 = flightDate.AddMinutes(30);
-			if (flightDate.Day == now.Day && now >= flightDate && now <= add30)
-				return true;
-			return false;
 		}
 
 		public void ConvertFlights(List<Flight> flights)
