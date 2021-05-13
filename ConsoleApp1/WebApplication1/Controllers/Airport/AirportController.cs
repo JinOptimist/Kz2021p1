@@ -33,7 +33,10 @@ namespace WebApplication1.Controllers.Airport
         [Authorize]
         public IActionResult BookTicket(long id)
         {
-            if (!_airpotPresentation.FlightIsValid(id)) return RedirectToAction("AvailableFlights");
+            if (!_airpotPresentation.FlightIsValid(id) || _airpotPresentation.FlightIsAlreadyBooked(id)) 
+            {
+                return RedirectToAction("AvailableFlights");
+            }
             _airpotPresentation.BookTicket(id);
             return RedirectToAction("BookingConfirmation");
         }

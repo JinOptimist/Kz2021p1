@@ -32,6 +32,11 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
                 .ToList();
         }
 
+        public bool CitizenIsRegisteredForFlight(long flightId, long citizenId)
+        {
+            return _dbSet.SingleOrDefault(passenger => passenger.CitizenId == citizenId && passenger.FlightId == flightId) != null;
+        }
+
         private bool IsValidDepartureTime(DateTime flightDate)
         {
             DateTime now = DateTime.Now;

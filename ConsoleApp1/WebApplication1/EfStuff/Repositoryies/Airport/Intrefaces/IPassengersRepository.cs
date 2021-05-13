@@ -7,5 +7,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces
     {
         List<Passenger> GetAllPassengersAvailableForAdmission();
         List<Passenger> GetAllPassengersAvailableForDeparture();
+        bool CitizenIsRegisteredForFlight(long flightId, long citizenId);
     }
 }

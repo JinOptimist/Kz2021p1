@@ -84,6 +84,12 @@ namespace WebApplication1.Presentation.Airport
             return _flightsRepository.Get(id) != null;
         }
 
+        public bool FlightIsAlreadyBooked(long id)
+        {
+            var citizen = _userService.GetUser();
+            return _passengersRepository.CitizenIsRegisteredForFlight(id, citizen.Id);
+        }
+
         public void BookTicket(long id)
         {
             Flight selectedFlight = _flightsRepository.Get(id);
