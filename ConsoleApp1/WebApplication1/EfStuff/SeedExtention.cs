@@ -24,13 +24,15 @@ namespace WebApplication1.EfStuff
 
                 CreateDefaultAdress(scope.ServiceProvider);
 
+                CreateDefaultCertificates(scope.ServiceProvider);
+
                 CreateDefaultUniversities(scope.ServiceProvider);
 
                 CreateDefaultSchools(scope.ServiceProvider);
 
                 CreateDefaultStudents(scope.ServiceProvider);
 
-                CreateDefaultPupils(scope.ServiceProvider);
+                CreateDefaultPupils(scope.ServiceProvider);                
 
                 //CreateDefaultFlights(scope.ServiceProvider);
             }
@@ -273,6 +275,43 @@ namespace WebApplication1.EfStuff
 
                     pupilRepository.Save(pupil);
                 }
+            }
+        }
+
+        private static void CreateDefaultCertificates(IServiceProvider serviceProvider)
+        {
+            var certificateRepository = serviceProvider.GetService<ICertificateRepository>();
+            var certificates = certificateRepository.GetAll().Any();
+            if (!certificates)
+            {
+                var certificate1 = new Certificate()
+                {
+                    Type = "Middle",
+                    CertificateImgUrl = "middle.jpeg"
+                };
+
+                var certificate2 = new Certificate()
+                {
+                    Type = "High",
+                    CertificateImgUrl = "high.jpeg"
+                };
+
+                var certificate3 = new Certificate()
+                {
+                    Type = "Police",
+                    CertificateImgUrl = "police.jpeg"
+                };
+
+                var certificate4 = new Certificate()
+                {
+                    Type = "Medicine",
+                    CertificateImgUrl = "medicine.jpeg"
+                };
+
+                certificateRepository.Save(certificate1);
+                certificateRepository.Save(certificate2);
+                certificateRepository.Save(certificate3);
+                certificateRepository.Save(certificate4);
             }
         }
     }
