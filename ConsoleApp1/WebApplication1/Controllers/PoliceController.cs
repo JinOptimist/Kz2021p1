@@ -21,14 +21,14 @@ namespace WebApplication1.Controllers
 		private readonly IPolicePresentation _policePresentation;
 		private readonly IMapper _mapper;
 		private readonly IUserService _userService;
-		//private readonly IBlobService _blobService;
+		private readonly IBlobService _blobService;
 
-		public PoliceController(IPolicePresentation policePresentation, IMapper mapper, IUserService userService/*, IBlobService blobService*/)
+		public PoliceController(IPolicePresentation policePresentation, IMapper mapper, IUserService userService, IBlobService blobService)
 		{
 			_policePresentation = policePresentation;
 			_mapper = mapper;
 			_userService = userService;
-			/*_blobService = blobService;*/
+			_blobService = blobService;
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace WebApplication1.Controllers
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		/*[HttpGet("/police/user-info/{id}")]
+		[HttpGet("/police/user-info/{id}")]
 		[IsActiveDuty]
 		public async Task<IActionResult> UserInfo(long id)
 		{
@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
 			};
 
 			return View(fullInfo);
-		}*/
+		}
 
 		/// <summary>
 		/// Get all users
@@ -181,13 +181,13 @@ namespace WebApplication1.Controllers
 		/// </summary>
 		/// <param name="fileUpload"></param>
 		/// <returns></returns>
-		/*[HttpPost("/police/uploadUserPhoto")]
+		[HttpPost("/police/uploadUserPhoto")]
 		public async Task<IActionResult> UploadUserPhoto([FromForm] FileUpload fileUpload)
 		{
 			Uri uri = await _blobService.UploadPhotoAsync(fileUpload);
 
 			return Ok(uri.AbsoluteUri);
-		}*/
+		}
 		
 		/// <summary>
 		/// Get all workers.

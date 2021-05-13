@@ -14,7 +14,7 @@ namespace WebApplication1.Presentation.Police
 		bool AmnestySeverity(long id);
 		bool CreateCall(PoliceCallHistory policeCallHistory);
 		List<UserViolationViewModel> GetAllUserViolations(long id);
-		//Task<UserInfoViewModel> GetUserInfo(long id);
+		Task<UserInfoViewModel> GetUserInfo(long id);
 		List<PolicemanViewModel> GetAllPolicemen();
 		void DismissPoliceman(long id);
 		List<ApplicantViewModel> GetAllApplicants();
