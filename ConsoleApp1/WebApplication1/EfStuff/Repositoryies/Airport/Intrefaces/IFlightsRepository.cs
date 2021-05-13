@@ -5,6 +5,7 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces
 {
 	public interface IFlightsRepository : IBaseRepository<Flight>
     {
-        List<Flight> GetAllIncomingFlights()
+        List<Flight> GetAllIncomingFlights();
+        List<Flight> GetFlightsAvailableForBooking();
     }
 }
