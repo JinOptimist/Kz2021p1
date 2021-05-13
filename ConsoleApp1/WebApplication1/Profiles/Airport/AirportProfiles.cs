@@ -24,6 +24,12 @@ namespace WebApplication1.Profiles.Airport
             CreateMap<DepartingFlightInfoViewModel, Flight>()
                 .ForMember(nameof(Flight.Date), opt => opt.MapFrom(viewModel => DateTime.Parse(viewModel.DepartureTime)))
                 .ForMember(nameof(Flight.Place), opt => opt.MapFrom(viewModel => viewModel.Destination));
+            CreateMap<Flight, AvailableFlightsViewModel>()
+                .ForMember(nameof(AvailableFlightsViewModel.DepartureTime), opt => opt.MapFrom(f => f.Date.ToString("dd.MM.yyyy HH:mm")))
+                .ForMember(nameof(DepartingFlightInfoViewModel.Destination), opt => opt.MapFrom(f => f.Place));
+            CreateMap<AvailableFlightsViewModel, Flight>()
+                .ForMember(nameof(Flight.Date), opt => opt.MapFrom(viewModel => DateTime.Parse(viewModel.DepartureTime)))
+                .ForMember(nameof(Flight.Place), opt => opt.MapFrom(viewModel => viewModel.Destination));
         }
     }
 }

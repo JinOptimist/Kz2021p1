@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers.Airport
 
         public IActionResult AvailableFlights()
         {
-            List<Flight> departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
+            List<AvailableFlightsViewModel> departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
             _airpotPresentation.DepartPassengers();
             return View(departingFlightsAvailableForBooking);
         }

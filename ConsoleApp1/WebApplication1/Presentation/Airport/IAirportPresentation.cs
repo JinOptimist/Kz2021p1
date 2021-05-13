@@ -12,7 +12,7 @@ namespace WebApplication1.Presentation.Airport
 		void ConvertFlights(List<Flight> flights);
 		void DepartPassengers();
 		bool FlightIsValid(long id);
-		List<Flight> GetAvailableFlights();
+		List<AvailableFlightsViewModel> GetAvailableFlights();
 		List<IncomingFlightInfoViewModel> GetIndexViewModel();
 		bool IsValidAddmissionTime(DateTime flightDate);
 		bool IsValidDepartureTime(DateTime flightDate);

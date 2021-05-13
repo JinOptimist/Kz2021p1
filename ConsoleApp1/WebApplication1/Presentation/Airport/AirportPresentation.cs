@@ -41,11 +41,12 @@ namespace WebApplication1.Presentation.Airport
 				.ToList();
 		}
 
-		public List<Flight> GetAvailableFlights()
+		public List<AvailableFlightsViewModel> GetAvailableFlights()
 		{
 			return _flightsRepository
 				.GetAll()
 				.Where(flight => flight.FlightStatus == FlightStatus.OnTime && flight.FlightType == FlightType.DepartingFlight && flight.Passengers.Count() < 100)
+				.Select(flight => _mapper.Map<AvailableFlightsViewModel>(flight))
 				.ToList();
 		}
 
