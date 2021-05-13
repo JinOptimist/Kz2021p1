@@ -81,8 +81,7 @@ namespace WebApplication1.Presentation.Airport
 
 		public bool FlightIsValid(long id)
 		{
-			Flight selectedFlight = _flightsRepository.GetAll().SingleOrDefault(f => f.Id == id && f.FlightType == FlightType.DepartingFlight);
-			return selectedFlight != null;
+			return _flightsRepository.Get(id) != null;
 		}
 
 		public void BookTicket(long id)
