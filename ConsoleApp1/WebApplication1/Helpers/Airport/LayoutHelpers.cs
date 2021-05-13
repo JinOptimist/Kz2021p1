@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Helpers
 {
-    public static class IsLinkSelected
+    public static class LayoutHelpers
     {
         public static string IsSelected(this IHtmlHelper html, string controller = null, string action = null)
         {
