@@ -1,0 +1,25 @@
+﻿@model List<HCEstablishmentsViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+
+@{
+    Layout = "~/Views/Shared/_HCLayout.cshtml";
+}
+@section Scripts{
+    <script src="./js/hcestablishment.js"></script>
+}
+
+@foreach (var estabs in Model)
+{
+    <div class="user">
+        ID: @estabs.Id
+        Name: @estabs.Name
+        Address: @estabs.Address
+        Contacts: @estabs.Contacts
+        Webpage: @estabs.Webpage
+        @if (userService.IsHCWorker())
+        {
+            <input type="button" estab-id="@estabs.Id" class="delete" value="X" />
+        }
+    </div>
+}

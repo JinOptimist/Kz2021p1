@@ -6,5 +6,6 @@ namespace WebApplication1.Services
     {
         Citizen GetUser();
         bool IsPolicment();
+        bool IsHCWorker();
     }
 }
