@@ -2,6 +2,7 @@
     ViewData["Title"] = "Available flights";
     Layout = "~/Views/Shared/Airport/_LayoutAirport.cshtml";
 }
+@using WebApplication1.EfStuff.Model.Airport
 @model List<WebApplication1.Models.Airport.AvailableFlightsViewModel>
 <div class="container justify-content-md-center">
     <div class="row-auto">
@@ -27,14 +28,8 @@
                             <th class="align-middle">@departingFlightInfo.TailNumber</th>
                             <td class="align-middle">@departingFlightInfo.Destination</td>
                             <td class="align-middle">@departingFlightInfo.DepartureTime</td>
-                            @if (departingFlightInfo.FlightStatus == WebApplication1.EfStuff.Model.Airport.FlightStatus.OnTime)
-                            {
-                                <td class="align-middle">On Time</td>
-                            }
-                            else
-                            {
-                                <td class="align-middle">@departingFlightInfo.FlightStatus</td>
-                            }
+                            <td class="align-middle">@(departingFlightInfo.FlightStatus == @FlightStatus.OnTime ? "On Time" : departingFlightInfo.FlightStatus.ToString())</td>
+
                             <td class="align-middle">@departingFlightInfo.Airline</td>
                             @if (User.Identity.IsAuthenticated)
                             {

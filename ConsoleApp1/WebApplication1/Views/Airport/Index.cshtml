@@ -2,22 +2,12 @@
     ViewData["Title"] = "Main page";
     Layout = "~/Views/Shared/Airport/_LayoutAirport.cshtml";
 }
+@model List<WebApplication1.Models.Airport.IncomingFlightInfoViewModel>
+@using WebApplication1.EfStuff.Model.Airport
+
 
 @section Styles {
     <link href="~/Airport/css/index/styles.css" rel="stylesheet" />
-}
-@model List<WebApplication1.Models.Airport.IncomingFlightInfoViewModel>
-
-@functions {
-    public string GetClassByFlighState(WebApplication1.EfStuff.Model.Airport.FlightStatus state)
-    {
-        return state switch
-        {
-            var s when s == WebApplication1.EfStuff.Model.Airport.FlightStatus.Landed => "table-success",
-            var s when s == WebApplication1.EfStuff.Model.Airport.FlightStatus.Delayed => "table-danger",
-            _ => string.Empty
-        };
-    }
 }
 <section>
     <div class="container">
@@ -58,7 +48,7 @@
                                     <th>@incomingFlight.TailNumber</th>
                                     <td>@incomingFlight.Origin</td>
                                     <td>@incomingFlight.ETA</td>
-                                    <td class="@GetClassByFlighState(incomingFlight.FlightStatus)">@incomingFlight.FlightStatus</td>
+                                    <td class="@incomingFlight.FlightStatus == @FlightStatus.Landed ? table-success : table-danger">@incomingFlight.FlightStatus</td>
                                     <td>@incomingFlight.Airline</td>
                                 </tr>
                             }
