@@ -91,19 +91,31 @@ namespace WebApplication1
 
         private void RegisterRepositories(IServiceCollection services)
         {
-            foreach (var repositoryType in Assembly
+            var repositoryTypes = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(type =>
                         type.BaseType?.IsGenericType == true
-                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>));
+
+            foreach (var repositoryType in repositoryTypes)
             {
-                services.AddScoped(repositoryType, x =>
+                var repositortInterfaces = repositoryType.GetInterfaces()
+                    .FirstOrDefault(i => i.Name != typeof(IBaseRepository<>).Name);
+
+                if (repositortInterfaces != null)
                 {
-                    var constructor = repositoryType.GetConstructors().Single();
-                    var parameters = new object[] { x.GetService<KzDbContext>() };
-                    return constructor.Invoke(parameters);
-                });
+                    services.AddScoped(repositortInterfaces, repositoryType);
+                }
+                else
+                {
+                    services.AddScoped(repositoryType, x =>
+                    {
+                        var constructor = repositoryType.GetConstructors().Single();
+                        var parameters = new object[] { x.GetService<KzDbContext>() };
+                        return constructor.Invoke(parameters);
+                    });
+                }
             }
         }
 
