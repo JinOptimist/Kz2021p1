@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
@@ -29,7 +30,7 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultFlights(IServiceProvider serviceProvider)
         {
             IFlightsRepository flightsRepository = serviceProvider.GetService<IFlightsRepository>();
-            if (flightsRepository.GetAll().Count == 0)
+            if (flightsRepository.GetAll().Any())
             {
                 Random random = new Random();
                 FlightStatus[] incomingStatuses = new FlightStatus[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };
@@ -39,7 +40,7 @@ namespace WebApplication1.EfStuff
                 {
                     Flight incomingFlight = new Flight()
                     {
-                        TailNumber = $"{(char)('A' + random.Next(26))}{(char)('A' + random.Next(26))} {(char)('0' + random.Next(9))}{(char)('0' + random.Next(9))}",
+                        TailNumber = GenerateTailNumber(random),
                         FlightType = FlightType.IncomingFlight,
                         Airline = "International Airline",
                         FlightStatus = incomingStatuses[random.Next(incomingStatuses.Length)],
@@ -52,7 +53,7 @@ namespace WebApplication1.EfStuff
                 {
                     Flight departingFlight = new Flight()
                     {
-                        TailNumber = $"{(char)('A' + random.Next(26))}{(char)('A' + random.Next(26))} {(char)('0' + random.Next(9))}{(char)('0' + random.Next(9))}",
+                        TailNumber = GenerateTailNumber(random),
                         FlightType = FlightType.DepartingFlight,
                         Airline = "International Airline",
                         FlightStatus = departingStatuses[random.Next(departingStatuses.Length)],
@@ -62,6 +63,13 @@ namespace WebApplication1.EfStuff
                     flightsRepository.Save(departingFlight);
                 }
             }
+        }
+
+        private static string GenerateTailNumber(Random random)
+        {
+            var firstPart = $"{(char)('A' + random.Next(26))}{(char)('A' + random.Next(26))}";
+            var secondPart = $"{(char)('0' + random.Next(9))}{(char)('0' + random.Next(9))}";
+            return $"{firstPart} {secondPart}";
         }
 
         private static void CreateDefaultAdress(IServiceProvider serviceProvider)
