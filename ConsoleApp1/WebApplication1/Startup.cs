@@ -22,6 +22,7 @@ using WebApplication1.Presentation.Airport;
 using WebApplication1.Profiles;
 using WebApplication1.Profiles.Airport;
 using WebApplication1.Services;
+using WebApplication1.Utils.MiniTimeline;
 
 namespace WebApplication1
 {
@@ -58,6 +59,7 @@ namespace WebApplication1
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICitizenPresentation, CitizenPresentation>();
             services.AddScoped<IAirportPresentation, AirportPresentation>();
+            services.AddHostedService<MiniTimeline>();
 
             RegisterAutoMapper(services);
 
