@@ -7,5 +7,9 @@ namespace WebApplication1.Services
         Citizen GetUser();
         bool IsPolicment();
         bool IsHCWorker();
+        bool IsTvStaff();
+        bool IsTvAdmin();
+        bool IsTvDirector();
+        bool IsTvCastingDirector();
     }
 }
