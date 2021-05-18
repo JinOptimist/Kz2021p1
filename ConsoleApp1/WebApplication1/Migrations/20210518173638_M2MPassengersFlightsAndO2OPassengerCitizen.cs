@@ -9,12 +9,6 @@ namespace WebApplication1.Migrations
             migrationBuilder.DropTable(
                 name: "CitizenFlight");
 
-            migrationBuilder.AddColumn<long>(
-                name: "PassengerId",
-                table: "Citizens",
-                type: "bigint",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Passengers",
                 columns: table => new
@@ -28,6 +22,12 @@ namespace WebApplication1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Passengers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Passengers_Citizens_CitizenId",
+                        column: x => x.CitizenId,
+                        principalTable: "Citizens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,45 +55,25 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Citizens_PassengerId",
-                table: "Citizens",
-                column: "PassengerId",
-                unique: true,
-                filter: "[PassengerId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FlightPassenger_PassengersId",
                 table: "FlightPassenger",
                 column: "PassengersId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Citizens_Passengers_PassengerId",
-                table: "Citizens",
-                column: "PassengerId",
-                principalTable: "Passengers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.CreateIndex(
+                name: "IX_Passengers_CitizenId",
+                table: "Passengers",
+                column: "CitizenId",
+                unique: true,
+                filter: "[CitizenId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Citizens_Passengers_PassengerId",
-                table: "Citizens");
-
             migrationBuilder.DropTable(
                 name: "FlightPassenger");
 
             migrationBuilder.DropTable(
                 name: "Passengers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Citizens_PassengerId",
-                table: "Citizens");
-
-            migrationBuilder.DropColumn(
-                name: "PassengerId",
-                table: "Citizens");
 
             migrationBuilder.CreateTable(
                 name: "CitizenFlight",

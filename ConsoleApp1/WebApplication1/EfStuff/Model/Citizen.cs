@@ -26,7 +26,6 @@ namespace WebApplication1.EfStuff.Model
 		public virtual PoliceAcademy PoliceAcademy { get; set; }
 		public virtual ICollection<Violations> Violations  {get; set; }
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
-        public long? PassengerId { get; set; }
         public virtual Passenger Passenger { get; set; }
     }
 }
