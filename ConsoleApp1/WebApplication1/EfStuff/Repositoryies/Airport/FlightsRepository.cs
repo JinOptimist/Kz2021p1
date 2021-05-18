@@ -20,7 +20,7 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
                 .ToList();
         }
         /// <summary>
-        /// Returns all flights within 10 minutes until arriving
+        /// Returns all flights within 10 minutes until arrival
         /// </summary>
         /// <returns>List of flights</returns>
         public List<Flight> GetArrivingFlights()
@@ -31,7 +31,18 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
                 .Where(f => f.FlightType == FlightType.IncomingFlight
                 && currentTime >= f.Date && currentTime <= offset).ToList();
         }
-
+        /// <summary>
+        /// Returns all flights within 10 minutes until departure
+        /// </summary>
+        /// <returns>List of flights</returns>
+        public List<Flight> GetDepartingFlights()
+        {
+            var currentTime = DateTime.Now;
+            var offset = currentTime.AddMinutes(-10);
+            return _dbSet
+                .Where(f => f.FlightType == FlightType.DepartingFlight
+                && currentTime >= offset && currentTime <= f.Date).ToList();
+        }
         public List<Flight> GetFlightsAvailableForBooking()
         {
             return _dbSet

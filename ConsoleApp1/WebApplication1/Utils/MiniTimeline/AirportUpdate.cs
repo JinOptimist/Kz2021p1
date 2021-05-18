@@ -32,10 +32,8 @@ namespace WebApplication1.Utils.MiniTimeline
             {
                 var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
                 var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
-                var _passengersRepository = scope.ServiceProvider.GetRequiredService<IPassengersRepository>();
-                var arrivedFlights = _flightsRepository.GetArrivingFlights();
-                Debug.WriteLine(arrivedFlights.Count());
-                arrivedFlights.ForEach(f =>
+                var arrivingFlights = _flightsRepository.GetArrivingFlights();
+                arrivingFlights.ForEach(f =>
                 {
                     f.Passengers.ForEach(p =>
                     {
@@ -49,21 +47,23 @@ namespace WebApplication1.Utils.MiniTimeline
             }
         }
 
-        private async Task DepartPassengers()
+        private void DepartPassengers()
         {
-            //TODO: move DepartPassengers to MiniTimeline
-            //List<Flight> departedFlights = new List<Flight>();
-            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
-            //{
-            //    if (!departedFlights.Contains(passenger.Flight))
-            //    {
-            //        departedFlights.Add(passenger.Flight);
-            //    }
-            //    passenger.Citizen.IsOutOfCity = true;
-            //    _citizenRepository.Save(passenger.Citizen);
-            //}
-            //ConvertFlights(departedFlights);
-            Debug.WriteLine("Departed");
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
+                var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
+                var departingFlights = _flightsRepository.GetDepartingFlights();
+                departingFlights.ForEach(f =>
+                {
+                    f.Passengers.ForEach(p =>
+                    {
+                        p.Citizen.IsOutOfCity = true;
+                        _citizenRepository.Save(p.Citizen);
+                    });
+                });
+                Debug.WriteLine("Departed");
+            }
         }
     }
 }
