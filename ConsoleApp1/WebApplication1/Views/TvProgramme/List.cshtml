@@ -1,0 +1,30 @@
+﻿@model List<WebApplication1.Models.Television.TvProgrammeViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+
+@section Scripts{
+    <script src="~/js/tv.js"></script>
+}
+@if (userService.IsTvDirector())
+{
+    <div>
+        <a asp-action="Add">Add new programme</a>
+    </div>
+}
+
+@foreach (var programme in Model)
+{
+    <div class="programme">
+        <img class="avatar" src="@programme.AvatarUrl" />
+        @programme.Name
+        Content Rating: @programme.ContentRating
+        Type Of Programme: @programme.TypeOfProgramme
+        <a asp-controller="TvProgramme" asp-action="Profile" asp-route-programmeName="@programme.Name">Details</a>
+
+        @if (userService.IsTvDirector())
+        {
+            <a asp-action="Edit" asp-route-id="@programme.Id">Edit</a>
+            <input type="button" class="delete" data-name="@programme.Id" value="X" />
+        }
+    </div>
+}

@@ -1,0 +1,18 @@
+﻿@model WebApplication1.Models.Television.TvChannelViewModel
+
+<h1>Add new TV Channel</h1>
+
+<form action="/TvChannel/Add" method="post">
+    <div>
+        Name:
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+        <label class="label-danger">@ViewBag.ErrorMsg</label>
+    </div>
+    <div>
+        Working From:
+        @Html.EditorFor(x => x.WorkingFrom)
+        @Html.ValidationMessageFor(x => x.WorkingFrom)
+    </div>
+    <input type="submit" value="Add" />
+</form>

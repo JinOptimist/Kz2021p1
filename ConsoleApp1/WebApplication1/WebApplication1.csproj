@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Image\avatars\" />
+    <Folder Include="wwwroot\Image\Television\" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
@@ -31,6 +32,26 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <Folder Include="wwwroot\images\police\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\TvCelebrity\Add.cshtml" />
+    <None Include="Views\TvCelebrity\Index.cshtml" />
+    <None Include="Views\TvChannel\Add.cshtml" />
+    <None Include="Views\TvChannel\AddDirector.cshtml" />
+    <None Include="Views\TvChannel\Index.cshtml" />
+    <None Include="Views\TvChannel\Profile.cshtml" />
+    <None Include="Views\TvProgramme\Add.cshtml" />
+    <None Include="Views\TvProgramme\Edit.cshtml" />
+    <None Include="Views\TvProgramme\Index.cshtml" />
+    <None Include="Views\TvProgramme\Profile.cshtml" />
+    <None Include="Views\TvProgramme\List.cshtml" />
+    <None Include="Views\TvSchedule\Add.cshtml" />
+    <None Include="Views\TvSchedule\Index.cshtml" />
+    <None Include="Views\TvStaff\Add.cshtml" />
+    <None Include="Views\TvStaff\AddStaffToProgramme.cshtml" />
+    <None Include="Views\TvStaff\Index.cshtml" />
+    <None Include="Views\TvStaff\Profile.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

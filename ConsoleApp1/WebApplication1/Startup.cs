@@ -26,10 +26,14 @@ using Newtonsoft.Json;
 using WebApplication1.Presentation;
 using System.Reflection;
 using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Model.Television;
+using WebApplication1.Models.Television;
+using WebApplication1.Presentation.Television;
+using WebApplication1.EfStuff.Repositoryies.Television;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -44,11 +48,11 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
@@ -64,6 +68,45 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+
+            services.AddScoped<TvChannelPresentation>(x =>
+                new TvChannelPresentation(
+                    x.GetService<TvChannelRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvStaffRepository>()));
+
+            services.AddScoped<TvProgrammePresentation>(x =>
+                new TvProgrammePresentation(
+                    x.GetService<TvProgrammeRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IWebHostEnvironment>()));
+
+            services.AddScoped<TvStaffPresentation>(x =>
+                new TvStaffPresentation(
+                    x.GetService<TvStaffRepository>(),
+                    x.GetService<TvProgrammeStaffRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvProgrammeRepository>()));
+
+            services.AddScoped<TvSchedulePresentation>(x =>
+                new TvSchedulePresentation(
+                    x.GetService<TvScheduleRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<TvProgrammeRepository>(),
+                    x.GetService<IUserService>()));
+
+            services.AddScoped<TvCelebrityPresentation>(x =>
+                new TvCelebrityPresentation(
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvCelebrityRepository>(),
+                    x.GetService<TvProgrammeCelebrityRepository>(),
+                    x.GetService<TvProgrammeRepository>()));
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
@@ -112,7 +155,7 @@ namespace WebApplication1
 
             configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
             configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            
+
             configurationExp.AddProfile<PoliceProfiles>();
 
             configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
@@ -127,6 +170,29 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+
+            configurationExp.CreateMap<TvStaff, TvStaffViewModel>()
+                .ForMember(nameof(TvStaffViewModel.Name),
+                            opt => opt.MapFrom(staff => staff.Citizen.Name));
+            configurationExp.CreateMap<TvStaffViewModel, TvStaff>();
+
+            configurationExp.CreateMap<TvCelebrity, TvCelebrityViewModel>()
+                .ForMember(nameof(TvCelebrityViewModel.Name),
+                            opt => opt.MapFrom(staff => staff.Citizen.Name));
+            configurationExp.CreateMap<TvCelebrityViewModel, TvCelebrity>();
+
+            configurationExp.CreateMap<TvChannel, TvChannelViewModel>()
+                .ForMember(nameof(TvChannelViewModel.StaffCount),
+                        opt => opt.MapFrom(channel => channel.Staff.Count))
+                .ForMember(nameof(TvChannelViewModel.ProgrammeCount),
+                        opt => opt.MapFrom(channel => channel.Programmes.Count));
+            configurationExp.CreateMap<TvChannelViewModel, TvChannel>();
+
+            MapBothSide<TvProgramme, TvProgrammeViewModel>(configurationExp);
+            MapBothSide<TvProgramme, TvProgrammeShortViewModel>(configurationExp);
+            MapBothSide<TvSchedule, TvScheduleViewModel>(configurationExp);
+            MapBothSide<TvProgrammeStaff, TvProgrammeStaffViewModel>(configurationExp);
+            MapBothSide<TvProgrammeCelebrity, TvProgrammeCelebrityViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
@@ -161,12 +227,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

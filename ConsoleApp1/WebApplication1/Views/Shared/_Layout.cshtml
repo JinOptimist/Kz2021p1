@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet" />
     <link href="~/lib/izimodal/css/iziModal.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css?v=6" />
+    <link rel="stylesheet" href="~/css/site.css?v=7" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -153,6 +153,26 @@
                                href="@Url.Action("Main", "Fireman")">Пожарные главная страница</a>
                         </li>
                         <li class="list-group-item">@Html.ActionLink("City Bus System", "CityBusSystemMainPage", "Bus")</li>
+
+                        <li class="nav-item dropdown">
+                            <a asp-controller="TvProgramme" asp-action="Index" class="dropdown-toggle nav-link text-dark">Television<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="TvProgramme" asp-action="Index">Tv Programmes</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item nav-link text-dark" asp-controller="TvChannel" asp-action="Index">Channels</a>
+                                </li>
+                                <li class="divider"></li>
+                            </ul>
+                        </li>
+
+                        @if (userService.IsTvStaff())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="TvStaff" asp-action="Profile">My Job</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

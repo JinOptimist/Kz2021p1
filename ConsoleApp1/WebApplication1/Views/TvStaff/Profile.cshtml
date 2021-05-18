@@ -1,0 +1,62 @@
+﻿@model WebApplication1.Models.Television.TvStaffViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+<h1>My profile</h1>
+<div>
+    <div>
+        Name : @Model.Citizen.Name
+    </div>
+    <div>
+        Occupation : @Model.Occupation
+    </div>
+    @if (userService.IsTvStaff() && !userService.IsTvAdmin())
+    {
+        <br />
+        <h6>For Television staff: </h6>
+        <div>
+            Channel:
+            @Model.Channel.Name
+        </div>
+        <div>
+            <a asp-action="ProgrammeListOfStaff" asp-route-name="@Model.Name">My programmes</a>
+        </div>
+    }
+    @if (userService.IsTvAdmin())
+    {
+        <h6>For Television Admin: </h6>
+        <div>
+            <a asp-controller="TvChannel" asp-action="Index">Channels</a>
+        </div>
+    }
+    @if (userService.IsTvDirector())
+    {
+        <br />
+        <h6>For Television Director: </h6>
+        <div>
+            <a asp-controller="TvProgramme" asp-action="List" asp-route-channelName="@Model.Channel.Name">Programmes</a>
+        </div>
+        <div>
+            Schedules of @Model.Channel.Name :
+            @for (int i = 0; i < 7; i++)
+            {
+                <a asp-controller="TvSchedule" asp-action="Index" asp-route-channelName="@Model.Channel.Name"
+                   asp-route-date="@DateTime.UtcNow.AddDays(i).ToShortDateString()">
+                    @DateTime.UtcNow.AddDays(i).DayOfWeek
+                </a>
+            }
+        </div>
+        <div>
+            <a asp-controller="TvStaff" asp-action="Index" asp-route-channelName="@Model.Channel.Name">Staff</a>
+        </div>
+    }
+    @if (userService.IsTvCastingDirector())
+    {
+        <br />
+        <div>
+            <a asp-controller="TvCelebrity" asp-action="Index">All Celebrities</a>
+        </div>
+        <div>
+            <a asp-controller="TvCelebrity" asp-action="Add">Add new celebrity</a>
+        </div>
+    }
+</div>

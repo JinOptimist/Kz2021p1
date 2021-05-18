@@ -1,0 +1,23 @@
+﻿@model WebApplication1.Models.Television.TvStaffViewModel
+<h1>Staff</h1>
+
+<form action="/TvChannel/AddDirector" method="post">
+    <div>
+        Channel:
+        @Html.DisplayFor(x => x.Channel.Name)
+        @Html.HiddenFor(x => x.Channel.Name)
+        @Html.ValidationMessageFor(x => x.Channel)
+    </div>
+    <div>
+        Occupation:
+        @Html.DisplayFor(x => x.Occupation)
+        @Html.HiddenFor(x => x.Occupation)
+        @Html.ValidationMessageFor(x => x.Occupation)
+    </div>
+    <div>
+        Citizen:
+        @Html.DropDownListFor(x => x.Citizen.Name, new SelectList(ViewBag.Citizens, "Name", "Name"))
+        @Html.ValidationMessageFor(model => model.Citizen, "", new { @class = "text-danger" })
+    </div>
+    <input type="submit" value="Add" />
+</form>

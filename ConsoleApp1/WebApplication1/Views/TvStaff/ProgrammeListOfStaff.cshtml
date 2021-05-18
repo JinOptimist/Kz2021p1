@@ -1,0 +1,29 @@
+﻿@model List<WebApplication1.Models.Television.TvProgrammeStaffViewModel>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Programme
+        </th>
+        <th>
+            Occupation
+        </th>
+        <th>
+            
+        </th>
+    </tr>
+    <tr>
+        @foreach (var item in Model)
+        {
+            <td>
+                @item.Programme.Name
+            </td>
+            <td>
+                @item.Staff.Occupation
+            </td>
+            <td>
+                <a asp-controller="TvProgramme" asp-action="Profile" asp-route-programmeName="@item.Programme.Name">Details</a>
+            </td>
+        }
+    </tr>
+</table>
