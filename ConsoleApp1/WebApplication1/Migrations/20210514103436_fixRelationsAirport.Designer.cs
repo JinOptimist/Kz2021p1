@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210514103436_fixRelationsAirport")]
+    partial class fixRelationsAirport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,21 +49,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("StudentsId");
 
                     b.ToTable("CertificateStudent");
-                });
-
-            modelBuilder.Entity("CitizenFlight", b =>
-                {
-                    b.Property<long>("CitizensId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("FlightsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CitizensId", "FlightsId");
-
-                    b.HasIndex("FlightsId");
-
-                    b.ToTable("CitizenFlight");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
@@ -113,6 +100,29 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Flights");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CitizenId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FlightId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CitizenId")
+                        .IsUnique();
+
+                    b.HasIndex("FlightId");
+
+                    b.ToTable("Passengers");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
@@ -718,19 +728,23 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CitizenFlight", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
                 {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", null)
-                        .WithMany()
-                        .HasForeignKey("CitizensId")
+                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
+                        .WithOne("PlanePassenger")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Airport.Passenger", "CitizenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Flight", null)
-                        .WithMany()
-                        .HasForeignKey("FlightsId")
+                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Flight", "Flight")
+                        .WithMany("Passengers")
+                        .HasForeignKey("FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("Flight");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
@@ -878,9 +892,16 @@ namespace WebApplication1.Migrations
                     b.Navigation("Citizens");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Flight", b =>
+                {
+                    b.Navigation("Passengers");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.Navigation("Fireman");
+
+                    b.Navigation("PlanePassenger");
 
                     b.Navigation("PoliceAcademy");
 
