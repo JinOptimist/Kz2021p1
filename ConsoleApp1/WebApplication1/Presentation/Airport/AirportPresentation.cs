@@ -18,7 +18,6 @@ namespace WebApplication1.Presentation.Airport
     public class AirportPresentation : IAirportPresentation
     {
         private IFlightsRepository _flightsRepository { get; set; }
-        //private IPassengersRepository _passengersRepository { get; set; }
         private ICitizenRepository _citizenRepository { get; set; }
         private IUserService _userService { get; set; }
         private IMapper _mapper { get; set; }
@@ -50,6 +49,7 @@ namespace WebApplication1.Presentation.Airport
 
         public void AdmitPassengers()
         {
+            //TODO: move AdmitPassengers to MiniTimeline
             //List<Flight> arrivedFlights = new List<Flight>();
             //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForAdmission())
             //{
@@ -67,6 +67,7 @@ namespace WebApplication1.Presentation.Airport
 
         public void DepartPassengers()
         {
+            //TODO: move DepartPassengers to MiniTimeline
             //List<Flight> departedFlights = new List<Flight>();
             //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
             //{
@@ -88,9 +89,7 @@ namespace WebApplication1.Presentation.Airport
 
         public bool FlightIsAlreadyBooked(long id)
         {
-            //var citizen = _userService.GetUser();
-            //return _passengersRepository.CitizenIsRegisteredForFlight(id, citizen.Id);
-            return false;
+            return _userService.GetUser().Flights.Any(f => f.Id == id);
         }
 
         public void BookTicket(long id)
@@ -103,17 +102,11 @@ namespace WebApplication1.Presentation.Airport
 
             _citizenRepository.Save(citizen);
             _flightsRepository.Save(selectedFlight);
-            //Passenger passenger = new Passenger
-            //{
-            //    Flight = selectedFlight,
-            //    Citizen = citizen
-            //};
-            //_passengersRepository.Save(passenger);
-            Debug.WriteLine("Booked");
         }
 
         public void ConvertFlights(List<Flight> flights)
         {
+            //TODO: move ConvertFlights to MiniTimeline
             Random random = new Random();
             foreach (var flight in flights)
             {

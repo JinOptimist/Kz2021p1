@@ -18,14 +18,14 @@ namespace WebApplication1.Controllers.Airport
 
         public IActionResult Index()
         {
-            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
+            var incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
             _airpotPresentation.AdmitPassengers();
             return View(incomingFlightsInfo);
         }
 
         public IActionResult AvailableFlights()
         {
-            List<AvailableFlightsViewModel> departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
+           var departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
             _airpotPresentation.DepartPassengers();
             return View(departingFlightsAvailableForBooking);
         }
