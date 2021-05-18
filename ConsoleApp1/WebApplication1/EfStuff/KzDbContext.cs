@@ -31,7 +31,6 @@ namespace WebApplication1.EfStuff
 		    public DbSet<Question> Qestions { get; set; }
 		    public DbSet<Shift> Shifts { get; set; }
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<Passenger> Passengers { get; set; }
 
 
 		public KzDbContext(DbContextOptions options) : base(options) { }
@@ -104,12 +103,11 @@ namespace WebApplication1.EfStuff
                 .WithMany(s => s.Shifts);
 
             modelBuilder.Entity<Flight>()
-                .HasMany(f => f.Passengers)
-                .WithOne(p => p.Flight);
-                
-            modelBuilder.Entity<Passenger>()
-                .HasOne(p => p.Citizen)
-                .WithOne(c => c.PlanePassenger);
+                .HasMany(f => f.Citizens)
+                .WithMany(p => p.Flights);
+            modelBuilder.Entity<Citizen>()
+                .HasMany(c => c.Flights)
+                .WithMany(f => f.Citizens);
 
             base.OnModelCreating(modelBuilder);
         }

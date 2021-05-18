@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
@@ -17,16 +18,14 @@ namespace WebApplication1.Presentation.Airport
     public class AirportPresentation : IAirportPresentation
     {
         private IFlightsRepository _flightsRepository { get; set; }
-        private IPassengersRepository _passengersRepository { get; set; }
         private ICitizenRepository _citizenRepository { get; set; }
         private IUserService _userService { get; set; }
         private IMapper _mapper { get; set; }
-        public AirportPresentation(IFlightsRepository flightsRepository, IMapper mapper, IPassengersRepository passengersRepository
-            , IUserService userService, ICitizenRepository citizenRepository)
+        public AirportPresentation(IFlightsRepository flightsRepository, IMapper mapper,
+             IUserService userService, ICitizenRepository citizenRepository)
         {
             _flightsRepository = flightsRepository;
             _mapper = mapper;
-            _passengersRepository = passengersRepository;
             _userService = userService;
             _citizenRepository = citizenRepository;
         }
@@ -50,33 +49,37 @@ namespace WebApplication1.Presentation.Airport
 
         public void AdmitPassengers()
         {
-            List<Flight> arrivedFlights = new List<Flight>();
-            foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForAdmission())
-            {
-                if (!arrivedFlights.Contains(passenger.Flight))
-                {
-                    arrivedFlights.Add(passenger.Flight);
-                }
-                passenger.Citizen.IsOutOfCity = false;
-                _passengersRepository.Save(passenger);
-                _passengersRepository.Remove(passenger);
-            }
-            ConvertFlights(arrivedFlights);
+            //TODO: move AdmitPassengers to MiniTimeline
+            //List<Flight> arrivedFlights = new List<Flight>();
+            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForAdmission())
+            //{
+            //    if (!arrivedFlights.Contains(passenger.Flight))
+            //    {
+            //        arrivedFlights.Add(passenger.Flight);
+            //    }
+            //    passenger.Citizen.IsOutOfCity = false;
+            //    _passengersRepository.Save(passenger);
+            //    _passengersRepository.Remove(passenger);
+            //}
+            //ConvertFlights(arrivedFlights);
+            Debug.WriteLine("Admited");
         }
 
         public void DepartPassengers()
         {
-            List<Flight> departedFlights = new List<Flight>();
-            foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
-            {
-                if (!departedFlights.Contains(passenger.Flight))
-                {
-                    departedFlights.Add(passenger.Flight);
-                }
-                passenger.Citizen.IsOutOfCity = true;
-                _citizenRepository.Save(passenger.Citizen);
-            }
-            ConvertFlights(departedFlights);
+            //TODO: move DepartPassengers to MiniTimeline
+            //List<Flight> departedFlights = new List<Flight>();
+            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
+            //{
+            //    if (!departedFlights.Contains(passenger.Flight))
+            //    {
+            //        departedFlights.Add(passenger.Flight);
+            //    }
+            //    passenger.Citizen.IsOutOfCity = true;
+            //    _citizenRepository.Save(passenger.Citizen);
+            //}
+            //ConvertFlights(departedFlights);
+            Debug.WriteLine("Departed");
         }
 
         public bool FlightIsValid(long id)
@@ -86,25 +89,24 @@ namespace WebApplication1.Presentation.Airport
 
         public bool FlightIsAlreadyBooked(long id)
         {
-            var citizen = _userService.GetUser();
-            return _passengersRepository.CitizenIsRegisteredForFlight(id, citizen.Id);
+            return _userService.GetUser().Flights.Any(f => f.Id == id);
         }
 
         public void BookTicket(long id)
         {
-            Flight selectedFlight = _flightsRepository.Get(id);
-            Citizen citizen = _userService.GetUser();
+            var selectedFlight = _flightsRepository.Get(id);
+            var citizen = _userService.GetUser();
 
-            Passenger passenger = new Passenger
-            {
-                FlightId = selectedFlight.Id,
-                CitizenId = citizen.Id
-            };
-            _passengersRepository.Save(passenger);
+            citizen.Flights.Add(selectedFlight);
+            selectedFlight.Citizens.Add(citizen);
+
+            _citizenRepository.Save(citizen);
+            _flightsRepository.Save(selectedFlight);
         }
 
         public void ConvertFlights(List<Flight> flights)
         {
+            //TODO: move ConvertFlights to MiniTimeline
             Random random = new Random();
             foreach (var flight in flights)
             {
