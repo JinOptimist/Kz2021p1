@@ -32,15 +32,38 @@ namespace WebApplication1.Utils.MiniTimeline
             {
                 var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
                 var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
-                var arrivedFlights = new List<Flight>();
+                var _passengersRepository = scope.ServiceProvider.GetRequiredService<IPassengersRepository>();
+                var arrivedFlights = _flightsRepository.GetArrivingFlights();
+                Debug.WriteLine(arrivedFlights.Count());
+                arrivedFlights.ForEach(f =>
+                {
+                    f.Passengers.ForEach(p =>
+                    {
+                        p.Flights.Remove(f);
+                        p.Citizen.IsOutOfCity = false;
+                        _citizenRepository.Save(p.Citizen);
+                    });
+                });
+                Debug.WriteLine("Admited");
 
-                
             }
         }
 
         private async Task DepartPassengers()
         {
-
+            //TODO: move DepartPassengers to MiniTimeline
+            //List<Flight> departedFlights = new List<Flight>();
+            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
+            //{
+            //    if (!departedFlights.Contains(passenger.Flight))
+            //    {
+            //        departedFlights.Add(passenger.Flight);
+            //    }
+            //    passenger.Citizen.IsOutOfCity = true;
+            //    _citizenRepository.Save(passenger.Citizen);
+            //}
+            //ConvertFlights(departedFlights);
+            Debug.WriteLine("Departed");
         }
     }
 }

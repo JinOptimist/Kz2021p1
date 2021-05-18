@@ -49,41 +49,6 @@ namespace WebApplication1.Presentation.Airport
                 .ToList();
         }
 
-        public void AdmitPassengers()
-        {
-            //TODO: move AdmitPassengers to MiniTimeline
-            //List<Flight> arrivedFlights = new List<Flight>();
-            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForAdmission())
-            //{
-            //    if (!arrivedFlights.Contains(passenger.Flight))
-            //    {
-            //        arrivedFlights.Add(passenger.Flight);
-            //    }
-            //    passenger.Citizen.IsOutOfCity = false;
-            //    _passengersRepository.Save(passenger);
-            //    _passengersRepository.Remove(passenger);
-            //}
-            //ConvertFlights(arrivedFlights);
-            Debug.WriteLine("Admited");
-        }
-
-        public void DepartPassengers()
-        {
-            //TODO: move DepartPassengers to MiniTimeline
-            //List<Flight> departedFlights = new List<Flight>();
-            //foreach (var passenger in _passengersRepository.GetAllPassengersAvailableForDeparture())
-            //{
-            //    if (!departedFlights.Contains(passenger.Flight))
-            //    {
-            //        departedFlights.Add(passenger.Flight);
-            //    }
-            //    passenger.Citizen.IsOutOfCity = true;
-            //    _citizenRepository.Save(passenger.Citizen);
-            //}
-            //ConvertFlights(departedFlights);
-            Debug.WriteLine("Departed");
-        }
-
         public bool FlightIsValid(long id)
         {
             return _flightsRepository.Get(id) != null;
@@ -112,7 +77,7 @@ namespace WebApplication1.Presentation.Airport
 
             citizen.Passenger = passenger;
             selectedFlight.Passengers.Add(passenger);
-            
+
             _passengersRepository.Save(passenger);
             _citizenRepository.Save(citizen);
             _flightsRepository.Save(selectedFlight);

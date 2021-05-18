@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
@@ -17,6 +18,18 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
             return _dbSet
                 .Where(flight => flight.FlightType == FlightType.IncomingFlight)
                 .ToList();
+        }
+        /// <summary>
+        /// Returns all flights within 10 minutes until arriving
+        /// </summary>
+        /// <returns>List of flights</returns>
+        public List<Flight> GetArrivingFlights()
+        {
+            var currentTime = DateTime.Now;
+            var offset = currentTime.AddMinutes(10);
+            return _dbSet
+                .Where(f => f.FlightType == FlightType.IncomingFlight
+                && currentTime >= f.Date && currentTime <= offset).ToList();
         }
 
         public List<Flight> GetFlightsAvailableForBooking()

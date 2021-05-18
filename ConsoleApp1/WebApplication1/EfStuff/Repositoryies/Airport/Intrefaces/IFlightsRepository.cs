@@ -7,5 +7,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces
     {
         List<Flight> GetAllIncomingFlights();
         List<Flight> GetFlightsAvailableForBooking();
+        List<Flight> GetArrivingFlights();
     }
 }

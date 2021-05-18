@@ -25,7 +25,7 @@ namespace WebApplication1.Utils.MiniTimeline
             while (!stoppingToken.IsCancellationRequested)
             {
                 await UpdateTimeline();
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromMinutes(2));
             }
         }
 
