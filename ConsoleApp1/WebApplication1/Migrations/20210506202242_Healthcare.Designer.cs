@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210506202242_Healthcare")]
+    partial class Healthcare
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -631,164 +633,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvCelebrity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("CitizenId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Occupation")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CitizenId")
-                        .IsUnique();
-
-                    b.ToTable("TvCelebrities");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvChannel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("WorkingFrom")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TvChannels");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgramme", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("ChannelId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ContentRating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeOfProgramme")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChannelId");
-
-                    b.ToTable("TvProgrammes");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgrammeCelebrity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("CelebrityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ProgrammeId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CelebrityId");
-
-                    b.HasIndex("ProgrammeId");
-
-                    b.ToTable("TvProgrammeCelebrities");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgrammeStaff", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("ProgrammeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("StaffId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProgrammeId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("TvProgrammeStaff");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvSchedule", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AiringTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("ProgrammeId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProgrammeId");
-
-                    b.ToTable("TvSchedules");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvStaff", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("ChannelId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CitizenId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Occupation")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChannelId");
-
-                    b.HasIndex("CitizenId")
-                        .IsUnique();
-
-                    b.ToTable("TvStaff");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.TripRoute", b =>
                 {
                     b.Property<long>("Id")
@@ -1025,82 +869,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("University");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvCelebrity", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("TvCelebrity")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Television.TvCelebrity", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgramme", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvChannel", "Channel")
-                        .WithMany("Programmes")
-                        .HasForeignKey("ChannelId");
-
-                    b.Navigation("Channel");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgrammeCelebrity", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvCelebrity", "Celebrity")
-                        .WithMany("Programme")
-                        .HasForeignKey("CelebrityId");
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvProgramme", "Programme")
-                        .WithMany("Celebrities")
-                        .HasForeignKey("ProgrammeId");
-
-                    b.Navigation("Celebrity");
-
-                    b.Navigation("Programme");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgrammeStaff", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvProgramme", "Programme")
-                        .WithMany("Staff")
-                        .HasForeignKey("ProgrammeId");
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvStaff", "Staff")
-                        .WithMany("Programme")
-                        .HasForeignKey("StaffId");
-
-                    b.Navigation("Programme");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvSchedule", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvProgramme", "Programme")
-                        .WithMany("Schedules")
-                        .HasForeignKey("ProgrammeId");
-
-                    b.Navigation("Programme");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvStaff", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Television.TvChannel", "Channel")
-                        .WithMany("Staff")
-                        .HasForeignKey("ChannelId");
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("TvStaff")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Television.TvStaff", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Channel");
-
-                    b.Navigation("Citizen");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Violations", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
@@ -1137,10 +905,6 @@ namespace WebApplication1.Migrations
 
                     b.Navigation("Policeman");
 
-                    b.Navigation("TvCelebrity");
-
-                    b.Navigation("TvStaff");
-
                     b.Navigation("Violations");
                 });
 
@@ -1164,32 +928,6 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.EfStuff.Model.SportComplex", b =>
                 {
                     b.Navigation("Sections");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvCelebrity", b =>
-                {
-                    b.Navigation("Programme");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvChannel", b =>
-                {
-                    b.Navigation("Programmes");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvProgramme", b =>
-                {
-                    b.Navigation("Celebrities");
-
-                    b.Navigation("Schedules");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Television.TvStaff", b =>
-                {
-                    b.Navigation("Programme");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.TripRoute", b =>
