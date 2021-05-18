@@ -89,7 +89,7 @@ namespace WebApplication1.Presentation.Airport
 
         public bool FlightIsAlreadyBooked(long id)
         {
-            return _userService.GetUser().Flights.Any(f => f.Id == id);
+            return _userService.GetUser().PlanePassenger.Flights.Any(f => f.Id == id);
         }
 
         public void BookTicket(long id)
@@ -97,8 +97,11 @@ namespace WebApplication1.Presentation.Airport
             var selectedFlight = _flightsRepository.Get(id);
             var citizen = _userService.GetUser();
 
-            citizen.Flights.Add(selectedFlight);
-            selectedFlight.Citizens.Add(citizen);
+            var passenger = new Passenger { Citizen = citizen };
+            passenger.Flights.Add(selectedFlight);
+
+            citizen.PlanePassenger = passenger;
+            selectedFlight.Passengers.Add(passenger);
 
             _citizenRepository.Save(citizen);
             _flightsRepository.Save(selectedFlight);

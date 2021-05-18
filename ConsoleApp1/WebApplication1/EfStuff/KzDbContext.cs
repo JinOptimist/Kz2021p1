@@ -102,12 +102,16 @@ namespace WebApplication1.EfStuff
                 .HasOne(p => p.Policeman)
                 .WithMany(s => s.Shifts);
 
+            modelBuilder.Entity<Passenger>()
+                .HasMany(p => p.Flights)
+                .WithMany(f => f.Passengers);
             modelBuilder.Entity<Flight>()
-                .HasMany(f => f.Citizens)
+                .HasMany(f => f.Passengers)
                 .WithMany(p => p.Flights);
             modelBuilder.Entity<Citizen>()
-                .HasMany(c => c.Flights)
-                .WithMany(f => f.Citizens);
+                .HasOne(c => c.PlanePassenger)
+                .WithOne(p => p.Citizen)
+                .HasForeignKey<Passenger>(p => p.CitizenId);
 
             base.OnModelCreating(modelBuilder);
         }

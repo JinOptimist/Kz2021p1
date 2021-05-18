@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.Models.Airport;
 
@@ -30,6 +31,8 @@ namespace WebApplication1.Profiles.Airport
             CreateMap<AvailableFlightsViewModel, Flight>()
                 .ForMember(nameof(Flight.Date), opt => opt.MapFrom(viewModel => DateTime.Parse(viewModel.DepartureTime)))
                 .ForMember(nameof(Flight.Place), opt => opt.MapFrom(viewModel => viewModel.Destination));
+            CreateMap<Citizen, Passenger>()
+                .ForMember(nameof(Passenger.CitizenId), opt => opt.MapFrom(c => c.Id));
         }
     }
 }
