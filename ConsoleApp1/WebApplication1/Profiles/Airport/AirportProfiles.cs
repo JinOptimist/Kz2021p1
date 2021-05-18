@@ -32,7 +32,8 @@ namespace WebApplication1.Profiles.Airport
                 .ForMember(nameof(Flight.Date), opt => opt.MapFrom(viewModel => DateTime.Parse(viewModel.DepartureTime)))
                 .ForMember(nameof(Flight.Place), opt => opt.MapFrom(viewModel => viewModel.Destination));
             CreateMap<Citizen, Passenger>()
-                .ForMember(nameof(Passenger.CitizenId), opt => opt.MapFrom(c => c.Id));
+                .ForMember(nameof(Passenger.CitizenId), opt => opt.MapFrom(c => c.Id))
+                .ForMember(nameof(Passenger.Id), opt => opt.Ignore());
         }
     }
 }

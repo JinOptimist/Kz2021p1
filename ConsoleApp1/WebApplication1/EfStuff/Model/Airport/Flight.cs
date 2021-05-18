@@ -13,6 +13,6 @@ namespace WebApplication1.EfStuff.Model.Airport
         public FlightStatus FlightStatus { get; set; }
         public string Place { get; set; }
         public DateTime Date { get; set; }
-        public virtual ICollection<Passenger> Passengers { get; set; }
+        public virtual List<Passenger> Passengers { get; set; }
     }
 }

@@ -22,12 +22,12 @@ namespace WebApplication1.EfStuff.Model
 		public virtual Adress House { get; set; } 
         public virtual Fireman Fireman { get; set; }
         public bool IsOutOfCity { get; set; }
-        
 		public virtual Policeman Policeman { get; set; }
 		public virtual PoliceAcademy PoliceAcademy { get; set; }
 		public virtual ICollection<Violations> Violations  {get; set; }
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
-        public virtual Passenger PlanePassenger { get; set; }
+        public long? PassengerId { get; set; }
+        public virtual Passenger Passenger { get; set; }
     }
 }
 

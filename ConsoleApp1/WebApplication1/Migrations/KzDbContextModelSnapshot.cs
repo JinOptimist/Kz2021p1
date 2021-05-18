@@ -133,11 +133,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CitizenId")
-                        .IsUnique()
-                        .HasFilter("[CitizenId] IS NOT NULL");
-
-                    b.ToTable("Passenger");
+                    b.ToTable("Passengers");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
@@ -237,12 +233,19 @@ namespace WebApplication1.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("PassengerId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HouseId");
+
+                    b.HasIndex("PassengerId")
+                        .IsUnique()
+                        .HasFilter("[PassengerId] IS NOT NULL");
 
                     b.ToTable("Citizens");
                 });
@@ -758,15 +761,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("PlanePassenger")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Airport.Passenger", "CitizenId");
-
-                    b.Navigation("Citizen");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.Question", "Question")
@@ -793,7 +787,13 @@ namespace WebApplication1.Migrations
                         .WithMany("Citizens")
                         .HasForeignKey("HouseId");
 
+                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Passenger", "Passenger")
+                        .WithOne("Citizen")
+                        .HasForeignKey("WebApplication1.EfStuff.Model.Citizen", "PassengerId");
+
                     b.Navigation("House");
+
+                    b.Navigation("Passenger");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Fireman", b =>
@@ -912,11 +912,14 @@ namespace WebApplication1.Migrations
                     b.Navigation("Citizens");
                 });
 
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
+                {
+                    b.Navigation("Citizen");
+                });
+
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Citizen", b =>
                 {
                     b.Navigation("Fireman");
-
-                    b.Navigation("PlanePassenger");
 
                     b.Navigation("PoliceAcademy");
 

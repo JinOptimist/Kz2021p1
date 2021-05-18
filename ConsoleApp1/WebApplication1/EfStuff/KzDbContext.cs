@@ -23,17 +23,18 @@ namespace WebApplication1.EfStuff
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
-		    public DbSet<Policeman> Policemen { get; set; }
-		    public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
-		    public DbSet<Violations> Violations { get; set; }
-		    public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
-		    public DbSet<Answer> Answers { get; set; }
-		    public DbSet<Question> Qestions { get; set; }
-		    public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Policeman> Policemen { get; set; }
+        public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
+        public DbSet<Violations> Violations { get; set; }
+        public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Question> Qestions { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
         public DbSet<Flight> Flights { get; set; }
+        public DbSet<Passenger> Passengers { get; set; }
 
 
-		public KzDbContext(DbContextOptions options) : base(options) { }
+        public KzDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,13 +55,13 @@ namespace WebApplication1.EfStuff
                        .HasIndex(u => u.Email)
                        .IsUnique();
 
-           /* modelBuilder.Entity<Student>()
-                      .HasIndex(u => u.IIN)
-                      .IsUnique();
+            /* modelBuilder.Entity<Student>()
+                       .HasIndex(u => u.IIN)
+                       .IsUnique();
 
-            modelBuilder.Entity<Pupil>()
-                      .HasIndex(u => u.IIN)
-                      .IsUnique();*/
+             modelBuilder.Entity<Pupil>()
+                       .HasIndex(u => u.IIN)
+                       .IsUnique();*/
 
             modelBuilder.Entity<University>()
                       .HasIndex(u => u.Name)
@@ -108,10 +109,14 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Flight>()
                 .HasMany(f => f.Passengers)
                 .WithMany(p => p.Flights);
-            modelBuilder.Entity<Citizen>()
-                .HasOne(c => c.PlanePassenger)
-                .WithOne(p => p.Citizen)
+            modelBuilder.Entity<Passenger>()
+                .HasOne(p => p.Citizen)
+                .WithOne(c => c.Passenger)
                 .HasForeignKey<Passenger>(p => p.CitizenId);
+            modelBuilder.Entity<Citizen>()
+                .HasOne(c => c.Passenger)
+                .WithOne(p => p.Citizen)
+                .HasForeignKey<Citizen>(c => c.PassengerId);
 
             base.OnModelCreating(modelBuilder);
         }

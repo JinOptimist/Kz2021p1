@@ -19,15 +19,17 @@ namespace WebApplication1.Presentation.Airport
     {
         private IFlightsRepository _flightsRepository { get; set; }
         private ICitizenRepository _citizenRepository { get; set; }
+        private IPassengersRepository _passengersRepository { get; set; }
         private IUserService _userService { get; set; }
         private IMapper _mapper { get; set; }
         public AirportPresentation(IFlightsRepository flightsRepository, IMapper mapper,
-             IUserService userService, ICitizenRepository citizenRepository)
+             IUserService userService, ICitizenRepository citizenRepository, IPassengersRepository passengersRepository)
         {
             _flightsRepository = flightsRepository;
             _mapper = mapper;
             _userService = userService;
             _citizenRepository = citizenRepository;
+            _passengersRepository = passengersRepository;
         }
 
 
@@ -89,20 +91,29 @@ namespace WebApplication1.Presentation.Airport
 
         public bool FlightIsAlreadyBooked(long id)
         {
-            return _userService.GetUser().PlanePassenger.Flights.Any(f => f.Id == id);
+            var isBooked = _userService.GetUser().Passenger?.Flights.Any(f => f.Id == id);
+            return isBooked ?? false;
         }
 
         public void BookTicket(long id)
         {
             var selectedFlight = _flightsRepository.Get(id);
             var citizen = _userService.GetUser();
+            var passenger = _passengersRepository.GetPassengerByCitizenId(citizen.Id) ?? _mapper.Map<Passenger>(citizen);
+            passenger.Citizen ??= citizen;
+            if (passenger.Flights != null)
+            {
+                passenger.Flights.Add(selectedFlight);
+            }
+            else
+            {
+                passenger.Flights = new List<Flight>() { selectedFlight };
+            }
 
-            var passenger = new Passenger { Citizen = citizen };
-            passenger.Flights.Add(selectedFlight);
-
-            citizen.PlanePassenger = passenger;
+            citizen.Passenger = passenger;
             selectedFlight.Passengers.Add(passenger);
-
+            
+            _passengersRepository.Save(passenger);
             _citizenRepository.Save(citizen);
             _flightsRepository.Save(selectedFlight);
         }
