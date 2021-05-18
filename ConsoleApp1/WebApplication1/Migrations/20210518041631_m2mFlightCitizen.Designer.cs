@@ -10,8 +10,8 @@ using WebApplication1.EfStuff;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    [Migration("20210517153132_test")]
-    partial class test
+    [Migration("20210518041631_m2mFlightCitizen")]
+    partial class m2mFlightCitizen
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

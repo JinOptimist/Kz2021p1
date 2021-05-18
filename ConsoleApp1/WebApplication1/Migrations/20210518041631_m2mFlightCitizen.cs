@@ -2,7 +2,7 @@
 
 namespace WebApplication1.Migrations
 {
-    public partial class test : Migration
+    public partial class m2mFlightCitizen : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
