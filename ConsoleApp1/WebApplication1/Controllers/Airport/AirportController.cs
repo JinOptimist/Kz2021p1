@@ -18,24 +18,29 @@ namespace WebApplication1.Controllers.Airport
 
         public IActionResult Index()
         {
-            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
-            _airpotPresentation.AdmitPassengers();
+            var incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
             return View(incomingFlightsInfo);
         }
 
         public IActionResult AvailableFlights()
         {
-            List<Flight> departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
-            _airpotPresentation.DepartPassengers();
+           var departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
             return View(departingFlightsAvailableForBooking);
         }
 
         [Authorize]
         public IActionResult BookTicket(long id)
         {
-            if (!_airpotPresentation.FlightIsValid(id)) return RedirectToAction("AvailableFlights");
+            if (!_airpotPresentation.FlightIsValid(id) || _airpotPresentation.FlightIsAlreadyBooked(id)) 
+            {
+                return RedirectToAction("AvailableFlights");
+            }
             _airpotPresentation.BookTicket(id);
-            return View("./Views/Airport/BookingConfirmation.cshtml");
+            return RedirectToAction("BookingConfirmation");
+        }
+        public IActionResult BookingConfirmation()
+        {
+            return View();
         }
     }
 }

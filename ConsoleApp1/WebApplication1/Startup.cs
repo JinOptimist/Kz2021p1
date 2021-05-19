@@ -25,6 +25,7 @@ using WebApplication1.Presentation.FirePresentation;
 using WebApplication1.Profiles;
 using WebApplication1.Profiles.Airport;
 using WebApplication1.Services;
+using WebApplication1.Utils.MiniTimeline;
 
 namespace WebApplication1
 {
@@ -67,6 +68,7 @@ namespace WebApplication1
             services.AddScoped<IPupilPresentation, PupilPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
+            services.AddHostedService<MiniTimeline>();
 
             RegisterAutoMapper(services);
 

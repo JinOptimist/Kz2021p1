@@ -5,16 +5,12 @@ using WebApplication1.Models.Airport;
 
 namespace WebApplication1.Presentation.Airport
 {
-	public interface IAirportPresentation
-	{
-		void AdmitPassengers();
-		void BookTicket(long id);
-		void ConvertFlights(List<Flight> flights);
-		void DepartPassengers();
-		bool FlightIsValid(long id);
-		List<Flight> GetAvailableFlights();
-		List<IncomingFlightInfoViewModel> GetIndexViewModel();
-		bool IsValidAddmissionTime(DateTime flightDate);
-		bool IsValidDepartureTime(DateTime flightDate);
-	}
+    public interface IAirportPresentation
+    {
+        void BookTicket(long id);
+        bool FlightIsValid(long id);
+        List<AvailableFlightsViewModel> GetAvailableFlights();
+        List<IncomingFlightInfoViewModel> GetIndexViewModel();
+        bool FlightIsAlreadyBooked(long id);
+    }
 }

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
-using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Model.Firemen;
+using WebApplication1.EfStuff.Model.Airport;
 
 namespace WebApplication1.EfStuff
 {
@@ -108,13 +108,17 @@ namespace WebApplication1.EfStuff
                 .HasOne(p => p.Policeman)
                 .WithMany(s => s.Shifts);
 
+            modelBuilder.Entity<Passenger>()
+                .HasMany(p => p.Flights)
+                .WithMany(f => f.Passengers);
             modelBuilder.Entity<Flight>()
                 .HasMany(f => f.Passengers)
-                .WithOne(p => p.Flight);
-
+                .WithMany(p => p.Flights);
             modelBuilder.Entity<Passenger>()
                 .HasOne(p => p.Citizen)
-                .WithOne(c => c.PlanePassenger);    
+                .WithOne(c => c.Passenger)
+                .HasForeignKey<Passenger>(p => p.CitizenId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
