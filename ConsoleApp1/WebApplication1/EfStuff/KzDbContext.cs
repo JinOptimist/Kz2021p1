@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Model.Firemen;
 
 namespace WebApplication1.EfStuff
 {
@@ -16,6 +17,9 @@ namespace WebApplication1.EfStuff
         public DbSet<SportComplex> SportComplex { get; set; }
         public DbSet<SportEvent> SportEvent { get; set; }
         public DbSet<Fireman> Firemen { get; set; }
+        public DbSet<FireTruck> FireTrucks { get; set; }
+        public DbSet<FiremanTeam> FiremanTeams { get; set; }
+        public DbSet<FireIncident> FireIncidents { get; set; }
         public DbSet<University> Universities { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<School> Schools { get; set; }
@@ -41,10 +45,20 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasOne(x => x.House)
                 .WithMany(x => x.Citizens);
+
             modelBuilder.Entity<Citizen>()
                .HasOne(x => x.Fireman)
                .WithOne(x => x.Citizen)
                .HasForeignKey<Fireman>(x => x.CitizenId);
+            modelBuilder.Entity<FireTruck>()
+                .HasOne(x => x.FiremanTeam)
+                .WithOne(x => x.FireTruck);               
+            modelBuilder.Entity<Fireman>()
+                .HasOne(x => x.FiremanTeam)
+                .WithMany(x => x.Firemen);
+            modelBuilder.Entity<FireIncident>()
+                .HasOne(x => x.FiremanTeam)
+                .WithMany(x => x.FireIncidents);
 
             modelBuilder.Entity<Policeman>()
                 .HasOne(c => c.Citizen)
