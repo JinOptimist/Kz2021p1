@@ -19,10 +19,10 @@ namespace WebApplication1.Controllers
 {
     public class FiremanController : Controller
     {
-        private FiremanPresentation _firemanPresentation { get; set; }
+        private IFiremanPresentation _firemanPresentation { get; set; }
 
 
-        public FiremanController(FiremanPresentation firemanPresentation)
+        public FiremanController(IFiremanPresentation firemanPresentation)
         {
             _firemanPresentation = firemanPresentation;
         }
@@ -51,7 +51,8 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Main()
         {
-            return View();
+            var models = _firemanPresentation.GetCurrentIncidents();
+            return View(models);
         }
         public JsonResult Remove(long id)
         {
@@ -85,6 +86,6 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
             return RedirectToAction("Main", "Fireman");
-        }
+        }     
     }
 }

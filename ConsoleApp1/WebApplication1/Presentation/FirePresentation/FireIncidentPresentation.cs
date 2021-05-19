@@ -9,7 +9,7 @@ using WebApplication1.Models.FiremanModels;
 
 namespace WebApplication1.Presentation.FirePresentation
 {
-    public class FireIncidentPresentation
+    public class FireIncidentPresentation : IFireIncidentPresentation
     {
         private IFireIncidentRepository _fireIncidentRepository { get; set; }
         private IFiremanTeamRepository _firemanTeamRepository { get; set; }
@@ -30,9 +30,24 @@ namespace WebApplication1.Presentation.FirePresentation
         public void AddFireIncident(FireIncidentViewModel model)
         {
             var newModel = _mapper.Map<FireIncident>(model);
-
-            var team = _firemanTeamRepository.GetByName(model.TeamName);
-            newModel.FiremanTeam = team;
+            if (string.IsNullOrEmpty(model.TeamName))
+            {
+                var team = _firemanTeamRepository.GetFreeTeam();
+                if (team != null)
+                {
+                    team.TeamState = TeamState.Busy;
+                    newModel.FiremanTeam = team;
+                }
+                newModel.Reason = "Not defined";
+                newModel.Status = IncidentStatus.Fire;
+                newModel.Date = DateTime.Now;
+                _firemanTeamRepository.Save(team);
+            }
+            else
+            {
+                var team = _firemanTeamRepository.GetByName(model.TeamName);
+                newModel.FiremanTeam = team;
+            }
 
             _fireIncidentRepository.Save(newModel);
         }
@@ -66,6 +81,7 @@ namespace WebApplication1.Presentation.FirePresentation
                 incident.Injured = model.Injured;
                 incident.Dead = model.Dead;
                 incident.Date = model.Date;
+                incident.Status = model.Status;
 
                 var team = _firemanTeamRepository.GetByName(model.TeamName);
 

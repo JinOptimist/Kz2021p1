@@ -1,6 +1,7 @@
 ﻿@model WebApplication1.Models.FiremanModels.FireIncidentViewModel
 @using WebApplication1.Services
-@inject UserService userService
+@inject IUserService userService
+@using WebApplication1.EfStuff.Model.Firemen 
 
 <h1>Edit fire incident</h1>
 <form action="@Url.Action("Edit", "FireIncident")" method="post">
@@ -9,6 +10,15 @@
     </div>
     <div>
         Date : @Html.TextBoxFor(x => x.Date)
+    </div>
+    <div>
+        Incident Status :
+        <select asp-for="Status"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<IncidentStatus>()">
+            <option>Select Status ...</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
     <div>
         Reason : @Html.TextBoxFor(x => x.Reason)

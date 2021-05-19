@@ -16,9 +16,9 @@ namespace WebApplication1.Controllers.Firemen
 {
     public class FiremanTeamController : Controller
     {
-        private FiremanTeamPresentation _firemanTeamPresentation { get; set; }
+        private IFiremanTeamPresentation _firemanTeamPresentation { get; set; }
 
-        public FiremanTeamController(FiremanTeamPresentation firemanTeamPresentation)
+        public FiremanTeamController(IFiremanTeamPresentation firemanTeamPresentation)
         {
             _firemanTeamPresentation = firemanTeamPresentation;
         }
@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers.Firemen
         {
             _firemanTeamPresentation.Edit(model);
 
-            return RedirectToAction("Index", "Fireman");
+            return RedirectToAction("Index", "FiremanTeam");
         }
 
     }

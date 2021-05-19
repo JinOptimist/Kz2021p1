@@ -70,29 +70,10 @@ namespace WebApplication1
                     x.GetService<ICitizenRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
-            services.AddScoped<FiremanPresentation>(x =>
-                new FiremanPresentation(
-                    x.GetService<IFiremanRepository>(),
-                    x.GetService<IMapper>(),
-                    x.GetService<ICitizenRepository>(),
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IUserService>()));
-            services.AddScoped<FireIncidentPresentation>(x =>
-                new FireIncidentPresentation(
-                    x.GetService<IFireIncidentRepository>(),
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IMapper>()));
-            services.AddScoped<FiremanTeamPresentation>(x =>
-                new FiremanTeamPresentation(
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IFireTruckRepository>(),
-                    x.GetService<IFiremanRepository>(),
-                    x.GetService<IMapper>()));
-            services.AddScoped<FireTruckPresentation>(x =>
-                new FireTruckPresentation(
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IFireTruckRepository>(),
-                    x.GetService<IMapper>()));
+            services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
+            services.AddScoped<IFiremanPresentation, FiremanPresentation>();
+            services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
+            services.AddScoped<IFiremanTeamPresentation, FiremanTeamPresentation>();
 
             services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
@@ -110,21 +91,7 @@ namespace WebApplication1
         }
 
         private void RegisterRepositories(IServiceCollection services)
-        {
-            /*  foreach (var repositoryType in Assembly
-                  .GetExecutingAssembly()
-                  .GetTypes()
-                  .Where(type =>
-                          type.BaseType?.IsGenericType == true
-                          && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
-              {
-                  services.AddScoped(repositoryType, x =>
-                  {
-                      var constructor = repositoryType.GetConstructors().Single();
-                      var parameters = new object[] { x.GetService<KzDbContext>() };
-                      return constructor.Invoke(parameters);
-                  });
-              }*/
+        {            
 
             IEnumerable<Type> implementationsType = Assembly
                 .GetExecutingAssembly()

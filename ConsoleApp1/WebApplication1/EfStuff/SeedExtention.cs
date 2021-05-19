@@ -67,7 +67,7 @@ namespace WebApplication1.EfStuff
                 citizenRepository.Save(firecitizen);
                 var fireadmin = new Fireman()
                 {
-                    Role = "FireAdmin",
+                    Role = FireWorkerRole.Fireadmin,
                     WorkExperYears = 10,
                     CitizenId = firecitizen.Id,
                     Citizen = firecitizen

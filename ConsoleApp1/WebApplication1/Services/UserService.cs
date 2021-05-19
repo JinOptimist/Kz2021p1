@@ -40,6 +40,6 @@ namespace WebApplication1.Services
         public bool IsPolicment()
              => GetUser()?.Policeman != null;
         public bool IsFireAdmin()
-            => GetUser()?.Fireman?.Role == "FireAdmin";
+            => GetUser()?.Fireman?.Role == EfStuff.Model.Firemen.FireWorkerRole.Fireadmin;
     }
 }

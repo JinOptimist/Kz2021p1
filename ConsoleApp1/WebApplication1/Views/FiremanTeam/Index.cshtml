@@ -33,23 +33,25 @@
         @if (userService.IsFireAdmin())
         {
             <th>Delete</th>
-            <th>Edit</th>
+
         }
+        <th>Edit</th>
     </tr>
     @foreach (var team in Model)
     {
-        <tr class="team">
-            <td>@team.Id</td>
-            <td>@team.TeamName</td>
-            <td>@team.Shift</td>
-            <td>@team.TeamState</td>
-            <td>@team.FiremanCount</td>
-            <td>@team.TruckId</td>
-            @if (userService.IsFireAdmin())
-            {
-                <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
-                <td><a href="FiremanTeam/Edit/@team.Id">edit</a></td>
-            }
-        </tr>
+<tr class="team">
+    <td>@team.Id</td>
+    <td>@team.TeamName</td>
+    <td>@team.Shift</td>
+    <td>@team.TeamState</td>
+    <td>@team.FiremanCount</td>
+    <td>@team.TruckId</td>
+    @if (userService.IsFireAdmin())
+    {
+        <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
+
+    }
+    <td><a href="FiremanTeam/Edit/@team.Id">edit</a></td>
+</tr>
     }
 </table>

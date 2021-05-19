@@ -9,7 +9,7 @@ using WebApplication1.Models.FiremanModels;
 
 namespace WebApplication1.Presentation.FirePresentation
 {
-    public class FireTruckPresentation
+    public class FireTruckPresentation : IFireTruckPresentation
     {
         private IFireTruckRepository _fireTruckRepository { get; set; }
         private IFiremanTeamRepository _firemanTeamRepository { get; set; }

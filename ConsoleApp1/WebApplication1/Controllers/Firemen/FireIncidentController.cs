@@ -14,9 +14,9 @@ namespace WebApplication1.Controllers.Firemen
 {
     public class FireIncidentController : Controller
     {
-        private FireIncidentPresentation _fireIncidentPresentation { get; set; }
+        private IFireIncidentPresentation _fireIncidentPresentation { get; set; }
 
-        public FireIncidentController(FireIncidentPresentation fireIncidentPresentation)
+        public FireIncidentController(IFireIncidentPresentation fireIncidentPresentation)
         {
             _fireIncidentPresentation = fireIncidentPresentation;
         }
@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers.Firemen
             }
             _fireIncidentPresentation.AddFireIncident(model);
 
-            return RedirectToAction("Index", "FireIncident");
+            return RedirectToAction("Main", "Fireman");
         }
         public JsonResult Remove(long id)
         {
@@ -61,6 +61,12 @@ namespace WebApplication1.Controllers.Firemen
             _fireIncidentPresentation.Edit(model);
 
             return RedirectToAction("Index", "FireIncident");
+        }
+        [HttpGet]
+        public IActionResult FireCall()
+        {
+            var model = new FireIncidentViewModel();
+            return View(model);
         }
     }
 }

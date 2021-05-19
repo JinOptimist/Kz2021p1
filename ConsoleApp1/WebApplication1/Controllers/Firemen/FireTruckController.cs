@@ -15,8 +15,8 @@ namespace WebApplication1.Controllers.Firemen
 {
     public class FireTruckController : Controller
     {
-        private FireTruckPresentation _fireTruckPresentation { get; set; }
-        public FireTruckController(FireTruckPresentation fireTruckPresentation)
+        private IFireTruckPresentation _fireTruckPresentation { get; set; }
+        public FireTruckController(IFireTruckPresentation fireTruckPresentation)
         {
             _fireTruckPresentation = fireTruckPresentation;
         }

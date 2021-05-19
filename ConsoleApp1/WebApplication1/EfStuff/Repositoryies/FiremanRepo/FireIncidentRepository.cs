@@ -9,8 +9,11 @@ namespace WebApplication1.EfStuff.Repositoryies.FiremanRepo
 {
     public class FireIncidentRepository : BaseRepository<FireIncident>, IFireIncidentRepository
     {
-        public FireIncidentRepository(KzDbContext kzDbContext) : base(kzDbContext)
+        public FireIncidentRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
+
+        public List<FireIncident> GetCurrentFireIncidents()
         {
+            return _kzDbContext.FireIncidents.Where(x => x.Status == IncidentStatus.Fire).ToList<FireIncident>();
         }
     }
 }
