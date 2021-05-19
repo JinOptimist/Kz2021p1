@@ -114,14 +114,6 @@ namespace WebApplication1.EfStuff
                 .WithOne(c => c.Passenger)
                 .HasForeignKey<Passenger>(p => p.CitizenId)
                 .OnDelete(DeleteBehavior.Cascade);
-            //modelBuilder.Entity<Passenger>()
-            //    .HasOne(p => p.Citizen)
-            //    .WithOne(c => c.Passenger)
-            //    .HasForeignKey<Passenger>(p => p.CitizenId);
-            //modelBuilder.Entity<Citizen>()
-            //    .HasOne(c => c.Passenger)
-            //    .WithOne(p => p.Citizen)
-            //    .HasForeignKey<Citizen>(c => c.PassengerId);
 
             base.OnModelCreating(modelBuilder);
         }
