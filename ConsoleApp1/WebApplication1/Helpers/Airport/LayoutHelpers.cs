@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.EfStuff.Model.Airport;
 
 namespace WebApplication1.Helpers
 {
@@ -22,6 +23,16 @@ namespace WebApplication1.Helpers
 
             return controller == CurrentController && action == CurrentAction ?
                 CssClass : string.Empty;
+        }
+
+        public static string GetColorClassByFlightStatus(this IHtmlHelper html, FlightStatus flightStatus)
+        {
+            return flightStatus switch
+            {
+                FlightStatus.Landed => "table-success",
+                FlightStatus.Delayed => "table-warning",
+                _ => string.Empty
+            };
         }
     }
 }

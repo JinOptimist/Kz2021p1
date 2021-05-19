@@ -48,7 +48,7 @@
                                     <th>@incomingFlight.TailNumber</th>
                                     <td>@incomingFlight.Origin</td>
                                     <td>@incomingFlight.ETA</td>
-                                    <td class="@incomingFlight.FlightStatus == @FlightStatus.Landed ? table-success : table-danger">@incomingFlight.FlightStatus</td>
+                                    <td class="@Html.GetColorClassByFlightStatus(incomingFlight.FlightStatus)">@incomingFlight.FlightStatus</td>
                                     <td>@incomingFlight.Airline</td>
                                 </tr>
                             }

@@ -63,7 +63,7 @@ function updateTable(dataObj) {
                 }
                 if (prop === 'flightStatus') {
                     let status = flightStatuses[obj[prop]]
-                    if (status === 'Canceled') cell.classList.add('table-danger')
+                    if (status === 'Canceled') cell.classList.add('table-warning')
                     else if (status === 'Departed') cell.classList.add('table-success')
                     else if (status === 'Delayed') cell.classList.add('table-warning')
                     cell.innerText = status
