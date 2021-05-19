@@ -38,7 +38,7 @@ namespace WebApplication1.EfStuff
 
                 CreateDefaultPupils(scope.ServiceProvider);                
 
-                //CreateDefaultFlights(scope.ServiceProvider);
+                CreateDefaultFlights(scope.ServiceProvider);
             }
 
             return host;
@@ -241,7 +241,7 @@ namespace WebApplication1.EfStuff
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], new string[] { "MM.dd.yyyy", "MM-dd-yyyy", "MM/dd/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None),
                         GraduatedYear = null,
                         UniversityId = studentUniverIds[i],
-                        Certificates = (ICollection<Certificate>)certificate
+                        Certificates = certificate as ICollection<Certificate>
                     };
 
                     studentRepository.Save(student);
