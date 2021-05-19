@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
@@ -30,37 +31,38 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultFlights(IServiceProvider serviceProvider)
         {
             IFlightsRepository flightsRepository = serviceProvider.GetService<IFlightsRepository>();
-            if (flightsRepository.GetAll().Any())
+            if (!flightsRepository.GetAll().Any())
             {
                 Random random = new Random();
                 FlightStatus[] incomingStatuses = new FlightStatus[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };
                 FlightStatus[] departingStatuses = new FlightStatus[] { FlightStatus.Canceled, FlightStatus.OnTime, FlightStatus.Departed, FlightStatus.Canceled };
-                string[] places = new[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
-                for (int i = 0; i < random.Next(5, 10); i++)
-                {
-                    Flight incomingFlight = new Flight()
-                    {
-                        TailNumber = GenerateTailNumber(random),
-                        FlightType = FlightType.IncomingFlight,
-                        Airline = "International Airline",
-                        FlightStatus = incomingStatuses[random.Next(incomingStatuses.Length)],
-                        Place = places[random.Next(places.Length)],
-                        Date = DateTime.Now.AddHours(random.Next(1, 10))
-                    };
-                    flightsRepository.Save(incomingFlight);
-                }
-                for (int i = 0; i < random.Next(5, 10); i++)
+                string[] places = new string[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
+                string[] airlines = new string[] { "International Airline", "Southwest Airline", "Delta Airline", "United Airline", "UC Airline", "Rex Airline"};
+                for (int i = 0; i < random.Next(10, 50); i++)
                 {
                     Flight departingFlight = new Flight()
                     {
                         TailNumber = GenerateTailNumber(random),
                         FlightType = FlightType.DepartingFlight,
-                        Airline = "International Airline",
+                        Airline = airlines[random.Next(airlines.Length)],
                         FlightStatus = departingStatuses[random.Next(departingStatuses.Length)],
                         Place = places[random.Next(places.Length)],
                         Date = DateTime.Now.AddHours(random.Next(1, 10))
                     };
                     flightsRepository.Save(departingFlight);
+                }
+                for (int i = 0; i < random.Next(10, 50); i++)
+                {
+                    Flight incomingFlight = new Flight()
+                    {
+                        TailNumber = GenerateTailNumber(random),
+                        FlightType = FlightType.IncomingFlight,
+                        Airline = airlines[random.Next(airlines.Length)],
+                        FlightStatus = incomingStatuses[random.Next(incomingStatuses.Length)],
+                        Place = places[random.Next(places.Length)],
+                        Date = DateTime.Now.AddHours(random.Next(1, 10))
+                    };
+                    flightsRepository.Save(incomingFlight);
                 }
             }
         }
