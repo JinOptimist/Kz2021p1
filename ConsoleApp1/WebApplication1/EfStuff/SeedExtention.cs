@@ -31,7 +31,7 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultFlights(IServiceProvider serviceProvider)
         {
             IFlightsRepository flightsRepository = serviceProvider.GetService<IFlightsRepository>();
-            if (!flightsRepository.GetAll().Any())
+            if (!flightsRepository.HasAnyFlights())
             {
                 Random random = new Random();
                 FlightStatus[] incomingStatuses = new FlightStatus[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };

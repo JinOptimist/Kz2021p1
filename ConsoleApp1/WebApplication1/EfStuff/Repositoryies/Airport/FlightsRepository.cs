@@ -74,5 +74,10 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport
                 .Where(flight => flight.FlightStatus == FlightStatus.OnTime && flight.FlightType == FlightType.DepartingFlight && flight.Passengers.Count() < 100)
                 .ToList();
         }
+
+        public bool HasAnyFlights()
+        {
+            return _dbSet.Any();
+        }
     }
 }

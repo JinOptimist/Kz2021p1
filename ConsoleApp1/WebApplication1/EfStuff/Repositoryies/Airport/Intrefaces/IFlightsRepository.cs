@@ -35,5 +35,10 @@ namespace WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces
         /// </summary>
         /// <returns></returns>
         List<Flight> GetDepartedFlights();
+        /// <summary>
+        /// Check if database has any flights
+        /// </summary>
+        /// <returns></returns>
+        bool HasAnyFlights();
     }
 }
