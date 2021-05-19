@@ -28,6 +28,7 @@ namespace WebApplication1.EfStuff
 
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public DbSet<HCEstablishments> HCEstablishments { get; set; }
         public DbSet<HCWorker> HCWorker { get; set; }
@@ -53,13 +54,7 @@ namespace WebApplication1.EfStuff
                        .HasIndex(u => u.Email)
                        .IsUnique();
 
-           /* modelBuilder.Entity<Student>()
-                      .HasIndex(u => u.IIN)
-                      .IsUnique();
 
-            modelBuilder.Entity<Pupil>()
-                      .HasIndex(u => u.IIN)
-                      .IsUnique();*/
 
             modelBuilder.Entity<University>()
                       .HasIndex(u => u.Name)
@@ -74,6 +69,10 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Bus>()
                 .HasOne(x => x.RoutePlan)
                 .WithMany(x => x.Buses);
+
+            modelBuilder.Entity<Order>()
+                      .HasIndex(x => x.Name)
+                      .IsUnique();
 
             modelBuilder.Entity<Policeman>()
                 .HasMany(v => v.Violations)

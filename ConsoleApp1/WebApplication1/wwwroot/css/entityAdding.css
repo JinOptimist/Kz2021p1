@@ -1,0 +1,214 @@
+﻿.form-container {
+    background-color: rgba(255,255,255,0.9);
+    font-family: 'Titillium Web', sans-serif;
+    padding: 25px 30px 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: fixed;
+    top: 41%;
+    left: 42%;
+    width: 557px;
+    height: 300px;
+    margin: -50px 0 0 -100px;
+}
+
+    .form-container .title {
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 25px;
+    }
+
+        .form-container .title:after {
+            content: '';
+            background-color: #0cd674;
+            height: 2px;
+            width: 150px;
+            margin: 5px auto 0;
+            clear: both;
+            display: block;
+        }
+
+    .form-container .form-horizontal {
+        margin: 0 0 20px;
+        font-size: 0;
+    }
+
+        .form-container .form-horizontal .sub-title {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            margin: 0 0 15px;
+            padding: 17px 0 0;
+            border-top: 1px solid #d1d1d1;
+        }
+
+.form-horizontal .form-group {
+    width: calc(50% - 10px);
+    margin: 0 10px 15px 0;
+    display: inline-block;
+}
+
+    .form-horizontal .form-group:nth-child(even) {
+        margin: 0 0 10px 10px;
+    }
+
+    .form-horizontal .form-group:nth-child(3),
+    .form-horizontal .form-group:nth-child(4) {
+        margin-bottom: 25px;
+    }
+
+    .form-horizontal .form-group.phone-no {
+        margin: 0 10px 20px 0;
+    }
+
+    .form-horizontal .form-group.age {
+        margin: 0 0 20px 10px;
+    }
+
+    .form-horizontal .form-group label {
+        color: #999;
+        font-size: 13px;
+        font-weight: 500;
+        font-style: italic;
+        margin: 0 0 3px;
+    }
+
+.form-horizontal .form-control {
+    color: #555;
+    background-color: transparent;
+    font-size: 14px;
+    letter-spacing: 1px;
+    height: 33px;
+    padding: 5px;
+    box-shadow: none;
+    border: 1px solid #d1d1d1;
+    border-radius: 0;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+    .form-horizontal .form-control:focus {
+        box-shadow: none;
+        border: 1px solid #0cd674;
+    }
+
+.form-horizontal .btn {
+    color: #fff;
+    background: #0cd674;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 7px 20px 7px;
+    margin: 0 auto 20px;
+    border: none;
+    border-radius: 0;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+    .form-horizontal .btn:hover,
+    .form-horizontal .btn:focus {
+        color: #fff;
+        background-color: #0cd674;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3),0 0 10px rgba(0,0,0,0.3) inset;
+        outline: none;
+    }
+
+.form-horizontal .user-login {
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    display: block;
+}
+
+    .form-horizontal .user-login a {
+        color: #0cd674;
+        transition: all 0.3s ease 0s;
+    }
+
+        .form-horizontal .user-login a:hover {
+            color: #555;
+        }
+
+.form-container .social-links {
+    font-size: 14px;
+    text-align: center;
+}
+
+    .form-container .social-links span {
+        font-style: italic;
+        margin: 0 0 20px;
+        display: block;
+        position: relative;
+    }
+
+        .form-container .social-links span:before,
+        .form-container .social-links span:after {
+            content: '';
+            background-color: #999;
+            height: 1px;
+            width: 25%;
+            position: absolute;
+            top: 50%;
+            left: 0;
+        }
+
+        .form-container .social-links span:after {
+            left: auto;
+            right: 0;
+        }
+
+    .form-container .social-links a {
+        color: #fff;
+        background-color: #20599F;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        text-align: center;
+        width: 120px;
+        padding: 7px 15px;
+        margin: 0 5px;
+        transition: all 0.3s ease 0s;
+    }
+
+        .form-container .social-links a i {
+            font-size: 13px;
+            margin-right: 3px;
+        }
+
+        .form-container .social-links a:nth-child(2) {
+            background-color: #00ADF2;
+        }
+
+        .form-container .social-links a:hover {
+            text-shadow: 0 0 10px rgba(0,0,0,0.4);
+            box-shadow: 0 0 10px rgba(0,0,0,0.4);
+        }
+
+@media only screen and (max-width:576px) {
+    .form-container .form-group,
+    .form-container .form-group:nth-child(even),
+    .form-container .form-group.phone-no,
+    .form-container .form-group.age {
+        width: 100%;
+        margin: 0 0 25px;
+    }
+}
+
+@media only screen and (max-width:479px) {
+    .form-container .social-links a {
+        width: 80%;
+        margin: 0 auto;
+        display: block;
+    }
+
+        .form-container .social-links a:nth-child(even) {
+            margin: 0 auto 10px;
+        }
+}

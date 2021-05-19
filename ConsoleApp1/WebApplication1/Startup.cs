@@ -29,7 +29,7 @@ using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -44,17 +44,21 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
             services.AddScoped<ICitizenRepository, CitizenRepository>();
             services.AddScoped<IHCWorkerRepository, HCWorkerRepository>();
             services.AddScoped<IHCEstablishmentsRepository, HCEstablishmentsRepository>();
+
+            services.AddScoped<IBusRepository, BusRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ITripRouteRepository, TripRouteRepository>();
 
             services.AddScoped<IUserService>(x =>
                 new UserService(
@@ -147,6 +151,7 @@ namespace WebApplication1
             MapBothSide<Fireman, FiremanViewModel>(configurationExp);
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
+            MapBothSide<Order, OrderViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
             MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
             MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);
@@ -185,12 +190,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

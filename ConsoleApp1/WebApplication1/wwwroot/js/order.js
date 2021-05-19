@@ -4,10 +4,10 @@
         clicked.attr('disabled', 'disabled');
 
         var id = clicked.attr('data-id');
-        var url = '/Bus/Remove?id=' + id;
+        var url = '/Order/Remove?id=' + id;
         $.get(url).done(function (answer) {
             if (answer) {
-                clicked.closest('.bus').remove();
+                clicked.closest('.order').remove();
             }
         });
     });

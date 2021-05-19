@@ -1,8 +1,12 @@
-﻿<link rel="stylesheet" href="~/css/entityAdding.css" />
+﻿@model OrderViewModel
+
+
+
+<link rel="stylesheet" href="~/css/entityAdding.css" />
 
 <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
     <div>
-        <h1 class="display-4 font-italic">Bus Registration page</h1>
+        <h1 class="display-4 font-italic">Make Order</h1>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam sed ex at imperdiet. Nulla vel malesuada quam. Morbi sit amet mi quis nibh hendrerit tincidunt. Aenean pellentesque a justo at faucibus. Cras a sapien pretium, varius turpis eu, egestas orci. Cras aliquam at mauris vel accumsan. Nam libero tellus, sodales et lectus quis, facilisis blandit risus. Nulla facilisi.</p>
 
     </div>
@@ -15,9 +19,14 @@
             <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
                 <div class="form-container">
                     <h3 class="title">Bus Registration</h3>
-                    <form class="form-horizontal" action="@Url.Action("CreateBus", "Bus")" method="post">
+                    <form class="form-horizontal" action="@Url.Action("MakeOrder", "Order")" method="post">
                         <div class="form-group">
-                            <label>Model*</label>
+                            <label>Full name*</label>
+                            <input class="form-control" aria-label="Default select example" type="text" name="name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Bus model*</label>
                             <select class="form-select" aria-label="Default select example" type="text" name="model">
                                 <option selected>Open this select menu</option>
                                 <option>IKAR</option>
@@ -28,30 +37,19 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label>Type*</label>
-                            <select class="form-select" aria-label="Default select example" type="text" name="type">
-                                <option selected>Open this select menu</option>
-                                <option>ordinary</option>
-                                <option>touristic</option>
-                                <option>school</option>
-                                <option>city</option>
-                                <option>special</option>
-                                <option>administration</option>
-                            </select>
-                        </div>
-
 
                         <div class="form-group phone-no">
-                            <label>Capacity*</label>
-                            <input class="form-control" type="number" name="capacity">
+                            <label>Route Title*</label>
+                            <input class="form-control" type="text" name="RouteTitle">
 
                         </div>
                         <div class="form-group age">
-                            <label>Price*</label>
-                            <input class="form-control" type="number" name="price">
+                            <label>Duration*</label>
+                            <input class="form-control" type="number" name="Period">
                         </div>
-                        <button class="btn signin" type="submit" style="background-color: blue;">Register</button>
+
+
+                        <button class="btn signin" type="submit" style="background-color: blue;">Order</button>
 
                     </form>
                 </div>
