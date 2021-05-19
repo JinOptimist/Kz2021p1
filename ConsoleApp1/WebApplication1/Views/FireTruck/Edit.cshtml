@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "FiremanTeams";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model WebApplication1.Models.FiremanModels.FireTruckViewModel
+
+<h1>Edit team information</h1>
+
+<form action="@Url.Action("Edit", "FireTruck")" method="post">
+    <div>
+        Truck Number : @Html.TextBoxFor(x => x.TruckNumber)
+    </div>
+    <div>
+        Truck State : @Html.TextBoxFor(x => x.TruckState)
+    </div>
+    <div>
+        Team Name : @Html.TextBoxFor(x => x.TeamName)
+    </div>
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>

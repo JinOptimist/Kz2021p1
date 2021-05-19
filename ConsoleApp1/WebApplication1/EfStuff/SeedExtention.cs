@@ -8,7 +8,10 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
+using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 
 namespace WebApplication1.EfStuff
 {
@@ -23,6 +26,7 @@ namespace WebApplication1.EfStuff
                 CreateDefaultCitizen(scope.ServiceProvider);
 
                 CreateDefaultAdress(scope.ServiceProvider);
+                CreateDefaultFireAdmin(scope.ServiceProvider);
 
                 CreateDefaultUniversities(scope.ServiceProvider);
 
@@ -273,6 +277,31 @@ namespace WebApplication1.EfStuff
 
                     pupilRepository.Save(pupil);
                 }
+            }
+        }
+        private static void CreateDefaultFireAdmin(IServiceProvider serviceProvider)
+        {
+            var firemanRepository = serviceProvider.GetService<IFiremanRepository>();
+            var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
+
+            var firecitizen = citizenRepository.GetByName("FireAdmin");
+            if (firecitizen == null)
+            {
+                firecitizen = new Citizen()
+                {
+                    Name = "FireAdmin",
+                    Password = "fireadmin",
+                    Age = 40
+                };
+                citizenRepository.Save(firecitizen);
+                var fireadmin = new Fireman()
+                {
+                    Role = "FireAdmin",
+                    WorkExperYears = 10,
+                    CitizenId = firecitizen.Id,
+                    Citizen = firecitizen
+                };
+                firemanRepository.Save(fireadmin);
             }
         }
     }

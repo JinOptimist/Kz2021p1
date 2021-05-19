@@ -1,0 +1,38 @@
+﻿@model FiremanViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+<h1>
+    My Profile
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    table {
+        margin-left: 30px;
+    }
+</style>
+
+
+<table>
+    <tr>
+        <th>Worker Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Work Experience (years)</th>
+        <th>Team Name</th>
+        <th>Edit</th>
+    </tr>
+    <tr class="worker">
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
+        <td>@Model.Age</td>
+        <td>@Model.Role</td>
+        <td>@Model.WorkExperYears</td>
+        <td>@Model.TeamName</td>
+        <td><a href="Edit/@Model.Id">edit</a></td>
+
+    </tr>
+</table>

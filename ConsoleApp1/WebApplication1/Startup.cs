@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.Configuration;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +25,14 @@ using WebApplication1.Presentation;
 using WebApplication1.Presentation.Airport;
 using WebApplication1.Profiles.Airport;
 using WebApplication1.Models.Education;
+using System.Reflection;
+using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
+using WebApplication1.Models.FiremanModels;
+using WebApplication1.EfStuff.Model.Firemen;
+using System.Collections.Generic;
+using WebApplication1.Presentation.FirePresentation;
+using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 
 namespace WebApplication1
 {
@@ -61,6 +69,34 @@ namespace WebApplication1
             services.AddScoped<ICitizenPresentation, CitizenPresentation>();
             services.AddScoped<IAirportPresentation, AirportPresentation>();
 
+            services.AddScoped<CitizenPresentation>(x =>
+                new CitizenPresentation(
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FiremanPresentation>(x =>
+                new FiremanPresentation(
+                    x.GetService<IFiremanRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IUserService>()));
+            services.AddScoped<FireIncidentPresentation>(x =>
+                new FireIncidentPresentation(
+                    x.GetService<IFireIncidentRepository>(),
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FiremanTeamPresentation>(x =>
+                new FiremanTeamPresentation(
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IFireTruckRepository>(),
+                    x.GetService<IFiremanRepository>(),
+                    x.GetService<IMapper>()));
+            services.AddScoped<FireTruckPresentation>(x =>
+                new FireTruckPresentation(
+                    x.GetService<IFiremanTeamRepository>(),
+                    x.GetService<IFireTruckRepository>(),
+                    x.GetService<IMapper>()));
             services.AddScoped<IPupilPresentation, PupilPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
@@ -109,14 +145,30 @@ namespace WebApplication1
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
             configurationExp.AddProfile<PoliceProfiles>();
-            configurationExp.AddProfile<AirportProfiles>();
-            configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
-                .ForMember(nameof(FiremanShowViewModel.Name),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
-                .ForMember(nameof(FiremanShowViewModel.Age),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
-            MapBothSide<Fireman, FiremanViewModel>(configurationExp);
+
+            configurationExp.CreateMap<FireIncident, FireIncidentViewModel>()
+                .ForMember(nameof(FireIncidentViewModel.TeamName),
+                    opt => opt.MapFrom(incident => incident.FiremanTeam.TeamName));
+            configurationExp.CreateMap<Fireman, FiremanViewModel>()
+                .ForMember(nameof(FiremanViewModel.TeamName),
+                    opt => opt.MapFrom(fireman => fireman.FiremanTeam.TeamName))
+                .ForMember(nameof(FiremanViewModel.Name),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+                .ForMember(nameof(FiremanViewModel.Age),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+            configurationExp.CreateMap<FiremanTeam, FiremanTeamViewModel>()
+                .ForMember(nameof(FiremanTeamViewModel.TruckState),
+                    opt => opt.MapFrom(t => t.FireTruck.TruckState))
+                .ForMember(nameof(FiremanTeamViewModel.FiremanCount),
+                    opt => opt.MapFrom(t => t.Firemen.Count()));
+            configurationExp.CreateMap<FiremanViewModel, Fireman>();
+            configurationExp.CreateMap<FiremanTeamViewModel, FiremanTeam>();
+            configurationExp.CreateMap<FireIncidentViewModel, FireIncident>();
+
+            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
+            configurationExp.AddProfile<AirportProfiles>();
+                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);

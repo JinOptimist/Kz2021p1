@@ -46,5 +46,7 @@ namespace WebApplication1.Services
 			=> GetUser()?.Policeman.Rank == Rank.Officer;
 		public bool IsTrainee()
 			=> GetUser()?.Policeman.Rank == Rank.Trainee;
-	}
+        public bool IsFireAdmin()
+            => GetUser()?.Fireman?.Role == "FireAdmin";
+    }
 }

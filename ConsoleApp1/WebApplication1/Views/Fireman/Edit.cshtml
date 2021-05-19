@@ -1,0 +1,34 @@
+﻿@model FiremanViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+
+<h1>Edit worker</h1>
+<h2>@Model.Name</h2>
+
+<form action="@Url.Action("Edit", "Fireman")" method="post">
+    @if (userService.IsFireAdmin())
+    {
+        <div>
+            Role : @Html.TextBoxFor(x => x.Role)
+        </div>
+
+        <div>
+            Team Name : @Html.TextBoxFor(x => x.TeamName)
+        </div>
+    }
+    @if (!userService.IsFireAdmin())
+    {
+        <div>
+            Name : @Html.TextBoxFor(x => x.Name)
+        </div>
+        <div>
+            Age : @Html.TextBoxFor(x => x.Age)
+        </div>
+        <div>
+            Work Experience Years : @Html.TextBoxFor(x => x.WorkExperYears)
+        </div>
+    }
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>
