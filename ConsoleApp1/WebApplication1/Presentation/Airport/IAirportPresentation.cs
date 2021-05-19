@@ -8,7 +8,6 @@ namespace WebApplication1.Presentation.Airport
     public interface IAirportPresentation
     {
         void BookTicket(long id);
-        void ConvertFlights(List<Flight> flights);
         bool FlightIsValid(long id);
         List<AvailableFlightsViewModel> GetAvailableFlights();
         List<IncomingFlightInfoViewModel> GetIndexViewModel();

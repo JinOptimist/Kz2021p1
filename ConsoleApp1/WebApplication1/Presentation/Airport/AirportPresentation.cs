@@ -65,43 +65,17 @@ namespace WebApplication1.Presentation.Airport
             var selectedFlight = _flightsRepository.Get(id);
             var citizen = _userService.GetUser();
             var passenger = _passengersRepository.GetPassengerByCitizenId(citizen.Id) ?? _mapper.Map<Passenger>(citizen);
-            passenger.Citizen ??= citizen;
-            if (passenger.Flights != null)
-            {
-                passenger.Flights.Add(selectedFlight);
-            }
-            else
-            {
-                passenger.Flights = new List<Flight>() { selectedFlight };
-            }
 
-            citizen.Passenger = passenger;
+            passenger.Citizen ??= citizen;
+            passenger.Flights ??= new List<Flight>();
+            citizen.Passenger ??= passenger;
+
+            passenger.Flights.Add(selectedFlight);
             selectedFlight.Passengers.Add(passenger);
 
             _passengersRepository.Save(passenger);
             _citizenRepository.Save(citizen);
             _flightsRepository.Save(selectedFlight);
-        }
-
-        public void ConvertFlights(List<Flight> flights)
-        {
-            //TODO: move ConvertFlights to MiniTimeline
-            Random random = new Random();
-            foreach (var flight in flights)
-            {
-                if (flight.FlightType == FlightType.IncomingFlight)
-                {
-                    flight.FlightType = FlightType.DepartingFlight;
-                    flight.FlightStatus = FlightStatus.OnTime;
-                }
-                else
-                {
-                    flight.FlightType = FlightType.IncomingFlight;
-                    flight.FlightStatus = FlightStatus.Expected;
-                }
-                flight.Date = DateTime.Now.AddDays(random.Next(5));
-                _flightsRepository.Save(flight);
-            }
         }
     }
 }

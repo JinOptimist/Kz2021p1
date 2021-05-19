@@ -42,8 +42,8 @@ namespace WebApplication1.Utils.MiniTimeline
                         _citizenRepository.Save(p.Citizen);
                     });
                 });
+                ConvertFlights(arrivingFlights, _flightsRepository);
                 Debug.WriteLine("Admited");
-
             }
         }
 
@@ -62,7 +62,30 @@ namespace WebApplication1.Utils.MiniTimeline
                         _citizenRepository.Save(p.Citizen);
                     });
                 });
+                ConvertFlights(departingFlights, _flightsRepository);
                 Debug.WriteLine("Departed");
+            }
+        }
+
+        private void ConvertFlights(List<Flight> flights, IFlightsRepository _flightsRepository)
+        {
+            Random random = new Random();
+            string[] places = new string[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
+            foreach (var flight in flights)
+            {
+                flight.Place = places[random.Next(places.Length)];
+                if (flight.FlightType == FlightType.IncomingFlight)
+                {
+                    flight.FlightType = FlightType.DepartingFlight;
+                    flight.FlightStatus = FlightStatus.OnTime;
+                }
+                else
+                {
+                    flight.FlightType = FlightType.IncomingFlight;
+                    flight.FlightStatus = FlightStatus.Expected;
+                }
+                flight.Date = DateTime.Now.AddDays(random.Next(5));
+                _flightsRepository.Save(flight);
             }
         }
     }
