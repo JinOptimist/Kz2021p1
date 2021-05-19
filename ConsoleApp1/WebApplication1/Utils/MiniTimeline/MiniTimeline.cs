@@ -11,13 +11,11 @@ namespace WebApplication1.Utils.MiniTimeline
 {
     public class MiniTimeline : BackgroundService
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly AirportUpdate _airportUpdate;
 
         public MiniTimeline(IServiceProvider serviceProvider)
         {
             _airportUpdate = new AirportUpdate(serviceProvider);
-            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,7 +23,7 @@ namespace WebApplication1.Utils.MiniTimeline
             while (!stoppingToken.IsCancellationRequested)
             {
                 await UpdateTimeline();
-                await Task.Delay(TimeSpan.FromMinutes(2));
+                await Task.Delay(TimeSpan.FromMinutes(5));
             }
         }
 

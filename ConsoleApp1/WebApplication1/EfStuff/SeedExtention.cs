@@ -11,7 +11,7 @@ using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff
 {
-	public static class SeedExtention
+    public static class SeedExtention
     {
         public const string AdminName = "admin";
 
@@ -37,7 +37,7 @@ namespace WebApplication1.EfStuff
                 FlightStatus[] incomingStatuses = new FlightStatus[] { FlightStatus.Expected, FlightStatus.Delayed, FlightStatus.Landed };
                 FlightStatus[] departingStatuses = new FlightStatus[] { FlightStatus.Canceled, FlightStatus.OnTime, FlightStatus.Departed, FlightStatus.Canceled };
                 string[] places = new string[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
-                string[] airlines = new string[] { "International Airline", "Southwest Airline", "Delta Airline", "United Airline", "UC Airline", "Rex Airline"};
+                string[] airlines = new string[] { "International Airline", "Southwest Airline", "Delta Airline", "United Airline", "UC Airline", "Rex Airline" };
                 for (int i = 0; i < random.Next(10, 50); i++)
                 {
                     Flight departingFlight = new Flight()
@@ -47,7 +47,7 @@ namespace WebApplication1.EfStuff
                         Airline = airlines[random.Next(airlines.Length)],
                         FlightStatus = departingStatuses[random.Next(departingStatuses.Length)],
                         Place = places[random.Next(places.Length)],
-                        Date = DateTime.Now.AddHours(random.Next(1, 10))
+                        Date = DateTime.Now.AddHours(random.Next(12)).AddMinutes(random.Next(30))
                     };
                     flightsRepository.Save(departingFlight);
                 }
@@ -60,7 +60,7 @@ namespace WebApplication1.EfStuff
                         Airline = airlines[random.Next(airlines.Length)],
                         FlightStatus = incomingStatuses[random.Next(incomingStatuses.Length)],
                         Place = places[random.Next(places.Length)],
-                        Date = DateTime.Now.AddHours(random.Next(1, 10))
+                        Date = DateTime.Now.AddHours(random.Next(12)).AddMinutes(random.Next(30))
                     };
                     flightsRepository.Save(incomingFlight);
                 }

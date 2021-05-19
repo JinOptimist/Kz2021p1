@@ -20,19 +20,39 @@ namespace WebApplication1.Utils.MiniTimeline
 
         public void AirportStateUpdater()
         {
+            AdmitPassengers();
             Task.WhenAll(
-                Task.Run(() => AdmitPassengers()),
-                Task.Run(() => DepartPassengers()
-                ));
+                Task.Run(() => LandFlights()),
+                Task.Run(() => DepartPassengers()),
+                Task.Run(() => ReturnFlights())
+                );
+        }
+
+        private void LandFlights()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var landedFlights = 0;
+                var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
+                var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
+                var arrivingFlights = _flightsRepository.GetArrivingFlights();
+                arrivingFlights.ForEach(f =>
+                {
+                    f.FlightStatus = FlightStatus.Landed;
+                    _flightsRepository.Save(f);
+                    landedFlights++;
+                });
+            }
         }
 
         private void AdmitPassengers()
         {
             using (var scope = _serviceProvider.CreateScope())
             {
+                var admittedFlights = 0;
                 var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
                 var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
-                var arrivingFlights = _flightsRepository.GetArrivingFlights();
+                var arrivingFlights = _flightsRepository.GetLandedFlights();
                 arrivingFlights.ForEach(f =>
                 {
                     f.Passengers.ForEach(p =>
@@ -41,9 +61,9 @@ namespace WebApplication1.Utils.MiniTimeline
                         p.Citizen.IsOutOfCity = false;
                         _citizenRepository.Save(p.Citizen);
                     });
+                    admittedFlights++;
                 });
                 ConvertFlights(arrivingFlights, _flightsRepository);
-                Debug.WriteLine("Admited");
             }
         }
 
@@ -51,6 +71,7 @@ namespace WebApplication1.Utils.MiniTimeline
         {
             using (var scope = _serviceProvider.CreateScope())
             {
+                var departedFlights = 0;
                 var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
                 var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
                 var departingFlights = _flightsRepository.GetDepartingFlights();
@@ -61,9 +82,21 @@ namespace WebApplication1.Utils.MiniTimeline
                         p.Citizen.IsOutOfCity = true;
                         _citizenRepository.Save(p.Citizen);
                     });
+                    f.FlightStatus = FlightStatus.Departed;
+                    _flightsRepository.Save(f);
+                    departedFlights++;
                 });
-                ConvertFlights(departingFlights, _flightsRepository);
-                Debug.WriteLine("Departed");
+            }
+        }
+
+        private void ReturnFlights()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _citizenRepository = scope.ServiceProvider.GetRequiredService<ICitizenRepository>();
+                var _flightsRepository = scope.ServiceProvider.GetRequiredService<IFlightsRepository>();
+                var returningFlights = _flightsRepository.GetDepartedFlights();
+                ConvertFlights(returningFlights, _flightsRepository);
             }
         }
 
@@ -73,18 +106,18 @@ namespace WebApplication1.Utils.MiniTimeline
             string[] places = new string[] { "Moscow", "New York", "Sydney", "Los Angeles", "Berlin", "Tokyo", "Paris", "Istanbul", "Rome", "Krakow", "Singapore" };
             foreach (var flight in flights)
             {
-                flight.Place = places[random.Next(places.Length)];
-                if (flight.FlightType == FlightType.IncomingFlight)
+                if (flight.FlightStatus == FlightStatus.Landed)
                 {
+                    flight.Place = places[random.Next(places.Length)];
                     flight.FlightType = FlightType.DepartingFlight;
                     flight.FlightStatus = FlightStatus.OnTime;
                 }
-                else
+                else if (flight.FlightStatus == FlightStatus.Departed)
                 {
                     flight.FlightType = FlightType.IncomingFlight;
                     flight.FlightStatus = FlightStatus.Expected;
                 }
-                flight.Date = DateTime.Now.AddDays(random.Next(5));
+                flight.Date = DateTime.Now.AddDays(random.Next(5)).AddHours(random.Next(12)).AddMinutes(random.Next(30));
                 _flightsRepository.Save(flight);
             }
         }
