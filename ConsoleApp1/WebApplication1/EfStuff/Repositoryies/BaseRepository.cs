@@ -51,12 +51,6 @@ namespace WebApplication1.EfStuff.Repositoryies
             _kzDbContext.SaveChanges();
         }
 
-        public void Update(DbModel model)
-        {
-            _kzDbContext.Entry(model).State = EntityState.Modified;
-            _kzDbContext.SaveChanges();
-        }
-
         public IQueryable<DbModel> GetAllAsIQueryable()
         {
             return _dbSet.AsQueryable();
