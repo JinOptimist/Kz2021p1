@@ -3,40 +3,32 @@ using AutoMapper.Configuration;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReflectionIT.Mvc.Paging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
-using WebApplication1.Models.Airport;
-using WebApplication1.Services;
-using WebApplication1.Profiles;
+using WebApplication1.Models.Education;
+using WebApplication1.Models.FiremanModels;
 using WebApplication1.Presentation;
 using WebApplication1.Presentation.Airport;
-using WebApplication1.Profiles.Airport;
-using WebApplication1.Models.Education;
-using System.Reflection;
-using WebApplication1.EfStuff.Repositoryies.Interface;
-using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
-using WebApplication1.Models.FiremanModels;
-using WebApplication1.EfStuff.Model.Firemen;
-using System.Collections.Generic;
 using WebApplication1.Presentation.FirePresentation;
-using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
+using WebApplication1.Profiles;
+using WebApplication1.Profiles.Airport;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
-    public class Startup
+	public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -68,35 +60,10 @@ namespace WebApplication1
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICitizenPresentation, CitizenPresentation>();
             services.AddScoped<IAirportPresentation, AirportPresentation>();
-
-            services.AddScoped<CitizenPresentation>(x =>
-                new CitizenPresentation(
-                    x.GetService<ICitizenRepository>(),
-                    x.GetService<IUserService>(),
-                    x.GetService<IMapper>()));
-            services.AddScoped<FiremanPresentation>(x =>
-                new FiremanPresentation(
-                    x.GetService<IFiremanRepository>(),
-                    x.GetService<IMapper>(),
-                    x.GetService<ICitizenRepository>(),
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IUserService>()));
-            services.AddScoped<FireIncidentPresentation>(x =>
-                new FireIncidentPresentation(
-                    x.GetService<IFireIncidentRepository>(),
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IMapper>()));
-            services.AddScoped<FiremanTeamPresentation>(x =>
-                new FiremanTeamPresentation(
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IFireTruckRepository>(),
-                    x.GetService<IFiremanRepository>(),
-                    x.GetService<IMapper>()));
-            services.AddScoped<FireTruckPresentation>(x =>
-                new FireTruckPresentation(
-                    x.GetService<IFiremanTeamRepository>(),
-                    x.GetService<IFireTruckRepository>(),
-                    x.GetService<IMapper>()));
+            services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
+            services.AddScoped<IFiremanPresentation, FiremanPresentation>();
+            services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
+            services.AddScoped<IFiremanTeamPresentation, FiremanTeamPresentation>();
             services.AddScoped<IPupilPresentation, PupilPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
@@ -167,8 +134,7 @@ namespace WebApplication1
             configurationExp.CreateMap<FireIncidentViewModel, FireIncident>();
 
             MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
-            configurationExp.AddProfile<AirportProfiles>();
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+            configurationExp.AddProfile<AirportProfiles>();             
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);

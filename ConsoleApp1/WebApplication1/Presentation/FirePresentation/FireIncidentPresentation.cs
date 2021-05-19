@@ -9,72 +9,72 @@ using WebApplication1.Models.FiremanModels;
 
 namespace WebApplication1.Presentation.FirePresentation
 {
-    public class FireIncidentPresentation
-    {
-        private IFireIncidentRepository _fireIncidentRepository { get; set; }
-        private IFiremanTeamRepository _firemanTeamRepository { get; set; }
-        private IMapper _mapper { get; set; }
+	public class FireIncidentPresentation : IFireIncidentPresentation
+	{
+		private IFireIncidentRepository _fireIncidentRepository { get; set; }
+		private IFiremanTeamRepository _firemanTeamRepository { get; set; }
+		private IMapper _mapper { get; set; }
 
-        public FireIncidentPresentation(IFireIncidentRepository fireIncidentRepository, IFiremanTeamRepository firemanTeamRepository, IMapper mapper)
-        {
-            _fireIncidentRepository = fireIncidentRepository;
-            _firemanTeamRepository = firemanTeamRepository;
-            _mapper = mapper;
-        }
-        public List<FireIncidentViewModel> GetAllIncidents()
-        {
-            var viewmodels = _fireIncidentRepository.GetAll()
-                   .Select(x => _mapper.Map<FireIncidentViewModel>(x)).ToList();
-            return viewmodels;
-        }
-        public void AddFireIncident(FireIncidentViewModel model)
-        {
-            var newModel = _mapper.Map<FireIncident>(model);
+		public FireIncidentPresentation(IFireIncidentRepository fireIncidentRepository, IFiremanTeamRepository firemanTeamRepository, IMapper mapper)
+		{
+			_fireIncidentRepository = fireIncidentRepository;
+			_firemanTeamRepository = firemanTeamRepository;
+			_mapper = mapper;
+		}
+		public List<FireIncidentViewModel> GetAllIncidents()
+		{
+			var viewmodels = _fireIncidentRepository.GetAll()
+				   .Select(x => _mapper.Map<FireIncidentViewModel>(x)).ToList();
+			return viewmodels;
+		}
+		public void AddFireIncident(FireIncidentViewModel model)
+		{
+			var newModel = _mapper.Map<FireIncident>(model);
 
-            var team = _firemanTeamRepository.GetByName(model.TeamName);
-            newModel.FiremanTeam = team;
+			var team = _firemanTeamRepository.GetByName(model.TeamName);
+			newModel.FiremanTeam = team;
 
-            _fireIncidentRepository.Save(newModel);
-        }
-        public bool Remove(long id)
-        {
-            var fireman = _fireIncidentRepository.Get(id);
-            if (fireman == null)
-            {
-                return false;
-            }
+			_fireIncidentRepository.Save(newModel);
+		}
+		public bool Remove(long id)
+		{
+			var fireman = _fireIncidentRepository.Get(id);
+			if (fireman == null)
+			{
+				return false;
+			}
 
-            _fireIncidentRepository.Remove(fireman);
-            return true;
-        }
-        public FireIncidentViewModel GetIncident(long id)
-        {
-            var fireincident = _fireIncidentRepository.Get(id);
-            var model = _mapper.Map<FireIncidentViewModel>(fireincident);
+			_fireIncidentRepository.Remove(fireman);
+			return true;
+		}
+		public FireIncidentViewModel GetIncident(long id)
+		{
+			var fireincident = _fireIncidentRepository.Get(id);
+			var model = _mapper.Map<FireIncidentViewModel>(fireincident);
 
-            model.TeamName = fireincident.FiremanTeam?.TeamName;
-            return model;
-        }
-        public void Edit(FireIncidentViewModel model)
-        {
-            var incident = _fireIncidentRepository.Get(model.Id);
-            if (incident != null)
-            {
-                incident.Address = model.Address;
-                incident.Date = model.Date;
-                incident.Reason = model.Reason;
-                incident.Injured = model.Injured;
-                incident.Dead = model.Dead;
-                incident.Date = model.Date;
+			model.TeamName = fireincident.FiremanTeam?.TeamName;
+			return model;
+		}
+		public void Edit(FireIncidentViewModel model)
+		{
+			var incident = _fireIncidentRepository.Get(model.Id);
+			if (incident != null)
+			{
+				incident.Address = model.Address;
+				incident.Date = model.Date;
+				incident.Reason = model.Reason;
+				incident.Injured = model.Injured;
+				incident.Dead = model.Dead;
+				incident.Date = model.Date;
 
-                var team = _firemanTeamRepository.GetByName(model.TeamName);
+				var team = _firemanTeamRepository.GetByName(model.TeamName);
 
-                incident.TeamId = team.Id;
-                incident.FiremanTeam = team;
+				incident.TeamId = team.Id;
+				incident.FiremanTeam = team;
 
-                _fireIncidentRepository.Save(incident);
-            }
-        }
-    }
+				_fireIncidentRepository.Save(incident);
+			}
+		}
+	}
 
 }

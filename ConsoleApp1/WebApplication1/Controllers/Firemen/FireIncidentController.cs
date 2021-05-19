@@ -14,9 +14,9 @@ namespace WebApplication1.Controllers.Firemen
 {
     public class FireIncidentController : Controller
     {
-        private FireIncidentPresentation _fireIncidentPresentation { get; set; }
+        private IFireIncidentPresentation _fireIncidentPresentation { get; set; }
 
-        public FireIncidentController(FireIncidentPresentation fireIncidentPresentation)
+        public FireIncidentController(IFireIncidentPresentation fireIncidentPresentation)
         {
             _fireIncidentPresentation = fireIncidentPresentation;
         }
