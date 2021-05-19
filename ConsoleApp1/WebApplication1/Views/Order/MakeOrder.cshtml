@@ -1,30 +1,24 @@
 ﻿@model OrderViewModel
 
-
-
 <link rel="stylesheet" href="~/css/entityAdding.css" />
 
 <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
     <div>
-        <h1 class="display-4 font-italic">Make Order</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam sed ex at imperdiet. Nulla vel malesuada quam. Morbi sit amet mi quis nibh hendrerit tincidunt. Aenean pellentesque a justo at faucibus. Cras a sapien pretium, varius turpis eu, egestas orci. Cras aliquam at mauris vel accumsan. Nam libero tellus, sodales et lectus quis, facilisis blandit risus. Nulla facilisi.</p>
-
+        <h1 class="display-4 font-italic">Order Registration page</h1>        
     </div>
 </div>
-
 
 <div class="form-bg">
     <div class="container">
         <div class="row">
             <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
                 <div class="form-container">
-                    <h3 class="title">Bus Registration</h3>
+                    <h3 class="title">Order Form</h3>
                     <form class="form-horizontal" action="@Url.Action("MakeOrder", "Order")" method="post">
                         <div class="form-group">
                             <label>Full name*</label>
                             <input class="form-control" aria-label="Default select example" type="text" name="name">
                         </div>
-
                         <div class="form-group">
                             <label>Bus model*</label>
                             <select class="form-select" aria-label="Default select example" type="text" name="model">
@@ -36,21 +30,15 @@
                                 <option>Aurora</option>
                             </select>
                         </div>
-
-
                         <div class="form-group phone-no">
                             <label>Route Title*</label>
                             <input class="form-control" type="text" name="RouteTitle">
-
                         </div>
                         <div class="form-group age">
                             <label>Duration*</label>
                             <input class="form-control" type="number" name="Period">
                         </div>
-
-
                         <button class="btn signin" type="submit" style="background-color: blue;">Order</button>
-
                     </form>
                 </div>
             </div>

@@ -10,6 +10,5 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface
     {
         Order GetByName(string name);
         Order GetById(long id);
-
     }
 }

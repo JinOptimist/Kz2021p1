@@ -10,7 +10,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface
     {
         Bus GetByModel(string model);
         Bus GetByType(string type);
-
         Bus GetById(long id);
         bool IsFree(string model, string routeTitle);
         long FreeBusId(string model, string routeTitle);

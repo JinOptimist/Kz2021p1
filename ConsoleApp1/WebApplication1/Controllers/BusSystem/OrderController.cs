@@ -8,6 +8,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers.BusSystem
 {
@@ -16,29 +17,30 @@ namespace WebApplication1.Controllers.BusSystem
         private IOrderRepository _orderRepository;
         private IBusRepository _busRepository;
         private ITripRouteRepository _tripRouteRepository;
+        private IUserService _userService { get; set; }
         private IMapper _mapper { get; set; }
 
-        public OrderController(IOrderRepository orderRepository, IBusRepository busRepository, ITripRouteRepository tripRouteRepository, IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, IBusRepository busRepository, ITripRouteRepository tripRouteRepository, IUserService userService, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _busRepository = busRepository;
             _tripRouteRepository = tripRouteRepository;
+            _userService = userService;
             _mapper = mapper;
         }
 
         public IActionResult Acknow()
         {
-
+            ViewData["userName"] = _userService.GetUser().Name;
             return View();
         }
 
         public IActionResult OrderPage()
         {
-
             return View();
         }
 
-        [HttpGet("/cbs/orders")]
+        [HttpGet("/cbs/orders/index")]
         public IActionResult Index()
         {
             var viewModels = _orderRepository.GetAll()
@@ -48,32 +50,24 @@ namespace WebApplication1.Controllers.BusSystem
                     Name = x.Name,
                     Model = x.Model,
                     Period = x.Period,
+                    RouteTitle = x.RouteTitle,
+                    FinalPrice = x.FinalPrice,
                 }).ToList();
             return View(viewModels);
         }
 
+        [HttpGet("/cbs/orders/error")]
         public IActionResult Error()
         {
-
             return View();
         }
-
 
         [HttpGet]
         public IActionResult MakeOrder()
         {
             return View();
         }
-
-
-
-
-        public IActionResult CheckOrder()
-        {
-            return View();
-        }
-
-
+        
         [HttpPost]
         public IActionResult MakeOrder(OrderViewModel newOrder)
         {
@@ -89,12 +83,10 @@ namespace WebApplication1.Controllers.BusSystem
                     RouteTitle = newOrder.RouteTitle,
                     FinalPrice = Convert.ToDouble(busPrice + routePrice)
                 };
-
-                //ViewBag.OrderPrice = order.FinalPrice;
+                                
                 long freeBusId = _busRepository.FreeBusId(newOrder.Model, newOrder.RouteTitle);
                 _busRepository.UpdateBusOrderStatus(freeBusId, true);
                 _orderRepository.Save(order);
-
 
                 return RedirectToAction("Acknow");
             }
@@ -102,15 +94,10 @@ namespace WebApplication1.Controllers.BusSystem
             {
                 return RedirectToAction("Error");
             }
-
-
-
         }
 
         public JsonResult Remove(long id)
         {
-
-
             var order = _orderRepository.GetById(id);
             if (order == null)
             {
@@ -121,8 +108,5 @@ namespace WebApplication1.Controllers.BusSystem
 
             return Json(true);
         }
-
-
-
     }
 }

@@ -13,7 +13,5 @@ namespace WebApplication1.EfStuff.Model
         public decimal Price { get; set; }
         public bool IsOnOrder { get; set; } = false;
         public virtual TripRoute RoutePlan { get; set; }
-
-
     }
 }

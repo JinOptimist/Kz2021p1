@@ -11,17 +11,7 @@ namespace WebApplication1.EfStuff.Repositoryies
     {
         public OrderRepository(KzDbContext kzDbContext) : base(kzDbContext) { }
 
-        public Order GetByName(string name)
-        {
-            return _kzDbContext.Orders.SingleOrDefault(x => x.Name == name);
-        }
-
-        public Order GetById(long id)
-        {
-            return _kzDbContext.Orders.SingleOrDefault(x => x.Id == id);
-        }
-
-
-
+        public Order GetByName(string name) => _kzDbContext.Orders.SingleOrDefault(x => x.Name == name);        
+        public Order GetById(long id) => _kzDbContext.Orders.SingleOrDefault(x => x.Id == id);       
     }
 }

@@ -18,10 +18,8 @@ namespace WebApplication1.Controllers.BusSystem
     {
         private IBusRepository _busRepository;
         private ITripRouteRepository _tripRouteRepository;
-        private IMapper _mapper { get; set; }
         private IUserService _userService { get; set; }
-
-
+        private IMapper _mapper { get; set; }      
 
         public BusController(IBusRepository busRepository, ITripRouteRepository tripRouteRepository, IMapper mapper, IUserService userService)
         {
@@ -41,7 +39,6 @@ namespace WebApplication1.Controllers.BusSystem
         [HttpGet("/cbs/index")]
         public IActionResult Index()
         {
-
             var viewModels = _busRepository.GetAll()
                 .Select(x => new BusParkViewModel()
                 {
@@ -69,8 +66,6 @@ namespace WebApplication1.Controllers.BusSystem
         {
             return View();
         }
-
-
 
         [HttpGet("/cbs/bus_adding")]
         public IActionResult BusPark()
@@ -104,9 +99,7 @@ namespace WebApplication1.Controllers.BusSystem
             _busRepository.Save(bus);
 
             return RedirectToAction("Index");
-            //return View();
         }
-
 
         public JsonResult Remove(long id)
         {
@@ -120,7 +113,5 @@ namespace WebApplication1.Controllers.BusSystem
 
             return Json(true);
         }
-
     }
-
 }

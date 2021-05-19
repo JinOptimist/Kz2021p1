@@ -39,16 +39,12 @@ namespace WebApplication1.Controllers.BusSystem
         [HttpGet]
         public IActionResult RoutesMap()
         {
-
-
             return View();
         }
 
         [HttpPost]
         public IActionResult CreateRoute(TripViewModel newRoute)
         {
-
-
             var route = new TripRoute()
             {
                 Title = newRoute.Title,
@@ -65,8 +61,6 @@ namespace WebApplication1.Controllers.BusSystem
 
         public JsonResult Remove(long id)
         {
-
-
             var route = _tripRouteRepository.GetById(id);
             if (route == null)
             {
@@ -79,5 +73,4 @@ namespace WebApplication1.Controllers.BusSystem
             return Json(true);
         }
     }
-
 }
