@@ -37,6 +37,7 @@ namespace WebApplication1.EfStuff
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
 
         public DbSet<HCEstablishments> HCEstablishments { get; set; }
         public DbSet<HCWorker> HCWorker { get; set; }
@@ -84,6 +85,10 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Bus>()
                 .HasOne(x => x.RoutePlan)
                 .WithMany(x => x.Buses);
+
+            modelBuilder.Entity<Order>()
+                      .HasIndex(x => x.Name)
+                      .IsUnique();
 
             modelBuilder.Entity<Policeman>()
                 .HasMany(v => v.Violations)

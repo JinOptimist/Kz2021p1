@@ -2,8 +2,10 @@
 
 namespace WebApplication1.EfStuff.Repositoryies.Interface
 {
-	public interface ITripRouteRepository : IBaseRepository<TripRoute>
+    public interface ITripRouteRepository : IBaseRepository<TripRoute>
     {
+        TripRoute GetByType(string type);
         TripRoute GetByTitle(string title);
+        TripRoute GetById(long id);
     }
 }
