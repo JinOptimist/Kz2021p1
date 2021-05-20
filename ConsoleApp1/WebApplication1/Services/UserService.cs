@@ -48,7 +48,9 @@ namespace WebApplication1.Services
 		public bool IsTrainee()
 			=> GetUser()?.Policeman.Rank == Rank.Trainee;
         public bool IsFireAdmin()
-            => GetUser()?.Fireman?.Role == "FireAdmin";
+            => GetUser()?.Fireman?.Role == EfStuff.Model.Firemen.FireWorkerRole.Fireadmin;
+        public bool IsTruckSpecialist()
+           => GetUser()?.Fireman?.Role == EfStuff.Model.Firemen.FireWorkerRole.FireTruckSpecialist;
 
         public bool IsHCWorker() 
             => GetUser()?.HCWorker != null;

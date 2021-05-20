@@ -9,5 +9,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface
     public interface IFiremanTeamRepository : IBaseRepository<FiremanTeam>
     {
         FiremanTeam GetByName(string name);
+        FiremanTeam GetFreeTeam();
     }
 }

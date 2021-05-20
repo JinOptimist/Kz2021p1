@@ -82,7 +82,10 @@ namespace WebApplication1
                     x.GetService<IHCEstablishmentsRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
-
+            services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
+            services.AddScoped<IFiremanPresentation, FiremanPresentation>();
+            services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
+            services.AddScoped<IFiremanTeamPresentation, FiremanTeamPresentation>();
 
             RegisterAutoMapper(services);
 
