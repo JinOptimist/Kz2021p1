@@ -2,7 +2,7 @@
 
 namespace WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces
 {
-	public interface IQuestionsRepo : IBaseRepository<Question>
+	public interface IQuestionsRepository : IBaseRepository<PoliceQuizQuestion>
     {
         
     }

@@ -219,10 +219,7 @@
             success: function (result) {
                 $("#quizer").empty();
                 $("#quizer").html(result)
-            },
-            error: function (error) {
-                alert('Error: ' + error.statusText);
-            }
+            }          
         });
     })
 

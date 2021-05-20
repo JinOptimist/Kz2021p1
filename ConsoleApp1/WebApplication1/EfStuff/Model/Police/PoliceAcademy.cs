@@ -29,7 +29,7 @@ namespace WebApplication1.EfStuff.Model
 		[DataType(DataType.PhoneNumber)]
 		public string PhoneNumber { get; set; }
 
-		public RequestStatus RequestStatus { get; set; } = RequestStatus.InProcess;
+		public RequestStatus RequestStatus { get; set; }
 
 		public long CitizenId { get; set; } = 0;
 		public virtual Citizen Citizen { get; set; }

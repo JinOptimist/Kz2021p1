@@ -3,11 +3,11 @@ using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-	public class ShiftRepo : BaseRepository<Shift>, IShiftRepo
+	public class PoliceCallRepository : BaseRepository<PoliceCallHistory>, IPoliceCallRepository
 	{
-		public ShiftRepo(KzDbContext kzDbContext) : base(kzDbContext)
+		public PoliceCallRepository(KzDbContext kzDbContext) : base(kzDbContext)
 		{
 
 		}
-    }
+	}
 }

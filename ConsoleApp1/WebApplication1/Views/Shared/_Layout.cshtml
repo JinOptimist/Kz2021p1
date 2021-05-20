@@ -96,12 +96,12 @@
                             <li>
                                 <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="duties">Policemens</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="users">Citizens</a>
-                            </li>
-                            <li>
+                            @if (userService.IsPolicmen()) { 
+                             <li>
                                 <a class="dropdown-item nav-link text-dark" asp-controller="police" asp-action="police-personal-cabinet">Personal Cabinet</a>
-                            </li>
+                             </li>
+                            }
+                            
                             <li class="divider"></li>
                         </ul>
                     </li>

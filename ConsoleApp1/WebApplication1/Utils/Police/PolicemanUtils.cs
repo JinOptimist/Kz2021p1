@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WebApplication1.Utils.Police
 {
 	public static class PolicemanUtils
 	{
-		public static long SearchRandom(int policeCount)
+		public static long SearchRandom(List<long> policeId)
 		{
-			return new Random().Next(1, policeCount);
+			int randomNumber = new Random().Next(0, policeId.Count);
+
+			return policeId[randomNumber];
 		}
 	}
 }

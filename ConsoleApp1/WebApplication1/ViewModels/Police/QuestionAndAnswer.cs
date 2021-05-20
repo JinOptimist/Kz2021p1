@@ -6,6 +6,6 @@ namespace WebApplication1.ViewModels
     {
 		public long QuestionId { get; set; }
 		public string QuestionDesc { get; set; }
-		public List<AnswerViewModel> Answers { get; set; }
+		public List<PoliceAnswerViewModel> Answers { get; set; }
 	}
 }

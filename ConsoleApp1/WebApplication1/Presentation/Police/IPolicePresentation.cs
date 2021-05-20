@@ -17,17 +17,17 @@ namespace WebApplication1.Presentation.Police
 		Task<UserInfoViewModel> GetUserInfo(long id);
 		List<PolicemanViewModel> GetAllPolicemen();
 		void DismissPoliceman(long id);
-		List<ApplicantViewModel> GetAllApplicants();
+		List<PoliceApplicantViewModel> GetAllApplicants();
 		void AcceptApplicant(long id);
-		long AddNewQuestion(Question question);
-		void AddAnswers(List<Answer> answers);
+		long AddNewQuestion(PoliceQuizQuestion question);
+		void AddAnswers(List<PoliceQuizAnswer> answers);
 		List<QuestionAndAnswer> GetQuiz();
 		bool? CheckAnswer(long id);
 		void UpRank(Rank officer);
 
-		void SetPoliceShift(Shift shift);
+		void SetPoliceShift(PoliceShift shift);
 		IEnumerable<BasePolicemanShiftVM> GetShifts();
 		IEnumerable<SheriffShiftVM> GetOfficerShift();
-		Shift UpdateShift(UpdateShiftViewModel shift);
+		PoliceShift UpdateShift(UpdateShiftViewModel shift);
 	}
 }

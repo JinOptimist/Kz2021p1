@@ -51,7 +51,7 @@ namespace WebApplication1
                 new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
 
             var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
-            services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
+            services.AddDbContext<KzDbContext>(option =>  option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
             services.AddPoliceServices(Configuration);

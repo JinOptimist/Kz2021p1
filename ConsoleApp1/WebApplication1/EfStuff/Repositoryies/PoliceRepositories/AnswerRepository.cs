@@ -3,9 +3,9 @@ using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-	public class AnswerRepo : BaseRepository<Answer>, IAnswerRepo
+	public class AnswerRepository : BaseRepository<PoliceQuizAnswer>, IAnswerRepository
     {
-		public AnswerRepo(KzDbContext kzDbContext) : base(kzDbContext)
+		public AnswerRepository(KzDbContext kzDbContext) : base(kzDbContext)
 		{
 
 		}

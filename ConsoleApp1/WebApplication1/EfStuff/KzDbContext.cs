@@ -31,9 +31,9 @@ namespace WebApplication1.EfStuff
         public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
         public DbSet<Violations> Violations { get; set; }
         public DbSet<PoliceAcademy> PoliceAcademy { get; set; }
-        public DbSet<Answer> Answers { get; set; }
-        public DbSet<Question> Qestions { get; set; }
-        public DbSet<Shift> Shifts { get; set; }
+        public DbSet<PoliceQuizAnswer> Answers { get; set; }
+        public DbSet<PoliceQuizQuestion> Qestions { get; set; }
+        public DbSet<PoliceShift> Shifts { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
 
@@ -112,7 +112,7 @@ namespace WebApplication1.EfStuff
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
 
-            modelBuilder.Entity<Shift>()
+            modelBuilder.Entity<PoliceShift>()
                 .HasOne(p => p.Policeman)
                 .WithMany(s => s.Shifts);
 

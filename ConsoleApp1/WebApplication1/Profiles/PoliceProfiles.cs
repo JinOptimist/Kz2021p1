@@ -21,15 +21,15 @@ namespace WebApplication1.Profiles
 				.ForMember(c => c.CitizenId, opt => opt.MapFrom(x => x.Id));
 			CreateMap<Policeman, PolicemanViewModel>()
 				.ForMember(x => x.Name, opt => opt.MapFrom(x => x.Citizen.Name));
-			CreateMap<PoliceAcademy, ApplicantViewModel>();
-			CreateMap<Question, QuestionAndAnswer>()
+			CreateMap<PoliceAcademy, PoliceApplicantViewModel>();
+			CreateMap<PoliceQuizQuestion, QuestionAndAnswer>()
 				.ForMember(x => x.QuestionDesc, opt => opt.MapFrom(x => x.Description))
 				.ForMember(x => x.QuestionId, opt => opt.MapFrom(y => y.Id));
-			CreateMap<Answer, AnswerViewModel>()
+			CreateMap<PoliceQuizAnswer, PoliceAnswerViewModel>()
 				.ForMember(a => a.AnswerId, opt => opt.MapFrom(x => x.Id));
-			CreateMap<BasePolicemanShiftVM, Shift>()
+			CreateMap<BasePolicemanShiftVM, PoliceShift>()
 				.ReverseMap();
-			CreateMap<Shift, SheriffShiftVM>()
+			CreateMap<PoliceShift, SheriffShiftVM>()
 				.ForMember(sf => sf.Name, opt => opt.MapFrom(x => x.Policeman.Citizen.Name));
 		}
 	}

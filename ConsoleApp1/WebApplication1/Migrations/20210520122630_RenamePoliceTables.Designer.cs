@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210520122630_RenamePoliceTables")]
+    partial class RenamePoliceTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,7 +170,7 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("CertificateType")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -590,8 +592,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("AverageMark")
-                        .HasColumnType("int");
+                    b.Property<double>("AverageMark")
+                        .HasColumnType("float");
 
                     b.Property<string>("Birthday")
                         .HasColumnType("nvarchar(max)");
@@ -627,7 +629,7 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<long?>("SchoolId")
+                    b.Property<long>("SchoolId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Surname")
@@ -789,7 +791,7 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<long?>("UniversityId")
+                    b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -1077,7 +1079,9 @@ namespace WebApplication1.Migrations
 
                     b.HasOne("WebApplication1.EfStuff.Model.School", "School")
                         .WithMany("Pupils")
-                        .HasForeignKey("SchoolId");
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Certificate");
 
@@ -1095,7 +1099,9 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.University", "University")
                         .WithMany("Students")
-                        .HasForeignKey("UniversityId");
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("University");
                 });
