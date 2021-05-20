@@ -34,7 +34,7 @@
                 <div>
                     Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
                 </div>
-                <div style="margin-top:20px">
+                <div class="topMargin20">
                     <div class="row">
 
                         <div class="col-sm-4">
@@ -55,11 +55,11 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-top:20px">
+                <div class="topMargin20">
                     Faculty:
                     <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties"><option>@Model.Faculty</option></select>
                 </div>
-                <div style="margin-top:20px">
+                <div class="topMargin20">
                     <div class="row">
                         <div class="col-sm-6">
                             Entered Year: @Html.TextBoxFor(x => x.EnteredYear, new { @Value = Model.EnteredYear, @readonly = true, Class = "form-control" })
@@ -72,7 +72,7 @@
 
                 </div>
 
-                <div style="margin-top:20px">
+                <div class="topMargin20">
                     <div class="row">
                         <div class="col-sm-6">
                             Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })
@@ -92,16 +92,10 @@
 
                 </div>
 
-                <div class="margin20" style="margin-bottom:50px">
+                <div class="topMargin20 bottomMargin50">
                     <input class="btn btn-primary" type="submit" value="Save Changes" />
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<style>
-    .margin20 {
-        margin-top: 20px;
-    }
-</style>

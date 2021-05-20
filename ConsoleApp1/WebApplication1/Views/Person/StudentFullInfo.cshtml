@@ -1,24 +1,17 @@
 ﻿@model StudentViewModel
 
 
-<h1>@ViewData["Title"]</h1>
+<h1>@ViewData["StudentFullInfo"]</h1>
 
-<div class="container" style="display:flex; flex-direction:row;">
-    <div style="padding:50px">
+<div class="container forFlexDisplay">
+    <div class="padding50">
         <h1>@Model.Surname @Model.Name @Model.Patronymic</h1>
-        @if (Model.AvatarUrl == null)
-        {
-            <img src="/Education/img/ava1.png">
-        }
-        else
-        {
-            <img src="@Model.AvatarUrl">
-        }
+        <img src=@(Model.AvatarUrl == null ? "/Education/img/ava1.png" : $"{Model.AvatarUrl}") class="card-img-top">
     </div>
 
 
-    <div style="padding:50px">
-        <h5 style="display:flex; justify-content:center; align-items:center;">Full Info</h5>
+    <div class="padding50">
+        <h5 class="forFlexDisplay">Full Info</h5>
         <p>Email: <b>@Model.Email</b></p>
         <p>Birthday: <b>@Model.Birthday</b></p>
         <p>University: <b>@Model.University.Name</b></p>
@@ -26,20 +19,20 @@
         <p>Course Year: <b>@Model.CourseYear</b></p>
         <p>Entered Year: <b>@Html.DisplayFor(x => x.EnteredYear)</b></p>
         <p>Graduated Year: <b> @Html.DisplayFor(x => x.GraduatedYear)</b></p>
-       
+
         <p>Gpa: <b>@Model.Gpa</b></p>
         <p>On Grant: <b>@Model.IsGrant</b></p>
         @foreach (var certificate in Model.Certificates)
         {
-            <p>Certificate: <b>@certificate.Type</b></p>
+            <p>Certificate: <b>@certificate.CertificateType</b></p>
         }
     </div>
 
 </div>
-<div style="display:flex; flex-direction:row; margin-bottom: 50px">
+<div class="forDisplayCertificate">
     @foreach (var certificate in Model.Certificates)
     {
-        <img src="/Education/img/certificateImg/@certificate.CertificateImgUrl" style="width:400px;">
+        <img src="/Education/img/certificateImg/@certificate.CertificateImgUrl" class="width400">
     }
 
 </div>

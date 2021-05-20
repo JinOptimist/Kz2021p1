@@ -13,7 +13,6 @@ namespace WebApplication1.Presentation
         void GetAddNewOrEditPupil(PupilViewModel pupilViewModel);
         void GetPupilGrant(List<long> universityIds, int minValueForGrant);
         bool Remove(string iin);
-        List<School> GetSchoolList();
         School GetSchoolBySchoolName(string schoolName);
         List<string> GetListOfSchoolNames();
         void EndStudyYearForSchool();

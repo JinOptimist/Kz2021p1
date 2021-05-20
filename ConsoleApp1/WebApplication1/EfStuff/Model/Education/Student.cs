@@ -21,8 +21,6 @@ namespace WebApplication1.EfStuff.Model
 
         public DateTime? GraduatedYear { get; set; }
 
-        public long UniversityId { get; set; }
-
         public virtual University University { get; set; }
 
         public virtual ICollection<Certificate> Certificates { get; set; }

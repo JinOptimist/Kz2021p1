@@ -1,5 +1,7 @@
 ﻿@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
+@using System.Linq
 @using ReflectionIT.Mvc.Paging
+
 @addTagHelper *,ReflectionIT.Mvc.Paging
 
 @{
@@ -10,35 +12,23 @@
     <script src="~/js/Education/certificate.js"></script>
 }
 
-<h1 style="display:flex; justify-content:center; align-items:center">Certificate</h1>
-
+<h1 class="forFlexDisplay">Certificate</h1>
 
 <div class="container mb-5">
 
     <form asp-action="Certificate" method="post">
         <p>
-            <b style="margin: 10px;"> Select: </b>
-            @Html.RadioButton("select", "Middle") <text class="marginForText">Middle</text>
-            @Html.RadioButton("select", "Police") <text class="marginForText">Police</text>
-            @Html.RadioButton("select", "Medicine") <text class="marginForText">Medicine</text>
-
+            <b class="margin10"> Select: </b>
+            @Html.RadioButton("select", "Middle") <text class="rightMargin25">Middle</text>
+            @Html.RadioButton("select", "Police") <text class="rightMargin25">Police</text>
+            @Html.RadioButton("select", "Medicine") <text class="rightMargin25">Medicine</text>
         </p>
 
         <br />
         <p>
-
-            <input type="submit" value="OK" class="btn btn-primary" style="margin-left:15px" />
-
+            <input type="submit" value="OK" class="btn btn-primary leftMargin15" />
         </p>
     </form>
-    @* @if (ViewBag.Message != null)
-        {
-            <script type="text/javascript">
-                window.onload = function () {
-                    alert("@ViewBag.Message");
-                };
-            </script>
-        }*@
 
     <form asp-action="SearchStudentByFacultyAndCourseYear" method="get">
 
@@ -63,9 +53,9 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
+                <input type="submit" value="Search" class="btn btn-primary leftMargin15" />
 
-                <a class="btn btn-primary" style="margin-left:15px" asp-action="Certificate">Get All Students</a>
+                <a class="btn btn-primary leftMargin15" asp-action="Certificate">Get All Students</a>
             </div>
         </div>
     </form>
@@ -77,7 +67,8 @@
                 <th scope="col">FIO</th>
                 <th scope="col">Course Year</th>
                 <th scope="col">Faculty</th>
-                <th scope="col">Certificate</th>
+                <th scope="col">My Certificates</th>
+                <th scope="col">Certificates</th>
             </tr>
         </thead>
         <tbody>
@@ -86,28 +77,65 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-
                         <td>
                             @Html.ActionLink(@item.Iin, "StudentFullInfo", new { studentId = item.Id })
                         </td>
-                        <td>@item.Surname @item.Name @item.Patronymic </td>
-                        @if (item.CourseYear == 0)
-                        {
-                            <td>Graduated</td>
-                        }
-                        else
-                        {
-                            <td> @item.CourseYear </td>
-                        }
-                        <td> @item.Faculty </td>
-                        @for (var i = 0; i < item.Certificates.Count; i++)
-                        {
-                            <td class="cancelBtn">
-                                @item.Certificates[i].Type
-                                <input class="btn btn-danger cancelCertificate" id="@item.Certificates[i].Type" data-name="@item.Iin" type="button" value="X" />
-                            </td>
-                        }
 
+                        <td>@item.Surname @item.Name </td>
+
+                        <td>@(item.CourseYear == 0 ? "Graduated" : $"{item.CourseYear}")</td>
+
+                        <td> @item.Faculty </td>
+
+                        <td>
+                            <select class="form-control width130" id="selectedCertificate">
+                                @for (var i = 0; i < item.Certificates.Count; i++)
+                                {
+                                    <option>@item.Certificates[i].CertificateType</option>
+                                }
+                            </select>
+                        </td>
+
+                        @{var counter = 0;
+
+                            if (item.CourseYear > 0)
+                            {
+                                <td>
+                                    <select class="form-control width130" id="selectedCertificateType">
+                                        @foreach (var certificateType in ViewBag.CertificateTypes)
+                                        {
+
+                                            @for (var i = 0; i < item.Certificates.Count; i++)
+                                            {
+                                                @if (certificateType == item.Certificates[i].CertificateType)
+                                                {
+                                                    counter++;
+                                                }
+
+                                            }
+                                            @if (counter == 0)
+                                            {
+                                                <option>@certificateType</option>
+
+                                            }
+                                            counter = 0;
+                                        }
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input class="btn btn-success addNewCertificateType"
+                                           data-name="@item.Iin"
+                                           type="submit" value="Add" />
+                                </td>
+
+                                <td>
+                                    <input class="btn btn-danger cancelCertificate"
+                                           data-name="@item.Iin"
+                                           type="submit" value="Cancel" />
+                                </td>
+                            }
+                        }
 
                     </tr>
                 }
@@ -116,23 +144,10 @@
         </tbody>
     </table>
 
-
     <nav aria-label="nav example">
         @if (this.Model != null)
         {
             @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
         }
-
     </nav>
-
 </div>
-
-<style>
-    .marginForText {
-        margin-right: 25px;
-    }
-
-    ul.pagination li {
-        margin: 10px;
-    }
-</style>

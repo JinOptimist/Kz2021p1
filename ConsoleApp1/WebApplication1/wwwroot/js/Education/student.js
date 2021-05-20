@@ -22,35 +22,19 @@
 
         if (this.value == "Забрать грант") {
             $.get(url).done(function (answer) {
-                alert(answer);
+                if (answer) {
+                    this.value("Выдать грант");
+                }
             });
-            this.value("Выдать грант");
         }
         else {
             $.get(url).done(function (answer) {
-                alert(answer);
+                if (answer) {
+                    this.value("Забрать грант");
+                }
             });
-            this.value("Забрать грант");
         }
-        clicked.closest('.user').reload();
+        $window.location.reload(true);
     });
 
-    $('.cancelCertificate').click(function () {
-        var clicked = $(this);
-       // clicked.attr('disabled', 'disabled');
-
-        var iin = clicked.attr('data-name');
-        var certificateType = clicked.attr('id');
-        
-        console.log(iin);
-        console.log(certificateType);
-        
-        var url = '/Person/CancelCertificate?iin=' + iin + '&certificateType=' + certificateType;
-
-        $.get(url).done(function (answer) {
-            if (answer) {
-                clicked.closest('.cancelBtn').remove();
-            }
-        });
-    });
 });
