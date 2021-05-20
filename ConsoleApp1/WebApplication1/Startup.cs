@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.Education;
@@ -55,6 +54,7 @@ namespace WebApplication1
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
+            services.AddPoliceServices(Configuration);
             services.AddScoped<ICitizenRepository, CitizenRepository>();
             services.AddScoped<IHCWorkerRepository, HCWorkerRepository>();
             services.AddScoped<IHCEstablishmentsRepository, HCEstablishmentsRepository>();
@@ -71,7 +71,7 @@ namespace WebApplication1
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddHostedService<MiniTimeline>();
-
+            services.AddPoliceServices(Configuration);
 
             services.AddScoped<HCEstablishmentsPresentation>(x =>
                 new HCEstablishmentsPresentation(
@@ -79,7 +79,7 @@ namespace WebApplication1
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
 
-            services.AddPoliceServices(Configuration);
+
             RegisterAutoMapper(services);
 
             services.AddAuthentication(AuthMethod)
