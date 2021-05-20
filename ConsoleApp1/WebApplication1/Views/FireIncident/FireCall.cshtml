@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "FireIncident";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model WebApplication1.Models.FiremanModels.FireIncidentViewModel
+
+<h1>Fire Call</h1>
+
+<form action="@Url.Action("AddFireIncident", "FireIncident")" method="post">
+
+    <div>
+        Address : @Html.TextBoxFor(x => x.Address)
+    </div>
+    <div>
+        <input type="submit" value="Call">
+    </div>
+</form>

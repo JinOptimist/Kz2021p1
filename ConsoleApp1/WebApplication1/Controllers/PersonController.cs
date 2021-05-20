@@ -1,240 +1,230 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using ReflectionIT.Mvc.Paging;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
+using WebApplication1.Models.Education;
+using WebApplication1.Presentation;
 
 namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
-        private StudentRepository StudentRepository { get; set; }
-        private PupilRepository PupilRepository { get; set; }
-        private IMapper Mapper { get; set; }
+        private IStudentPresentation _studentPresentation;
+        private IPupilPresentation _pupilPresentation;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        public PersonController(StudentRepository studentRepository, PupilRepository pupilRepository, IMapper mapper)
+        public PersonController(IStudentPresentation studentPresentation, IPupilPresentation pupilPresentation, IWebHostEnvironment webHostEnvironment)
         {
-            StudentRepository = studentRepository;
-            PupilRepository = pupilRepository;
-            Mapper = mapper;
+            _studentPresentation = studentPresentation;
+            _pupilPresentation = pupilPresentation;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult StudentListAndSearch(int page = 1)
+        public IActionResult StudentList(int page = 1)
         {
-            var students = StudentRepository
-                .GetAll()
-                .Select(x => Mapper.Map<StudentViewModel>(x))
-                .ToList();
-            var model = PagingList.Create(students, 3, page);
+            var viewModels = _studentPresentation.GetStudentList(page);
 
-            model.Action = "StudentListAndSearch";
-            return View(model);
+            return View("StudentListAndSearch", viewModels);
         }
 
         [HttpGet]
         public IActionResult StudentListAndSearch(string searchBy, string searchStudent, int page = 1)
         {
-            ViewData["GetStudentDetails"] = searchStudent;
-
-            var query = from x in StudentRepository.GetAll() select x;
-            if (!String.IsNullOrEmpty(searchStudent))
-            {
-                if (searchBy == "iin")
-                {
-                    query = query.Where(x => x.IIN.Equals(searchStudent));
-                }
-                if (searchBy == "name")
-                {
-                    query = query.Where(x => x.Name.Contains(searchStudent));
-                }
-                if (searchBy == "courseYear")
-                {
-                    query = query.Where(x => x.CourseYear == int.Parse(searchStudent)).OrderBy(s => s.UniversityId);
-                }
-                if (searchBy == "universityID")
-                {
-                    query = query.Where(x => x.UniversityId == int.Parse(searchStudent)).OrderBy(s => s.CourseYear);
-                }
-            }
-            List<StudentViewModel> studentViewModels = new List<StudentViewModel>();
-            foreach (var item in query)
-            {
-                studentViewModels.Add(Mapper.Map<StudentViewModel>(item));
-            }
-            var model = PagingList.Create(studentViewModels, 3, page);
-            model.Action = "StudentListAndSearch";
-
-            return View(model);
+            var viewModels = _studentPresentation.GetStudentListAndSearch(searchBy, searchStudent, page);
+            return View(viewModels);
         }
 
-        public IActionResult StudentFullInfo(string IINStudent)
+        public IActionResult StudentFullInfo(long studentId)
         {
-            var student = StudentRepository.GetStudentByIIN(IINStudent);
-            var studentViewModel = Mapper.Map<StudentViewModel>(student);
+            var studentViewModel = _studentPresentation.GetStudentById(studentId);
             return View(studentViewModel);
         }
 
-
         [HttpPost]
-        public IActionResult StudentListAndSearch(string select, double minGpaValue)
+        public IActionResult StudentGrantByGpa(string select, double minGpaValue)
         {
-            ViewData["minGpaValue"] = minGpaValue;
-
-            if (minGpaValue != null)
+            _studentPresentation.GetStudentGrantByGpa(select, minGpaValue);
+            if (select == "issueGrant")
             {
-                if (select == "issueGrant")
-                {
-                    var studentsNoGrant = StudentRepository.GetAll()
-                         .Where(x => x.OnGrant == false)
-                         .Where(c => c.CourseYear > 1)
-                         .Where(student => student.Gpa >= minGpaValue)
-                         .ToList();
-                    foreach (var student in studentsNoGrant)
-                    {
-                        StudentRepository.UpdateStudentGrantData(student.Id, true);
-                    }
-                }
-                else
-                {
-                    var studentsYesGrant = StudentRepository.GetAll().Where(x => x.OnGrant == true).Where(student => student.Gpa <= minGpaValue).ToList();
-                    foreach (var student in studentsYesGrant)
-                    {
-                        StudentRepository.UpdateStudentGrantData(student.Id, false);
-                    }
-                }
-            }
-
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult StudentGrant(long IDStudent)
-        {
-
-            var student = StudentRepository.Get(IDStudent);
-            if (student.OnGrant == true)
-            {
-                StudentRepository.UpdateStudentGrantData(student.Id, false);
+                ViewBag.Message = $"Grant was issued to students with a Gpa greater than or equal to {minGpaValue}";
             }
             else
             {
-                StudentRepository.UpdateStudentGrantData(student.Id, true);
+                ViewBag.Message = $"Grant for students with a Gpa less than or equal to 3 has been canceled {minGpaValue}";
             }
 
             return View("StudentListAndSearch");
         }
 
-
-        public IActionResult PupilListAndSearch()
+        [HttpGet]
+        public IActionResult StudentGrantIndividual(long studentId)
         {
-            var pupils = PupilRepository
-                 .GetAll()
-                 .Select(x => Mapper.Map<StudentViewModel>(x))
-                 .ToList();
-            return View(pupils);
+            return Json(_studentPresentation.GetStudentGrantIndividual(studentId));
         }
-
 
         [HttpGet]
-        public async Task<IActionResult> PupilListAndSearch(string searchBy, string searchPupil)
+        public IActionResult AddNewStudent()
         {
-            ViewData["GetStudentDetails"] = searchPupil;
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
 
-            var query = from x in PupilRepository.GetAll() select x;
-            if (!String.IsNullOrEmpty(searchPupil))
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditStudentData(long studentId)
+        {
+            var student = _studentPresentation.GetStudentById(studentId);
+
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            ViewBag.Universities = new SelectList(_studentPresentation.GetListOfUniversityNames());
+
+            return View(student);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewOrEditStudentAsync(StudentViewModel studentViewModel)
+        {
+            if (studentViewModel.AvatarFile != null)
             {
-                if (searchBy == "iin")
+                var fileExtention = Path.GetExtension(studentViewModel.AvatarFile.FileName);
+                var fileName = $"{studentViewModel.Iin.Substring(6)}{fileExtention}";
+                var path = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "Image", "Avatars", fileName);
+                using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
                 {
-                    query = query.Where(x => x.IIN.Equals(searchPupil));
+                    await studentViewModel.AvatarFile.CopyToAsync(fileStream);
                 }
-                else if (searchBy == "name")
-                {
-                    query = query.Where(x => x.Name.Contains(searchPupil));
-                }
-                else if (searchBy == "classYear")
-                {
-                    query = query.Where(x => x.ClassYear == int.Parse(searchPupil)).OrderBy(s => s.SchoolId);
-                }
-                else if (searchBy == "schoolID")
-                {
-                    query = query.Where(x => x.SchoolId == int.Parse(searchPupil)).OrderBy(s => s.ClassYear);
-                }
+                studentViewModel.AvatarUrl = $"/Image/Avatars/{fileName}";
             }
-            List<PupilViewModel> pupilViewModel = new List<PupilViewModel>();
-            foreach (var item in query)
-            {
-                pupilViewModel.Add(Mapper.Map<PupilViewModel>(item));
-            }
+            _studentPresentation.GetAddNewOrEditStudentAsync(studentViewModel);
+            return RedirectToAction("StudentList");
+        }
+        public JsonResult RemoveStudent(string iin)
+        {
+            return Json(_studentPresentation.Remove(iin));
+        }
+
+        [HttpGet]
+        public IActionResult Certificate(int page = 1)
+        {
+            var viewModels = _studentPresentation.GetStudentList(page);
+            viewModels.Action = "Certificate";
+
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            var certificateTypes = new List<string> { "Police", "Medicine" };
+            ViewBag.CertificateTypes = certificateTypes;
+
+            return View(viewModels);
+        }
+        [HttpGet]
+        public IActionResult SearchStudentByFacultyAndCourseYear(string faculty, int courseYear, int page = 1)
+        {
+            var studentViewModels = _studentPresentation.GetStudentByFacultyAndCourseYear(faculty, courseYear, page);
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+            return View("Certificate", studentViewModels);
+        }
+
+        public JsonResult AddNewCertificate(string iin, string selectedCertificateType)
+        {
+            return Json(_studentPresentation.AddNewCertificate(iin, selectedCertificateType));
+        }
+
+        public JsonResult CancelCertificate(string iin, string certificateType)
+        {
+            return Json(_studentPresentation.CancelCertificate(iin, certificateType));
+        }
+
+        public IActionResult PupilList(int page = 1)
+        {
+            var pupilViewModels = _pupilPresentation.GetPupilList(page);
+            return View("PupilListAndSearch", pupilViewModels);
+        }
+
+        [HttpGet]
+        public IActionResult PupilListAndSearch(string searchBy, string searchPupil, int page = 1)
+        {
+            var pupilViewModels = _pupilPresentation.GetPupilListAndSearch(searchBy, searchPupil, page);
+            return View(pupilViewModels);
+        }
+
+        public IActionResult PupilFullInfo(long pupilId)
+        {
+            var pupilViewModel = _pupilPresentation.GetPupilById(pupilId);
             return View(pupilViewModel);
         }
 
-        public IActionResult PupilFullInfo(string IINPupil)
+        [HttpGet]
+        public IActionResult AddNewPupil()
         {
-            var pupil = PupilRepository.GetPupilByIIN(IINPupil);
-            var pupilViewModel = Mapper.Map<PupilViewModel>(pupil);
-            return View(pupilViewModel);
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditPupilData(long pupilId)
+        {
+            var pupil = _pupilPresentation.GetPupilById(pupilId);
+
+            ViewBag.Schools = new SelectList(_pupilPresentation.GetListOfSchoolNames());
+            return View(pupil);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewOrEditPupil(PupilViewModel pupilViewModel)
+        {
+            if (pupilViewModel.AvatarFile != null)
+            {
+                var fileExtention = Path.GetExtension(pupilViewModel.AvatarFile.FileName);
+                var fileName = $"{pupilViewModel.Id}{fileExtention}";
+                var path = Path.Combine(
+                    _webHostEnvironment.WebRootPath,
+                    "Image", "Avatars", fileName);
+                using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    await pupilViewModel.AvatarFile.CopyToAsync(fileStream);
+                }
+                pupilViewModel.AvatarUrl = $"/Image/Avatars/{fileName}";
+            }
+
+            _pupilPresentation.GetAddNewOrEditPupil(pupilViewModel);
+            return RedirectToAction("PupilList");
+        }
+
+        public JsonResult RemovePupil(string iin)
+        {
+            return Json(_pupilPresentation.Remove(iin));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> PupilListAndSearch(int minValueForGrant)
+        public IActionResult PupilGrant(int minValueForGrant)
         {
-            ViewData["PostMinValueForGrant"] = minValueForGrant;
+            var universityIds = _studentPresentation.GetListOfUniversityIds();
+            _pupilPresentation.GetPupilGrant(universityIds, minValueForGrant);
 
-            // проверка значения инпута (если пользователь ввел букву например 
-            // или текст а не числовое значение)
+            return RedirectToAction("PupilList");
+        }
 
-            // добавить вытаскивание айди универа рандомно
-            // enum faculty добавить и тоже рандомно присвоивать при выдаче гранта и 
-            // регистрации ученика в качестве студента
-
-
-            if (minValueForGrant != null)
-            {
-                var pupils = PupilRepository.GetAll();
-                foreach (var pupil in pupils)
-                {
-                    if (pupil.ENT != null)
-                    {
-                        StudentViewModel studentVIewModel = new StudentViewModel();
-                        studentVIewModel.IIN = pupil.IIN;
-                        studentVIewModel.Name = pupil.Name;
-                        studentVIewModel.Surname = pupil.Surname;
-                        studentVIewModel.Patronymic = pupil.Patronymic;
-                        studentVIewModel.Birthday = pupil.Birthday;
-                        studentVIewModel.Email = pupil.Email;
-                        studentVIewModel.Faculty = "Biology";
-                        studentVIewModel.CourseYear = 1;
-                        studentVIewModel.Gpa = 0.0;
-                        studentVIewModel.EnteredYear = DateTime.Now;
-                        studentVIewModel.GraduatedYear = null;
-                        studentVIewModel.UniversityId = 100; // Random()
-
-                        if (pupil.ENT >= minValueForGrant)
-                        {
-                            studentVIewModel.OnGrant = true;
-                            var student = Mapper.Map<Student>(studentVIewModel);
-                            StudentRepository.Save(student);
-
-                            PupilRepository.Remove(pupil);
-                        }
-                        else
-                        {
-                            studentVIewModel.OnGrant = false;
-                            var student = Mapper.Map<Student>(studentVIewModel);
-                            StudentRepository.Save(student);
-
-                            PupilRepository.Remove(pupil);
-                        }
-                    }
-                }
-            }
-
+        public IActionResult EndOfStudy()
+        {
+            _pupilPresentation.EndStudyYearForSchool();
+            _studentPresentation.EndStudyYearForUniversity();
             return View();
         }
     }

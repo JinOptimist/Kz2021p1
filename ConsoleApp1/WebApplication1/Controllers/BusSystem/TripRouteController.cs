@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Controllers.BusSystem
 {
     public class TripRouteController : Controller
     {
-        private TripRouteRepository _tripRouteRepository;
+        private ITripRouteRepository _tripRouteRepository;
+        private IBusRepository _busRepository;
 
-        public TripRouteController(TripRouteRepository tripRouteRepository)
+        public TripRouteController(ITripRouteRepository tripRouteRepository, IBusRepository busRepository)
         {
             _tripRouteRepository = tripRouteRepository;
+            _busRepository = busRepository;
         }
 
         public IActionResult Index()
@@ -23,10 +26,12 @@ namespace WebApplication1.Controllers.BusSystem
             var viewModels = _tripRouteRepository.GetAll()
                 .Select(x => new TripViewModel()
                 {
+                    Id = x.Id,
                     Title = x.Title,
                     Type = x.Type,
                     Length = x.Length,
-                    Price = x.Price
+                    Price = x.Price,
+                    Buses = x.Buses
                 }).ToList();
             return View(viewModels);
         }
@@ -34,22 +39,12 @@ namespace WebApplication1.Controllers.BusSystem
         [HttpGet]
         public IActionResult RoutesMap()
         {
-            var model = new TripViewModel()
-            {
-                Title = "ikar",
-                Type = "ordinary",
-                Length = 100,
-                Price = 10
-            };
-
-            return View(model);
+            return View();
         }
 
         [HttpPost]
         public IActionResult CreateRoute(TripViewModel newRoute)
         {
-            
-
             var route = new TripRoute()
             {
                 Title = newRoute.Title,
@@ -63,22 +58,19 @@ namespace WebApplication1.Controllers.BusSystem
             return RedirectToAction("Index");
         }
 
-        public JsonResult Remove(string title)
+
+        public JsonResult Remove(long id)
         {
-
-
-            var route = _tripRouteRepository.GetByTitle(title);
+            var route = _tripRouteRepository.GetById(id);
             if (route == null)
             {
                 return Json(false);
             }
 
+            _busRepository.UpdateBusRoute(route);
             _tripRouteRepository.Remove(route);
 
             return Json(true);
         }
     }
-    
 }
-
-

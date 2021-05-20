@@ -1,0 +1,92 @@
+﻿@model StudentViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>Add New Student</h1>
+            <form action="/Person/AddNewOrEditStudent" method="post" enctype="multipart/form-data">
+                <div>
+                    Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />
+                </div>
+                <div>
+                    IIN: @Html.TextBoxFor(x => x.Iin, new { Class = "form-control", @required = "required", @maxlength = "12" })
+                </div>
+                <div>
+                    Surname: @Html.TextBoxFor(x => x.Surname, new { Class = "form-control" })
+                </div>
+                <div>
+                    Name: @Html.TextBoxFor(x => x.Name, new { Class = "form-control", @required = "required" })
+                </div>
+                <div>
+                    Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { Class = "form-control" })
+                </div>
+                <div>
+                    Birthday:
+                    <div class="row">
+                        @Html.EditorFor(model => model.Birthday, "Date", new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                    </div>
+
+                </div>
+                <div>
+                    Email: @Html.TextBoxFor(x => x.Email, new { Class = "form-control", @required = "required" })
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option selected disabled>University</option></select>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <select asp-for="IsGrant" class="form-control">
+                                <option selected disabled>On Grant</option>
+                                <option>true</option>
+                                <option>false</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option selected disabled>Course Year</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="topMargin20">
+                    <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties">
+                        <option selected disabled>Faculty</option>
+                    </select>
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Entered Year:                           
+                            @Html.TextBoxFor(m => m.EnteredYear, "{0:dd/MM/yyyy}", new { @type = "date", @class = "form-control", @required = "required" })
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            Graduated Year:
+                            @Html.TextBoxFor(m => m.GraduatedYear, "{0:dd/MM/yyyy}", new { @type = "date", @class = "form-control" })
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Gpa: @Html.TextBoxFor(x => x.Gpa, new { Class = "form-control" })
+                        </div>
+                        <div class="col-sm-6">
+                            Certificate:  <input disabled
+                                                 class="form-control"
+                                                 placeholder="Middle" />
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topMargin20 bottomMargin50">
+                    <input class="btn btn-primary" type="submit" value="Add New Student" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -83,6 +83,11 @@
                 opacity: 0.6;
             }
 
+
+.shadow-generate {
+    box-shadow: -1px 2px 18px -5px rgba(0,0,0,0.75);
+}
+
 @media (max-width: 576px) {
     .registration-form form {
         padding: 50px 20px;

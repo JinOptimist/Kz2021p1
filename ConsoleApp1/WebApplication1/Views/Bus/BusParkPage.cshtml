@@ -1,0 +1,119 @@
+﻿@using WebApplication1.Services
+@inject IUserService userService
+
+
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+    <div>
+        <h3 class="display-4 font-italic">We have six types of buses: ordinary, touristic, school, city, administration and special types</h3>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_ordinary.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>Ordinary</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_touristic.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>Touristic</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_school.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>School</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_city_touristic.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>City</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_super_special.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>Special</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_special.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>City administration</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View", "Index", "Bus")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Settings", "BusPark", "Bus")</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,41 @@
+﻿@model List<PoliceApplicantViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Birth Date</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Accept</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PoliceApplicantViewModel applicant in Model)
+        {
+        <tr class="applicant" data-applicantid="@applicant.Id">
+            <td>@applicant.FirstName</td>
+            <td>@applicant.LastName</td>
+            <td>@applicant.BirthDate</td>
+            <td>@applicant.Email</td>
+            <td>@applicant.PhoneNumber</td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-outline-danger accept-applicant" id="accept-applicant">Accept</button>
+                    <button class="btn btn-outline-success refuse-applicant" id="refuse-applicant">Refuse</button>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="pagination-wrapper d-flex justify-content-center align-items-center">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</div>

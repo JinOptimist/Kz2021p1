@@ -1,6 +1,8 @@
-﻿@model List<FiremanShowViewModel>
+﻿@model List<FiremanViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
 @section Scripts{
-    <script src="~/js/fireman.js"></script>
+    <script src="~/js/Fireman/fireman.js"></script>
 }
 <h1>
     All Fireman workerss
@@ -9,10 +11,11 @@
     table, th, td {
         border: 1px solid black;
     }
+
     table {
         margin-left: 30px;
     }
-    </style>
+</style>
 
 
 <table>
@@ -22,17 +25,27 @@
         <th>Age</th>
         <th>Role</th>
         <th>Work Experience (years)</th>
-        <th>Remove</th>
+        <th>Team Name</th>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Remove</th>
+            <th>Edit</th>
+        }
     </tr>
     @foreach (var worker in Model)
     {
-<tr class="worker">
-    <td>@worker.Id</td>
-    <td>@worker.Name</td>
-    <td>@worker.Age</td>
-    <td>@worker.Role</td>
-    <td>@worker.WorkExperYears</td>
-    <td><input type="button" class="delete" data-name="@worker.Id" value="delete" /></td>
-</tr>
+        <tr class="worker">
+            <td>@worker.Id</td>
+            <td>@worker.Name</td>
+            <td>@worker.Age</td>
+            <td>@worker.Role</td>
+            <td>@worker.WorkExperYears</td>
+            <td>@worker.TeamName</td>
+            @if (userService.IsFireAdmin())
+            {
+                <td><input type="button" class="delete" data-name="@worker.Id" value="delete" /></td>
+                <td><a href="Fireman/Edit/@worker.Id">edit</a></td>
+            }
+        </tr>
     }
 </table>

@@ -1,0 +1,63 @@
+﻿@using WebApplication1.Services
+@inject IUserService userService
+
+
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+    <div>
+        <h1 class="display-4 font-italic">Here you can make your order</h1>        
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="~/Image/CBS_Images/cbs_bus_ordinary.jpg" data-holder-rendered="true">
+            <div class="card-body">
+                <h4>Make Order</h4>                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("Order", "MakeOrder", "Order")</button>
+                        @if (userService.IsPolicmen() || true) // to fix
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary">@Html.ActionLink("View orders", "Index", "Order")</button>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+@*<h2>Our buses</h2>
+    <div class="list-group" id="list-tab" role="tablist">
+        <ul class="navbar-nav flex-grow-1 list-group">
+            <li class="list-group-item list-group-item-action">@Html.ActionLink("New bus", "BusPark", "Bus")</li>
+            <li class="list-group-item list-group-item-action">@Html.ActionLink("Edit bus", "Edit", "Bus")</li>
+            <li class="list-group-item list-group-item-action">@Html.ActionLink("Bus park", "Index", "Bus")</li>
+        </ul>
+    </div>*@
+
+
+
+
+
+
+@*<ul class="navbar-nav flex-grow-1">
+        <li class="list-group-item">@Html.ActionLink("New bus", "BusPark", "Bus")</li>
+        <li class="list-group-item">@Html.ActionLink("Edit bus", "Edit", "Bus")</li>
+        <li class="list-group-item">@Html.ActionLink("Bus park", "Index", "Bus")</li>
+        <li class="list-group-item">@Html.ActionLink("New route", "RoutesMap", "TripRoute")</li>
+        <li class="list-group-item">@Html.ActionLink("Routes", "Index", "TripRoute")</li>
+    </ul>*@

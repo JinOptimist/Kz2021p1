@@ -1,0 +1,101 @@
+﻿@model StudentViewModel
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>Edit Student Data</h1>
+
+            <form action="/Person/AddNewOrEditStudent" method="post" enctype="multipart/form-data">
+                <div>
+                    @Html.HiddenFor(model => model.Id)
+                </div>
+                <img src="@Model.AvatarUrl" class="card-img-top">
+                <div>
+                    Avatar: <input class="form-control" type="file" name="@nameof(StudentViewModel.AvatarFile)" />
+                </div>
+                <div>
+                    IIN: @Html.TextBoxFor(x => x.Iin, new { @Value = Model.Iin, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Iin)
+                </div>
+                <div>
+                    Surname: @Html.TextBoxFor(x => x.Surname, new { @Value = Model.Surname, Class = "form-control" })
+                </div>
+                <div>
+                    Name: @Html.TextBoxFor(x => x.Name, new { @Value = Model.Name, Class = "form-control" })
+                </div>
+                <div>
+                    Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { @Value = Model.Patronymic, Class = "form-control" })
+                </div>
+                <div>
+                    Birthday: @Html.TextBoxFor(x => x.Birthday, new { @Value = Model.Birthday, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Birthday)
+                </div>
+                <div>
+                    Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            Unversity:
+                            <select asp-for="University.Name" class="form-control" asp-items="ViewBag.Universities"><option>@Model.University.Name</option></select>
+                        </div>
+                        <div class="col-sm-4">
+                            On Grant:
+                            <select asp-for="IsGrant" class="form-control">
+                                <option selected>@Model.IsGrant</option>
+                                <option>true</option>
+                                <option>false</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            CourseYear:
+                            <select asp-for="CourseYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 4))"><option>@Model.CourseYear</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="topMargin20">
+                    Faculty:
+                    <select asp-for="Faculty" class="form-control" asp-items="ViewBag.Faculties"><option>@Model.Faculty</option></select>
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Entered Year: @Html.TextBoxFor(x => x.EnteredYear, new { @Value = Model.EnteredYear, @readonly = true, Class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-6">
+                            Graduated Year: @Html.TextBoxFor(x => x.GraduatedYear, new { @Value = Model.EnteredYear, @readonly = true, Class = "form-control" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Gpa: @Html.TextBoxFor(x => x.Gpa, new { @Value = Model.Gpa, Class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-6">
+                 
+                            <div class="col-sm-6">
+                                Certificate:  <input disabled
+                                                     class="form-control"
+                                                     placeholder="Middle" />
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="topMargin20 bottomMargin50">
+                    <input class="btn btn-primary" type="submit" value="Save Changes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
