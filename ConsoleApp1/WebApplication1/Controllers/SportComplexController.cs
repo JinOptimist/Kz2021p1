@@ -6,14 +6,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class SportComplexController : Controller
     {
-        private SportComplexRepository _SportComplexRepository; 
-        public SportComplexController(SportComplexRepository sportComplexRepository)
+        private ISportComplexRepository _SportComplexRepository; 
+        public SportComplexController(ISportComplexRepository sportComplexRepository)
         {
             _SportComplexRepository = sportComplexRepository;
         }

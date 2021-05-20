@@ -1,0 +1,153 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
+@using System.Linq
+@using ReflectionIT.Mvc.Paging
+
+@addTagHelper *,ReflectionIT.Mvc.Paging
+
+@{
+    ViewData["Title"] = "Certificate";
+}
+
+@section Scripts{
+    <script src="~/js/Education/certificate.js"></script>
+}
+
+<h1 class="forFlexDisplay">Certificate</h1>
+
+<div class="container mb-5">
+
+    <form asp-action="Certificate" method="post">
+        <p>
+            <b class="margin10"> Select: </b>
+            @Html.RadioButton("select", "Middle") <text class="rightMargin25">Middle</text>
+            @Html.RadioButton("select", "Police") <text class="rightMargin25">Police</text>
+            @Html.RadioButton("select", "Medicine") <text class="rightMargin25">Medicine</text>
+        </p>
+
+        <br />
+        <p>
+            <input type="submit" value="OK" class="btn btn-primary leftMargin15" />
+        </p>
+    </form>
+
+    <form asp-action="SearchStudentByFacultyAndCourseYear" method="get">
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        <select class="form-control" asp-items="ViewBag.Faculties" name="faculty">
+                            <option selected disabled>Search By Faculty: </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <select class="form-control" name="courseYear">
+                            <option selected disabled>Search By courseYear: </option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <input type="submit" value="Search" class="btn btn-primary leftMargin15" />
+
+                <a class="btn btn-primary leftMargin15" asp-action="Certificate">Get All Students</a>
+            </div>
+        </div>
+    </form>
+
+    <table border="1" class="table">
+        <thead>
+            <tr>
+                <th scope="col">IIN</th>
+                <th scope="col">FIO</th>
+                <th scope="col">Course Year</th>
+                <th scope="col">Faculty</th>
+                <th scope="col">My Certificates</th>
+                <th scope="col">Certificates</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(@item.Iin, "StudentFullInfo", new { studentId = item.Id })
+                        </td>
+
+                        <td>@item.Surname @item.Name </td>
+
+                        <td>@(item.CourseYear == 0 ? "Graduated" : $"{item.CourseYear}")</td>
+
+                        <td> @item.Faculty </td>
+
+                        <td>
+                            <select class="form-control width130" id="selectedCertificate">
+                                @for (var i = 0; i < item.Certificates.Count; i++)
+                                {
+                                    <option>@item.Certificates[i].CertificateType</option>
+                                }
+                            </select>
+                        </td>
+
+                        @{var counter = 0;
+
+                            if (item.CourseYear > 0)
+                            {
+                                <td>
+                                    <select class="form-control width130" id="selectedCertificateType">
+                                        @foreach (var certificateType in ViewBag.CertificateTypes)
+                                        {
+
+                                            @for (var i = 0; i < item.Certificates.Count; i++)
+                                            {
+                                                @if (certificateType == item.Certificates[i].CertificateType)
+                                                {
+                                                    counter++;
+                                                }
+
+                                            }
+                                            @if (counter == 0)
+                                            {
+                                                <option>@certificateType</option>
+
+                                            }
+                                            counter = 0;
+                                        }
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input class="btn btn-success addNewCertificateType"
+                                           data-name="@item.Iin"
+                                           type="submit" value="Add" />
+                                </td>
+
+                                <td>
+                                    <input class="btn btn-danger cancelCertificate"
+                                           data-name="@item.Iin"
+                                           type="submit" value="Cancel" />
+                                </td>
+                            }
+                        }
+
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+    <nav aria-label="nav example">
+        @if (this.Model != null)
+        {
+            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+        }
+    </nav>
+</div>

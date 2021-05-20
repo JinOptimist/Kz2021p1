@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Airport;
 using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
 using WebApplication1.Models.Airport;
 
 namespace WebApplication1.Controllers.Airport
@@ -14,26 +15,26 @@ namespace WebApplication1.Controllers.Airport
     [ApiController]
     public class IncomingFlightsInfoApiController : ControllerBase
     {
-        private IncomingFlightsRepository _incomingFlightInfoRepository { get; set; }
+        private IFlightsRepository _flightsRepository { get; set; }
         private IMapper _mapper { get; set; }
 
-        public IncomingFlightsInfoApiController(IncomingFlightsRepository incomingFlightInfoRepository, IMapper mapper)
+        public IncomingFlightsInfoApiController(IMapper mapper, IFlightsRepository flightsRepository)
         {
-            _incomingFlightInfoRepository = incomingFlightInfoRepository;
             _mapper = mapper;
+            _flightsRepository = flightsRepository;
         }
         // GET: api/IncomingFlightsInfo
         [HttpGet]
-        public ActionResult<IEnumerable<IncomingFlightInfoViewModel>> GetDepartingFlightsInfo()
+        public ActionResult<IEnumerable<IncomingFlightInfoViewModel>> GetIncomingFlightsInfo()
         {
-            return _incomingFlightInfoRepository.GetAll().Select(flight => _mapper.Map<IncomingFlightInfoViewModel>(flight)).ToList();
+            return _flightsRepository.GetAll().Where(f => f.FlightType == FlightType.IncomingFlight).Select(flight => _mapper.Map<IncomingFlightInfoViewModel>(flight)).ToList();
         }
 
         // GET: api/IncomingFlightsInfo/5
         [HttpGet("{id}")]
-        public ActionResult<IncomingFlightInfo> GetDepartingFlightInfo(int id)
+        public ActionResult<Flight> GetIncomingFlightInfo(int id)
         {
-            var incomingFlightInfo = _incomingFlightInfoRepository.Get(id);
+            var incomingFlightInfo = _flightsRepository.GetAll().SingleOrDefault(f => f.Id == id && f.FlightType == FlightType.IncomingFlight);
 
             if (incomingFlightInfo == null)
             {
@@ -43,41 +44,27 @@ namespace WebApplication1.Controllers.Airport
             return incomingFlightInfo;
         }
 
-        // PUT: api/IncomingFlightsInfo/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public IActionResult PutDepartingFlightInfo(int id, IncomingFlightInfo incomingFlightInfo)
-        {
-            if (!_incomingFlightInfoRepository.PutEntity(id, incomingFlightInfo))
-            {
-                return NotFound();
-            }
-            return NoContent();
-
-        }
-
         // POST: api/IncomingFlightsInfo
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public ActionResult<IncomingFlightInfo> PostDepartingFlightInfo(IncomingFlightInfo incomingFlightInfo)
+        public ActionResult<Flight> PostDepartingFlightInfo(Flight incomingFlightInfo)
         {
-            _incomingFlightInfoRepository.Save(incomingFlightInfo);
+            _flightsRepository.Save(incomingFlightInfo);
 
             return CreatedAtAction("GetDepartingFlightInfo", new { id = incomingFlightInfo.Id }, incomingFlightInfo);
         }
 
         // DELETE: api/IncomingFlightsInfo/5
         [HttpDelete("{id}")]
-        public ActionResult<IncomingFlightInfo> DeleteDepartingFlightInfo(int id)
+        public ActionResult<Flight> DeleteDepartingFlightInfo(int id)
         {
-            var incomingFlightInfo = _incomingFlightInfoRepository.Get(id);
+            var incomingFlightInfo = _flightsRepository.Get(id);
             if (incomingFlightInfo == null)
             {
                 return NotFound();
             }
-            _incomingFlightInfoRepository.Remove(incomingFlightInfo);
+            _flightsRepository.Remove(incomingFlightInfo);
 
             return incomingFlightInfo;
         }

@@ -5,15 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Compile Remove="Interfaces\**" />
+    <Content Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Content Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <None Remove="Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\Image\avatars\" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.4" />
@@ -31,6 +36,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <Folder Include="wwwroot\images\police\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.woff2" />
   </ItemGroup>
 
   <ItemGroup>

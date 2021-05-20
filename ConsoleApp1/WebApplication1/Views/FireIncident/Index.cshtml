@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "FireIncidents";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model List<WebApplication1.Models.FiremanModels.FireIncidentViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+@section Scripts{
+    <script src="~/js/Fireman/fireincident.js"></script>
+}
+<h1>
+    Fire Incidents
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    table {
+        margin-left: 30px;
+    }
+</style>
+
+
+<table>
+    <tr>
+        <th>Fire Incident Address</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Reason</th>
+        <th>Injured people</th>
+        <th>Dead</th>
+        <th>Team Name</th>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Delete</th>
+        }
+        <th>Edit</th>
+    </tr>
+    @foreach (var incident in Model)
+    {
+<tr class="incident">
+    <td>@incident.Address</td>
+    <td>@incident.Date</td>
+    <td>@incident.Status</td>
+    <td>@incident.Reason</td>
+    <td>@incident.Injured</td>
+    <td>@incident.Dead</td>
+    <td>@incident.TeamName</td>
+    @if (userService.IsFireAdmin())
+    {
+        <td><input type="button" class="delete" data-name="@incident.Id" value="delete" /></td>
+    }
+    <td><a href="FireIncident/Edit/@incident.Id">edit</a></td>
+</tr>
+    }
+</table>

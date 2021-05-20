@@ -2,30 +2,18 @@
     ViewData["Title"] = "Main page";
     Layout = "~/Views/Shared/Airport/_LayoutAirport.cshtml";
 }
+@model List<WebApplication1.Models.Airport.IncomingFlightInfoViewModel>
+@using WebApplication1.EfStuff.Model.Airport
+
 
 @section Styles {
     <link href="~/Airport/css/index/styles.css" rel="stylesheet" />
-}
-@model List<WebApplication1.Models.Airport.IncomingFlightInfoViewModel>
-
-@functions {
-    public string GetClassByFlighState(string state)
-    {
-        switch (state)
-        {
-            case "Landed":
-                return "table-success";
-            case "Delayed":
-                return "table-danger";
-        }
-        return string.Empty;
-    }
 }
 <section>
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-7">
-                <h1>Hello world</h1>
+                <h1>Say "Hello" to the World</h1>
             </div>
             <div class="col-5">
                 <img class="rounded" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fphotos%2Fpassenger-airplane-taking-off-picture-id494996104%3Fk%3D6%26m%3D494996104%26s%3D170667a%26w%3D0%26h%3DmoMsZSAPedJR1HqvpSoZSfjnY6AtJWamtfqwT3Bmmg4%3D&f=1&nofb=1" alt="plane taking off" />
@@ -46,7 +34,7 @@
                         <tr>
                             <th scope="col">Рейс</th>
                             <th id="place" scope="col">Откуда</th>
-                            <th scope="col">Время прибытия</th>
+                            <th id="date" scope="col">Время прибытия</th>
                             <th scope="col">Статус</th>
                             <th scope="col">Авиакомпания</th>
                         </tr>
@@ -57,10 +45,10 @@
                             @foreach (var incomingFlight in Model)
                             {
                                 <tr>
-                                    <th>@incomingFlight.FlightId</th>
+                                    <th>@incomingFlight.TailNumber</th>
                                     <td>@incomingFlight.Origin</td>
                                     <td>@incomingFlight.ETA</td>
-                                    <td class="@GetClassByFlighState(incomingFlight.Status)">@incomingFlight.Status</td>
+                                    <td class="@Html.GetColorClassByFlightStatus(incomingFlight.FlightStatus)">@incomingFlight.FlightStatus</td>
                                     <td>@incomingFlight.Airline</td>
                                 </tr>
                             }
@@ -73,5 +61,5 @@
 </section>
 
 @section Scripts {
-    <script src="~/Airport/js/index/script.js"></script>
+    <script src="~/Airport/js/index/script.js?v=1"></script>
 }
