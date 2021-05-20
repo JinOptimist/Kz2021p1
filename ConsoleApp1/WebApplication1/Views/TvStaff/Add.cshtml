@@ -1,0 +1,19 @@
+﻿@model WebApplication1.Models.Television.TvStaffViewModel
+@using WebApplication1.EfStuff.Model.Television
+<h1>Staff</h1>
+
+<form action="/TvStaff/Add" method="post">
+    <div>
+        Occupation:
+        @Html.DropDownListFor(x => x.Occupation,
+            new SelectList(Enum.GetValues(typeof(Occupation))),
+            "Select Occupation")
+        @Html.ValidationMessageFor(x => x.Occupation)
+    </div>
+    <div>
+        Citizen:
+        @Html.DropDownListFor(x => x.Citizen.Name, new SelectList(ViewBag.Citizens, "Name", "Name"))
+        @Html.ValidationMessageFor(model => model.Citizen, "", new { @class = "text-danger" })
+    </div>
+    <input type="submit" value="Add" />
+</form>

@@ -12,15 +12,19 @@ using System.Reflection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Firemen;
+using WebApplication1.EfStuff.Model.Television;
 using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.EfStuff.Repositoryies.Television;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
 using WebApplication1.Models.Education;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.Models.Television;
 using WebApplication1.Presentation;
 using WebApplication1.Presentation.Airport;
 using WebApplication1.Presentation.FirePresentation;
+using WebApplication1.Presentation.Television;
 using WebApplication1.Profiles;
 using WebApplication1.Profiles.Airport;
 using WebApplication1.Services;
@@ -89,6 +93,45 @@ namespace WebApplication1
                     x.GetService<IBallotRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+
+            services.AddScoped<TvChannelPresentation>(x =>
+                new TvChannelPresentation(
+                    x.GetService<TvChannelRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvStaffRepository>()));
+
+            services.AddScoped<TvProgrammePresentation>(x =>
+                new TvProgrammePresentation(
+                    x.GetService<TvProgrammeRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IWebHostEnvironment>()));
+
+            services.AddScoped<TvStaffPresentation>(x =>
+                new TvStaffPresentation(
+                    x.GetService<TvStaffRepository>(),
+                    x.GetService<TvProgrammeStaffRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvProgrammeRepository>()));
+
+            services.AddScoped<TvSchedulePresentation>(x =>
+                new TvSchedulePresentation(
+                    x.GetService<TvScheduleRepository>(),
+                    x.GetService<IMapper>(),
+                    x.GetService<TvProgrammeRepository>(),
+                    x.GetService<IUserService>()));
+
+            services.AddScoped<TvCelebrityPresentation>(x =>
+                new TvCelebrityPresentation(
+                    x.GetService<IMapper>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<ICitizenRepository>(),
+                    x.GetService<TvCelebrityRepository>(),
+                    x.GetService<TvProgrammeCelebrityRepository>(),
+                    x.GetService<TvProgrammeRepository>()));
 
             services.AddScoped<IBallotRepository>(x =>
                 new BallotRepository(x.GetService<KzDbContext>())
@@ -195,6 +238,29 @@ namespace WebApplication1
             MapBothSide<University, UniversityViewModel>(configurationExp);
             MapBothSide<School, SchoolViewModel>(configurationExp);
             MapBothSide<Certificate, CertificateViewModel>(configurationExp);
+
+            configurationExp.CreateMap<TvStaff, TvStaffViewModel>()
+                .ForMember(nameof(TvStaffViewModel.Name),
+                            opt => opt.MapFrom(staff => staff.Citizen.Name));
+            configurationExp.CreateMap<TvStaffViewModel, TvStaff>();
+
+            configurationExp.CreateMap<TvCelebrity, TvCelebrityViewModel>()
+                .ForMember(nameof(TvCelebrityViewModel.Name),
+                            opt => opt.MapFrom(staff => staff.Citizen.Name));
+            configurationExp.CreateMap<TvCelebrityViewModel, TvCelebrity>();
+
+            configurationExp.CreateMap<TvChannel, TvChannelViewModel>()
+                .ForMember(nameof(TvChannelViewModel.StaffCount),
+                        opt => opt.MapFrom(channel => channel.Staff.Count))
+                .ForMember(nameof(TvChannelViewModel.ProgrammeCount),
+                        opt => opt.MapFrom(channel => channel.Programmes.Count));
+            configurationExp.CreateMap<TvChannelViewModel, TvChannel>();
+
+            MapBothSide<TvProgramme, TvProgrammeViewModel>(configurationExp);
+            MapBothSide<TvProgramme, TvProgrammeShortViewModel>(configurationExp);
+            MapBothSide<TvSchedule, TvScheduleViewModel>(configurationExp);
+            MapBothSide<TvProgrammeStaff, TvProgrammeStaffViewModel>(configurationExp);
+            MapBothSide<TvProgrammeCelebrity, TvProgrammeCelebrityViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);

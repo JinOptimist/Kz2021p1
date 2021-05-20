@@ -464,7 +464,7 @@ namespace WebApplication1.EfStuff
             var firemanRepository = serviceProvider.GetService<IFiremanRepository>();
             var citizenRepository = serviceProvider.GetService<ICitizenRepository>();
 
-            var firemen = firemanRepository.GetAll().Any();
+            var firemen = firemanRepository.GetAll().Any(x => x.Role != FireWorkerRole.Fireadmin);
             List<string> citizens = new List<string>() { "Martin", "Marvin", "Matt", "Maximilian", "Michael", "Miles", "Murray", "Myron", "Nate", "Nathan", "Neil", "Nicholas", "Nicolas", "Norman", "Oliver", "Oscar", "Osric", "Owen", "Patrick", "Paul", "Peleg", "Philip", "Phillipps", "Raymond", "Reginald" };
             List<string> teamnames = new List<string>() { "UtopiaHeros", "Titanium", "FireUtopia", "WaterTeam", "HopeTeam", "PowerTeam" };
             List<int> wey = new List<int>() { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2 };

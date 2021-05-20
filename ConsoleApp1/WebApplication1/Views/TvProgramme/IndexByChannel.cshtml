@@ -1,0 +1,14 @@
+﻿@model List<WebApplication1.Models.Television.TvProgrammeViewModel>
+
+<h1>Programmes of @ViewBag.ChannelName</h1>
+
+@foreach (var programme in Model)
+{
+    <div class="programme">
+        <img class="avatar" src="@programme.AvatarUrl" />
+        @programme.Name
+        Content Rating: @programme.ContentRating
+        Type Of Programme: @programme.TypeOfProgramme
+        <a asp-controller="TvProgramme" asp-action="Profile" asp-route-programmeName="@programme.Name">Details</a>
+    </div>
+}

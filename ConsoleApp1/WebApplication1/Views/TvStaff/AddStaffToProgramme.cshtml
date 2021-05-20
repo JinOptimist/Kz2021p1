@@ -1,0 +1,16 @@
+﻿@model WebApplication1.Models.Television.TvProgrammeStaffViewModel
+
+<form action="/TvStaff/AddStaffToProgramme" method="post">
+    <div>
+        Staff :
+        @Html.DropDownListFor(x => x.Staff.Name, new SelectList(ViewBag.Staff, "Name", "Name"))
+        @Html.ValidationMessageFor(model => model.Staff, "", new { @class = "text-danger" })
+    </div>
+    <div>
+        Programme :
+        @Html.DisplayFor(x => x.Programme.Name)
+        @Html.HiddenFor(x => x.Programme.Name)
+        @Html.ValidationMessageFor(model => model.Programme, "", new { @class = "text-danger" })
+    </div>
+    <input type="submit" value="Add" />
+</form>

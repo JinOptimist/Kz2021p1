@@ -1,0 +1,39 @@
+﻿@model WebApplication1.Models.Television.TvProgrammeViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+@section Scripts{
+    <script src="~/js/tv.js"></script>
+}
+
+<h1>@Model.Name</h1>
+
+<div>
+    <img width="100" src="@Model.AvatarUrl" />
+</div>
+<div>
+    Content Rating : @Model.ContentRating
+</div>
+<div>
+    Type Of Programme : @Model.TypeOfProgramme
+</div>
+<div>
+    <input type="button" class="loadCelebrity" data-name="@Model.Name" value="Show Cast" />
+    @if (userService.IsTvCastingDirector())
+    {
+        <a asp-controller="TvCelebrity" asp-action="AddToProgramme" asp-route-id="@Model.Id">Add cast</a>
+    }
+</div>
+<div id="partialViewCelebrity">
+
+</div>
+@if (userService.IsTvDirector())
+{
+    <div>
+        <input type="button" class="loadStaff" data-name="@Model.Name" value="Show Staff" />
+        <a asp-controller="TvStaff" asp-action="AddStaffToProgramme" asp-route-id="@Model.Id" asp-route-channelName="@Model.Channel.Name">Add Staff</a>
+    </div>
+    <div id="partialView">
+
+    </div>
+}
+

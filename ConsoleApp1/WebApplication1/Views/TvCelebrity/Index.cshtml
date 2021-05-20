@@ -1,0 +1,10 @@
+﻿@model List<WebApplication1.Models.Television.TvCelebrityViewModel>
+
+@foreach (var celebrity in Model)
+{
+    <div>
+        <img class="avatar" src="@celebrity.Citizen.AvatarUrl"/>
+        Name : @celebrity.Citizen.Name
+        Occupation : @celebrity.Occupation
+    </div>
+}

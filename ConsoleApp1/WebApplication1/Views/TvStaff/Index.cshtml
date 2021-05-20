@@ -1,0 +1,23 @@
+﻿@model List<WebApplication1.Models.Television.TvStaffViewModel>
+
+<div>
+    <a asp-action="Add">Add new staff</a>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Occupation
+        </th>
+    </tr>
+
+    @foreach (var staff in Model)
+    {
+        <tr class="schedule">
+            <td>@staff.Name</td>
+            <td>@staff.Occupation</td>
+        </tr>
+    }
+</table>
