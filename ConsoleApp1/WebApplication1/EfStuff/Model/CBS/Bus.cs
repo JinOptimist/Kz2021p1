@@ -11,6 +11,7 @@ namespace WebApplication1.EfStuff.Model
         public string Type { get; set; }
         public int Capacity { get; set; }
         public decimal Price { get; set; }
+        public bool IsOnOrder { get; set; } = false;
         public virtual TripRoute RoutePlan { get; set; }
     }
 }

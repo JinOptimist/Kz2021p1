@@ -44,6 +44,9 @@ namespace WebApplication1.EfStuff
                 CreateDefaultHCEstablishments(scope.ServiceProvider);
 
                 CreateDefaultHCWorker(scope.ServiceProvider);
+
+                CreateDefaultBusPark(scope.ServiceProvider);
+                //CreateDefaultRoutes(scope.ServiceProvider);
             }
 
             return host;
@@ -407,5 +410,101 @@ namespace WebApplication1.EfStuff
                 hcworkerRepository.Save(hcadmin);
             }
         }
+
+
+        public const string busTypeOrdinary = "ordinary";
+        public const string busTypeTouristic = "touristic";
+        public const string busTypeSchool = "school";
+        public const string busTypeCity = "city";
+        public const string busTypeSpecial = "special";
+        public const string busTypeCityAdministration = "administration";
+        private static void CreateDefaultBusPark(IServiceProvider serviceProvider)
+        {
+            var busRepository = serviceProvider.GetService<IBusRepository>();
+            var tripRepository = serviceProvider.GetService<ITripRouteRepository>();
+
+            var busOrdinary = busRepository.GetByType(busTypeOrdinary);
+            var busTouristic = busRepository.GetByType(busTypeTouristic);
+            var busSchool = busRepository.GetByType(busTypeOrdinary);
+            var busCity = busRepository.GetByType(busTypeOrdinary);
+            var busSpecial = busRepository.GetByType(busTypeOrdinary);
+            var busCityAdministration = busRepository.GetByType(busTypeOrdinary);
+
+            if (busOrdinary == null)
+            {
+                busOrdinary = new Bus()
+                {
+                    Model = "IKAR",
+                    Capacity = 30,
+                    Type = "ordinary",
+                    Price = 50,
+                    RoutePlan = new TripRoute()
+                    {
+
+                        Title = "Daily",
+                        Type = "ordinary",
+                        Length = 1,
+                        TripTime = 1,
+                        Price = 1,
+                        Buses = null
+                    }
+                };
+
+                busRepository.Save(busOrdinary);
+            }
+
+            if (busTouristic == null)
+            {
+                busTouristic = new Bus()
+                {
+                    Model = "Aurora",
+                    Capacity = 50,
+                    Type = "touristic",
+                    Price = 80,
+                    RoutePlan = new TripRoute()
+                    {
+
+                        Title = "GrandTour",
+                        Type = "touristic",
+                        Length = 1,
+                        TripTime = 1,
+                        Price = 1,
+                        Buses = null
+                    }
+                };
+
+                busRepository.Save(busTouristic);
+            }
+
+            if (busSchool == null)
+            {
+                busSchool = new Bus()
+                {
+                    Model = "STAR",
+                    Capacity = 60,
+                    Type = "school",
+                    Price = 90,
+                    RoutePlan = new TripRoute()
+                    {
+
+                        Title = "Special",
+                        Type = "special",
+                        Length = 1,
+                        TripTime = 1,
+                        Price = 1,
+                        Buses = null
+                    }
+                };
+
+                busRepository.Save(busSchool);
+            }
+
+
+
+
+        }
+
+
+
     }
 }

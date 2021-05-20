@@ -28,7 +28,7 @@ using WebApplication1.Utils.MiniTimeline;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -72,6 +72,10 @@ namespace WebApplication1
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddHostedService<MiniTimeline>();
             services.AddPoliceServices(Configuration);
+            services.AddScoped<IBusRepository, BusRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ITripRouteRepository, TripRouteRepository>();
+
 
             services.AddScoped<HCEstablishmentsPresentation>(x =>
                 new HCEstablishmentsPresentation(
@@ -158,6 +162,7 @@ namespace WebApplication1
             configurationExp.AddProfile<AirportProfiles>();             
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
+            MapBothSide<Order, OrderViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
             MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
             MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);

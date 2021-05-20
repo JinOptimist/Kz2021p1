@@ -1,7 +1,7 @@
 ﻿@using WebApplication1.Services
 @inject IUserService userService
 
-@model List<TripViewModel>
+@model List<OrderViewModel>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,27 +12,26 @@
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 
 @section Scripts{
-    <script src="~/js/CBS/trip.js" asp-append-version="true"></script>
+    <script src="~/js/CBS/order.js" asp-append-version="true"></script>
 }
 
 
 
 <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
     <div>
-        <h1 class="display-4 font-italic">Our Routes Map </h1>
-
-        
-
+        <h1 class="display-4 font-italic">Order list </h1>
     </div>
 </div>
 
-<table class="table table-bordered" id="routeSortTable">
+
+<table class="table table-bordered" id="orderSortTable">
     <thead>
         <tr>
-            <th scope="col">Title</th>
-            <th id="place" scope="col">Type</th>
-            <th scope="col">Length</th>
+            <th scope="col">Name</th>
+            <th id="place" scope="col">Model</th>
+            <th scope="col">Period</th>
             <th scope="col">Price</th>
+            <th scope="col">Route Title</th>
             @if (userService.IsPolicment() || true)
             {
                 <th scope="col">Delete</th>
@@ -40,16 +39,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var route in Model)
+        @foreach (var order in Model)
         {
-            <tr class="route">
-                <td style="width: 16.66%">@route.Title</td>
-                <td style="width: 16.66%">@route.Type</td>
-                <td style="width: 16.66%">@route.Length</td>
-                <td style="width: 16.66%">@route.Price</td>
+            <tr class="order">
+                <td style="width: 16.66%">@order.Name</td>
+                <td style="width: 16.66%">@order.Model</td>
+                <td style="width: 16.66%">@order.Period</td>
+                <td style="width: 16.66%">@order.FinalPrice</td>
+                <td style="width: 16.66%">@order.RouteTitle</td>
                 @if (userService.IsPolicment() || true)
                 {
-                    <td style="width: 5%"><input type="button" class="delete" data-id="@route.Id" value="X" /></td>
+                    <td style="width: 5%"><input type="button" class="delete" data-id="@order.Id" value="X" /></td>
                 }
             </tr>
         }
@@ -57,5 +57,5 @@
 </table>
 
 <script>
-    $('#routeSortTable').DataTable();
+    $('#orderSortTable').DataTable();
 </script>
