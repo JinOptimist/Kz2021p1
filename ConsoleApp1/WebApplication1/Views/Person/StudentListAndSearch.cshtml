@@ -9,31 +9,27 @@
     <script src="~/js/Education/student.js"></script>
 }
 
-<h1 style="display:flex; justify-content:center; align-items:center">Student Page</h1>
+<h1 class="forFlexDisplay">Student Page</h1>
 
 
 <div class="container mb-5">
 
     <form asp-action="StudentGrantByGpa" method="post">
         <p>
-            <b style="margin: 10px;"> Select: </b>
-            @Html.RadioButton("select", "issueGrant") <text class="marginForText">Выдать Грант</text>
-            @Html.RadioButton("select", "сancelGrant") <text class="marginForText">Забрать Грант</text>
+            <b> Select: </b>
+            @Html.RadioButton("select", "issueGrant") <text class="rightMargin25">Выдать Грант</text>
+            @Html.RadioButton("select", "сancelGrant") <text class="rightMargin25">Забрать Грант</text>
 
         </p>
-        <br />
         <p>
             <input type="number"
                    placeholder="Enter GPA..."
                    min="0.0"
                    max="4.0"
                    step="0.1"
-                   value="@ViewData["minGpaValue"]"
                    name="minGpaValue"
-                   style="width:300px;" />
-
-            <input type="submit" value="OK" class="btn btn-primary" style="margin-left:15px" />
-
+                   class="width400" />
+            <input type="submit" value="OK" class="btn btn-primary leftMargin15" />
         </p>
     </form>
     @if (ViewBag.Message != null)
@@ -46,32 +42,28 @@
     }
 
     <form asp-action="StudentListAndSearch" method="get">
-
         <p>
-            <b style="margin: 10px;"> Search By: </b>
-            @Html.RadioButton("searchBy", "iin") <text class="marginForText">IIN</text>
-            @Html.RadioButton("searchBy", "name") <text class="marginForText">Name</text>
-            @Html.RadioButton("searchBy", "courseYear") <text class="marginForText">Course Year</text>
-            @Html.RadioButton("searchBy", "universityID") <text class="marginForText">University ID</text>
+            <b> Search By: </b>
+            @Html.RadioButton("searchBy", "iin") <text class="rightMargin25">IIN</text>
+            @Html.RadioButton("searchBy", "name") <text class="rightMargin25">Name</text>
+            @Html.RadioButton("searchBy", "courseYear") <text class="rightMargin25">Course Year</text>
+            @Html.RadioButton("searchBy", "universityID") <text class="rightMargin25">University ID</text>
 
         </p>
         <br />
         <p>
             <input type="search"
                    placeholder="Search Student..."
-                   value="@ViewData["GetStudentDetails"]"
                    name="searchStudent"
-                   style="width:300px;" />
+                   class="width400" />
+            <input type="submit" value="Search" class="btn btn-primary leftMargin15" />
 
-            <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
+            <a class="btn btn-primary leftMargin15" asp-action="StudentList">Get All Students</a>
+            <a class="btn btn-primary leftMargin15" asp-action="AddNewStudent">Add New Student</a>
+            <a class="btn btn-primary leftMargin15" asp-action="Certificate">Certificate</a>
 
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="StudentList">Get All Students</a>
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="AddNewStudent">Add New Student</a>
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="Certificate">Certificate</a>
-
-            <a class="btn btn-danger"
+            <a class="btn btn-danger leftMargin15"
                type="submit"
-               style="margin-left:15px"
                asp-action="EndOfStudy"
                onclick="return confirm('Are you sure?');">
                 End Study Year
@@ -88,6 +80,7 @@
                 <th scope="col">University ID</th>
             </tr>
         </thead>
+
         <tbody>
             @if (Model != null)
             {
@@ -99,34 +92,14 @@
                             @Html.ActionLink(@item.Iin, "StudentFullInfo", new { studentId = item.Id })
                         </td>
                         <td>@item.Surname @item.Name @item.Patronymic </td>
-                        @if (item.CourseYear == 0)
-                        {
-                            <td>Graduated</td>
-                        }
-                        else
-                        {
-                            <td> @item.CourseYear </td>
-                        }
-                        <td> @item.UniversityId </td>
-                        @if (item.CourseYear > 0)
-                        {
-                            @if (item.IsGrant == false)
-                            {
-                                <td>
-                                    <input class="btn btn-light grant" data-name="@item.Id" type="button" value="Выдать грант" />
-                                </td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <input class="btn btn-light grant" data-name="@item.Id" type="button" value="Забрать грант" />
-                                </td>
-                            }
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
+                        <td>@(item.CourseYear == 0 ? "Graduated" : $"{item.CourseYear}")</td>
+                        <td> @item.University.Id </td>
+
+                        <td>
+                            <input class="btn btn-light grant" data-name="@item.Id" 
+                                   type=@(item.CourseYear > 0 ? "button" : "hidden") 
+                                   value=@(item.IsGrant ? "Забрать грант" : "Выдать грант") />
+                        </td>
 
                         <td>
                             <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditStudentData", "Person", new { studentId = item.Id })</button>
@@ -155,12 +128,3 @@
 
 </div>
 
-<style>
-    .marginForText {
-        margin-right: 25px;
-    }
-
-    ul.pagination li {
-        margin: 10px;
-    }
-</style>
