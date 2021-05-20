@@ -10,7 +10,7 @@ namespace WebApplication1.EfStuff.Model
     {
         [Required]
         [MaxLength(50)]
-        public string Type { get; set; }
+        public string CertificateType { get; set; }
 
         [MaxLength(30)]
         public string CertificateImgUrl { get; set; }

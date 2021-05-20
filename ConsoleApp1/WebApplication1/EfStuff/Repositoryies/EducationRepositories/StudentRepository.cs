@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApplication1.EfStuff.Model;
@@ -13,12 +14,12 @@ namespace WebApplication1.EfStuff.Repositoryies
 
         public Student GetStudentByIin(string studentIin)
         {
-            return _kzDbContext.Students.SingleOrDefault(x => x.Iin.Equals(studentIin));
+            return _kzDbContext.Students.SingleOrDefault(x => x.Iin == studentIin);
         }
 
         public List<Student> GetStudentsByFaculty(string faculty)
         {
-            return _kzDbContext.Students.Where(x => x.Faculty.Equals(faculty)).ToList();
+            return _kzDbContext.Students.Where(x => x.Faculty == faculty).ToList();
         }
 
         public List<Student> GetStudentsByCourseYear(int courseYear)
@@ -26,12 +27,9 @@ namespace WebApplication1.EfStuff.Repositoryies
             return _kzDbContext.Students.Where(x => x.CourseYear == courseYear).ToList();
         }
 
-        public void UpdateStudentGrantData(long studentId, bool isGrant)
+        public List<Student> GetStudentsByGrantInfo(bool isGrant)
         {
-            Student student = _kzDbContext.Students.SingleOrDefault(x => x.Id == studentId);
-            student.IsGrant = isGrant;
-            _kzDbContext.Students.Update(student);
-            _kzDbContext.SaveChanges();
+            return _kzDbContext.Students.Where(x => x.IsGrant == isGrant).Where(x => x.Gpa > 0).ToList();
         }
     }
 }

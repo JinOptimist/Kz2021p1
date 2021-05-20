@@ -34,7 +34,7 @@ namespace WebApplication1.EfStuff
 
                 CreateDefaultPupils(scope.ServiceProvider);                
 
-                //CreateDefaultFlights(scope.ServiceProvider);
+                CreateDefaultFlights(scope.ServiceProvider);
             }
 
             return host;
@@ -193,24 +193,24 @@ namespace WebApplication1.EfStuff
         {
             var studentRepository = serviceProvider.GetService<IStudentRepository>();
             var certificateRepository = serviceProvider.GetService<ICertificateRepository>();
-            var certificate = certificateRepository.GetCertificateByType("Middle");
-            var students = studentRepository.GetAll().Any();
-
-            List<string> studentIins = new List<string>() { "980704401339", "971104401334", "960915401335", "990521401336", "001210401337", "010229401338" };
-            List<string> studentNames = new List<string>() { "Samat", "Asem", "Arai", "Sunkar", "Madina", "Askar" };
-            List<string> studentSurnames = new List<string>() { "Maksatov", "Askatova", "Samatova", "Madiyarov", "Alieva", "Zhanibekov" };
-            List<string> studentPatronymics = new List<string>() { "Maksatuly", "Askatkyzy", "Samatkyzy", "Madiyaruly", "Alikyzy", "Kozhauly" };
-            List<string> studentBirthdays = new List<string>() { "04.07.98", "04.11.97", "15.09.96", "21.05.99", "10.12.00", "29.02.01" };
-            List<string> studentEmails = new List<string>() { "samat@gmail.com", "asem@gmail.com", "arai@gmail.com", "sunkar@gmail.com", "madina@gmail.com", "askar@gmail.com" };
-            List<string> studentFaculties = new List<string>() { "BIOLOGY_AND_BIOTECHNOLOGY", "INTERNATIONAL_RELATIONS_DEPARTMENT", "PHYSICS_AND_TECHNOLOGY", "GEOGRAPHY_AND_ENVIRONMENTAL_SCIENCES", "MECHANICAL_MATHEMATICS", "INFORMATION_TECHNOLOGY" };
-            List<int> studentCourseYears = new List<int>() { 3, 4, 3, 4, 2, 2 };
-            List<double> studentGpas = new List<double>() { 4.0, 3.67, 3.3, 2.67, 3.0, 2.3 };
-            List<bool> studentOnGrant = new List<bool>() { true, true, true, false, true, false };
-            List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };
-            List<long> studentUniverIds = new List<long>() { 1, 2, 2, 1, 2, 1 };
+            
+            var students = studentRepository.GetAll().Any();          
 
             if (!students)
             {
+                List<string> studentIins = new List<string>() { "980704401339", "971104401334", "960915401335", "990521401336", "001210401337", "010229401338" };
+                List<string> studentNames = new List<string>() { "Samat", "Asem", "Arai", "Sunkar", "Madina", "Askar" };
+                List<string> studentSurnames = new List<string>() { "Maksatov", "Askatova", "Samatova", "Madiyarov", "Alieva", "Zhanibekov" };
+                List<string> studentPatronymics = new List<string>() { "Maksatuly", "Askatkyzy", "Samatkyzy", "Madiyaruly", "Alikyzy", "Kozhauly" };
+                List<string> studentBirthdays = new List<string>() { "04.07.98", "04.11.97", "15.09.96", "21.05.99", "10.12.00", "29.02.01" };
+                List<string> studentEmails = new List<string>() { "samat@gmail.com", "asem@gmail.com", "arai@gmail.com", "sunkar@gmail.com", "madina@gmail.com", "askar@gmail.com" };
+                List<string> studentFaculties = new List<string>() { "BIOLOGY_AND_BIOTECHNOLOGY", "INTERNATIONAL_RELATIONS_DEPARTMENT", "PHYSICS_AND_TECHNOLOGY", "GEOGRAPHY_AND_ENVIRONMENTAL_SCIENCES", "MECHANICAL_MATHEMATICS", "INFORMATION_TECHNOLOGY" };
+                List<int> studentCourseYears = new List<int>() { 3, 4, 3, 4, 2, 2 };
+                List<double> studentGpas = new List<double>() { 4.0, 3.67, 3.3, 2.67, 3.0, 2.3 };
+                List<bool> studentOnGrant = new List<bool>() { true, true, true, false, true, false };
+                List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };                
+                var certificate = certificateRepository.GetCertificateByType("Middle");
+
                 for (int i = 0; i < studentIins.Count; i++)
                 {
                     Student student = new Student()
@@ -228,8 +228,8 @@ namespace WebApplication1.EfStuff
                         IsGrant = studentOnGrant[i],
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], "d", CultureInfo.InvariantCulture),
                         GraduatedYear = null,
-                        UniversityId = studentUniverIds[i],
-                        Certificates = (ICollection<Certificate>)certificate
+                        University = null,
+                        Certificates = certificate as ICollection<Certificate>
                     };
 
                     studentRepository.Save(student);
@@ -242,18 +242,17 @@ namespace WebApplication1.EfStuff
             var pupilRepository = serviceProvider.GetService<IPupilRepository>();
             var pupils = pupilRepository.GetAll().Any();
 
-            List<string> pupilIins = new List<string>() { "061231401442", "050131401441", "041005401442", "070915401443", "051105401442", "051104401442" };
-            List<string> pupilNames = new List<string>() { "Aigerim", "Aliya", "Damir", "Aybek", "Kaisar", "Kairat" };
-            List<string> pupilSurnames = new List<string>() { "Askarova", "Zheksen", "Sadykov", "Alishev", "Karimov", "Karimov" };
-            List<string> pupilPatronymics = new List<string>() { "Maksatkyzy", "Zhuniskyzy", "Nursatuly", "Bekzhanuly", "Nursatuly", "Nursatuly" };
-            List<string> pupilBirthdays = new List<string>() { "31.12.06", "31.01.05", "04.10.05", "15.09.07", "05.11.05", "05.11.04" };
-            List<string> pupilEmails = new List<string>() { "aigerim@gmail.com", "aliya@gmail.com", "damir@gmail.com", "aybek@gmail.com", "kaisar@gmail.com", "kairat@gmail.com" };
-            List<int> pupilClassYears = new List<int>() { 9, 10, 11, 8, 11, 11 };
-            List<int> pupilAverageMarks = new List<int>() { 12, 10, 9, 11, 9, 9 };
-            List<long> pupilSchoolIds = new List<long>() { 1, 2, 3, 1, 2, 3 };
-
             if (!pupils)
             {
+                List<string> pupilIins = new List<string>() { "061231401442", "050131401441", "041005401442", "070915401443", "051105401442", "051104401442" };
+                List<string> pupilNames = new List<string>() { "Aigerim", "Aliya", "Damir", "Aybek", "Kaisar", "Kairat" };
+                List<string> pupilSurnames = new List<string>() { "Askarova", "Zheksen", "Sadykov", "Alishev", "Karimov", "Karimov" };
+                List<string> pupilPatronymics = new List<string>() { "Maksatkyzy", "Zhuniskyzy", "Nursatuly", "Bekzhanuly", "Nursatuly", "Nursatuly" };
+                List<string> pupilBirthdays = new List<string>() { "31.12.06", "31.01.05", "04.10.05", "15.09.07", "05.11.05", "05.11.04" };
+                List<string> pupilEmails = new List<string>() { "aigerim@gmail.com", "aliya@gmail.com", "damir@gmail.com", "aybek@gmail.com", "kaisar@gmail.com", "kairat@gmail.com" };
+                List<int> pupilClassYears = new List<int>() { 9, 10, 11, 8, 11, 11 };
+                List<int> pupilAverageMarks = new List<int>() { 12, 10, 9, 11, 9, 9 };                
+
                 for (int i = 0; i < pupilIins.Count; i++)
                 {
                     Pupil pupil = new Pupil()
@@ -269,7 +268,7 @@ namespace WebApplication1.EfStuff
                         AverageMark = pupilAverageMarks[i],
                         GraduatedYear = null,
                         ENT = null,
-                        SchoolId = pupilSchoolIds[i],
+                        School = null,
                         Certificate = null
                     };
 
@@ -286,25 +285,25 @@ namespace WebApplication1.EfStuff
             {
                 var certificate1 = new Certificate()
                 {
-                    Type = "Middle",
+                    CertificateType = "Middle",
                     CertificateImgUrl = "middle.jpeg"
                 };
 
                 var certificate2 = new Certificate()
                 {
-                    Type = "High",
+                    CertificateType = "High",
                     CertificateImgUrl = "high.jpeg"
                 };
 
                 var certificate3 = new Certificate()
                 {
-                    Type = "Police",
+                    CertificateType = "Police",
                     CertificateImgUrl = "police.jpeg"
                 };
 
                 var certificate4 = new Certificate()
                 {
-                    Type = "Medicine",
+                    CertificateType = "Medicine",
                     CertificateImgUrl = "medicine.jpeg"
                 };
 

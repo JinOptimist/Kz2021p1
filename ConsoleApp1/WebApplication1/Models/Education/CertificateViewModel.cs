@@ -8,7 +8,7 @@ namespace WebApplication1.Models.Education
 {
     public class CertificateViewModel
     {
-        public string Type { get; set; }
+        public string CertificateType { get; set; }
         public string CertificateImgUrl { get; set; }
         public IFormFile CertificateImgFile { get; set; }
     }

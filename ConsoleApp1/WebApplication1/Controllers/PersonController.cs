@@ -38,8 +38,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult StudentListAndSearch(string searchBy, string searchStudent, int page = 1)
         {
-            ViewData["GetStudentDetails"] = searchStudent;
-
             var viewModels = _studentPresentation.GetStudentListAndSearch(searchBy, searchStudent, page);
             return View(viewModels);
         }
@@ -53,7 +51,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult StudentGrantByGpa(string select, double minGpaValue)
         {
-            ViewData["minGpaValue"] = minGpaValue;
             _studentPresentation.GetStudentGrantByGpa(select, minGpaValue);
             if (select == "issueGrant")
             {
@@ -70,20 +67,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult StudentGrantIndividual(long studentId)
         {
-
-            var student = _studentPresentation.GetStudentById(studentId);
-            if (student.IsGrant == true)
-            {
-                _studentPresentation.GetStudentGrantIndividual(student.Id, false);
-                string message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
-                return Json(message);
-            }
-            else
-            {
-                _studentPresentation.GetStudentGrantIndividual(student.Id, true);
-                string message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
-                return Json(message);
-            }
+            return Json(_studentPresentation.GetStudentGrantIndividual(studentId));
         }
 
         [HttpGet]
@@ -112,20 +96,10 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNewOrEditStudentAsync(StudentViewModel studentViewModel)
         {
-            var university = _studentPresentation.GetUniversityByUniversityName(studentViewModel.University.Name);
-            studentViewModel.UniversityId = university.Id;
-            studentViewModel.University = null;
-
-            if (studentViewModel.Id == 0)
-            {
-                studentViewModel.Certificates = new List<CertificateViewModel>();
-                studentViewModel.Certificates.Add(_studentPresentation.GetCertificateViewModelByType("Middle"));
-            }
-
             if (studentViewModel.AvatarFile != null)
             {
                 var fileExtention = Path.GetExtension(studentViewModel.AvatarFile.FileName);
-                var fileName = $"{studentViewModel.Id}{fileExtention}";
+                var fileName = $"{studentViewModel.Iin.Substring(6)}{fileExtention}";
                 var path = Path.Combine(
                     _webHostEnvironment.WebRootPath,
                     "Image", "Avatars", fileName);
@@ -138,10 +112,37 @@ namespace WebApplication1.Controllers
             _studentPresentation.GetAddNewOrEditStudentAsync(studentViewModel);
             return RedirectToAction("StudentList");
         }
-
         public JsonResult RemoveStudent(string iin)
         {
             return Json(_studentPresentation.Remove(iin));
+        }
+
+        [HttpGet]
+        public IActionResult Certificate(int page = 1)
+        {
+            var viewModels = _studentPresentation.GetStudentList(page);
+            viewModels.Action = "Certificate";
+
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+
+            var certificateTypes = new List<string> { "Police", "Medicine" };
+            ViewBag.CertificateTypes = certificateTypes;
+
+            return View(viewModels);
+        }
+        [HttpGet]
+        public IActionResult SearchStudentByFacultyAndCourseYear(string faculty, int courseYear, int page = 1)
+        {
+            var studentViewModels = _studentPresentation.GetStudentByFacultyAndCourseYear(faculty, courseYear, page);
+            var allFaculties = _studentPresentation.GetAllFaculties();
+            ViewBag.Faculties = new SelectList(allFaculties);
+            return View("Certificate", studentViewModels);
+        }
+
+        public JsonResult AddNewCertificate(string iin, string selectedCertificateType)
+        {
+            return Json(_studentPresentation.AddNewCertificate(iin, selectedCertificateType));
         }
 
         public JsonResult CancelCertificate(string iin, string certificateType)
@@ -158,8 +159,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult PupilListAndSearch(string searchBy, string searchPupil, int page = 1)
         {
-            ViewData["GetStudentDetails"] = searchPupil;
-
             var pupilViewModels = _pupilPresentation.GetPupilListAndSearch(searchBy, searchPupil, page);
             return View(pupilViewModels);
         }
@@ -189,10 +188,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
-            var school = _pupilPresentation.GetSchoolBySchoolName(pupilViewModel.School.Name);
-            pupilViewModel.SchoolId = school.Id;
-            pupilViewModel.School = null;
-
             if (pupilViewModel.AvatarFile != null)
             {
                 var fileExtention = Path.GetExtension(pupilViewModel.AvatarFile.FileName);
@@ -220,7 +215,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult PupilGrant(int minValueForGrant)
         {
-            ViewData["PostMinValueForGrant"] = minValueForGrant;
             var universityIds = _studentPresentation.GetListOfUniversityIds();
             _pupilPresentation.GetPupilGrant(universityIds, minValueForGrant);
 
@@ -233,27 +227,5 @@ namespace WebApplication1.Controllers
             _studentPresentation.EndStudyYearForUniversity();
             return View();
         }
-
-
-        [HttpGet]
-        public IActionResult Certificate(int page = 1)
-        {
-            var viewModels = _studentPresentation.GetStudentList(page);
-            viewModels.Action = "Certificate";
-
-            var allFaculties = _studentPresentation.GetAllFaculties();
-            ViewBag.Faculties = new SelectList(allFaculties);
-
-            return View(viewModels);
-        }
-        [HttpGet]
-        public IActionResult SearchStudentByFacultyAndCourseYear(string faculty, int courseYear, int page = 1)
-        {
-            var studentViewModels = _studentPresentation.GetStudentByFacultyAndCourseYear(faculty, courseYear, page);
-            var allFaculties = _studentPresentation.GetAllFaculties();
-            ViewBag.Faculties = new SelectList(allFaculties);
-            return View("Certificate", studentViewModels);
-        }
-
     }
 }

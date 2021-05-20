@@ -37,14 +37,13 @@
                     School:
                     <select asp-for="School.Name" class="form-control" asp-items="ViewBag.Schools"><option>@Model.School.Name</option></select>
                 </div>
-                <div style="margin-top:20px">
-
+                <div class="topMargin20">
                     <div class="row">
-
                         <div class="col-sm-6">
                             Class Year:
                             <select asp-for="ClassYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 11))"><option>@Model.ClassYear</option></select>
                         </div>
+
                         <div class="col-sm-6">
                             Average Mark:
                             <select asp-for="AverageMark" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 12))"><option>@Model.AverageMark</option></select>
@@ -58,7 +57,7 @@
                     @Html.HiddenFor(model => model.ENT)
                 </div>
 
-                <div class="margin20" style="margin-bottom:50px">
+                <div class="topMargin20 bottomMargin50">
                     <input class="btn btn-primary" type="submit" value="Save Changes" />
                 </div>
             </form>
@@ -66,9 +65,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .margin20 {
-        margin-top: 20px;
-    }
-</style>

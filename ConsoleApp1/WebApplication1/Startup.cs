@@ -120,6 +120,7 @@ namespace WebApplication1
 
             MapBothSide<Student, StudentViewModel>(configurationExp);
             MapBothSide<Pupil, PupilViewModel>(configurationExp);
+            MapBothSide<Student, Pupil>(configurationExp);
             MapBothSide<University, UniversityViewModel>(configurationExp);
             MapBothSide<School, SchoolViewModel>(configurationExp);
             MapBothSide<Certificate, CertificateViewModel>(configurationExp);

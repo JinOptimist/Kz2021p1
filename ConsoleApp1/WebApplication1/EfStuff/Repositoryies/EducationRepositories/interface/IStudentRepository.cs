@@ -9,6 +9,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface
         Student GetStudentByIin(string studentIiN);
         List<Student> GetStudentsByFaculty(string faculty);
         List<Student> GetStudentsByCourseYear(int courseYear);
-        void UpdateStudentGrantData(long studentId, bool isGrant);
+        List<Student> GetStudentsByGrantInfo(bool isGrant);
     }
 }

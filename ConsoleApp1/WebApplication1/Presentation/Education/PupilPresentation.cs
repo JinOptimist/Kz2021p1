@@ -19,6 +19,13 @@ namespace WebApplication1.Presentation
         private ISchoolRepository _schoolRepository;
         private ICertificateRepository _certificateRepository;
         private IMapper _mapper;
+        public const int MaxClassYear = 11;
+        public const int MaxEntValue = 140;
+        public const int MinEntValue = 50;
+        public const int MinCourseYear = 1;
+        public const int PageSize = 5;
+        public const double Gpa = 3.67;
+        public const string CertificateTypeForSecondaryEducation = "Middle";
 
         public PupilPresentation(IPupilRepository pupilRepository, IStudentRepository studentRepository,
             ISchoolRepository schoolRepository, IMapper mapper, IStudentPresentation studentPresentation,
@@ -38,38 +45,38 @@ namespace WebApplication1.Presentation
                   .GetAll()
                   .Select(x => _mapper.Map<PupilViewModel>(x))
                   .ToList();
-            var model = PagingList.Create(pupils, 3, page);
+            var model = PagingList.Create(pupils, PageSize, page);
             model.Action = "PupilListAndSearch";
             return model;
         }
         public PagingList<PupilViewModel> GetPupilListAndSearch(string searchBy, string searchPupil, int page)
-        {
-            var query = from x in _pupilRepository.GetAll() select x;
+        {            
+            var query = _pupilRepository.GetAll().AsEnumerable();
+
             if (!String.IsNullOrEmpty(searchPupil))
             {
-                if (searchBy == "iin")
+                switch (searchBy)
                 {
-                    query = query.Where(x => x.Iin.Equals(searchPupil));
-                }
-                else if (searchBy == "name")
-                {
-                    query = query.Where(x => x.Name.Contains(searchPupil));
-                }
-                else if (searchBy == "classYear")
-                {
-                    query = query.Where(x => x.ClassYear == int.Parse(searchPupil)).OrderBy(s => s.SchoolId);
-                }
-                else if (searchBy == "schoolID")
-                {
-                    query = query.Where(x => x.SchoolId == int.Parse(searchPupil)).OrderBy(s => s.ClassYear);
+                    case "iin":
+                        query = query.Where(x => x.Iin == searchPupil);
+                        break;
+                    case "name":
+                        query = query.Where(x => x.Name.Contains(searchPupil));
+                        break;
+                    case "classYear":
+                        query = query.Where(x => x.ClassYear == int.Parse(searchPupil)).OrderBy(s => s.School.Id);
+                        break;
+                    case "schoolID":
+                        query = query.Where(x => x.School.Id == int.Parse(searchPupil)).OrderBy(s => s.ClassYear);
+                        break;
+                    default:
+                        break;
                 }
             }
-            List<PupilViewModel> pupilViewModels = new List<PupilViewModel>();
-            foreach (var item in query)
-            {
-                pupilViewModels.Add(_mapper.Map<PupilViewModel>(item));
-            }
-            var model = PagingList.Create(pupilViewModels, 3, page);
+
+            var pupilViewModels = query.Select(x => _mapper.Map<PupilViewModel>(x)).ToList();
+
+            var model = PagingList.Create(pupilViewModels, PageSize, page);
             model.RouteValue = new RouteValueDictionary {
                                     {"searchBy", searchBy},
                                     {"searchPupil", searchPupil} };
@@ -88,6 +95,8 @@ namespace WebApplication1.Presentation
         public void GetAddNewOrEditPupil(PupilViewModel pupilViewModel)
         {
             var pupil = _mapper.Map<Pupil>(pupilViewModel);
+            var school = GetSchoolBySchoolName(pupilViewModel.School.Name);
+            pupil.School = school;
 
             _pupilRepository.Save(pupil);
         }
@@ -100,42 +109,27 @@ namespace WebApplication1.Presentation
             int randomForFacultyHashCode = rand.Next(1, allFaculties.Count());
             int index = rand.Next(0, universityIds.Count());
 
-            var pupils = _pupilRepository.GetAll();
+            var pupils = _pupilRepository.GetPupilsWithEnt();
+
             foreach (var pupil in pupils)
-            {
-                if (pupil.ENT != null)
+            {                
+                var student = _mapper.Map<Student>(pupil);
+                student.Id = 0;
+                student.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
+                student.CourseYear = MinCourseYear;
+                student.Gpa = Gpa;
+                student.EnteredYear = DateTime.Now;
+                student.GraduatedYear = null;
+                student.University.Id = universityIds.ElementAt(index);
+                if(pupil.Certificate != null)
                 {
-                    Student student = new Student();
-                    student.Iin = pupil.Iin;
-                    student.Name = pupil.Name;
-                    student.Surname = pupil.Surname;
-                    student.Patronymic = pupil.Patronymic;
-                    student.AvatarUrl = pupil.AvatarUrl;
-                    student.Birthday = pupil.Birthday;
-                    student.Email = pupil.Email;
-                    student.Faculty = allFaculties.Where(x => x.GetHashCode() == randomForFacultyHashCode).SingleOrDefault().ToString();
-                    student.CourseYear = 1;
-                    student.Gpa = 2.67;
-                    student.EnteredYear = DateTime.Now;
-                    student.GraduatedYear = null;
-                    student.UniversityId = universityIds.ElementAt(index);
                     student.Certificates.Add(pupil.Certificate);
+                }              
 
-                    if (pupil.ENT >= minValueForGrant)
-                    {
-                        student.IsGrant = true;                        
-                        _studentRepository.Save(student);
+                student.IsGrant = pupil.ENT >= minValueForGrant ? true : false;
 
-                        _pupilRepository.Remove(pupil);
-                    }
-                    else
-                    {
-                        student.IsGrant = false;
-                        _studentRepository.Save(student);
-
-                        _pupilRepository.Remove(pupil);
-                    }
-                }
+                _studentRepository.Save(student);
+                _pupilRepository.Remove(pupil);
             }
         }
 
@@ -152,11 +146,6 @@ namespace WebApplication1.Presentation
             return true;
         }
 
-        public List<School> GetSchoolList()
-        {
-            return _schoolRepository.GetAll();
-        }
-
         public School GetSchoolBySchoolName(string schoolName)
         {
             return _schoolRepository.GetSchoolByName(schoolName);
@@ -164,32 +153,26 @@ namespace WebApplication1.Presentation
 
         public List<string> GetListOfSchoolNames()
         {
-            var all = GetSchoolList();
-            List<string> schoolNames = new List<string>();
-            foreach (var school in all)
-            {
-                schoolNames.Add(school.Name);
-            }
-
+            var schoolNames = _schoolRepository.GetSchoolNames();
             return schoolNames;
         }
 
         public void EndStudyYearForSchool()
         {
-            List<Pupil> pupils = _pupilRepository.GetAll();
+            var pupils = _pupilRepository.GetAll();
             Random rand = new Random();
-            foreach (Pupil pupil in pupils)
+            foreach (var pupil in pupils)
             {
-                if (pupil.ClassYear != 11)
+                if (pupil.ClassYear < MaxClassYear)
                 {
-                    pupil.ClassYear = pupil.ClassYear + 1;
+                    pupil.ClassYear = pupil.ClassYear++;
                 }
                 else
                 {
-                    pupil.ENT = rand.Next(50, 140);
+                    pupil.ENT = rand.Next(MinEntValue, MaxEntValue);
                     pupil.ClassYear = null;
                     pupil.GraduatedYear = DateTime.Now;
-                    pupil.Certificate = _certificateRepository.GetCertificateByType("Middle");
+                    pupil.Certificate = _certificateRepository.GetCertificateByType(CertificateTypeForSecondaryEducation);
                 }
                 _pupilRepository.Save(pupil);
             }
