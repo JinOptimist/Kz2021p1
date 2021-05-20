@@ -290,7 +290,7 @@ namespace WebApplication1.EfStuff
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], new string[] { "MM.dd.yyyy", "MM-dd-yyyy", "MM/dd/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None),
                         GraduatedYear = null,
                         University = university,
-                        Certificates = certificate as ICollection<Certificate>
+                        Certificates = new List<Certificate> { certificate }
                     };
 
                     studentRepository.Save(student);
@@ -528,8 +528,6 @@ namespace WebApplication1.EfStuff
                 }               
             }
         }
-
-
 
         private static void CreateDefaultCertificates(IServiceProvider serviceProvider)
         {
