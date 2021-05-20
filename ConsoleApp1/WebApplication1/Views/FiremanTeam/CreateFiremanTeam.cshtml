@@ -3,6 +3,7 @@
     Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
 }
 @model WebApplication1.Models.FiremanModels.FiremanTeamViewModel
+@using WebApplication1.EfStuff.Model.Firemen 
 
 <h1>New Team Information</h1>
 
@@ -11,10 +12,23 @@
         Team Name : @Html.TextBoxFor(x => x.TeamName)
     </div>
     <div>
-        Shift : @Html.TextBoxFor(x => x.Shift)
+        Work Shift :
+        <select asp-for="Shift"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<WorkShift>()" style="width: 30%">
+            <option>Select Work Shift Time ...</option>
+        </select>
+        <span asp-validation-for="Shift" class="text-danger"></span>
     </div>
     <div>
-        Team State : @Html.TextBoxFor(x => x.TeamState)
+        Team State :
+        <select asp-for="TeamState"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
+            <option>Select State ...</option>
+        </select>
+        <span asp-validation-for="TeamState" class="text-danger"></span>
+        
     </div>
     <div>
         Truck Id : @Html.TextBoxFor(x => x.TruckId)

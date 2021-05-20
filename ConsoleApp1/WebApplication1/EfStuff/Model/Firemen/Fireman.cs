@@ -9,8 +9,10 @@ namespace WebApplication1.EfStuff.Model.Firemen
 {
     public class Fireman : BaseModel
     {
-        public string Role { get; set; }
+        [Required]
+        public FireWorkerRole Role { get; set; }
         public int WorkExperYears { get; set; }
+        [Required]
         public long CitizenId { get; set; }
         public virtual Citizen Citizen { get; set; }
         public virtual FiremanTeam FiremanTeam { get; set; }

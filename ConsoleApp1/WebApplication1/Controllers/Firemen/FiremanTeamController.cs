@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers.Firemen
         {
             _firemanTeamPresentation.Edit(model);
 
-            return RedirectToAction("Index", "Fireman");
+            return RedirectToAction("Index", "FiremanTeam");
         }
 
     }

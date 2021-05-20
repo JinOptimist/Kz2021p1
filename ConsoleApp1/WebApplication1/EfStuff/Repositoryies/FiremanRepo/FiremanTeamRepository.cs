@@ -16,5 +16,9 @@ namespace WebApplication1.EfStuff.Repositoryies.FiremanRepo
         {
             return _kzDbContext.FiremanTeams.SingleOrDefault(x => x.TeamName == name);
         }
+        public FiremanTeam GetFreeTeam()
+        {
+            return _kzDbContext.FiremanTeams.FirstOrDefault(x => x.TeamState == TeamState.Free);
+        }
     }
 }

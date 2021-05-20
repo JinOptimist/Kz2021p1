@@ -8,5 +8,6 @@ namespace WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface
 {
     public interface IFireIncidentRepository : IBaseRepository<FireIncident>
     {
+        List<FireIncident> GetCurrentFireIncidents();
     }
 }

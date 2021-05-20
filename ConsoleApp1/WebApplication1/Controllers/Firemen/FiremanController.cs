@@ -51,7 +51,8 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Main()
         {
-            return View();
+            var models = _firemanPresentation.GetCurrentIncidents();
+            return View(models);
         }
         public JsonResult Remove(long id)
         {
@@ -85,6 +86,6 @@ namespace WebApplication1.Controllers
                 return View(model);
             }
             return RedirectToAction("Main", "Fireman");
-        }
+        }     
     }
 }
