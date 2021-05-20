@@ -252,6 +252,7 @@ namespace WebApplication1.EfStuff
         {
             var studentRepository = serviceProvider.GetService<IStudentRepository>();
             var certificateRepository = serviceProvider.GetService<ICertificateRepository>();
+            var universityRepository = serviceProvider.GetService<IUniversityRepository>();
             
             var students = studentRepository.GetAll().Any();          
 
@@ -269,6 +270,7 @@ namespace WebApplication1.EfStuff
                 List<bool> studentOnGrant = new List<bool>() { true, true, true, false, true, false };
                 List<string> studentEnteredYears = new List<string>() { "08-08-2015", "08-08-2015", "08-08-2014", "08-08-2016", "08-08-2017", "08-08-2018" };                
                 var certificate = certificateRepository.GetCertificateByType("Middle");
+                var university = universityRepository.GetUniversityByName("KazNU");
 
                 for (int i = 0; i < studentIins.Count; i++)
                 {
@@ -287,7 +289,7 @@ namespace WebApplication1.EfStuff
                         IsGrant = studentOnGrant[i],
                         EnteredYear = DateTime.ParseExact(studentEnteredYears[i], new string[] { "MM.dd.yyyy", "MM-dd-yyyy", "MM/dd/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None),
                         GraduatedYear = null,
-                        University = null,
+                        University = university,
                         Certificates = certificate as ICollection<Certificate>
                     };
 
@@ -299,6 +301,7 @@ namespace WebApplication1.EfStuff
         private static void CreateDefaultPupils(IServiceProvider serviceProvider)
         {
             var pupilRepository = serviceProvider.GetService<IPupilRepository>();
+            var schoolRepository = serviceProvider.GetService<ISchoolRepository>();
             var pupils = pupilRepository.GetAll().Any();
 
             if (!pupils)
@@ -310,7 +313,8 @@ namespace WebApplication1.EfStuff
                 List<string> pupilBirthdays = new List<string>() { "31.12.06", "31.01.05", "04.10.05", "15.09.07", "05.11.05", "05.11.04" };
                 List<string> pupilEmails = new List<string>() { "aigerim@gmail.com", "aliya@gmail.com", "damir@gmail.com", "aybek@gmail.com", "kaisar@gmail.com", "kairat@gmail.com" };
                 List<int> pupilClassYears = new List<int>() { 9, 10, 11, 8, 11, 11 };
-                List<int> pupilAverageMarks = new List<int>() { 12, 10, 9, 11, 9, 9 };                
+                List<int> pupilAverageMarks = new List<int>() { 12, 10, 9, 11, 9, 9 };
+                var school = schoolRepository.GetSchoolByName("Miras International School Almaty");
 
                 for (int i = 0; i < pupilIins.Count; i++)
                 {
@@ -327,7 +331,7 @@ namespace WebApplication1.EfStuff
                         AverageMark = pupilAverageMarks[i],
                         GraduatedYear = null,
                         ENT = null,
-                        School = null,
+                        School = school,
                         Certificate = null
                     };
 
