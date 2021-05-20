@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 
@@ -10,7 +11,12 @@ namespace WebApplication1.EfStuff.Repositoryies
 
         public Certificate GetCertificateByType(string certificateType)
         {
-            return _kzDbContext.Certificates.SingleOrDefault(x => x.Type.Equals(certificateType));
+            return _kzDbContext.Certificates.SingleOrDefault(x => x.CertificateType == certificateType);
+        }
+
+        public List<string> GetCertificateTypes()
+        {
+            return _kzDbContext.Certificates.Select(x => x.CertificateType).ToList();
         }
     }
 }

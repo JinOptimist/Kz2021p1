@@ -22,6 +22,10 @@ namespace WebApplication1.Presentation
         private ICertificateRepository _certificateRepository;
         private IMapper _mapper;
 
+        public const int MaxCourseYear = 4;
+        public const int PageSize = 5;
+        public const string CertificateTypeForHighEducation = "High";
+
         public StudentPresentation(IStudentRepository studentRepository,
             IUniversityRepository universityRepository, IMapper mapper,
             ICertificateRepository certificateRepository)
@@ -37,8 +41,9 @@ namespace WebApplication1.Presentation
             var students = _studentRepository
                .GetAll()
                .Select(x => _mapper.Map<StudentViewModel>(x))
+               .OrderByDescending(x => x.CourseYear)               
                .ToList();
-            var model = PagingList.Create(students, 5, page);
+            var model = PagingList.Create(students, PageSize, page);
 
             model.Action = "StudentListAndSearch";
             return model;
@@ -46,35 +51,31 @@ namespace WebApplication1.Presentation
 
         public PagingList<StudentViewModel> GetStudentListAndSearch(string searchBy, string searchStudent, int page = 1)
         {
-            var query = from x in _studentRepository.GetAll() select x;
+            var query = _studentRepository.GetAll().AsEnumerable();
             if (!String.IsNullOrEmpty(searchStudent))
             {
-                if (searchBy == "iin")
+                switch (searchBy)
                 {
-                    query = query.Where(x => x.Iin.Equals(searchStudent));
-                }
-                if (searchBy == "name")
-                {
-                    query = query.Where(x => x.Name.Contains(searchStudent));
-                }
-                if (searchBy == "courseYear")
-                {
-                    query = query.Where(x => x.CourseYear == int.Parse(searchStudent)).OrderBy(s => s.UniversityId);
-                }
-                if (searchBy == "universityID")
-                {
-                    query = query.Where(x => x.UniversityId == int.Parse(searchStudent)).OrderBy(s => s.CourseYear);
+                    case "iin":
+                        query = query.Where(x => x.Iin == searchStudent);
+                        break;
+                    case "name":
+                        query = query.Where(x => x.Name.Contains(searchStudent));
+                        break;
+                    case "courseYear":
+                        query = query.Where(x => x.CourseYear == int.Parse(searchStudent)).OrderBy(s => s.University.Id);
+                        break;
+                    case "universityID":
+                        query = query.Where(x => x.University.Id == int.Parse(searchStudent)).OrderBy(s => s.CourseYear);
+                        break;
+                    default:
+                        break;
                 }
             }
 
-            List<StudentViewModel> studentViewModels = new List<StudentViewModel>();
+            var studentViewModels = query.Select(x => _mapper.Map<StudentViewModel>(x)).ToList();
 
-            foreach (var item in query)
-            {
-                studentViewModels.Add(_mapper.Map<StudentViewModel>(item));
-            }
-
-            var model = PagingList.Create(studentViewModels, 5, page);
+            var model = PagingList.Create(studentViewModels, PageSize, page);
             model.RouteValue = new RouteValueDictionary {
                                     {"searchBy", searchBy},
                                     {"searchStudent", searchStudent} };
@@ -92,36 +93,55 @@ namespace WebApplication1.Presentation
 
         public void GetStudentGrantByGpa(string select, double minGpaValue)
         {
+            bool isGrant = true;
+            var students = _studentRepository.GetStudentsByGrantInfo(isGrant).Where(x => x.Gpa <= minGpaValue);
+
             if (select == "issueGrant")
             {
-                var studentsNoGrant = _studentRepository.GetAll()
-                     .Where(x => x.IsGrant == false)
-                     .Where(c => c.CourseYear > 1)
-                     .Where(student => student.Gpa >= minGpaValue)
-                     .ToList();
-                foreach (var student in studentsNoGrant)
-                {
-                    _studentRepository.UpdateStudentGrantData(student.Id, true);
-                }
+                isGrant = false;
+                students = _studentRepository.GetStudentsByGrantInfo(isGrant).Where(x => x.Gpa >= minGpaValue);
             }
-            else
+
+            foreach (var student in students)
             {
-                var studentsYesGrant = _studentRepository.GetAll().Where(x => x.IsGrant == true).Where(student => student.Gpa <= minGpaValue).ToList();
-                foreach (var student in studentsYesGrant)
-                {
-                    _studentRepository.UpdateStudentGrantData(student.Id, false);
-                }
+                student.IsGrant = !isGrant;
+                _studentRepository.Save(student);
             }
         }
 
-        public void GetStudentGrantIndividual(long id, bool isGrant)
+        public string GetStudentGrantIndividual(long id)
         {
-            _studentRepository.UpdateStudentGrantData(id, isGrant);
+            var student = _studentRepository.Get(id);
+            string message;
+
+            if (student.IsGrant)
+            {
+                student.IsGrant = false;
+                message = $"Grant of student {student.Surname} {student.Name} {student.Patronymic}  was canceled ";
+            }
+            else
+            {
+                student.IsGrant = true;
+                message = $"Grant was issued to student {student.Surname} {student.Name} {student.Patronymic}";
+            }
+
+            _studentRepository.Save(student);
+
+            return message;
         }
 
         public void GetAddNewOrEditStudentAsync(StudentViewModel studentViewModel)
         {
             var student = _mapper.Map<Student>(studentViewModel);
+
+            var university = GetUniversityByUniversityName(studentViewModel.University.Name);
+            student.University = university;
+
+            if (student.Id == 0)
+            {
+                var certificate = _certificateRepository.GetCertificateByType("Middle");
+                student.Certificates.Add(certificate);
+            }
             _studentRepository.Save(student);
         }
 
@@ -137,26 +157,34 @@ namespace WebApplication1.Presentation
 
             return true;
         }
+        public bool AddNewCertificate(string iin, string certificateType)
+        {
+            var student = _studentRepository.GetStudentByIin(iin);
+            if (student == null)
+            {
+                return false;
+            }
+            var certificate = _certificateRepository.GetCertificateByType(certificateType);
+            student.Certificates.Add(certificate);
+            _studentRepository.Save(student);
+
+            return true;
+        }
 
         public bool CancelCertificate(string iin, string certificateType)
         {
-           /* var student = _studentRepository.GetStudentByIin(iin);
-            var certificate = GetCertificateViewModelByType(certificateType);
-            student.Certificates.Remove(_mapper.Map<Certificate>(certificate));
-
-            _studentRepository.Save(student);*/
-
-
             var student = _studentRepository.GetStudentByIin(iin);
-            var certificate = student.Certificates.SingleOrDefault(x => x.Type.Equals(certificateType));
+
+            var certificate = _certificateRepository.GetCertificateByType(certificateType);
+
             if (certificate == null)
             {
                 return false;
             }
 
             student.Certificates.Remove(certificate);
-
             _studentRepository.Save(student);
+
             return true;
         }
 
@@ -167,11 +195,6 @@ namespace WebApplication1.Presentation
             return allFaculties;
         }
 
-        public List<University> GetUniversityList()
-        {
-            return _universityRepository.GetAll();
-        }
-
         public University GetUniversityByUniversityName(string universityName)
         {
             return _universityRepository.GetUniversityByName(universityName);
@@ -179,48 +202,25 @@ namespace WebApplication1.Presentation
 
         public List<string> GetListOfUniversityNames()
         {
-            var all = GetUniversityList();
-            List<string> universityNames = new List<string>();
-            foreach (var university in all)
-            {
-                universityNames.Add(university.Name);
-            }
-
+            var universityNames = _universityRepository.GetUniversityNames();
             return universityNames;
         }
 
         public List<long> GetListOfUniversityIds()
         {
-            var all = GetUniversityList();
-            List<long> universityIds = new List<long>();
-            foreach (var university in all)
-            {
-                universityIds.Add(university.Id);
-            }
-
+            var universityIds = _universityRepository.GetUniversityIds();
             return universityIds;
         }
-
-        public CertificateViewModel GetCertificateViewModelByType(string certificateType)
-        {
-            return _mapper.Map<CertificateViewModel>(_certificateRepository.GetCertificateByType(certificateType));
-        }
-
+               
         public List<string> GetListOfCertificateNames()
         {
-            var all = _certificateRepository.GetAll();
-            List<string> certificateTypes = new List<string>();
-            foreach (var certificate in all)
-            {
-                certificateTypes.Add(certificate.Type);
-            }
-
+            var certificateTypes = _certificateRepository.GetCertificateTypes();
             return certificateTypes;
         }
 
         public PagingList<StudentViewModel> GetStudentByFacultyAndCourseYear(string faculty, int courseYear, int page)
         {
-            List<Student> query = new List<Student>();
+            var query = new List<Student>();
 
             if (!String.IsNullOrEmpty(faculty))
             {
@@ -231,14 +231,9 @@ namespace WebApplication1.Presentation
                 query = _studentRepository.GetStudentsByCourseYear(courseYear);
             }
 
-            List<StudentViewModel> studentViewModels = new List<StudentViewModel>();
+            var studentViewModels = query.Select(x => _mapper.Map<StudentViewModel>(x)).ToList();
 
-            foreach (var item in query)
-            {
-                studentViewModels.Add(_mapper.Map<StudentViewModel>(item));
-            }
-
-            var model = PagingList.Create(studentViewModels, 5, page);
+            var model = PagingList.Create(studentViewModels, PageSize, page);
             model.RouteValue = new RouteValueDictionary {
                                     {"faculty", faculty},
                                     {"courseYear", courseYear} };
@@ -247,24 +242,22 @@ namespace WebApplication1.Presentation
             return model;
         }
 
-
-
         public void EndStudyYearForUniversity()
         {
-            List<Student> students = _studentRepository.GetAll();
-            int fourthCourseStudentsCount = 0;
-            foreach (Student student in students)
+            var students = _studentRepository.GetAll();
+
+            foreach (var student in students)
             {
-                if (student.CourseYear != 4)
+                if (student.CourseYear < MaxCourseYear)
                 {
-                    student.CourseYear = student.CourseYear + 1;
+                    student.CourseYear = student.CourseYear++;
                 }
                 else
                 {
                     student.CourseYear = null;
+                    student.Gpa = 0;
                     student.GraduatedYear = DateTime.Now;
-                    student.Certificates.Add(_certificateRepository.GetCertificateByType("High"));
-                    fourthCourseStudentsCount++;
+                    student.Certificates.Add(_certificateRepository.GetCertificateByType(CertificateTypeForHighEducation));                    
                 }
                 _studentRepository.Save(student);
             }

@@ -10,12 +10,11 @@ namespace WebApplication1.Models
     public class PupilViewModel : PersonViewModel
     {
         public int ClassYear { get; set; }
-        public double AverageMark { get; set; }
+        public int AverageMark { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? GraduatedYear { get; set; }
         public int? ENT { get; set; }
-        public long? SchoolId { get; set; }
         public SchoolViewModel School { get; set; }
         public CertificateViewModel Certificate{ get; set; }
     }
