@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Model.Television;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.Services
@@ -54,5 +55,22 @@ namespace WebApplication1.Services
 
         public bool IsHCWorker() 
             => GetUser()?.HCWorker != null;
+
+        public bool IsTvStaff() => GetUser()?.TvStaff != null;
+
+        public bool IsTvAdmin()
+        {
+            return GetUser()?.TvStaff != null ? GetUser().TvStaff.Occupation == Occupation.TvAdmin : false;
+        }
+
+        public bool IsTvDirector()
+        {
+            return GetUser()?.TvStaff != null ? GetUser().TvStaff.Occupation == Occupation.Director : false;
+        }
+
+        public bool IsTvCastingDirector()
+        {
+            return GetUser()?.TvStaff != null ? GetUser().TvStaff.Occupation == Occupation.CastingDirector : false;
+        }
     }
 }
