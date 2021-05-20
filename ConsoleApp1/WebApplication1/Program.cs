@@ -17,7 +17,6 @@ namespace WebApplication1
             CreateHostBuilder(args)
                 .Build()
                 .Seed()
-                .SeedElectionData()
                 .Run();
         }
 

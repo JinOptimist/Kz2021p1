@@ -153,8 +153,8 @@ namespace WebApplication1.EfStuff
                     Age = 30
                 };
 
-                Console.WriteLine(admin.Id);
                 citizenRepository.Save(admin);
+                Console.WriteLine(admin.Id);
             }
         }
 
