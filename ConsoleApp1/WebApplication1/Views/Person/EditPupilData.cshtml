@@ -1,0 +1,67 @@
+﻿@model PupilViewModel
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>Edit Pupil Data</h1>
+            <form action="/Person/AddNewOrEditPupil" method="post" enctype="multipart/form-data">
+                <div>
+                    @Html.HiddenFor(model => model.Id)
+                </div>
+                <img src="@Model.AvatarUrl" class="card-img-top">
+                <div>
+                    Avatar: <input class="form-control" type="file" name="@nameof(PupilViewModel.AvatarFile)" />
+                </div>
+                <div>
+                    IIN: @Html.TextBoxFor(x => x.Iin, new { @Value = Model.Iin, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Iin)
+                </div>
+                <div>
+                    Surname: @Html.TextBoxFor(x => x.Surname, new { @Value = Model.Surname, Class = "form-control" })
+                </div>
+                <div>
+                    Name: @Html.TextBoxFor(x => x.Name, new { @Value = Model.Name, Class = "form-control" })
+                </div>
+                <div>
+                    Patronymic: @Html.TextBoxFor(x => x.Patronymic, new { @Value = Model.Patronymic, Class = "form-control" })
+                </div>
+                <div>
+                    Birthday: @Html.TextBoxFor(x => x.Birthday, new { @Value = Model.Birthday, @readonly = true, Class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Birthday)
+                </div>
+                <div>
+                    Email: @Html.TextBoxFor(x => x.Email, new { @Value = Model.Email, Class = "form-control" })
+                </div>
+                <div>
+                    School:
+                    <select asp-for="School.Name" class="form-control" asp-items="ViewBag.Schools"><option>@Model.School.Name</option></select>
+                </div>
+                <div class="topMargin20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            Class Year:
+                            <select asp-for="ClassYear" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 11))"><option>@Model.ClassYear</option></select>
+                        </div>
+
+                        <div class="col-sm-6">
+                            Average Mark:
+                            <select asp-for="AverageMark" class="form-control" asp-items="new SelectList(Enumerable.Range(1, 12))"><option>@Model.AverageMark</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    @Html.HiddenFor(model => model.GraduatedYear)
+                </div>
+                <div>
+                    @Html.HiddenFor(model => model.ENT)
+                </div>
+
+                <div class="topMargin20 bottomMargin50">
+                    <input class="btn btn-primary" type="submit" value="Save Changes" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

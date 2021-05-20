@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Repositoryies;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -13,11 +14,11 @@ namespace WebApplication1.Controllers
 {
     public class AdressController : Controller
     {
-        private AdressRepository AdressRepository { get; set; }
+        private IAdressRepository AdressRepository { get; set; }
         private IUserService UserService { get; set; }
         private IMapper Mapper { get; set; }
 
-        public AdressController(AdressRepository adressRepository, IMapper mapper, IUserService userService)
+        public AdressController(IAdressRepository adressRepository, IMapper mapper, IUserService userService)
         {
             AdressRepository = adressRepository;
             Mapper = mapper;

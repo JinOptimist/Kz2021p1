@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "FireTrucks";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model List<WebApplication1.Models.FiremanModels.FireTruckViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+@section Scripts{
+    <script src="~/js/Fireman/firetruck.js"></script>
+}
+<h1>
+    All FireTrucks
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    table {
+        margin-left: 30px;
+    }
+</style>
+
+
+<table>
+    <tr>
+        <th>Truck Id</th>
+        <th>Truck Number</th>
+        <th>Truck State</th>
+        <th>Team Name</th>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Delete</th>
+            <th>Edit</th>
+        }
+    </tr>
+    @foreach (var truck in Model)
+    {
+        <tr class="truck">
+            <td>@truck.Id</td>
+            <td>@truck.TruckNumber</td>
+            <td>@truck.TruckState</td>
+            <td>@truck.TeamName</td>
+            @if (userService.IsFireAdmin() || userService.IsTruckSpecialist())
+            {
+                <td><input type="button" class="delete" data-name="@truck.Id" value="delete" /></td>
+                <td><a href="FireTruck/Edit/@truck.Id">edit</a></td>
+            }
+        </tr>
+    }
+</table>

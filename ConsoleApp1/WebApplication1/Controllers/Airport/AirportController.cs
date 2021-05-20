@@ -1,74 +1,46 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
-using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.EfStuff.Repositoryies.Airport;
-using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Models.Airport;
-using WebApplication1.Services;
+using WebApplication1.Presentation.Airport;
 
 namespace WebApplication1.Controllers.Airport
 {
     public class AirportController : Controller
     {
-        private IncomingFlightsRepository _incomingFlightsRepository { get; set; }
-        private DepartingFlightsRepository _departingFlightsRepository { get; set; }
-        private IUserService _userService { get; set; }
-        private PassengersRepository _passengersRepository { get; set; }
-        private IMapper _mapper { get; set; }
-        private ICitizenRepository _citizenRepository { get; set; }
+        private IAirportPresentation _airpotPresentation { get; set; }
 
-        public AirportController(IncomingFlightsRepository incomingFlightsRepository, DepartingFlightsRepository departingFlightsRepository, IUserService userService, PassengersRepository passengersRepository, IMapper mapper, ICitizenRepository citizenRepository)
+        public AirportController(IAirportPresentation airpotPresentation)
         {
-            _incomingFlightsRepository = incomingFlightsRepository;
-            _departingFlightsRepository = departingFlightsRepository;
-            _userService = userService;
-            _passengersRepository = passengersRepository;
-            _mapper = mapper;
-            _citizenRepository = citizenRepository;
+            _airpotPresentation = airpotPresentation;
         }
 
         public IActionResult Index()
         {
-            // TODO: filter flights by departure time
-            List<IncomingFlightInfoViewModel> incomingFlightsInfo = _incomingFlightsRepository.GetAll().Select(flightInfo => _mapper.Map<IncomingFlightInfoViewModel>(flightInfo)).ToList();
+            var incomingFlightsInfo = _airpotPresentation.GetIndexViewModel();
             return View(incomingFlightsInfo);
         }
 
         public IActionResult AvailableFlights()
         {
-            List<DepartingFlightInfo> departingFlightsAvailableForBooking = _departingFlightsRepository.GetAll().Where(flight => flight.Status == "On Time").ToList();
+           var departingFlightsAvailableForBooking = _airpotPresentation.GetAvailableFlights();
             return View(departingFlightsAvailableForBooking);
         }
+
+        [Authorize]
         public IActionResult BookTicket(long id)
         {
-            Citizen citizen = _userService.GetUser();
-            if (citizen == null)
-            {
-                return RedirectToAction("Login", "Citizen");
-            }
-            DepartingFlightInfo selectedFlight = _departingFlightsRepository.Get(id);
-            if (selectedFlight == null)
+            if (!_airpotPresentation.FlightIsValid(id) || _airpotPresentation.FlightIsAlreadyBooked(id)) 
             {
                 return RedirectToAction("AvailableFlights");
             }
-            Passenger passenger = new Passenger
-            {
-                FlightId = selectedFlight.Id,
-                CitizenId = citizen.Id
-            };
-            _passengersRepository.Save(passenger);
-            if (selectedFlight.DepartureIsNow())
-            {
-                citizen.IsOutOfCity = true;
-                _citizenRepository.Save(citizen);
-            }
-            return View("./Views/Airport/BookingConfirmation.cshtml");
+            _airpotPresentation.BookTicket(id);
+            return RedirectToAction("BookingConfirmation");
+        }
+        public IActionResult BookingConfirmation()
+        {
+            return View();
         }
     }
 }

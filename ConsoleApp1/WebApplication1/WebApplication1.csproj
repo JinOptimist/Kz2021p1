@@ -5,16 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Compile Remove="Interfaces\**" />
+    <Content Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <Content Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Controllers\CustomFilterAttributes\Airport\**" />
     <None Remove="Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\Image\avatars\" />
-    <Folder Include="wwwroot\Image\Television\" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.4" />
@@ -35,23 +39,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\TvCelebrity\Add.cshtml" />
-    <None Include="Views\TvCelebrity\Index.cshtml" />
-    <None Include="Views\TvChannel\Add.cshtml" />
-    <None Include="Views\TvChannel\AddDirector.cshtml" />
-    <None Include="Views\TvChannel\Index.cshtml" />
-    <None Include="Views\TvChannel\Profile.cshtml" />
-    <None Include="Views\TvProgramme\Add.cshtml" />
-    <None Include="Views\TvProgramme\Edit.cshtml" />
-    <None Include="Views\TvProgramme\Index.cshtml" />
-    <None Include="Views\TvProgramme\Profile.cshtml" />
-    <None Include="Views\TvProgramme\List.cshtml" />
-    <None Include="Views\TvSchedule\Add.cshtml" />
-    <None Include="Views\TvSchedule\Index.cshtml" />
-    <None Include="Views\TvStaff\Add.cshtml" />
-    <None Include="Views\TvStaff\AddStaffToProgramme.cshtml" />
-    <None Include="Views\TvStaff\Index.cshtml" />
-    <None Include="Views\TvStaff\Profile.cshtml" />
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\Education\fonts\fontawesome-webfont.woff2" />
   </ItemGroup>
 
   <ItemGroup>

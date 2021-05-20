@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "FiremanTeams";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model List<WebApplication1.Models.FiremanModels.FiremanTeamViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+@section Scripts{
+    <script src="~/js/Fireman/firemanteam.js"></script>
+}
+<h1>
+    All Fireman Teams
+</h1>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    table {
+        margin-left: 30px;
+    }
+</style>
+
+
+<table>
+    <tr>
+        <th>Team Id</th>
+        <th>Team Name</th>
+        <th>Shift</th>
+        <th>Team State</th>
+        <th>Quantity</th>
+        <th>Truck Id</th>
+        @if (userService.IsFireAdmin())
+        {
+            <th>Delete</th>
+
+        }
+        <th>Edit</th>
+    </tr>
+    @foreach (var team in Model)
+    {
+        <tr class="team">
+            <td>@team.Id</td>
+            <td>@team.TeamName</td>
+            <td>@team.Shift</td>
+            <td>@team.TeamState</td>
+            <td>@team.FiremanCount</td>
+            <td>@team.TruckId</td>
+            @if (userService.IsFireAdmin())
+            {
+                <td><input type="button" class="delete" data-name="@team.Id" value="delete" /></td>
+
+            }
+            <td><a href="FiremanTeam/Edit/@team.Id">edit</a></td>
+        </tr>
+    }
+</table>
+<div>
+    Morning Shift : 6 A.M - 14 P.M
+</div>
+<div>
+    Day Shift : 14 P.M - 22 P.M
+</div>
+<div>
+    Night Shift : 22 P.M - 6 A.M
+</div>

@@ -1,49 +1,49 @@
-﻿@model List<PupilViewModel>
-
+﻿@model ReflectionIT.Mvc.Paging.PagingList<PupilViewModel>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *,ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "PupilListAndSearch";
 }
 
-<h1 style="display:flex; justify-content:center; align-items:center">Pupil Page</h1>
+@section Scripts{
+    <script src="~/js/Education/pupil.js"></script>
+}
+
+<h1 class="forFlexDisplay">Pupil Page</h1>
 <div class="container">
     <form asp-action="PupilListAndSearch" method="get">
         <p>
-            <b style="margin: 10px;"> Search By: </b>
-            @Html.RadioButton("searchBy", "iin", true) <text class="marginForText">IIN</text>
-            @Html.RadioButton("searchBy", "name") <text class="marginForText">Name</text>
-            @Html.RadioButton("searchBy", "classYear") <text class="marginForText">Class Year</text>
-            @Html.RadioButton("searchBy", "schoolID") <text class="marginForText">School ID</text>
+            <b> Search By: </b>
+            @Html.RadioButton("searchBy", "iin", true) <text class="rightMargin25">IIN</text>
+            @Html.RadioButton("searchBy", "name") <text class="rightMargin25">Name</text>
+            @Html.RadioButton("searchBy", "classYear") <text class="rightMargin25">Class Year</text>
+            @Html.RadioButton("searchBy", "schoolID") <text class="rightMargin25">School ID</text>
 
         </p>
-        <br />
         <p>
             <input type="search"
                    placeholder="Search Pupil..."
-                   value="@ViewData["GetPupilDetails"]"
                    name="searchPupil"
-                   style="width:300px;" />
+                   class="width400" />
 
-            <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
+            <input type="submit" value="Search" class="btn btn-primary leftMargin15" />
 
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="PupilListAndSearch">Get All Pupil</a>
+            <a class="btn btn-primary leftMargin15" asp-action="PupilList">Get All Pupil</a>
+            <a class="btn btn-primary leftMargin15" asp-action="AddNewPupil">Add New Pupil</a>
         </p>
     </form>
 
-    <form asp-action="PupilListAndSearch" method="post">
-
+    <form asp-action="PupilGrant" method="post">
         <p>
             <input type="number"
                    placeholder="Pupil ENT must be > ??? for GRANT"
-                   value="@ViewData["PostMinValueForGrant"]"
                    min="0"
                    max="140"
                    name="minValueForGrant"
-                   style="width:300px;" />
+                   class="width400" />
 
-
-            <input type="submit" value="Выдать Грант" asp-action="PupilListAndSearch" class="btn btn-primary" style="margin-left:15px" />
-
+            <input type="submit" value="Выдать Грант" asp-action="PupilGrant" class="btn btn-primary leftMargin15" />
         </p>
     </form>
 </div>
@@ -59,23 +59,39 @@
                 <th scope="col">School ID</th>
             </tr>
         </thead>
+
         <tbody>
             @if (Model != null)
             {
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr class="user">
                         <td>
-                            @Html.ActionLink(@item.IIN, "PupilFullInfo", new { IINPupil = item.IIN })
+                            @Html.ActionLink(@item.Iin, "PupilFullInfo", new { pupilId = item.Id })
                         </td>
                         <td> @item.Surname @item.Name @item.Patronymic </td>
-                        <td> @item.ClassYear </td>
-                        <td> @item.SchoolId</td>
+                        <td>@(item.ClassYear == 0 ? "Graduated" : $"{item.ClassYear}")</td>
+                        <td> @item.School.Id</td>
+                        <td>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditPupilData", "Person", new { pupilId = item.Id })</button>
+                        </td>
+
+                        <td>
+                            <input class="btn btn-light deletePupil" data-name="@item.Iin" type="button" value="Delete" />
+                        </td>
                     </tr>
                 }
             }
 
         </tbody>
     </table>
+
+    <nav aria-label="nav example">
+        @if (this.Model != null)
+        {
+            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+        }
+
+    </nav>
 
 </div>

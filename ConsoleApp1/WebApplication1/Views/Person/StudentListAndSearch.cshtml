@@ -1,72 +1,75 @@
-﻿@*@model List<StudentViewModel>*@
-@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<StudentViewModel>
 @using ReflectionIT.Mvc.Paging
 @addTagHelper *,ReflectionIT.Mvc.Paging
 
 @{
     ViewData["Title"] = "StudentListAndSearch";
 }
+@section Scripts{
+    <script src="~/js/Education/student.js"></script>
+}
 
-<h1 style="display:flex; justify-content:center; align-items:center">Student Page</h1>
-
-<nav aria-label="nav example" style="margin:10px">
-    @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
-</nav>
-
+<h1 class="forFlexDisplay">Student Page</h1>
 
 
-<div class="container">
+<div class="container mb-5">
 
-    <form asp-action="StudentListAndSearch" method="post">
+    <form asp-action="StudentGrantByGpa" method="post">
         <p>
-            <b style="margin: 10px;"> Select: </b>
-            @Html.RadioButton("select", "issueGrant") <text class="marginForText">Выдать Грант</text>
-            @Html.RadioButton("select", "сancelGrant") <text class="marginForText">Забрать Грант</text>
+            <b> Select: </b>
+            @Html.RadioButton("select", "issueGrant") <text class="rightMargin25">Выдать Грант</text>
+            @Html.RadioButton("select", "сancelGrant") <text class="rightMargin25">Забрать Грант</text>
 
         </p>
-        <br />
         <p>
             <input type="number"
                    placeholder="Enter GPA..."
                    min="0.0"
                    max="4.0"
                    step="0.1"
-                   value="@ViewData["minGpaValue"]"
                    name="minGpaValue"
-                   style="width:300px;" />
-
-            <input type="submit" value="OK" class="btn btn-primary" style="margin-left:15px" />
-
+                   class="width400" />
+            <input type="submit" value="OK" class="btn btn-primary leftMargin15" />
         </p>
     </form>
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+    }
 
     <form asp-action="StudentListAndSearch" method="get">
         <p>
-            <b style="margin: 10px;"> Search By: </b>
-            @Html.RadioButton("searchBy", "iin", true) <text class="marginForText">IIN</text>
-            @Html.RadioButton("searchBy", "name") <text class="marginForText">Name</text>
-            @Html.RadioButton("searchBy", "courseYear") <text class="marginForText">Course Year</text>
-            @Html.RadioButton("searchBy", "universityID") <text class="marginForText">University ID</text>
+            <b> Search By: </b>
+            @Html.RadioButton("searchBy", "iin") <text class="rightMargin25">IIN</text>
+            @Html.RadioButton("searchBy", "name") <text class="rightMargin25">Name</text>
+            @Html.RadioButton("searchBy", "courseYear") <text class="rightMargin25">Course Year</text>
+            @Html.RadioButton("searchBy", "universityID") <text class="rightMargin25">University ID</text>
 
         </p>
         <br />
         <p>
             <input type="search"
                    placeholder="Search Student..."
-                   value="@ViewData["GetStudentDetails"]"
                    name="searchStudent"
-                   style="width:300px;" />
+                   class="width400" />
+            <input type="submit" value="Search" class="btn btn-primary leftMargin15" />
 
-            <input type="submit" value="Search" class="btn btn-primary" style="margin-left:15px" />
+            <a class="btn btn-primary leftMargin15" asp-action="StudentList">Get All Students</a>
+            <a class="btn btn-primary leftMargin15" asp-action="AddNewStudent">Add New Student</a>
+            <a class="btn btn-primary leftMargin15" asp-action="Certificate">Certificate</a>
 
-            <a class="btn btn-primary" style="margin-left:15px" asp-action="StudentListAndSearch">Get All Students</a>
+            <a class="btn btn-danger leftMargin15"
+               type="submit"
+               asp-action="EndOfStudy"
+               onclick="return confirm('Are you sure?');">
+                End Study Year
+            </a>
         </p>
     </form>
-
-</div>
-
-
-<div class="container" style="margin:30px">
 
     <table border="1" class="table">
         <thead>
@@ -77,33 +80,35 @@
                 <th scope="col">University ID</th>
             </tr>
         </thead>
+
         <tbody>
             @if (Model != null)
             {
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr class="user">
 
                         <td>
-                            @Html.ActionLink(@item.IIN, "StudentFullInfo", new { IINStudent = item.IIN })
+                            @Html.ActionLink(@item.Iin, "StudentFullInfo", new { studentId = item.Id })
                         </td>
                         <td>@item.Surname @item.Name @item.Patronymic </td>
-                        <td> @item.CourseYear </td>
-                        <td> @item.UniversityId </td>
-                        @if (item.OnGrant == false)
-                        {
-                            <td>
+                        <td>@(item.CourseYear == 0 ? "Graduated" : $"{item.CourseYear}")</td>
+                        <td> @item.University.Id </td>
 
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Выдать грант", "StudentGrant", "Person", new { IDStudent = item.Id })</button>
+                        <td>
+                            <input class="btn btn-light grant" data-name="@item.Id" 
+                                   type=@(item.CourseYear > 0 ? "button" : "hidden") 
+                                   value=@(item.IsGrant ? "Забрать грант" : "Выдать грант") />
+                        </td>
 
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                <button class="btn btn-light" type="submit">@Html.ActionLink("Забрать грант", "StudentGrant", "Person", new { IDStudent = item.Id })</button>
-                            </td>
-                        }
+                        <td>
+                            <button class="btn btn-light edit" type="submit">@Html.ActionLink("Edit", "EditStudentData", "Person", new { studentId = item.Id })</button>
+                        </td>
+
+                        <td>
+                            <input class="btn btn-light deleteStudent" data-name="@item.Iin" type="button" value="Delete" />
+                        </td>
+
                     </tr>
                 }
             }
@@ -111,18 +116,15 @@
         </tbody>
     </table>
 
-    <nav aria-label="nav example" style="margin:10px">
-        <vc:pager paging-list="@Model" />
+
+    <nav aria-label="nav example">
+        @if (this.Model != null)
+        {
+            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+            //<vc:pager paging-list="@Model" />
+        }
+
     </nav>
 
 </div>
 
-<style>
-    .marginForText {
-        margin-right: 25px;
-    }
-
-    ul.pagination li{
-        margin:10px;
-    }
-</style>

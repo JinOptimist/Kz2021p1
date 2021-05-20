@@ -129,4 +129,67 @@
   <data name="FullProfile_Title" xml:space="preserve">
     <value>Full profile</value>
   </data>
+  <data name="CreateElection_Title" xml:space="preserve">
+    <value>Create election</value>
+  </data>
+  <data name="CreateElection_Name" xml:space="preserve">
+    <value>Election name</value>
+  </data>
+  <data name="CreateElection_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="CreateElection_Start" xml:space="preserve">
+    <value>Election start date</value>
+  </data>
+  <data name="CreateElection_End" xml:space="preserve">
+    <value>Election end date</value>
+  </data>
+  <data name="CreateElection_CreateBtn" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateElection_CancelBtn" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ElectionsIndex_Title" xml:space="preserve">
+    <value>Election Center</value>
+  </data>
+  <data name="ElectionsIndex_GoBackBtn" xml:space="preserve">
+    <value>Go back to the main page</value>
+  </data>
+  <data name="ElectionsIndex_ViewArchive" xml:space="preserve">
+    <value>View archived elections</value>
+  </data>
+  <data name="ElectionsIndex_Create" xml:space="preserve">
+    <value>Create new elections</value>
+  </data>
+  <data name="ElectionsIndex_ActualList" xml:space="preserve">
+    <value>List of current elections</value>
+  </data>
+  <data name="ElectionsIndex_Id" xml:space="preserve">
+    <value>Elections ID</value>
+  </data>
+  <data name="ElectionsIndex_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ElectionsIndex_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ElectionsIndex_Start" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="ElectionsIndex_End" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="ElectionsIndex_NoActual" xml:space="preserve">
+    <value>No actual elections</value>
+  </data>
+  <data name="ElectionsIndex_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ElectionsIndex_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ElectionsIndex_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

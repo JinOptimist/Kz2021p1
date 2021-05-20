@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "FiremanTeams";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model WebApplication1.Models.FiremanModels.FireTruckViewModel
+@using WebApplication1.EfStuff.Model.Firemen 
+
+<h1>Edit team information</h1>
+
+<form action="@Url.Action("Edit", "FireTruck")" method="post">
+    <div>
+        Truck Number : @Html.TextBoxFor(x => x.TruckNumber)
+    </div>
+    <div>
+        Truck State :
+        <select asp-for="TruckState"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<TruckState>()" style="width: 30%">
+            <option>Select State ...</option>
+        </select>
+        <span asp-validation-for="TruckState" class="text-danger"></span>
+    </div>
+    <div>
+        Team Name : @Html.TextBoxFor(x => x.TeamName)
+    </div>
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>

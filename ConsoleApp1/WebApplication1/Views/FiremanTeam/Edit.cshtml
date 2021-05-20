@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "FiremanTeams";
+    Layout = "~/Views/Fireman/_LayoutFireman.cshtml";
+}
+@model WebApplication1.Models.FiremanModels.FiremanTeamViewModel
+@using WebApplication1.EfStuff.Model.Firemen
+@using WebApplication1.Services
+@inject IUserService userService
+
+<h1>Edit team information</h1>
+
+<form action="@Url.Action("Edit", "FiremanTeam")" method="post">
+    @if (!userService.IsFireAdmin())
+    {
+        <div>
+            Team Name : @Model.TeamName
+        </div>
+        <div>
+            Team State :
+            <select asp-for="TeamState"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
+                <option>Select State ...</option>
+            </select>
+            <span asp-validation-for="TeamState" class="text-danger"></span>
+        </div>
+    }
+    @if (userService.IsFireAdmin())
+    {
+        <div>
+            Team Name : @Html.TextBoxFor(x => x.TeamName)
+        </div>
+        <div>
+            Work Shift :
+            <select asp-for="Shift"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<WorkShift>()" style="width: 30%">
+                <option>Select State ...</option>
+            </select>
+            <span asp-validation-for="Shift" class="text-danger"></span>
+        </div>
+
+        <div>
+            Truck Id : @Html.TextBoxFor(x => x.TruckId)
+        </div>
+        <div>
+            Team State :
+            <select asp-for="TeamState"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
+                <option>Select State ...</option>
+            </select>
+            <span asp-validation-for="TeamState" class="text-danger"></span>
+        </div>
+    }
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>

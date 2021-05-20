@@ -1,0 +1,55 @@
+
+/*schoolFullInfo, universityFullInfo*/
+.topPadding {
+    padding-top: 50px;
+}
+
+.forFlexDisplay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*AddNewPupil, AddNewStudent, EditPupilData, EditStudentData, PupilFullInfo*/
+
+.topMargin20 {
+    margin-top: 20px;
+}
+
+.bottomMargin50 {
+    margin-bottom: 50px;
+}
+
+/* Certificate, PupilListAndSearch, StudentListAndSearch */
+
+ul.pagination li, .margin10 {
+    margin: 10px;
+}
+
+.leftMargin15 {
+    margin-left: 15px;
+}
+
+.rightMargin25 {
+    margin-right: 25px;
+}
+
+/* StudentFullInfo */
+
+.padding50 {
+    padding: 50px;
+}
+
+.forDisplayCertificate {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 50px
+}
+
+.width400 {
+    width: 400px;
+}
+
+.width130 {
+    width: 130px;
+}

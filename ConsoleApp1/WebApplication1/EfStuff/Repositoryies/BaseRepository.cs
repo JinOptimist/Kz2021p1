@@ -32,8 +32,8 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             if (model.Id > 0)
             {
-                //_dbSet.Update(model);
-                _kzDbContext.Entry(model).State = EntityState.Modified;
+                _dbSet.Update(model);
+                //_kzDbContext.Entry(model).State = EntityState.Modified;
             }
             else
             {
@@ -49,6 +49,18 @@ namespace WebApplication1.EfStuff.Repositoryies
         {
             _dbSet.Remove(model);
             _kzDbContext.SaveChanges();
+        }
+        
+        public void RemoveAll()
+        {
+            _dbSet.RemoveRange(_dbSet);
+            _kzDbContext.SaveChanges();
+            
+        }
+
+        public IQueryable<DbModel> GetAllAsIQueryable()
+        {
+            return _dbSet.AsQueryable();
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿@model WebApplication1.Models.FiremanModels.FireIncidentViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+@using WebApplication1.EfStuff.Model.Firemen 
+
+<h1>Edit fire incident</h1>
+<form action="@Url.Action("Edit", "FireIncident")" method="post">
+    <div>
+        Address : @Html.TextBoxFor(x => x.Address)
+    </div>
+    <div>
+        Date : @Html.TextBoxFor(x => x.Date)
+    </div>
+    <div>
+        Incident Status :
+        <select asp-for="Status"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<IncidentStatus>()" style="width: 30%">
+            <option>Select Status ...</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div>
+        Reason : @Html.TextBoxFor(x => x.Reason)
+    </div>
+    <div>
+        Injured people : @Html.TextBoxFor(x => x.Injured)
+    </div>
+    <div>
+        Dead : @Html.TextBoxFor(x => x.Dead)
+    </div>
+    <div>
+        Team Name : @Html.TextBoxFor(x => x.TeamName)
+    </div>
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>

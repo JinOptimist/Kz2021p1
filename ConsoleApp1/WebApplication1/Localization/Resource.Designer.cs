@@ -61,6 +61,195 @@ namespace WebApplication1.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Отмена.
+        /// </summary>
+        public static string CreateElection_CancelBtn {
+            get {
+                return ResourceManager.GetString("CreateElection_CancelBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создать.
+        /// </summary>
+        public static string CreateElection_CreateBtn {
+            get {
+                return ResourceManager.GetString("CreateElection_CreateBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Описание.
+        /// </summary>
+        public static string CreateElection_Description {
+            get {
+                return ResourceManager.GetString("CreateElection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Окончание выборов.
+        /// </summary>
+        public static string CreateElection_End {
+            get {
+                return ResourceManager.GetString("CreateElection_End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Название выборов.
+        /// </summary>
+        public static string CreateElection_Name {
+            get {
+                return ResourceManager.GetString("CreateElection_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Начало выборов.
+        /// </summary>
+        public static string CreateElection_Start {
+            get {
+                return ResourceManager.GetString("CreateElection_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Создать выборы.
+        /// </summary>
+        public static string CreateElection_Title {
+            get {
+                return ResourceManager.GetString("CreateElection_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Список актуальных выборов.
+        /// </summary>
+        public static string ElectionsIndex_ActualList {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_ActualList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создать новые выборы.
+        /// </summary>
+        public static string ElectionsIndex_Create {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалить.
+        /// </summary>
+        public static string ElectionsIndex_Delete {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Описание.
+        /// </summary>
+        public static string ElectionsIndex_Description {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Редактировать.
+        /// </summary>
+        public static string ElectionsIndex_Edit {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Время окончания.
+        /// </summary>
+        public static string ElectionsIndex_End {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вернуться на главную.
+        /// </summary>
+        public static string ElectionsIndex_GoBackBtn {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_GoBackBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Номер выборов.
+        /// </summary>
+        public static string ElectionsIndex_Id {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Название.
+        /// </summary>
+        public static string ElectionsIndex_Name {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нет зарегистрированных выборов.
+        /// </summary>
+        public static string ElectionsIndex_NoActual {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_NoActual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Время начала.
+        /// </summary>
+        public static string ElectionsIndex_Start {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Избирательный центр.
+        /// </summary>
+        public static string ElectionsIndex_Title {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Посмотреть.
+        /// </summary>
+        public static string ElectionsIndex_View {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Посмотреть архивные выборы.
+        /// </summary>
+        public static string ElectionsIndex_ViewArchive {
+            get {
+                return ResourceManager.GetString("ElectionsIndex_ViewArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Возраст.
         /// </summary>
         public static string FullProfile_Age {

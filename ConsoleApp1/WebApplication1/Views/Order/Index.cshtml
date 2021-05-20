@@ -1,0 +1,61 @@
+﻿@using WebApplication1.Services
+@inject IUserService userService
+
+@model List<OrderViewModel>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+@section Scripts{
+    <script src="~/js/CBS/order.js" asp-append-version="true"></script>
+}
+
+
+
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+    <div>
+        <h1 class="display-4 font-italic">Order list </h1>
+    </div>
+</div>
+
+
+<table class="table table-bordered" id="orderSortTable">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th id="place" scope="col">Model</th>
+            <th scope="col">Period</th>
+            <th scope="col">Price</th>
+            <th scope="col">Route Title</th>
+            @if (userService.IsPolicmen() || true)
+            {
+                <th scope="col">Delete</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr class="order">
+                <td style="width: 16.66%">@order.Name</td>
+                <td style="width: 16.66%">@order.Model</td>
+                <td style="width: 16.66%">@order.Period</td>
+                <td style="width: 16.66%">@order.FinalPrice</td>
+                <td style="width: 16.66%">@order.RouteTitle</td>
+                @if (userService.IsPolicmen() || true)
+                {
+                    <td style="width: 5%"><input type="button" class="delete" data-id="@order.Id" value="X" /></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('#orderSortTable').DataTable();
+</script>
