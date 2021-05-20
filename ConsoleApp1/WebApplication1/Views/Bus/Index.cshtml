@@ -34,7 +34,7 @@
             <th scope="col">Price</th>
             <th scope="col">Route Title</th>
             <th scope="col">Is reserved?</th>
-            @if (userService.IsPolicment() || true)
+            @if (userService.IsPolicmen() || true)
             {
                 <th scope="col">Delete</th>
             }
@@ -50,7 +50,7 @@
                 <td style="width: 16.66%">@bus.Price</td>
                 <td style="width: 16.66%">@bus.RoutePlan.Title</td>
                 <td style="width: 16.66%">@bus.IsOnOrder</td>
-                @if (userService.IsPolicment() || true)
+                @if (userService.IsPolicmen() || true)
                 {
                     <td style="width: 5%"><input type="button" class="delete" data-id="@bus.Id" value="X" /></td>
                 }

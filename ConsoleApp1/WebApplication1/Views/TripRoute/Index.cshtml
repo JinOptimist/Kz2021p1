@@ -33,7 +33,7 @@
             <th id="place" scope="col">Type</th>
             <th scope="col">Length</th>
             <th scope="col">Price</th>
-            @if (userService.IsPolicment() || true)
+            @if (userService.IsPolicmen() || true)
             {
                 <th scope="col">Delete</th>
             }
@@ -47,7 +47,7 @@
                 <td style="width: 16.66%">@route.Type</td>
                 <td style="width: 16.66%">@route.Length</td>
                 <td style="width: 16.66%">@route.Price</td>
-                @if (userService.IsPolicment() || true)
+                @if (userService.IsPolicmen() || true)
                 {
                     <td style="width: 5%"><input type="button" class="delete" data-id="@route.Id" value="X" /></td>
                 }
