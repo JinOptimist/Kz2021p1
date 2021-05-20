@@ -1,0 +1,33 @@
+﻿@model WebApplication1.Models.Television.TvProgrammeViewModel
+@using WebApplication1.EfStuff.Model.Television
+
+<h1>Add new TV Programme</h1>
+
+<form action="/TvProgramme/Add" method="post" enctype="multipart/form-data">
+    <div>
+        Name:
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+        <label class="label-danger">@ViewBag.ErrorMsg</label>
+    </div>
+    <div>
+        Content Rating:
+        @Html.DropDownListFor(x => x.ContentRating,
+            new SelectList(Enum.GetValues(typeof(ContentRating))),
+            "Select Content Rating")
+        @Html.ValidationMessageFor(x => x.ContentRating)
+    </div>
+    <div>
+        Content Rating:
+        @Html.DropDownListFor(x => x.TypeOfProgramme,
+            new SelectList(Enum.GetValues(typeof(TypeOfProgramme))),
+            "Select Type Of Programme")
+        @Html.ValidationMessageFor(x => x.TypeOfProgramme)
+    </div>
+    <div>
+        Avatar:
+        <input type="file" name="@nameof(WebApplication1.Models.Television.TvProgrammeViewModel.AvatarFile)" />
+        @Html.ValidationMessageFor(x => x.AvatarFile)
+    </div>
+    <input type="submit" value="Add" />
+</form>

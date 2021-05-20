@@ -22,5 +22,15 @@ namespace WebApplication1.EfStuff.Repositoryies
             return _kzDbContext.Citizens
                 .SingleOrDefault(x => x.Name == name && x.Password == password);
         }
+
+        public List<Citizen> AreNotTvStaff()
+        {
+            return _dbSet.Where(x => x.TvStaff == null).ToList();
+        }
+
+        public List<Citizen> AreNotCelebrity()
+        {
+            return _dbSet.Where(x => x.TvCelebrity == null).ToList();
+        }
     }
 }

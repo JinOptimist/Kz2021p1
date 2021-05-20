@@ -1,0 +1,37 @@
+﻿@model WebApplication1.Models.Television.TvProgrammeShortViewModel
+@using WebApplication1.EfStuff.Model.Television
+
+<h1>Update</h1>
+<div>
+    <img class="avatar" src="@Model.AvatarUrl" />
+</div>
+<form action="/TvProgramme/Edit" method="post" enctype="multipart/form-data">
+    <div>
+        @Html.HiddenFor(x => x.Id)
+    </div>
+    <div>
+        Name:
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        Avatar: <input type="file" name="@nameof(WebApplication1.Models.Television.TvProgrammeShortViewModel.AvatarFile)" />
+        @Html.HiddenFor(x => x.AvatarUrl)
+    </div>
+    <div>
+        Content Rating:
+        @Html.DropDownListFor(x => x.ContentRating,
+            new SelectList(Enum.GetValues(typeof(ContentRating))),
+            "Select Content Rating")
+        @Html.ValidationMessageFor(x => x.ContentRating)
+    </div>
+    <div>
+        Content Rating:
+        @Html.DropDownListFor(x => x.TypeOfProgramme,
+            new SelectList(Enum.GetValues(typeof(TypeOfProgramme))),
+            "Select Type Of Programme")
+        @Html.ValidationMessageFor(x => x.TypeOfProgramme)
+    </div>
+
+    <input type="submit" value="Edit" />
+</form>

@@ -1,0 +1,43 @@
+﻿@model List<WebApplication1.Models.Television.TvScheduleViewModel>
+@using WebApplication1.Services
+@inject IUserService userService
+@section Scripts{
+    <script src="~/js/tv.js"></script>
+}
+
+<h1>Schedule of @ViewBag.ChannelName</h1>
+@if (userService.IsTvDirector())
+{
+    <div>
+        <a asp-action="Add">Add new schedule for programme</a>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Time
+        </th>
+        <th>
+            Programme
+        </th>
+        <th>
+            Type of Programme
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var schedule in Model)
+    {
+        <tr class="schedule">
+            <td>@schedule.AiringTime.ToString("HH:mm")</td>
+            <td>@schedule.Programme.Name</td>
+            <td>@schedule.Programme.TypeOfProgramme</td>
+            <td><a asp-action="Edit" asp-route-id="@schedule.Id">Edit</a></td>
+            <td><input type="button" class="delete-schedule" data-name="@schedule.Id" value="Remove" /></td>
+
+        </tr>
+    }
+</table>
+

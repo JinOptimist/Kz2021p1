@@ -1,0 +1,16 @@
+﻿@model WebApplication1.Models.Television.TvProgrammeCelebrityViewModel
+
+<form action="/TvCelebrity/AddToProgramme" method="post">
+    <div>
+        Celebrity :
+        @Html.DropDownListFor(x => x.Celebrity.Name, new SelectList(ViewBag.Celebrity, "Name", "Name"))
+        @Html.ValidationMessageFor(model => model.Celebrity, "", new { @class = "text-danger" })
+    </div>
+    <div>
+        Programme :
+        @Html.DisplayFor(x => x.Programme.Name)
+        @Html.HiddenFor(x => x.Programme.Name)
+        @Html.ValidationMessageFor(model => model.Programme, "", new { @class = "text-danger" })
+    </div>
+    <input type="submit" value="Add" />
+</form>
