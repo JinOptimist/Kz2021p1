@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.EfStuff.Model
 {
-	public class Shift : BaseModel
+	[Table("Shifts", Schema = "Police")]
+	public class PoliceShift : BaseModel
 	{
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.ViewModels
 {
-	public class ApplicantViewModel
+	public class PoliceApplicantViewModel
     {
 		public long	Id { get; set; }
 

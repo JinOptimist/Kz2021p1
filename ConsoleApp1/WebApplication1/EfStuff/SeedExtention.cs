@@ -6,16 +6,15 @@ using System.Globalization;
 using System.Linq;
 using WebApplication1.EfStuff.Model;
 using WebApplication1.EfStuff.Model.Airport;
-using WebApplication1.EfStuff.Repositoryies.Airport;
-using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
-using WebApplication1.EfStuff.Repositoryies.FiremanRepo;
 using WebApplication1.EfStuff.Model.Firemen;
+using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
+using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 
 namespace WebApplication1.EfStuff
 {
-    public static class SeedExtention
+	public static class SeedExtention
     {
         public const string AdminName = "admin";
         public const string FacilityName = "Mediker";
@@ -46,13 +45,46 @@ namespace WebApplication1.EfStuff
                 CreateDefaultHCWorker(scope.ServiceProvider);
 
                 CreateDefaultBusPark(scope.ServiceProvider);
-                //CreateDefaultRoutes(scope.ServiceProvider);
+
+                CreateDefaultPolice(scope.ServiceProvider);
             }
 
             return host;
         }
 
-        private static void CreateDefaultFlights(IServiceProvider serviceProvider)
+        const string SHERIFF = "Sheriff";
+
+
+        private static void CreateDefaultPolice(IServiceProvider serviceProvider)
+		{
+			IPoliceRepository policeRepository = serviceProvider.GetService<IPoliceRepository>();
+            ICitizenRepository citizenRepository = serviceProvider.GetService<ICitizenRepository>();
+
+			if (!policeRepository.GetAllAsIQueryable().Any())
+			{
+				if (citizenRepository.GetByName(SHERIFF) == null)
+				{
+                    Citizen policeman = new Citizen
+                    {
+                        Name = SHERIFF,
+                        Age = 35,
+                        Password = "1234"
+                    };
+
+                    citizenRepository.Save(policeman);
+
+                    policeRepository.Save(new Policeman { 
+                        Citizen = policeman,
+                        Rank = Rank.Sheriff,
+                        StartWork = DateTime.Now,
+                        Salary = 2500
+                    });
+                }
+			}
+		}
+
+
+		private static void CreateDefaultFlights(IServiceProvider serviceProvider)
         {
             IFlightsRepository flightsRepository = serviceProvider.GetService<IFlightsRepository>();
             if (!flightsRepository.HasAnyFlights())
@@ -498,13 +530,6 @@ namespace WebApplication1.EfStuff
 
                 busRepository.Save(busSchool);
             }
-
-
-
-
         }
-
-
-
     }
 }

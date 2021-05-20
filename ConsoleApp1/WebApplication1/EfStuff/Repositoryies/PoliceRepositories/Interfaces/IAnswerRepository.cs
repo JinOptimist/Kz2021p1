@@ -2,7 +2,7 @@
 
 namespace WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces
 {
-	public interface IShiftRepo : IBaseRepository<Shift>
+	public interface IAnswerRepository : IBaseRepository<PoliceQuizAnswer>
     {
         
     }

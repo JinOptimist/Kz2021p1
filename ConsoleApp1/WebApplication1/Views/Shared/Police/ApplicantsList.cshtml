@@ -1,4 +1,4 @@
-﻿@model List<ApplicantViewModel>
+﻿@model List<PoliceApplicantViewModel>
 
 <table class="table">
     <thead>
@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (ApplicantViewModel applicant in Model)
+        @foreach (PoliceApplicantViewModel applicant in Model)
         {
         <tr class="applicant" data-applicantid="@applicant.Id">
             <td>@applicant.FirstName</td>

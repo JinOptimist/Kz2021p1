@@ -17,7 +17,7 @@ namespace WebApplication1.EfStuff.Model
 		public decimal Salary { get; set; } = 1000;
 
 		[Required]
-		public DateTime StartWork { get; set; } = DateTime.Now;
+		public DateTime StartWork { get; set; }
 
 		[Required]
 		[ForeignKey("Citizen")]
@@ -28,6 +28,6 @@ namespace WebApplication1.EfStuff.Model
 
 		public virtual ICollection<Violations> Violations { get; set; }
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
-		public virtual ICollection<Shift> Shifts { get; set; }
+		public virtual ICollection<PoliceShift> Shifts { get; set; }
 	}
 }

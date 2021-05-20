@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Repositoryies;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.EfStuff.Repositoryies.PoliceRepositories.Interfaces;
 using WebApplication1.Services;
@@ -16,18 +14,19 @@ namespace WebApplication1.Presentation.Police
 {
 	public class PolicePresentation : IPolicePresentation
 	{
-		// TODO: Implement with contracts
+		private const int COUNT_OF_QUESTION = 5; 
+
 		private readonly IPoliceRepository _policeRepo;
 		private readonly ICitizenRepository _citizenRepo;
 		private readonly IPoliceAcademyRepository _policeAcademyRepo;
 		private readonly IUserService _userService;
 		private readonly IViolationsRepository _violationsRepository;
-		private readonly IPoliceCallRepo _policeCallRepo;
+		private readonly IPoliceCallRepository _policeCallRepo;
 		private readonly IBlobService _blobService;
 		private readonly IMapper _mapper;
-		private readonly IQuestionsRepo _questionsRepo;
-		private readonly IAnswerRepo _answerRepo;
-		private readonly IShiftRepo _shiftRepo;
+		private readonly IQuestionsRepository _questionsRepo;
+		private readonly IAnswerRepository _answerRepo;
+		private readonly IShiftRepository _shiftRepo;
 
 		public PolicePresentation(
 			IPoliceRepository policeRepo,
@@ -35,10 +34,10 @@ namespace WebApplication1.Presentation.Police
 			IPoliceAcademyRepository policeAcademyRepo,
 			IUserService userService,
 			IViolationsRepository violationsRepository,
-			IPoliceCallRepo policeCallRepo,
-			IQuestionsRepo questionsRepo,
-			IAnswerRepo answerRepo,
-			IShiftRepo shiftRepo,
+			IPoliceCallRepository policeCallRepo,
+			IQuestionsRepository questionsRepo,
+			IAnswerRepository answerRepo,
+			IShiftRepository shiftRepo,
 			IMapper mapper,
 			IBlobService blobService
 			)
@@ -58,7 +57,7 @@ namespace WebApplication1.Presentation.Police
 
 		public List<Citizen> GetAll()
 		{
-			List<Citizen> users = _citizenRepo.GetAll().ToList();
+			List<Citizen> users = _citizenRepo.GetAll();
 
 			return users;
 		}
@@ -81,7 +80,7 @@ namespace WebApplication1.Presentation.Police
 
 			if (citizen is null) return false;
 
-			policeAcademy.CitizenId = citizen.Id;
+			policeAcademy.Citizen = citizen;
 
 			_policeAcademyRepo.Save(policeAcademy);
 
@@ -90,11 +89,9 @@ namespace WebApplication1.Presentation.Police
 
 		public long AddViolationForUser(Violations violation)
 		{
-			long? userId = _userService.GetUser()?.Id;
+			Citizen user = _userService.GetUser();
 
-			long policemanId = _policeRepo.GetAll().SingleOrDefault(p => p.CitizenId == userId).Id;
-
-			violation.PolicemanId = policemanId;
+			violation.PolicemanId = user.Policeman.Id;
 
 			_violationsRepository.Save(violation);
 
@@ -114,15 +111,17 @@ namespace WebApplication1.Presentation.Police
 		{
 			policeCallHistory.DateCall = DateTime.Now;
 
-			int countPolicemen = _policeRepo.GetAll().Count();
+			List<long> allPolicmanId = _policeRepo.GetAllAsIQueryable()
+												  .Select(p => p.Id)
+												  .ToList();
 
-			long randomPolicemanId = PolicemanUtils.SearchRandom(countPolicemen);
+			long randomPolicemanId = PolicemanUtils.SearchRandom(allPolicmanId);
 
 			policeCallHistory.PolicemanId = randomPolicemanId;
 
-			long userId = _userService.GetUser().Id;
+			Citizen citizen = _userService.GetUser();
 
-			policeCallHistory.CitizenId = userId;
+			policeCallHistory.Citizen = citizen;
 
 			_policeCallRepo.Save(policeCallHistory);
 
@@ -132,7 +131,7 @@ namespace WebApplication1.Presentation.Police
 		public List<UserViolationViewModel> GetAllUserViolations(long id)
 		{
 			List<Violations> userViolations = _violationsRepository.GetAllAsIQueryable()
-																   .Where(v => v.CitizenId == id)
+																   .Where(v => v.Citizen.Id == id)
 																   .ToList();
 
 			return _mapper.Map<List<UserViolationViewModel>>(userViolations); ;
@@ -141,7 +140,6 @@ namespace WebApplication1.Presentation.Police
 		public async Task<UserInfoViewModel> GetUserInfo(long id)
 		{
 			Citizen user = _citizenRepo.GetAllAsIQueryable()
-									   .Include(p => p.House)
 									   .FirstOrDefault(c => c.Id == id);
 
 			UserInfoViewModel userInfo = _mapper.Map<UserInfoViewModel>(user);
@@ -156,9 +154,8 @@ namespace WebApplication1.Presentation.Police
 		public List<PolicemanViewModel> GetAllPolicemen()
 		{
 			List<Policeman> policemen = _policeRepo.GetAllAsIQueryable()
-												  .Include(x => x.Citizen)
-												  .Take(10)
-												  .ToList();
+												   .Take(10)
+												   .ToList();
 
 			return _mapper.Map<List<PolicemanViewModel>>(policemen);
 		}
@@ -166,20 +163,18 @@ namespace WebApplication1.Presentation.Police
 		public void DismissPoliceman(long id)
 		{
 			Policeman policman = _policeRepo.GetAllAsIQueryable()
-											.Include(p => p.PoliceCallHistories)
-											.Include(p => p.Violations)
 											.SingleOrDefault(x => x.Id == id);
 
 			_policeRepo.Remove(policman);
 		}
 
-		public List<ApplicantViewModel> GetAllApplicants()
+		public List<PoliceApplicantViewModel> GetAllApplicants()
 		{
 			List<PoliceAcademy> requests = _policeAcademyRepo.GetAllAsIQueryable()
 															 .Where(pc => pc.RequestStatus == RequestStatus.InProcess)
 															 .ToList();
 
-			return _mapper.Map<List<ApplicantViewModel>>(requests);
+			return _mapper.Map<List<PoliceApplicantViewModel>>(requests);
 		}
 
 		public void AcceptApplicant(long id)
@@ -189,47 +184,35 @@ namespace WebApplication1.Presentation.Police
 
 			_policeAcademyRepo.Remove(applicant);
 
-			Policeman policeman = new Policeman
-				{ CitizenId = applicant.CitizenId };
+			Policeman policeman = new Policeman {
+				CitizenId = applicant.CitizenId,
+				StartWork = DateTime.Now
+			};
 
 			_policeRepo.Save(policeman);
 		}
 
-		public void AddNewQuestionsAndAnswers(List<QuestionAndAnswer> questionAndAnswers)
-		{
-			List<Question> questions = _mapper.Map<List<Question>>(questionAndAnswers);
-
-			questions.ForEach(question =>
-			{
-				_questionsRepo.Save(question);
-			});
-
-			List<Answer> answersWithId = _mapper.Map<List<Answer>>(questions);
-
-			List<Answer> ss = _mapper.Map(questionAndAnswers, answersWithId);
-		}
-
-		public long AddNewQuestion(Question question)
+		public long AddNewQuestion(PoliceQuizQuestion question)
 		{
 			_questionsRepo.Save(question);
 
 			return question.Id;
 		}
 
-		public void AddAnswers(List<Answer> answers)
+		public void AddAnswers(List<PoliceQuizAnswer> answers)
 		{
 			answers.ForEach(a => _answerRepo.Save(a));
 		}
 
 		public List<QuestionAndAnswer> GetQuiz()
 		{
-			IQueryable<Question> allRecords = _questionsRepo.GetAllAsIQueryable();
+			IQueryable<PoliceQuizQuestion> allRecords = _questionsRepo.GetAllAsIQueryable();
 
 			int randomNumber = new Random().Next(1, allRecords.Count());
 
-			List<Question> listQestion = allRecords
+			List<PoliceQuizQuestion> listQestion = allRecords
 											.Skip(randomNumber)
-											.Take(5)
+											.Take(COUNT_OF_QUESTION)
 											.ToList();
 
 			return _mapper.Map<List<QuestionAndAnswer>>(listQestion);
@@ -237,7 +220,8 @@ namespace WebApplication1.Presentation.Police
 
 		public bool? CheckAnswer(long id)
 		{
-			return _answerRepo.GetAllAsIQueryable().FirstOrDefault(a => a.Id == id)?.IsRight;
+			return _answerRepo.GetAllAsIQueryable()
+							  .FirstOrDefault(a => a.Id == id)?.IsRight;
 		}
 
 		public void UpRank(Rank rank)
@@ -252,7 +236,7 @@ namespace WebApplication1.Presentation.Police
 			_policeRepo.Save(policeman);
 		}
 
-		public void SetPoliceShift(Shift shift)
+		public void SetPoliceShift(PoliceShift shift)
 		{
 			_shiftRepo.Save(shift);
 		}
@@ -261,7 +245,7 @@ namespace WebApplication1.Presentation.Police
 		{
 			Citizen user = _userService.GetUser();
 
-			List<Shift> shifts = _shiftRepo.GetAllAsIQueryable()
+			List<PoliceShift> shifts = _shiftRepo.GetAllAsIQueryable()
 										   .Where(x => x.PolicemanId == user.Policeman.Id)
 										   .ToList();
 
@@ -270,17 +254,17 @@ namespace WebApplication1.Presentation.Police
 
 		public IEnumerable<SheriffShiftVM> GetOfficerShift()
 		{
-			List<Shift> shifts = _shiftRepo.GetAllAsIQueryable()
+			List<PoliceShift> shifts = _shiftRepo.GetAllAsIQueryable()
 										   .Take(10)
 										   .ToList();
 
 			return _mapper.Map<List<SheriffShiftVM>>(shifts);
 		}
 
-		public Shift UpdateShift(UpdateShiftViewModel shift)
+		public PoliceShift UpdateShift(UpdateShiftViewModel shift)
 		{
-			Shift oldshift = _shiftRepo.GetAllAsIQueryable()
-									   .FirstOrDefault(x => x.Id == shift.Id);
+			PoliceShift oldshift = _shiftRepo.GetAllAsIQueryable()
+											 .FirstOrDefault(x => x.Id == shift.Id);
 
 			oldshift.StartDate = shift.StartDate;
 			oldshift.EndDate = shift.EndDate;

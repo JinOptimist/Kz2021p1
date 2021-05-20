@@ -15,9 +15,6 @@ namespace WebApplication1.Controllers
 	[Route("{controller}")]
 	public class PoliceController : Controller
 	{
-		// TODO: Implement with async methods
-		// TODO: Add some checks for methods
-
 		private readonly IPolicePresentation _policePresentation;
 		private readonly IMapper _mapper;
 		private readonly IUserService _userService;
@@ -130,7 +127,11 @@ namespace WebApplication1.Controllers
 		[HttpPost("/police/requestPoliceAcademy")]
 		public IActionResult RequestForPoliceAcademy([FromForm] PoliceAcademyRequestVM request)
 		{
-			_policePresentation.AddedToPoliceAcademy(_mapper.Map<PoliceAcademy>(request));
+			PoliceAcademy policeAcademy = _mapper.Map<PoliceAcademy>(request);
+
+			policeAcademy.RequestStatus = RequestStatus.InProcess;
+
+			_policePresentation.AddedToPoliceAcademy(policeAcademy);
 
 			return Ok();
 		}
@@ -259,7 +260,7 @@ namespace WebApplication1.Controllers
 		/// <returns></returns>
 		[HttpPost("/police/add-new-question")]
 		[IsSheriff]
-		public IActionResult AddNewQuestion([FromForm] Question questions)
+		public IActionResult AddNewQuestion([FromForm] PoliceQuizQuestion questions)
 		{
 			long id = _policePresentation.AddNewQuestion(questions);
 
@@ -273,11 +274,11 @@ namespace WebApplication1.Controllers
 		/// <returns></returns>
 		[HttpPost("/police/add-new-answers")]
 		[IsSheriff]
-		public IActionResult AddNewAnswer(List<Answer> answers)
+		public JsonResult AddNewAnswer(List<PoliceQuizAnswer> answers)
 		{
 			_policePresentation.AddAnswers(answers);
 
-			return Ok();
+			return Json("");
 		}
 
 		/// <summary>
@@ -326,7 +327,7 @@ namespace WebApplication1.Controllers
 		[IsSheriff]
 		public IActionResult SetShift(BasePolicemanShiftVM shiftViewModel)
 		{
-			Shift shift = _mapper.Map<Shift>(shiftViewModel);
+			PoliceShift shift = _mapper.Map<PoliceShift>(shiftViewModel);
 
 			_policePresentation.SetPoliceShift(shift);
 

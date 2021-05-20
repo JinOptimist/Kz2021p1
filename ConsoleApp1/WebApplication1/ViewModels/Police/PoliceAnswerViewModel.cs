@@ -2,7 +2,7 @@
 
 namespace WebApplication1.ViewModels
 {
-	public class AnswerViewModel
+	public class PoliceAnswerViewModel
     {
 		public long AnswerId { get; set; }
 
