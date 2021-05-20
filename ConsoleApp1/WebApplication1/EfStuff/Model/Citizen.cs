@@ -29,5 +29,8 @@ namespace WebApplication1.EfStuff.Model
 		public virtual ICollection<PoliceCallHistory> PoliceCallHistories { get; set; }
         public virtual Passenger Passenger { get; set; }
     }
+
+		public virtual HCWorker HCWorker { get; set; }
+	}
 }
 

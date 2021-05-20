@@ -8,6 +8,7 @@ namespace WebApplication1.Services
 	public class UserService : IUserService
     {
         private ICitizenRepository _citizenRepository;
+
         private IHttpContextAccessor _httpContextAccessor;
 
         public UserService(ICitizenRepository citizenRepository, IHttpContextAccessor httpContextAccessor)
@@ -48,5 +49,8 @@ namespace WebApplication1.Services
 			=> GetUser()?.Policeman.Rank == Rank.Trainee;
         public bool IsFireAdmin()
             => GetUser()?.Fireman?.Role == "FireAdmin";
+
+        public bool IsHCWorker() 
+            => GetUser()?.HCWorker != null;
     }
 }

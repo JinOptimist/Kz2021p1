@@ -11,5 +11,6 @@ namespace WebApplication1.Services
         bool IsOfficer();
         bool IsTrainee();
         bool IsFireAdmin();
+        bool IsHCWorker();
     }
 }

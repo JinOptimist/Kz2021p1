@@ -55,7 +55,9 @@ namespace WebApplication1
             services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
-            services.AddPoliceServices(Configuration);
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
+            services.AddScoped<IHCWorkerRepository, HCWorkerRepository>();
+            services.AddScoped<IHCEstablishmentsRepository, HCEstablishmentsRepository>();
 
             services.AddScoped<IBlobService, BlobService>();
             services.AddScoped<IUserService, UserService>();
@@ -70,6 +72,14 @@ namespace WebApplication1
             services.AddScoped<IStudentPresentation, StudentPresentation>();
             services.AddHostedService<MiniTimeline>();
 
+
+            services.AddScoped<HCEstablishmentsPresentation>(x =>
+                new HCEstablishmentsPresentation(
+                    x.GetService<IHCEstablishmentsRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+
+            services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
 
             services.AddAuthentication(AuthMethod)
@@ -85,21 +95,30 @@ namespace WebApplication1
 
         private void RegisterRepositories(IServiceCollection services)
         {
-			IEnumerable<Type> implementationsType = Assembly
+            var repositoryTypes = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(type =>
-                        !type.IsInterface && type.GetInterface(typeof(IBaseRepository<>).Name) != null);
+                        type.BaseType?.IsGenericType == true
+                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>));
 
-            foreach (Type implementationType in implementationsType)
+            foreach (var repositoryType in repositoryTypes)
             {
-				IEnumerable<Type> servicesType = implementationType
-                    .GetInterfaces()
-                    .Where(r => !r.Name.Contains(typeof(IBaseRepository<>).Name));
+                var repositortInterfaces = repositoryType.GetInterfaces()
+                    .FirstOrDefault(i => i.Name != typeof(IBaseRepository<>).Name);
 
-				foreach (Type serviceType in servicesType)
-				{
-                    services.AddScoped(serviceType, implementationType);
+                if (repositortInterfaces != null)
+                {
+                    services.AddScoped(repositortInterfaces, repositoryType);
+                }
+                else
+                {
+                    services.AddScoped(repositoryType, x =>
+                    {
+                        var constructor = repositoryType.GetConstructors().Single();
+                        var parameters = new object[] { x.GetService<KzDbContext>() };
+                        return constructor.Invoke(parameters);
+                    });
                 }
             }
         }
@@ -140,6 +159,9 @@ namespace WebApplication1
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
+            MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);
+
 
             MapBothSide<Student, StudentViewModel>(configurationExp);
             MapBothSide<Pupil, PupilViewModel>(configurationExp);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.EfStuff;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(KzDbContext))]
-    partial class KzDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210506202242_Healthcare")]
+    partial class Healthcare
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,21 +51,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("CertificateStudent");
                 });
 
-            modelBuilder.Entity("FlightPassenger", b =>
-                {
-                    b.Property<long>("FlightsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("PassengersId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("FlightsId", "PassengersId");
-
-                    b.HasIndex("PassengersId");
-
-                    b.ToTable("FlightPassenger");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Adress", b =>
                 {
                     b.Property<long>("Id")
@@ -85,34 +72,58 @@ namespace WebApplication1.Migrations
                     b.ToTable("Adress");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Flight", b =>
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.DepartingFlightInfo", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Airline")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FlightStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FlightType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Place")
+                    b.Property<string>("DepartureTime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TailNumber")
+                    b.Property<string>("Destination")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FlightId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("DepartingFlightsInfo");
+                });
+
+            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.IncomingFlightInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Airline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ETA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FlightId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Origin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncomingFlightsInfo");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
@@ -122,45 +133,15 @@ namespace WebApplication1.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Age")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("CitizenId")
+                    b.Property<long>("CitizenId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("FlightId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CitizenId")
-                        .IsUnique()
-                        .HasFilter("[CitizenId] IS NOT NULL");
 
                     b.ToTable("Passengers");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsRight")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("QuestionId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Answer", "Police");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Bus", b =>
@@ -347,6 +328,9 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -362,6 +346,9 @@ namespace WebApplication1.Migrations
 
                     b.Property<int>("RequestStatus")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -490,21 +477,6 @@ namespace WebApplication1.Migrations
                     b.ToTable("Pupils");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Question", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Question", "Police");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.School", b =>
                 {
                     b.Property<long>("Id")
@@ -531,29 +503,6 @@ namespace WebApplication1.Migrations
                         .IsUnique();
 
                     b.ToTable("Schools");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Shift", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("PolicemanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PolicemanId");
-
-                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.SportComplex", b =>
@@ -802,42 +751,6 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FlightPassenger", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Flight", null)
-                        .WithMany()
-                        .HasForeignKey("FlightsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.EfStuff.Model.Airport.Passenger", null)
-                        .WithMany()
-                        .HasForeignKey("PassengersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Airport.Passenger", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Citizen", "Citizen")
-                        .WithOne("Passenger")
-                        .HasForeignKey("WebApplication1.EfStuff.Model.Airport.Passenger", "CitizenId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Citizen");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Answer", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.Bus", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.TripRoute", "RoutePlan")
@@ -938,17 +851,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Shift", b =>
-                {
-                    b.HasOne("WebApplication1.EfStuff.Model.Policeman", "Policeman")
-                        .WithMany("Shifts")
-                        .HasForeignKey("PolicemanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Policeman");
-                });
-
             modelBuilder.Entity("WebApplication1.EfStuff.Model.SportSection", b =>
                 {
                     b.HasOne("WebApplication1.EfStuff.Model.SportComplex", null)
@@ -995,8 +897,6 @@ namespace WebApplication1.Migrations
                 {
                     b.Navigation("Fireman");
 
-                    b.Navigation("Passenger");
-
                     b.Navigation("HCWorker");
 
                     b.Navigation("PoliceAcademy");
@@ -1017,14 +917,7 @@ namespace WebApplication1.Migrations
                 {
                     b.Navigation("PoliceCallHistories");
 
-                    b.Navigation("Shifts");
-
                     b.Navigation("Violations");
-                });
-
-            modelBuilder.Entity("WebApplication1.EfStuff.Model.Question", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("WebApplication1.EfStuff.Model.School", b =>

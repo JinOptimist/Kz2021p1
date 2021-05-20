@@ -1,0 +1,30 @@
+﻿@model HCWorkerViewModel
+
+@{
+    Layout = "~/Views/Shared/_HCLayout.cshtml";
+}
+
+<h1>
+    Add a new worker
+</h1>
+
+<form action="@Url.Action("AddWorker", "HCWorker")" method="post">
+
+    <div>
+        Position: @Html.TextBoxFor(x => x.Position)
+    </div>
+
+    <div>
+        Contacts: @Html.TextBoxFor(x => x.Contacts)
+    </div>
+
+    <div>
+        Facility number: @Html.TextBoxFor(x => x.FacilityId)
+    </div>
+
+    <div>
+        Citizen ID number: @Html.TextBoxFor(x => x.CitizenId)
+    </div>
+
+    <input type="submit" value="Add new worker" />
+</form>
