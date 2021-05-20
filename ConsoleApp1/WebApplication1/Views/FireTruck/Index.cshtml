@@ -41,7 +41,7 @@
             <td>@truck.TruckNumber</td>
             <td>@truck.TruckState</td>
             <td>@truck.TeamName</td>
-            @if (userService.IsFireAdmin())
+            @if (userService.IsFireAdmin() || userService.IsTruckSpecialist())
             {
                 <td><input type="button" class="delete" data-name="@truck.Id" value="delete" /></td>
                 <td><a href="FireTruck/Edit/@truck.Id">edit</a></td>

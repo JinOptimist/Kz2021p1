@@ -5,25 +5,28 @@ using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models;
+using WebApplication1.Models.FiremanModels;
 using WebApplication1.Services;
 
 namespace WebApplication1.Presentation.FirePresentation
 {
-	public class FiremanPresentation : IFiremanPresentation
-	{
-		private IFiremanRepository _firemanRepository { get; set; }
-		private ICitizenRepository _citizenRepository { get; set; }
-		private IFiremanTeamRepository _firemanTeamRepository { get; set; }
-		private IUserService _userService;
-		private IMapper _mapper { get; set; }
+    public class FiremanPresentation: IFiremanPresentation
+    {
+        private IFiremanRepository _firemanRepository { get; set; }
+        private ICitizenRepository _citizenRepository { get; set; }
+        private IFiremanTeamRepository _firemanTeamRepository { get; set; }
+        private IUserService _userService;
+        private IMapper _mapper { get; set; }
+        private IFireIncidentRepository _fireIncidentRepository { get; set; }
 
-		public FiremanPresentation(IFiremanRepository workerRepository, IMapper mapper, ICitizenRepository citizenRepository, IFiremanTeamRepository firemanTeamRepository, IUserService userService)
-		{
-			_firemanRepository = workerRepository;
-			_mapper = mapper;
-			_citizenRepository = citizenRepository;
-			_firemanTeamRepository = firemanTeamRepository;
-			_userService = userService;
+        public FiremanPresentation(IFiremanRepository workerRepository, IMapper mapper, ICitizenRepository citizenRepository, IFiremanTeamRepository firemanTeamRepository, IUserService userService, IFireIncidentRepository fireIncidentRepository)
+        {
+            _firemanRepository = workerRepository;
+            _mapper = mapper;
+            _citizenRepository = citizenRepository;
+            _firemanTeamRepository = firemanTeamRepository;
+            _userService = userService;
+            _fireIncidentRepository = fireIncidentRepository;
 
 		}
 		public List<FiremanViewModel> GetAllFiremen()
@@ -81,27 +84,37 @@ namespace WebApplication1.Presentation.FirePresentation
 					_firemanRepository.Save(fireman);
 					_citizenRepository.Save(citizen);
 
-					user = "notfireadmin";
-				}
-				else
-				{
-					fireman.Role = model.Role;
-					fireman.FiremanTeam = _firemanTeamRepository.GetByName(model.TeamName);
-					_firemanRepository.Save(fireman);
-				}
-			}
-			return user;
-		}
-		public FiremanViewModel MyProfile()
-		{
-			var user = _userService.GetUser();
-			var fireman = _firemanRepository.GetByName(user.Name);
-			if (fireman != null)
-			{
-				var viewModel = _mapper.Map<FiremanViewModel>(fireman);
-				return viewModel;
-			}
-			return null;
-		}
-	}
+                    user = "notfireadmin";
+                }
+                else
+                {
+                    fireman.Role = model.Role;
+                    fireman.FiremanTeam = _firemanTeamRepository.GetByName(model.TeamName);
+                    _firemanRepository.Save(fireman);
+                }
+            }
+            return user;
+        }
+        public FiremanViewModel MyProfile()
+        {
+            var user = _userService.GetUser();
+            var fireman = _firemanRepository.GetByName(user.Name);
+            if (fireman != null)
+            {
+                var viewModel = _mapper.Map<FiremanViewModel>(fireman);
+                return viewModel;
+            }
+            return null;
+        }
+        public List<FireIncidentViewModel> GetCurrentIncidents()
+        {
+            var models = _fireIncidentRepository.GetCurrentFireIncidents();
+            var viewmodels = new List<FireIncidentViewModel>();
+            foreach (var model in models)
+            {
+                viewmodels.Add(_mapper.Map<FireIncidentViewModel>(model));
+            }
+            return viewmodels;
+        }
+    }
 }
