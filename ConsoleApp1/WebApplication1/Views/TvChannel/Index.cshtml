@@ -1,0 +1,48 @@
+﻿@model List<WebApplication1.Models.Television.TvChannelViewModel>
+
+@using WebApplication1.Services
+@inject IUserService userService
+
+<div>
+    <h1>Tv Channels</h1>
+    @if (userService.IsTvAdmin())
+    {
+        <a asp-action="Add">Add new channel</a>
+        <br />
+    }
+</div>
+
+
+@foreach (var channel in Model)
+{
+    <div>
+        <h4>
+            @channel.Name (works from @channel.WorkingFrom.ToShortDateString())
+            <a asp-controller="TvProgramme" asp-action="IndexByChannel" asp-route-channelName="@channel.Name">
+                Programmes
+            </a>
+        </h4>
+
+
+        @if (userService.IsTvAdmin())
+        {
+            <a asp-action="Profile" asp-route-channelName="@channel.Name">Details</a>
+        }
+
+    </div>
+    <div>
+        Schedules :
+        @for (int i = 0; i < 7; i++)
+        {
+            <a asp-controller="TvSchedule" asp-action="Index" asp-route-channelName="@channel.Name"
+               asp-route-date="@DateTime.UtcNow.AddDays(i).ToShortDateString()">
+                <span> [</span>
+                @DateTime.UtcNow.AddDays(i).DayOfWeek
+                <span>] </span>
+            </a>
+            
+        }
+        <br />
+        <br />
+    </div>
+}

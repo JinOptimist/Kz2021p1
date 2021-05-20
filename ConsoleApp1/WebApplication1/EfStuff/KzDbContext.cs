@@ -7,6 +7,7 @@ using WebApplication1.EfStuff.Model;
 using WebApplication1.Models;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Model.Television;
 
 namespace WebApplication1.EfStuff
 {
@@ -42,6 +43,14 @@ namespace WebApplication1.EfStuff
         public DbSet<Order> Orders { get; set; }
         public DbSet<HCEstablishments> HCEstablishments { get; set; }
         public DbSet<HCWorker> HCWorker { get; set; }
+
+        public DbSet<TvProgramme> TvProgrammes { get; set; }
+        public DbSet<TvSchedule> TvSchedules { get; set; }
+        public DbSet<TvStaff> TvStaff { get; set; }
+        public DbSet<TvProgrammeStaff> TvProgrammeStaff { get; set; }
+        public DbSet<TvChannel> TvChannels { get; set; }
+        public DbSet<TvCelebrity> TvCelebrities { get; set; }
+        public DbSet<TvProgrammeCelebrity> TvProgrammeCelebrities { get; set; }
 
         public KzDbContext(DbContextOptions options) : base(options) { }
 
@@ -175,6 +184,41 @@ namespace WebApplication1.EfStuff
                 .HasOne(x => x.HCWorker)
                 .WithOne(x => x.Citizen)
                 .HasForeignKey<HCWorker>(x => x.CitizenId);
+
+            modelBuilder.Entity<TvProgramme>()
+               .HasMany(x => x.Schedules)
+               .WithOne(x => x.Programme);
+
+            modelBuilder.Entity<TvStaff>()
+               .HasOne(x => x.Citizen)
+               .WithOne(x => x.TvStaff);
+
+            modelBuilder.Entity<TvProgrammeStaff>()
+               .HasOne(x => x.Staff)
+               .WithMany(x => x.Programme);
+
+            modelBuilder.Entity<TvProgrammeStaff>()
+              .HasOne(x => x.Programme)
+              .WithMany(x => x.Staff);
+
+            modelBuilder.Entity<TvProgramme>()
+                .HasOne(x => x.Channel)
+                .WithMany(x => x.Programmes);
+
+            modelBuilder.Entity<TvStaff>()
+                .HasOne(x => x.Channel)
+                .WithMany(x => x.Staff);
+            modelBuilder.Entity<TvCelebrity>()
+               .HasOne(x => x.Citizen)
+               .WithOne(x => x.TvCelebrity);
+
+            modelBuilder.Entity<TvProgrammeCelebrity>()
+               .HasOne(x => x.Celebrity)
+               .WithMany(x => x.Programme);
+
+            modelBuilder.Entity<TvProgrammeCelebrity>()
+              .HasOne(x => x.Programme)
+              .WithMany(x => x.Celebrities);
 
             base.OnModelCreating(modelBuilder);
         }

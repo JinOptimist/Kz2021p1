@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Model.Television;
 
 namespace WebApplication1.EfStuff.Model
 {
@@ -34,6 +35,8 @@ namespace WebApplication1.EfStuff.Model
         public virtual Passenger Passenger { get; set; }
         public virtual HCWorker HCWorker { get; set; }
 
-	}
+        public virtual TvStaff TvStaff { get; set; }
+        public virtual TvCelebrity TvCelebrity { get; set; }
+    }
 }
 

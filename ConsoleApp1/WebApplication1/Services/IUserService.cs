@@ -13,5 +13,10 @@ namespace WebApplication1.Services
         bool IsFireAdmin();
         bool IsHCWorker();
         bool IsTruckSpecialist();
+
+        bool IsTvStaff();
+        bool IsTvAdmin();
+        bool IsTvDirector();
+        bool IsTvCastingDirector();
     }
 }

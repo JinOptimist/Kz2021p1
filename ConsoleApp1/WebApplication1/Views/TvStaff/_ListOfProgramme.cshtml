@@ -1,0 +1,23 @@
+﻿@model List<WebApplication1.Models.Television.TvProgrammeStaffViewModel>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Occupation
+        </th>
+    </tr>
+    <tr>
+        @foreach (var item in Model)
+        {
+            <td>
+                @item.Staff.Name
+            </td>
+            <td>
+                @item.Staff.Occupation
+            </td>
+        }
+    </tr>
+</table>

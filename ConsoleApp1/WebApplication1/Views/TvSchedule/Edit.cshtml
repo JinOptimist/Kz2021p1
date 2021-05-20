@@ -1,0 +1,20 @@
+﻿@model WebApplication1.Models.Television.TvScheduleViewModel
+
+<h1>Edit</h1>
+
+<form action="/TvSchedule/Edit" method="post">
+    <div>
+        @Html.HiddenFor(x=>x.Id)
+    </div>
+    <div>
+        Airing Time :
+        @Html.EditorFor(x => x.AiringTime)
+        @Html.ValidationMessageFor(x => x.AiringTime)
+    </div>
+    <div>
+        Programme:
+        @Html.DropDownListFor(model => model.Programme.Id, new SelectList(ViewBag.Programmes, "Id", "Name"))
+        @Html.ValidationMessageFor(x => x.Programme)
+    </div>
+    <input type="submit" value="Add" />
+</form>
