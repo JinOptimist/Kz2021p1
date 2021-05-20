@@ -267,7 +267,7 @@ namespace WebApplication1.EfStuff
                 List<int> studentCourseYears = new List<int>() { 3, 4, 3, 4, 2, 2 };
                 List<double> studentGpas = new List<double>() { 4.0, 3.67, 3.3, 2.67, 3.0, 2.3 };
                 List<bool> studentOnGrant = new List<bool>() { true, true, true, false, true, false };
-                List<string> studentEnteredYears = new List<string>() { "15.08.2015", "15.08.2015", "15.08.2014", "15.08.2016", "15.08.2017", "15.08.2018" };                
+                List<string> studentEnteredYears = new List<string>() { "08-08-2015", "08-08-2015", "08-08-2014", "08-08-2016", "08-08-2017", "08-08-2018" };                
                 var certificate = certificateRepository.GetCertificateByType("Middle");
 
                 for (int i = 0; i < studentIins.Count; i++)
