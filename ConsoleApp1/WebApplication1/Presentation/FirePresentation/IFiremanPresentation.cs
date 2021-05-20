@@ -16,5 +16,6 @@ namespace WebApplication1.Presentation.FirePresentation
 		FiremanViewModel MyProfile();
 		bool Remove(long id);
 		List<FireIncidentViewModel> GetCurrentIncidents();
+		
 	}
 }

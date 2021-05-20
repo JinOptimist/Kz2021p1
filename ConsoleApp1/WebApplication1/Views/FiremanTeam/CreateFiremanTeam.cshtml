@@ -15,8 +15,8 @@
         Work Shift :
         <select asp-for="Shift"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<WorkShift>()">
-            <option>Select State ...</option>
+                asp-items="Html.GetEnumSelectList<WorkShift>()" style="width: 30%">
+            <option>Select Work Shift Time ...</option>
         </select>
         <span asp-validation-for="Shift" class="text-danger"></span>
     </div>
@@ -24,7 +24,7 @@
         Team State :
         <select asp-for="TeamState"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<TeamState>()">
+                asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
             <option>Select State ...</option>
         </select>
         <span asp-validation-for="TeamState" class="text-danger"></span>

@@ -41,5 +41,7 @@ namespace WebApplication1.Services
              => GetUser()?.Policeman != null;
         public bool IsFireAdmin()
             => GetUser()?.Fireman?.Role == EfStuff.Model.Firemen.FireWorkerRole.Fireadmin;
+        public bool IsTruckSpecialist()
+           => GetUser()?.Fireman?.Role == EfStuff.Model.Firemen.FireWorkerRole.FireTruckSpecialist;
     }
 }

@@ -16,7 +16,7 @@
         Truck State :
         <select asp-for="TruckState"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<TruckState>()">
+                asp-items="Html.GetEnumSelectList<TruckState>()" style="width: 30%">
             <option>Select State ...</option>
         </select>
         <span asp-validation-for="TruckState" class="text-danger"></span>

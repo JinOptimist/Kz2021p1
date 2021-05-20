@@ -13,7 +13,7 @@
         Worker Role :
         <select asp-for="Role"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<FireWorkerRole>()">
+                asp-items="Html.GetEnumSelectList<FireWorkerRole>()" style="width: 30%">
             <option>Select Role ...</option>
         </select>
         <span asp-validation-for="Role" class="text-danger"></span>

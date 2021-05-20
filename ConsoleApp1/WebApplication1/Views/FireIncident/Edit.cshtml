@@ -15,7 +15,7 @@
         Incident Status :
         <select asp-for="Status"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<IncidentStatus>()">
+                asp-items="Html.GetEnumSelectList<IncidentStatus>()" style="width: 30%">
             <option>Select Status ...</option>
         </select>
         <span asp-validation-for="Status" class="text-danger"></span>

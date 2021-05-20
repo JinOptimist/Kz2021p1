@@ -13,10 +13,16 @@
     @if (!userService.IsFireAdmin())
     {
         <div>
-            Team Name : @Html.TextBoxFor(x => x.TeamName)
+            Team Name : @Model.TeamName
         </div>
         <div>
-            Team State : @Html.TextBoxFor(x => x.TeamState)
+            Team State :
+            <select asp-for="TeamState"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
+                <option>Select State ...</option>
+            </select>
+            <span asp-validation-for="TeamState" class="text-danger"></span>
         </div>
     }
     @if (userService.IsFireAdmin())
@@ -28,7 +34,7 @@
             Work Shift :
             <select asp-for="Shift"
                     class="form-control"
-                    asp-items="Html.GetEnumSelectList<WorkShift>()">
+                    asp-items="Html.GetEnumSelectList<WorkShift>()" style="width: 30%">
                 <option>Select State ...</option>
             </select>
             <span asp-validation-for="Shift" class="text-danger"></span>
@@ -38,10 +44,16 @@
             Truck Id : @Html.TextBoxFor(x => x.TruckId)
         </div>
         <div>
-            <input type="submit" value="Save">
-        </div>
-        <div>
-            Team State : @Html.TextBoxFor(x => x.TeamState)
+            Team State :
+            <select asp-for="TeamState"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<TeamState>()" style="width: 30%">
+                <option>Select State ...</option>
+            </select>
+            <span asp-validation-for="TeamState" class="text-danger"></span>
         </div>
     }
+    <div>
+        <input type="submit" value="Save">
+    </div>
 </form>

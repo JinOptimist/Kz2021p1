@@ -1,7 +1,7 @@
 ﻿@using WebApplication1.EfStuff.Model.Firemen;
 @model FiremanViewModel
 
-<h1>New Worker among Firemen!</h1>
+<h1>New Worker Information</h1>
 
 <form action="@Url.Action("CreateFireman", "Fireman")" method="post">
     <div>
@@ -14,7 +14,7 @@
         Worker Role :
         <select asp-for="Role"
                 class="form-control"
-                asp-items="Html.GetEnumSelectList<FireWorkerRole>()">
+                asp-items="Html.GetEnumSelectList<FireWorkerRole>()" style="width: 30%">
             <option>Select Role ...</option>
         </select>
         <span asp-validation-for="Role" class="text-danger"></span>

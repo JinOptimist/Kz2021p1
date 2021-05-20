@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies.Interface.FiremanInterface;
 using WebApplication1.Models.FiremanModels;
+using WebApplication1.Services;
 
 namespace WebApplication1.Presentation.FirePresentation
 {
@@ -15,14 +16,16 @@ namespace WebApplication1.Presentation.FirePresentation
         private IFireTruckRepository _fireTruckRepository { get; set; }
         private IFiremanRepository _firemanRepository { get; set; }
         private IMapper _mapper { get; set; }
+        private IUserService _userService { get; set; }
 
 
-        public FiremanTeamPresentation(IFiremanTeamRepository firemanTeamRepository, IFireTruckRepository fireTruckRepository, IFiremanRepository firemanRepository, IMapper mapper)
+        public FiremanTeamPresentation(IFiremanTeamRepository firemanTeamRepository, IFireTruckRepository fireTruckRepository, IFiremanRepository firemanRepository, IMapper mapper, IUserService userService)
         {
             _firemanTeamRepository = firemanTeamRepository;
             _fireTruckRepository = fireTruckRepository;
             _firemanRepository = firemanRepository;
             _mapper = mapper;
+            _userService = userService;
         }
         public List<FiremanTeamViewModel> GetAllTeams()
         {
@@ -33,13 +36,18 @@ namespace WebApplication1.Presentation.FirePresentation
         public void CreateFiremanTeam(FiremanTeamViewModel model)
         {
             var newModel = _mapper.Map<FiremanTeam>(model);
-
-            var truck = _fireTruckRepository.Get(model.TruckId);
-
-            newModel.FireTruck = truck;
-
-            truck.FiremanTeam = newModel;
-            _firemanTeamRepository.Save(newModel);
+            if (model.TruckId != 0)
+            {
+                var truck = _fireTruckRepository.Get(model.TruckId);
+                newModel.FireTruck = truck;
+                truck.FiremanTeam = newModel;
+                _fireTruckRepository.Save(truck);
+            }
+            else 
+            {
+                newModel.TruckId = null;
+            }
+            _firemanTeamRepository.Save(newModel);           
         }
         public bool Remove(long id)
         {
@@ -56,8 +64,10 @@ namespace WebApplication1.Presentation.FirePresentation
         {
             var firemanteam = _firemanTeamRepository.Get(id);
             var model = _mapper.Map<FiremanTeamViewModel>(firemanteam);
-
-            model.TruckState = firemanteam.FireTruck.TruckState;
+            if (firemanteam.FireTruck != null)
+            {
+                model.TruckState = firemanteam.FireTruck.TruckState;
+            }
             model.FiremanCount = firemanteam.Firemen.Count();
             return model;
         }
@@ -66,11 +76,18 @@ namespace WebApplication1.Presentation.FirePresentation
             var firemanteam = _firemanTeamRepository.Get(model.Id);
             if (firemanteam != null)
             {
-                firemanteam.TeamName = model.TeamName;
+                if (_userService.IsFireAdmin())
+                {
+                    if (model.TruckId != 0)
+                    {
+                        firemanteam.TruckId = model.TruckId;
+                    }
+                    firemanteam.TeamName = model.TeamName;
+                    firemanteam.TeamState = model.TeamState;
+                    firemanteam.FireTruck = _fireTruckRepository.Get(model.TruckId);
+                }
                 firemanteam.Shift = model.Shift;
-                firemanteam.TeamState = model.TeamState;
-                firemanteam.TruckId = model.TruckId;
-                firemanteam.FireTruck = _fireTruckRepository.Get(model.TruckId);
+
                 _firemanTeamRepository.Save(firemanteam);
             }
         }

@@ -7,5 +7,6 @@ namespace WebApplication1.Services
         Citizen GetUser();
         bool IsPolicment();
         bool IsFireAdmin();
+        bool IsTruckSpecialist();
     }
 }
