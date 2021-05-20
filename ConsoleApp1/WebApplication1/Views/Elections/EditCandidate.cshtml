@@ -1,0 +1,47 @@
+﻿@model CandidateViewModel
+
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css"/>
+}
+
+<div class="d-flex justify-content-between mb-1  p-1">
+
+    <h4 class="title">
+        Редактировать
+    </h4>
+
+    <a asp-action="Index"
+       asp-controller="Home"
+       class="btn alert-primary  btn-sm">
+        <i class="fas fa-arrow-circle-up mr-1"></i>
+        Вернуться
+    </a>
+</div>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="EditCandidate" method="post">
+    <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="Citizen"/>
+    <div class="form-group">
+        <label asp-for="Name">Имя</label>
+        <input asp-for="Name" class="form-control" readonly/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Job">Место работы</label>
+        <input asp-for="Job" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Slogan">Лозунг</label>
+        <input asp-for="Slogan" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age">Возраст</label>
+        <input asp-for="Age" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+</form>

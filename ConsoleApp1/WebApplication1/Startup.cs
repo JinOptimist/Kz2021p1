@@ -82,6 +82,23 @@ namespace WebApplication1
                     x.GetService<IHCEstablishmentsRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
+            services.AddScoped(x =>
+                new ElectionPresentation(
+                    x.GetService<ICandidateRepository>(),
+                    x.GetService<IElectionRepository>(),
+                    x.GetService<IBallotRepository>(),
+                    x.GetService<IUserService>(),
+                    x.GetService<IMapper>()));
+
+            services.AddScoped<IBallotRepository>(x =>
+                new BallotRepository(x.GetService<KzDbContext>())
+            );
+            services.AddScoped<IElectionRepository>(x =>
+                new ElectionRepository(x.GetService<KzDbContext>())
+            );
+            services.AddScoped<ICandidateRepository>(x =>
+                new CandidateRepository(x.GetService<KzDbContext>())
+            );
             services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
             services.AddScoped<IFiremanPresentation, FiremanPresentation>();
             services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
@@ -167,10 +184,11 @@ namespace WebApplication1
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
             MapBothSide<Order, OrderViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
+            MapBothSide<CandidateViewModel, Citizen>(configurationExp);
+            MapBothSide<CandidateViewModel, Candidate>(configurationExp);
+            MapBothSide<ElectionViewModel, Election>(configurationExp);
             MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
             MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);
-
-
             MapBothSide<Student, StudentViewModel>(configurationExp);
             MapBothSide<Pupil, PupilViewModel>(configurationExp);
             MapBothSide<Student, Pupil>(configurationExp);

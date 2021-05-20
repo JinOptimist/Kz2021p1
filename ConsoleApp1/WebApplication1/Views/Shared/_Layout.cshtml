@@ -4,14 +4,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - WebApplication1</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,500&family=Open+Sans:ital,wght@0,300;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,500&family=Open+Sans:ital,wght@0,300;0,700;1,400;1,600&family=Roboto:ital,wght@0,300;0,400;0,700;1,500&display=swap" rel="stylesheet">
+    <link href="~/lib/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet"/>
+    <link href="~/lib/izimodal/css/iziModal.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet" />
     <link href="~/lib/izimodal/css/iziModal.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/Education/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/Education/css/mainPageStyle.css">
@@ -31,6 +40,122 @@
 </head>
 <body>
 
+<header class="mb-3">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #7f7e90">
+
+<a class="navbar-brand" asp-controller="Home" asp-action="Index">
+    <i class="fas fa-archway"></i>
+    Utopia
+</a>
+
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+<ul class="navbar-nav ml-auto ">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item ">
+            <a class="nav-link" href="@Url.Action("Login", "Citizen")">Войти </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Register", "Citizen")">Зарегистрироваться</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Муниципалитет
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("Index", "Elections")">Выборы</a>
+                <a class="dropdown-item" href="@Url.Action("Index", "Adress")">Адреса</a>
+                <a class="dropdown-item" href="@Url.Action("Add", "Adress")">Добавить адрес</a>
+                <a class="dropdown-item" href="@Url.Action("Index", "Elections")">Выборы</a>
+                <a class="dropdown-item"href="@Url.Action("Index", "Citizen")">Граждане</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Транспорт
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("CityBusSystemMainPage", "Bus")">Автобусы</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"asp-controller="police" asp-action="main" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Полиция
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" asp-controller="police" asp-action="main">Главная</a>
+                <a class="dropdown-item" asp-controller="police" asp-action="news">Новости</a>
+                <a class="dropdown-item" asp-controller="police" asp-action="duties">Полицейские на службе</a>
+
+                <div class="dropdown-divider"></div>
+
+
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Пожарная служба
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("Main", "Fireman")">Главная</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                СМИ
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Образование
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("UniversityList", "EducationalInstitution")">Университеты</a>
+                <a class="dropdown-item" href="@Url.Action("SchoolList", "EducationalInstitution")">Школы</a>
+                <a class="dropdown-item" href="@Url.Action("StudentListAndSearch", "Person")">Студенты</a>
+                <a class="dropdown-item" href="@Url.Action("PupilListAndSearch", "Person")">Школьники</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
     <!--TODO: Переделать меню-->
     <header>
         <nav class="navbar navbar-expand-md bg-light navbar-light fixed-top">
@@ -186,28 +311,133 @@
             @RenderBody()
         </main>
     </div>
-
-    <wrapper class="police-call" data-izimodal-open="#police-call-modal">
-        <div class="dws">
-            <div class="pulse">
-                <div class="bloc"></div>
-                <div class="phone">
-                    <span class="material-icons">
-                        call
-                    </span>
-                </div>
-                <div class="text">Связь с полицией</div>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Медицина
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
             </div>
-        </div>
-    </wrapper>
-    <div id="police-call-modal" style="display: none">
-        @await Html.PartialAsync("_PoliceCall", new PoliceCallViewModel())
-    </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; Utopia-City 2021
-        </div>
+        </li>
 
-    </footer>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Спорт
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("Index", "SportComplex")">Спорткомплексы</a>
+                <a class="dropdown-item" href="@Url.Action("AddComplex", "SportComplex")">Добавить спорткомплекс</a>
+                <a class="dropdown-item" href="@Url.Action("Index", "SportEvent")">Спортивные мероприятия</a>
+                <a class="dropdown-item" href="@Url.Action("AddEvent", "SportEvent")">Добавить мероприятие</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Бизнес
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Отдых
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Отели
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Общепит
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Профиль
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("FullProfile", "Citizen")">Настройки</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+
+        <li class="nav-item mr-4">
+            <a class="nav-link" href="@Url.Action("Exit", "Citizen")">Выход</a>
+        </li>
+    }
+</ul>
+
+</div>
+</nav>
+</header>
+
+
+<div class="container mb-5">
+    <main role="main">
+        @RenderBody()
+    </main>
+</div>
+
+<wrapper class="police-call" data-izimodal-open="#police-call-modal">
+    <div class="dws">
+        <div class="pulse">
+            <div class="bloc"></div>
+            <div class="phone">
+                <span class="material-icons">
+                    call
+                </span>
+            </div>
+            <div class="text">Связь с полицией</div>
+        </div>
+    </div>
+</wrapper>
+
+
+<footer class="footer">
+    <div class="container-fluid">
+        &copy; 2021 - Сайт про прекрасный город
+    </div>
+</footer>
+
 </body>
 </html>

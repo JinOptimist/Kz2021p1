@@ -1,0 +1,50 @@
+﻿@model ElectionViewModel
+
+@section Scripts{
+    <script src="~/js/government/election.js"></script>
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css"/>
+}
+
+<div class="d-flex justify-content-between mb-1 p-1">
+    <h4 class="title">
+        Редактировать выборы
+    </h4>
+    <a asp-action="Index"
+       asp-controller="Home"
+       class="btn alert-primary  btn-sm">
+        <i class="fas fa-arrow-circle-up mr-1"></i>
+        Вернуться
+    </a>
+</div>
+
+<form asp-action="CreateElection" method="post">
+    <input type="hidden" asp-for="Id"/>
+    <div class="form-group">
+        <label asp-for="Name">Название выборов</label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span >
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Описание</label>
+        <input asp-for="Description" class="form-control"/>
+        <span asp-validation-for="Description" class="text-danger"></span >
+    </div>
+    <div class="form-group">
+        <label asp-for="Start">Начало выборов</label>
+        <input asp-for="Start" class="form-control"/>
+        <span asp-validation-for="Start" class="text-danger"></span >
+    </div>
+    <div class="form-group">
+        <label asp-for="End">Окончание выборов</label>
+        <input asp-for="End" class="form-control"/>
+    </div>
+    <div class="mt-3">
+        <button type="submit" id="createBtn" class="btn btn-primary">
+            Отправить
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>

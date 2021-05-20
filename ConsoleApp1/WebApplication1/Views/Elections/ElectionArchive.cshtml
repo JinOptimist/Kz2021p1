@@ -1,0 +1,91 @@
+﻿@model List<ElectionViewModel>
+
+@section Scripts{
+    <script src="~/js/government/election.js"></script>
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/government/styles.css"/>
+}
+
+
+<div class="d-flex justify-content-between mb-1 bg-info text-white p-1">
+    <h6 class="title">
+        <i class="fas fa-file-archive pl-1 pr-2"></i>
+        Архив
+    </h6>
+
+    <div>
+        <a asp-action="Index" asp-controller="Elections" class="btn alert-primary  btn-sm">
+            <i class="fas fa-arrow-circle-left"></i>
+            Вернуться назад
+        </a>
+        <a asp-action="Index" asp-controller="Home" class="btn alert-primary  btn-sm">
+            <i class="fas fa-arrow-circle-up mr-1"></i>
+            Вернуться на главную
+        </a>
+    </div>
+
+</div>
+
+
+<div class="p-2 mt-3">
+    <h4 class="text-secondary subtitle">
+        Список архивных выборов
+    </h4>
+</div>
+
+
+<table class="table table-sm table-bordered m-1 р-1" id="tbElections">
+    <tr class="alert alert-success">
+        <th>
+            ID
+        </th>
+        <th>
+            Название
+        </th>
+        <th>
+            Описание
+        </th>
+        <th>
+            Время начала
+        </th>
+        <th>
+            Время окончания
+        </th>
+
+
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" class="text-center">
+                Нет запрошенной информации
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var election in Model)
+        {
+            <tr id="electionsRow">
+                <td>
+                    @election.Id
+                </td>
+                <td>
+                    @election.Name
+                </td>
+                <td>
+                    @election.Description
+                </td>
+                <td>
+                    @election.Start
+                </td>
+                <td>
+                    @election.End
+                </td>
+
+            </tr>
+        }
+    }
+</table>

@@ -10,6 +10,9 @@ namespace WebApplication1.EfStuff.Repositoryies
         List<DbModel> GetAll();
         void Remove(DbModel model);
         DbModel Save(DbModel model);
+        
+        void RemoveAll();
+
         IQueryable<DbModel> GetAllAsIQueryable();
     }
 }

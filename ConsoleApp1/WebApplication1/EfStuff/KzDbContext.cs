@@ -27,6 +27,9 @@ namespace WebApplication1.EfStuff
         public DbSet<Certificate> Certificates { get; set; }
         public DbSet<Bus> Buses { get; set; }
         public DbSet<TripRoute> TripRoute { get; set; }
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Election> Elections { get; set; }
+        public DbSet<Ballot> Ballots { get; set; }
         public DbSet<Policeman> Policemen { get; set; }
         public DbSet<PoliceCallHistory> PoliceCallHistory { get; set; }
         public DbSet<Violations> Violations { get; set; }
@@ -36,9 +39,7 @@ namespace WebApplication1.EfStuff
         public DbSet<PoliceShift> Shifts { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
-
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<HCEstablishments> HCEstablishments { get; set; }
         public DbSet<HCWorker> HCWorker { get; set; }
 
@@ -111,6 +112,43 @@ namespace WebApplication1.EfStuff
             modelBuilder.Entity<Citizen>()
                 .HasMany(pc => pc.PoliceCallHistories)
                 .WithOne(c => c.Citizen);
+            
+            modelBuilder.Entity<Citizen>()
+                .HasMany(pc => pc.Candidates)
+                .WithOne(c => c.Citizen);
+
+            modelBuilder.Entity<Candidate>()
+                .HasOne(c => c.Election)
+                .WithMany(b => b.Candidates)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Election>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Elections)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Citizen)
+                .WithMany(b => b.Ballots);
+
+            modelBuilder.Entity<Citizen>()
+                .HasOne(c => c.Ballot)
+                .WithMany(b => b.Citizens);
+
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Election)
+                .WithMany(b => b.Ballots)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Ballot>()
+                .HasOne(c => c.Candidate)
+                .WithMany(b => b.Ballots)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Candidate>()
+                .HasOne(b => b.Ballot)
+                .WithMany(c => c.Candidates);
 
             modelBuilder.Entity<PoliceShift>()
                 .HasOne(p => p.Policeman)

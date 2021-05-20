@@ -50,6 +50,13 @@ namespace WebApplication1.EfStuff.Repositoryies
             _dbSet.Remove(model);
             _kzDbContext.SaveChanges();
         }
+        
+        public void RemoveAll()
+        {
+            _dbSet.RemoveRange(_dbSet);
+            _kzDbContext.SaveChanges();
+            
+        }
 
         public IQueryable<DbModel> GetAllAsIQueryable()
         {

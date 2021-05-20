@@ -1,0 +1,37 @@
+﻿
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.subtitle {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 22px;!important
+}
+
+.font-open-sans {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.restyled-link  {
+    text-decoration: none;
+}
+
+.restyled-link:hover {
+    text-decoration: underline;
+}
+
+.title-wrap {
+    background-color: #939E9D;
+}
+
+.table {
+    word-wrap: break-word;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
