@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApplication1.EfStuff.Model;
+﻿using WebApplication1.EfStuff.Model;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 
 namespace WebApplication1.EfStuff.Repositoryies
 {
-    public class SportComplexRepository : BaseRepository<SportComplex>
+	public class SportComplexRepository : BaseRepository<SportComplex>, ISportComplexRepository
     {
         public SportComplexRepository(KzDbContext kzDbContext) : base(kzDbContext)
         {

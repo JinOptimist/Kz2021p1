@@ -1,74 +1,78 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Repositoryies.Airport.Intrefaces;
 
 namespace WebApplication1.EfStuff.Repositoryies.Airport
 {
-    public class PassengersRepository
+    public class PassengersRepository : BaseRepository<Passenger>, IPassengersRepository
     {
-        protected KzDbContext _kzDbContext;
-
-        public PassengersRepository(KzDbContext kzDbContext)
+        public PassengersRepository(KzDbContext kzDbContext) : base(kzDbContext)
         {
-            _kzDbContext = kzDbContext;
         }
 
-        public Passenger Get(long id)
+        public Passenger GetPassengerByCitizenId(long citizenId)
         {
-            return _kzDbContext.Passengers.SingleOrDefault(x => x.Id == id);
+            return _dbSet.SingleOrDefault(p => p.CitizenId == citizenId);
         }
 
-        public List<Passenger> GetAll()
-        {
-            return _kzDbContext.Passengers.ToList();
-        }
+        //public List<Passenger> GetAllPassengersAvailableForAdmission()
+        //{
+        //    var incoming = _dbSet.Where(p => p.Flights.Where(f => f.FlightType == FlightType.IncomingFlight))
+        //    //var incomingPassengers = _dbSet
+        //    //    .Where(passenger => passenger.Flights.Where(f => f.FlightType == FlightType.IncomingFlight).ToList())
+        //    //    .ToList();
+        //    //return incomingPassengers
+        //    //    .Where(passenger => IsValidAddmissionTime(passenger.Flight.Date))
+        //    //    .ToList();
+        //}
 
-        public Passenger Save(Passenger model)
-        {
-            _kzDbContext.Passengers.Add(model);
-            _kzDbContext.SaveChanges();
+        //public List<Passenger> GetAllPassengersAvailableForDeparture()
+        //{
+        //    var departingPassengers = _dbSet
+        //        .Where(passenger => passenger.Flight.FlightType == FlightType.IncomingFlight)
+        //        .ToList();
+        //    return departingPassengers
+        //        .Where(passenger => IsValidDepartureTime(passenger.Flight.Date))
+        //        .ToList();
+        //}
 
-            return model;
-        }
+        //public bool CitizenIsRegisteredForFlight(long flightId, long citizenId)
+        //{
+        //    return _dbSet.SingleOrDefault(passenger => passenger.Citizen.Id == citizenId && passenger.Flight.Id == flightId) != null;
+        //}
 
-        public void Remove(Passenger model)
-        {
-            _kzDbContext.Passengers.Remove(model);
-            _kzDbContext.SaveChanges();
-        }
-        public bool PutEntity(long id, Passenger passengerModel)
-        {
-            if (id != passengerModel.Id)
-            {
-                return false;
-            }
+        //private bool IsValidDepartureTime(DateTime flightDate)
+        //{
+        //    DateTime now = DateTime.Now;
+        //    if (flightDate.Day == now.Day && flightDate.AddMinutes(-30) <= now && now >= flightDate)
+        //        return true;
+        //    return false;
+        //}
 
-            _kzDbContext.Entry(passengerModel).State = EntityState.Modified;
+        //private bool IsValidAddmissionTime(DateTime flightDate)
+        //{
+        //    DateTime now = DateTime.Now;
+        //    DateTime add30 = flightDate.AddMinutes(30);
+        //    if (flightDate.Day == now.Day && now >= flightDate && now <= add30)
+        //        return true;
+        //    return false;
+        //}
 
-            try
-            {
-                _kzDbContext.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!flightInfoModelExists(id))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //public List<Passenger> GetAllPassengersAvailableForAdmission()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-            return true;
-        }
-        private bool flightInfoModelExists(long id)
-        {
-            return _kzDbContext.Passengers.Any(e => e.Id == id);
-        }
+        //public List<Passenger> GetAllPassengersAvailableForDeparture()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public bool CitizenIsRegisteredForFlight(long flightId, long citizenId)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

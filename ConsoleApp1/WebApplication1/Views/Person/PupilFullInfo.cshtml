@@ -1,23 +1,38 @@
 ﻿@model PupilViewModel
 
 
-<h1>@ViewData["Title"]</h1>
+<h1>@ViewData["PupilFullInfo"]</h1>
 
 <div class="container">
-    <h1>@Model.Surname @Model.Name @Model.Patronymic</h1>
+    <div class="row">
+        <div class="col-sm-6 offset-3">
+            <h1>@Model.Surname @Model.Name @Model.Patronymic</h1>
 
-    <div class="card" style="width: 28rem;">
-        @*<img src="..." class="card-img-top" alt="...">*@
-        <div class="card-body">
-            <h5 class="card-title" style="display:flex; justify-content:center; align-items:center;">Full Info</h5>
-            <p class="card-text">Email:<b>@Model.Email</b></p>
-            <p class="card-text">Birthday: <b>@Model.Birthday</b></p>
-            <p class="card-text">School ID: <b>@Model.SchoolId</b></p>
-            <p class="card-text">Subject: <b>@Model.Subject</b></p>
-            <p class="card-text">Class Year: <b>@Model.ClassYear</b></p>
-            <p class="card-text">Graduated Year: <b>@Model.GraduatedYear</b></p>
-            <p class="card-text">Average Mark: <b>@Model.AverageMark</b></p>
-            <p class="card-text">ENT: <b>@Model.ENT</b></p>
+            <div class="card bottomMargin50">
+
+                <img src=@(Model.AvatarUrl == null ? "/Education/img/ava1.png" : $"{Model.AvatarUrl}") class="card-img-top">
+
+                <div class="card-body">
+                    <h5 class="card-title forFlexDisplay">Full Info</h5>
+                    <p class="card-text">Email:<b>@Model.Email</b></p>
+                    <p class="card-text">Birthday: <b>@Model.Birthday</b></p>
+                    <p class="card-text">School: <b>@Model.School.Name</b></p>
+                    <p class="card-text">Class Year: <b>@Model.ClassYear</b></p>
+                    <p class="card-text">Graduated Year: <b>@Html.DisplayFor(x => x.GraduatedYear, "{0:dd/MM/yyyy}")</b></p>
+                    <p class="card-text">Average Mark: <b>@Model.AverageMark</b></p>
+                    <p class="card-text">ENT: <b>@Model.ENT</b></p>
+                    @if (Model.Certificate != null)
+                    {
+                        <p class="card-text">Certificate: <b>@Model.Certificate.CertificateType</b></p>
+                    }
+                </div>
+            </div>
+            @if (Model.Certificate != null)
+            {
+                <div class="bottomMargin50">
+                    <img src="/Education/img/certificateImg/@Model.Certificate.CertificateImgUrl" class="card-img-top">
+                </div>
+            }
         </div>
     </div>
 

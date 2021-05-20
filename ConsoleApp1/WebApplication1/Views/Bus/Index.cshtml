@@ -1,35 +1,64 @@
-﻿@model List<BusParkViewModel>
+﻿@using WebApplication1.Services
+@inject IUserService userService
+
+@model List<BusParkViewModel>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 
 @section Scripts{
-    <script src="~/js/bus.js" asp-append-version="true"></script>
+    <script src="~/js/CBS/bus.js" asp-append-version="true"></script>
+
 }
 
 
-<!-- Jumbotron -->
-<div class="p-5 text-center bg-light">
-    <h1 class="mb-3">Bus Park</h1>
-</div>
-<!-- Jumbotron -->
 
-@foreach (var bus in Model)
-{
-    <div class="bus">
-        <table class="table table-bordered table-striped text-center">
-            <tr>
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+    <div>
+        <h1 class="display-4 font-italic">Our Bus Park </h1>      
+    </div>
+</div>
+
+
+<table class="table table-bordered" id="sortTable">
+    <thead>
+        <tr>
+            <th scope="col">Model</th>
+            <th id="place" scope="col">Type</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Route Title</th>
+            <th scope="col">Is reserved?</th>
+            @if (userService.IsPolicmen() || true)
+            {
+                <th scope="col">Delete</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bus in Model)
+        {
+            <tr class="bus">
                 <td style="width: 16.66%">@bus.Model</td>
                 <td style="width: 16.66%">@bus.Type</td>
                 <td style="width: 16.66%">@bus.Capacity</td>
                 <td style="width: 16.66%">@bus.Price</td>
-                <td style="width: 5%"><input type="button" class="edit" data-model="@bus.Model" value="E" /></td>
-                <td style="width: 5%"><input type="button" class="delete" data-model="@bus.Model" value="X" /></td>
+                <td style="width: 16.66%">@bus.RoutePlan.Title</td>
+                <td style="width: 16.66%">@bus.IsOnOrder</td>
+                @if (userService.IsPolicmen() || true)
+                {
+                    <td style="width: 5%"><input type="button" class="delete" data-id="@bus.Id" value="X" /></td>
+                }
             </tr>
+        }
+    </tbody>
+</table>
 
-
-        </table>
-
-
-        @*Model: @bus.Model    Type: @bus.Type  Capacity: @bus.Capacity  Price:  @bus.Price
-            <input type="button" class="delete" data-model="@bus.Model" value="X" />*@
-    </div>
-
-}
+<script>
+    $('#sortTable').DataTable();
+</script>

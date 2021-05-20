@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using WebApplication1.Services
+@inject IUserService userService
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,15 +23,61 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                     
                         <li>
                             <a class="nav-link text-dark"
-                               href="@Url.Action("Index", "Fireman")">All Workers</a>
+                               href="@Url.Action("Index", "Home")">Home page</a>
                         </li>
                         <li>
                             <a class="nav-link text-dark"
-                               href="@Url.Action("CreateFireman", "Fireman")">Add New Worker</a>
+                               href="@Url.Action("Main", "Fireman")">Main Page</a>
                         </li>
+                        @if (!userService.IsFireAdmin())
+                        {
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("MyProfile", "Fireman")">My Profile</a>
+                            </li>
+                        }
+                        @if (userService.IsFireAdmin())
+                        {
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("Index", "Fireman")">All Workers</a>
+                            </li>
+                        }
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "FiremanTeam")">All FireTeams</a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "FireTruck")">All Trucks</a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link text-dark"
+                               href="@Url.Action("Index", "FireIncident")">All Fire Incidents</a>
+                        </li>
+                        @if (userService.IsFireAdmin())
+                        {
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("CreateFireman", "Fireman")">Add New Worker</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("CreateFiremanTeam", "FiremanTeam")">Add New Team</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("AddFireTruck", "FireTruck")">Add New Truck</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark"
+                                   href="@Url.Action("AddFireIncident", "FireIncident")">New Fire Incident</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -45,6 +93,6 @@
         <div class="container">
             &copy; 2021 - Сайт про прекрасный город
         </div>
-    </footer>    
+    </footer>
 </body>
 </html>

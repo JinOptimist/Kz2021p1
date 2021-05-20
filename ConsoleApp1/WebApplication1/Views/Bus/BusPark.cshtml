@@ -1,32 +1,61 @@
-﻿@model BusParkViewModel
-<h3>Our Bus Park</h3>
+﻿<link rel="stylesheet" href="~/css/entityAdding.css" />
+
+<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+    <div>
+        <h1 class="display-4 font-italic">Bus Registration page</h1>
+        
+
+    </div>
+</div>
 
 
+<div class="form-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8">
+                <div class="form-container">
+                    <h3 class="title">Bus Registration</h3>
+                    <form class="form-horizontal" action="@Url.Action("CreateBus", "Bus")" method="post">
+                        <div class="form-group">
+                            <label>Model*</label>
+                            <select class="form-select" aria-label="Default select example" type="text" name="model">
+                                <option selected>Open this select menu</option>
+                                <option>IKAR</option>
+                                <option>Star</option>
+                                <option>Solaris</option>
+                                <option>Aero</option>
+                                <option>Aurora</option>
+                            </select>
+                        </div>
 
-<form action="@Url.Action("CreateBus", "Bus")" method="post">
-    <br>
-    <div>
-        Bus model: <input class="form-control" type="text" name="model">
-        @*Bus model: @Html.TextBoxFor(x => x.Model, new { Class = "form-control" })*@
+                        <div class="form-group">
+                            <label>Type*</label>
+                            <select class="form-select" aria-label="Default select example" type="text" name="type">
+                                <option selected>Open this select menu</option>
+                                <option>ordinary</option>
+                                <option>touristic</option>
+                                <option>school</option>
+                                <option>city</option>
+                                <option>special</option>
+                                <option>administration</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group phone-no">
+                            <label>Capacity*</label>
+                            <input class="form-control" type="number" name="capacity">
+
+                        </div>
+                        <div class="form-group age">
+                            <label>Price*</label>
+                            <input class="form-control" type="number" name="price">
+                        </div>
+                        <button class="btn signin" type="submit" style="background-color: blue;">Register</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <br>
-    <div>
-        Bus type: <input class="form-control" type="text" name="type">
-        @*Bus type: @Html.TextBoxFor(x => x.Type, new { Class = "form-control" })*@
-    </div>
-    <br>
-    <div>
-        Bus capacity: <input class="form-control" type="text" name="capacity">
-        @*Bus capacity: @Html.TextBoxFor(x => x.Capacity, new { Class = "form-control" })*@
-    </div>
-    <br>
-    <div>
-        Bus price: <input class="form-control" type="text" name="price">
-        @*Bus price:  @Html.TextBoxFor(x => x.Price, new { Class = "form-control" })*@
-    </div>
-    <br>
-    <div>
-        <button class="btn btn-secondary" type="submit">Add</button>
-    </div>
-    <br>
-</form>
+</div>

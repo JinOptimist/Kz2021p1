@@ -1,0 +1,79 @@
+﻿@inject ICitizenRepository _citizenRepo
+@inject IUserService userService
+@model Citizen
+@section PolicePersonalCabinet {
+    <link rel="stylesheet" type="text/css" src="~/css/police/personal-cabinet.css">
+    <script src="~/js/Police/police-personal-cabinet.js"></script>
+}
+
+<section>
+    <div class="row">
+        <div class="col-3 personal-card">
+            <div class="personal-card-img">
+                <img src="" alt="" style="width: 300px; height: 350px" />
+            </div>
+            <div class="personal-card-description">
+                <h5>First name: <span>@Model.Name</span></h5>
+                <h5>Second name: <span></span></h5>
+                <h5>Age: <span>@Model.Age</span></h5>
+                <h5>Current position: <span>2</span></h5>
+                <h5>Expirience work: <span>@DateTime.Now</span></h5>
+            </div>
+        </div>
+        <div class="col-9">
+            <ul class="nav nav-tabs">
+                @if (userService.IsPolicmen())
+                {
+                    @if (userService.IsSheriff() || userService.IsOfficer())
+                    {
+                        <li class="active nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link " id="shifts-tab" href="#shifts">Shifts</a>
+                        </li>
+                        <li class="custom-tab nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link active" id="users-tab" href="#users">Users</a>
+                        </li>
+                    }
+                    @if (userService.IsSheriff())
+                    {
+                        <li class="custom-tab nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link" id="policmen-tab" href="#policemen">Policemen</a>
+                        </li>
+                        <li class="custom-tab nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link" id="trainees-tab" href="#trainees">Trainees</a>
+                        </li>
+                        <li class="custom-tab nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link" id="quizer-tab" href="#quizer">Quizer</a>
+                        </li>
+                    }
+                    @if (userService.IsTrainee())
+                    {
+                        <li class="custom-tab nav-item">
+                            <a data-toggle="tab" class="nav-link custom-tab-link" id="quiz-tab" href="#quiz">Quiz</a>
+                        </li>
+                    }
+                }
+
+            </ul>
+
+            <div class="tab-content mt-4">
+                <div id="shifts" class="tab-pane fade">
+                   
+                </div>
+                <div id="users" class="tab-pane active">
+                   
+                </div>
+                <div id="policemen" class="tab-pane fade">
+                   
+                </div>
+                <div id="trainees" class="tab-pane fade">
+                    
+                </div>
+                <div id="quizer" class="tab-pane fade"></div>
+                <div id="quiz" class="tab-pane fade">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

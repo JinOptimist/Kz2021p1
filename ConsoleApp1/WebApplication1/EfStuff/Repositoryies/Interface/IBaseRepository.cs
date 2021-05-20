@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using WebApplication1.EfStuff.Model;
 
 namespace WebApplication1.EfStuff.Repositoryies
@@ -11,5 +12,7 @@ namespace WebApplication1.EfStuff.Repositoryies
         DbModel Save(DbModel model);
         
         void RemoveAll();
+
+        IQueryable<DbModel> GetAllAsIQueryable();
     }
 }

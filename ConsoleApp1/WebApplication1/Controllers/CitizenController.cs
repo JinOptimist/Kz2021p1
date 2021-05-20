@@ -25,13 +25,13 @@ namespace WebApplication1.Controllers
     public class CitizenController : Controller
     {
         private ICitizenRepository _citizenRepository;
-        private CitizenPresentation _citizenPresentation;
+        private ICitizenPresentation _citizenPresentation;
         private IUserService _userService;
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
 
         public CitizenController(ICitizenRepository citizenRepository,
-            CitizenPresentation citizenPresentation, IUserService userService, IMapper mapper,
+            ICitizenPresentation citizenPresentation, IUserService userService, IMapper mapper,
             IWebHostEnvironment webHostEnvironment)
         {
             _citizenRepository = citizenRepository;

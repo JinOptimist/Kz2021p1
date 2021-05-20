@@ -1,0 +1,41 @@
+﻿@model FiremanViewModel
+@using WebApplication1.Services
+@inject IUserService userService
+@using WebApplication1.EfStuff.Model.Firemen
+
+<h1>Edit worker</h1>
+<h2>@Model.Name</h2>
+
+<form action="@Url.Action("Edit", "Fireman")" method="post">
+    @if (userService.IsFireAdmin())
+    {
+    <div>
+        Worker Role :
+        <select asp-for="Role"
+                class="form-control"
+                asp-items="Html.GetEnumSelectList<FireWorkerRole>()" style="width: 30%">
+            <option>Select Role ...</option>
+        </select>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+
+        <div>
+            Team Name : @Html.TextBoxFor(x => x.TeamName)
+        </div>
+    }
+    @if (!userService.IsFireAdmin())
+    {
+        <div>
+            Name : @Html.TextBoxFor(x => x.Name)
+        </div>
+        <div>
+            Age : @Html.TextBoxFor(x => x.Age)
+        </div>
+        <div>
+            Work Experience Years : @Html.TextBoxFor(x => x.WorkExperYears)
+        </div>
+    }
+    <div>
+        <input type="submit" value="Save">
+    </div>
+</form>

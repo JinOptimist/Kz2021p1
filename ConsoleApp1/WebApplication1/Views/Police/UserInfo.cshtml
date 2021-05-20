@@ -1,0 +1,14 @@
+﻿@model UserFullInformationViewModel
+@section UserInfo {
+    <link rel="stylesheet" type="text/css" src="~/css/police/main.css">
+    <script src="~/js/Police/user-info.js"></script>
+}
+
+<user-full-info first-name="@Model.UserInfo.Name">
+    <user-card user-info="@Model.UserInfo"></user-card>
+    <user-violation user-violations="@Model.UserViolations"></user-violation>
+</user-full-info>
+
+<div id="modal-custom" data-iziModal-group="violation-form">
+    @await Html.PartialAsync("_AddViolation", new ViolationViewModel())
+</div>

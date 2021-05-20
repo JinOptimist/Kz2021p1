@@ -1,35 +1,34 @@
-﻿using AutoMapper;
+using AutoMapper;
 using AutoMapper.Configuration;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ReflectionIT.Mvc.Paging;
-using System;
 using System.Linq;
+using System.Reflection;
 using WebApplication1.EfStuff;
 using WebApplication1.EfStuff.Model;
-using WebApplication1.EfStuff.Model.Airport;
+using WebApplication1.EfStuff.Model.Firemen;
 using WebApplication1.EfStuff.Repositoryies;
-using WebApplication1.EfStuff.Repositoryies.Airport;
+using WebApplication1.EfStuff.Repositoryies.Interface;
 using WebApplication1.Extensions;
 using WebApplication1.Models;
-using WebApplication1.Models.Airport;
-using WebApplication1.ViewModels;
-using WebApplication1.Services;
-using WebApplication1.Profiles;
-using Newtonsoft.Json;
+using WebApplication1.Models.Education;
+using WebApplication1.Models.FiremanModels;
 using WebApplication1.Presentation;
-using System.Reflection;
-using WebApplication1.EfStuff.Repositoryies.Interface;
+using WebApplication1.Presentation.Airport;
+using WebApplication1.Presentation.FirePresentation;
+using WebApplication1.Profiles;
+using WebApplication1.Profiles.Airport;
+using WebApplication1.Services;
+using WebApplication1.Utils.MiniTimeline;
 
 namespace WebApplication1
 {
-	public class Startup
+    public class Startup
     {
         public const string AuthMethod = "Smile";
 
@@ -44,27 +43,45 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
-			services.AddOpenApiDocument();
-			services.AddRazorPages()
-				 .AddRazorRuntimeCompilation();
+            services.AddOpenApiDocument();
+            services.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
 
-			var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
-            services.AddDbContext<KzDbContext>(option => option.UseSqlServer(connectionString));
+            services.AddSingleton(x =>
+                new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
+
+            var connectionString = Configuration.GetValue<string>("SpecialConnectionStrings");
+            services.AddDbContext<KzDbContext>(option =>  option.UseSqlServer(connectionString));
 
             RegisterRepositories(services);
+            services.AddPoliceServices(Configuration);
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
+            services.AddScoped<IHCWorkerRepository, HCWorkerRepository>();
+            services.AddScoped<IHCEstablishmentsRepository, HCEstablishmentsRepository>();
 
-            services.AddScoped<IUserService>(x =>
-                new UserService(
-                    x.GetService<ICitizenRepository>(),
-                    x.GetService<IHttpContextAccessor>())
-                );
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICitizenPresentation, CitizenPresentation>();
+            services.AddScoped<IAirportPresentation, AirportPresentation>();
+            services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
+            services.AddScoped<IFiremanPresentation, FiremanPresentation>();
+            services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
+            services.AddScoped<IFiremanTeamPresentation, FiremanTeamPresentation>();
+            services.AddScoped<IPupilPresentation, PupilPresentation>();
+            services.AddScoped<IStudentPresentation, StudentPresentation>();
+            services.AddScoped<IStudentPresentation, StudentPresentation>();
+            services.AddHostedService<MiniTimeline>();
+            services.AddPoliceServices(Configuration);
+            services.AddScoped<IBusRepository, BusRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ITripRouteRepository, TripRouteRepository>();
 
-            services.AddScoped<CitizenPresentation>(x =>
-                new CitizenPresentation(
-                    x.GetService<ICitizenRepository>(),
+
+            services.AddScoped<HCEstablishmentsPresentation>(x =>
+                new HCEstablishmentsPresentation(
+                    x.GetService<IHCEstablishmentsRepository>(),
                     x.GetService<IUserService>(),
                     x.GetService<IMapper>()));
-            
             services.AddScoped(x =>
                 new ElectionPresentation(
                     x.GetService<ICandidateRepository>(),
@@ -82,8 +99,11 @@ namespace WebApplication1
             services.AddScoped<ICandidateRepository>(x =>
                 new CandidateRepository(x.GetService<KzDbContext>())
             );
+            services.AddScoped<IFireIncidentPresentation, FireIncidentPresentation>();
+            services.AddScoped<IFiremanPresentation, FiremanPresentation>();
+            services.AddScoped<IFireTruckPresentation, FireTruckPresentation>();
+            services.AddScoped<IFiremanTeamPresentation, FiremanTeamPresentation>();
 
-            services.AddPoliceServices(Configuration);
             RegisterAutoMapper(services);
 
             services.AddAuthentication(AuthMethod)
@@ -95,24 +115,35 @@ namespace WebApplication1
                 });
 
             services.AddHttpContextAccessor();
-            services.AddPaging();
         }
 
         private void RegisterRepositories(IServiceCollection services)
         {
-            foreach (var repositoryType in Assembly
+            var repositoryTypes = Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
                 .Where(type =>
                         type.BaseType?.IsGenericType == true
-                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>)))
+                        && type.BaseType.GetGenericTypeDefinition() == typeof(BaseRepository<>));
+
+            foreach (var repositoryType in repositoryTypes)
             {
-                services.AddScoped(repositoryType, x =>
+                var repositortInterfaces = repositoryType.GetInterfaces()
+                    .FirstOrDefault(i => i.Name != typeof(IBaseRepository<>).Name);
+
+                if (repositortInterfaces != null)
                 {
-                    var constructor = repositoryType.GetConstructors().Single();
-                    var parameters = new object[] { x.GetService<KzDbContext>() };
-                    return constructor.Invoke(parameters);
-                });
+                    services.AddScoped(repositortInterfaces, repositoryType);
+                }
+                else
+                {
+                    services.AddScoped(repositoryType, x =>
+                    {
+                        var constructor = repositoryType.GetConstructors().Single();
+                        var parameters = new object[] { x.GetService<KzDbContext>() };
+                        return constructor.Invoke(parameters);
+                    });
+                }
             }
         }
 
@@ -125,29 +156,45 @@ namespace WebApplication1
                     opt => opt.MapFrom(adress => adress.Citizens.Count()));
             configurationExp.CreateMap<AdressViewModel, Adress>();
 
-            configurationExp.CreateMap<IncomingFlightInfo, IncomingFlightInfoViewModel>();
-            configurationExp.CreateMap<IncomingFlightInfoViewModel, IncomingFlightInfo>();
-
-            configurationExp.CreateMap<DepartingFlightInfo, DepartingFlightInfoViewModel>();
-            configurationExp.CreateMap<DepartingFlightInfoViewModel, DepartingFlightInfo>();
-            
             configurationExp.AddProfile<PoliceProfiles>();
 
-            configurationExp.CreateMap<Fireman, FiremanShowViewModel>()
-                .ForMember(nameof(FiremanShowViewModel.Name),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Name))
-                .ForMember(nameof(FiremanShowViewModel.Age),
-                        opt => opt.MapFrom(fireman => fireman.Citizen.Age));
 
-            configurationExp.CreateMap<FiremanShowViewModel, Fireman>();
+            configurationExp.CreateMap<FireIncident, FireIncidentViewModel>()
+                .ForMember(nameof(FireIncidentViewModel.TeamName),
+                    opt => opt.MapFrom(incident => incident.FiremanTeam.TeamName));
+            configurationExp.CreateMap<Fireman, FiremanViewModel>()
+                .ForMember(nameof(FiremanViewModel.TeamName),
+                    opt => opt.MapFrom(fireman => fireman.FiremanTeam.TeamName))
+                .ForMember(nameof(FiremanViewModel.Name),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Name))
+                .ForMember(nameof(FiremanViewModel.Age),
+                    opt => opt.MapFrom(fireman => fireman.Citizen.Age));
+            configurationExp.CreateMap<FiremanTeam, FiremanTeamViewModel>()
+                .ForMember(nameof(FiremanTeamViewModel.TruckState),
+                    opt => opt.MapFrom(t => t.FireTruck.TruckState))
+                .ForMember(nameof(FiremanTeamViewModel.FiremanCount),
+                    opt => opt.MapFrom(t => t.Firemen.Count()));
+            configurationExp.CreateMap<FiremanViewModel, Fireman>();
+            configurationExp.CreateMap<FiremanTeamViewModel, FiremanTeam>();
+            configurationExp.CreateMap<FireIncidentViewModel, FireIncident>();
 
-            MapBothSide<Fireman, FiremanViewModel>(configurationExp);
+            MapBothSide<FireTruck, FireTruckViewModel>(configurationExp);
+            configurationExp.AddProfile<AirportProfiles>();             
             MapBothSide<Citizen, FullProfileViewModel>(configurationExp);
             MapBothSide<Bus, BusParkViewModel>(configurationExp);
+            MapBothSide<Order, OrderViewModel>(configurationExp);
             MapBothSide<TripRoute, TripViewModel>(configurationExp);
             MapBothSide<CandidateViewModel, Citizen>(configurationExp);
             MapBothSide<CandidateViewModel, Candidate>(configurationExp);
             MapBothSide<ElectionViewModel, Election>(configurationExp);
+            MapBothSide<HCWorker, HCWorkerViewModel>(configurationExp);
+            MapBothSide<HCEstablishmentsViewModel, HCEstablishments>(configurationExp);
+            MapBothSide<Student, StudentViewModel>(configurationExp);
+            MapBothSide<Pupil, PupilViewModel>(configurationExp);
+            MapBothSide<Student, Pupil>(configurationExp);
+            MapBothSide<University, UniversityViewModel>(configurationExp);
+            MapBothSide<School, SchoolViewModel>(configurationExp);
+            MapBothSide<Certificate, CertificateViewModel>(configurationExp);
 
             var config = new MapperConfiguration(configurationExp);
             var mapper = new Mapper(config);
@@ -182,12 +229,12 @@ namespace WebApplication1
 
             app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
-		}
-	}
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

@@ -1,7 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Home Page of FireFighters";
 }
+@model List<WebApplication1.Models.FiremanModels.FireIncidentViewModel>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>    
+    <h1 class="display-4">Welcome</h1>
+    <a asp-controller="FireIncident" asp-action="FireCall">Call Firemen</a>
+</div>
+<div>
+    <h2>Current FireIncidents</h2>
+    @foreach (var incident in Model)
+    {
+        <div>
+            #Address: @incident.Address
+
+            # Status: @incident.Status
+  
+            # Team: @incident.TeamName
+        </div>
+    }
+
 </div>

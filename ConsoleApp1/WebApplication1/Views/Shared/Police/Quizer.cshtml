@@ -1,0 +1,29 @@
+﻿@inject IUserService userService
+
+@if (userService.IsSheriff())
+{
+    <h3>Manage quiz</h3>
+
+    <p>
+        <button class="btn btn-primary"
+                id="create-question-btn"
+                type="button"
+                data-toggle="collapse"
+                data-target="#create-qestion"
+                aria-expanded="false"
+                aria-controls="create-qestion">
+            Create qestion
+        </button>
+    </p>
+    <div class="collapse" id="create-qestion">
+        <div class="card card-body">
+            <input class="form-control" placeholder="Enter your question" />
+            <button id="create-answer" class="btn btn-success mt-2">Create answer</button>
+        </div>
+    </div>
+}
+@if (userService.IsTrainee())
+{
+    <p>Quiz for Police Academy graduation</p>
+    <button class="btn btn-success" id="start-quiz">Press to start</button>
+}
